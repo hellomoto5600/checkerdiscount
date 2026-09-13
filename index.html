@@ -1,59 +1,156 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CheckerDiscount - Global AI Deal & Discount Engine</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="Checker Discount checks stores and helps you find the price worth paying.">
+  <meta property="og:title" content="Checker Discount — Is It Really a Deal?">
+  <meta property="og:description" content="Search, compare and check deals across stores.">
+  <title>Checker Discount — Is It Really a Deal?</title>
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-  <!-- Top Navigation Bar -->
-  <header class="navbar">
-    <a href="#" class="logo">
-      Checker<span>Discount</span>
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="#" aria-label="Checker Discount home">
+      <img src="assets/logo.svg" alt="">
+      <span>CHECKER <b>DISCOUNT</b></span>
     </a>
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Search products, flights, software, coupons...">
-    </div>
-  </header>
+    <nav class="desktop-nav" aria-label="Main navigation">
+      <a href="#deals">Best Deals</a>
+      <a href="#how">How It Works</a>
+      <a href="#hunt">Price Hunt</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#deals">Best Deals</a>
+    <a href="#how">How It Works</a>
+    <a href="#hunt">Price Hunt</a>
+  </div>
+</header>
 
-  <!-- Hero Section -->
+<section class="container"><div class="promo"><div><strong>🔥 Today's Deal Hunt</strong><span>Big savings. Real prices. No guesswork.</span></div><a class="btn btn-secondary" href="#deals">Explore Today's Deals</a></div></section>
+<main>
   <section class="hero">
-    <span class="hero-badge">AI-Powered Global Intelligence</span>
-    <h1>Find True Deals. Save Real Money.</h1>
-    <p>Compare real-time prices across retail stores, flight tickets, software subscriptions, and merchant coupons.</p>
+    <div class="container hero-inner">
+      <div class="eyebrow"><span class="pulse"></span> DEAL CHECKER</div>
+      <h1>Is It Really<br><span>a Deal?</span></h1>
+      <p class="hero-copy">Search a product, brand or service. We compare the price across stores so you can find the price worth paying.</p>
 
-    <!-- Multi-Category Filter Tabs -->
-    <div class="vertical-tabs">
-      <button class="tab-btn active" data-category="all">All Deals</button>
-      <button class="tab-btn" data-category="retail">Retail Products</button>
-      <button class="tab-btn" data-category="flights">Flights & Travel</button>
-      <button class="tab-btn" data-category="software">Software & Apps</button>
-      <button class="tab-btn" data-category="coupons">Merchant Coupons</button>
+      <form class="search-box" id="searchForm">
+        <span class="search-icon">⌕</span>
+        <input id="searchInput" type="search" autocomplete="off" placeholder="Search product, brand or service..." aria-label="Search product">
+        <button type="submit">CHECK DEAL</button>
+      </form>
+
+      <div class="quick-links" aria-label="Quick searches">
+        <button data-query="iPhone 17 Pro">iPhone 17 Pro</button>
+        <button data-query="Nike Air Max">Nike Air Max</button>
+        <button data-query="Samsung TV">Samsung TV</button>
+      </div>
+
+      <div class="trust-row">
+        <span>✓ Price comparison</span>
+        <span>✓ Availability check</span>
+        <span>✓ Shipping-aware</span>
+      </div>
     </div>
   </section>
 
-  <!-- Main Grid Section -->
-  <main class="main-container">
-    <div class="deals-grid" id="dealsGrid">
-      <!-- Dynamic Deals Load Here from app.js -->
-    </div>
-  </main>
+  <section class="result-section" id="deals" aria-live="polite">
+    <div class="container">
+      <div class="section-top">
+        <div>
+          <span class="section-label">CHECK RESULT</span>
+          <h2 id="resultTitle">Best deal found</h2>
+        </div>
+        <span class="demo-badge">DEMO DATA</span>
+      </div>
 
-  <!-- Footer -->
-  <footer>
-    <div class="footer-content">
-      <div>
-        <h3>CheckerDiscount.com</h3>
-        <p>The world's standard smart price comparison and deal verification engine.</p>
+      <div class="result-card">
+        <div class="product-head">
+          <div class="product-art" id="productArt">📱</div>
+          <div class="product-info">
+            <span class="mini-label">SEARCHED FOR</span>
+            <h3 id="productName">iPhone 17 Pro 256GB</h3>
+            <p id="availabilitySummary">Available at 4 of 12 stores</p>
+          </div>
+          <div class="best-price">
+            <span>BEST TOTAL PRICE</span>
+            <strong id="bestPrice">$899</strong>
+            <small id="bestStore">Amazon</small>
+          </div>
+        </div>
+
+        <div class="check-line">
+          <span>12 stores checked</span>
+          <span>•</span>
+          <span>4 available</span>
+          <span>•</span>
+          <span id="checkedTime">Just now</span>
+        </div>
+
+        <div class="store-list" id="storeList"></div>
+
+        <div class="result-footer">
+          <div>
+            <strong>🏆 Best price found</strong>
+            <p>We compare the available offers instead of trusting a discount badge alone.</p>
+          </div>
+          <button class="primary-btn" id="getDealBtn">GET DEAL <span>↗</span></button>
+        </div>
+      </div>
+
+      <div class="unavailable">
+        <span>Not available at 8 stores</span>
+        <button id="toggleUnavailable">Show stores checked</button>
+      </div>
+      <div class="unavailable-list" id="unavailableList" hidden></div>
+    </div>
+  </section>
+
+  <section class="how-section" id="how">
+    <div class="container">
+      <span class="section-label">HOW IT WORKS</span>
+      <h2>Don't hunt through<br>100 tabs.</h2>
+      <div class="steps">
+        <article><span>01</span><h3>Search</h3><p>Tell Checker Discount what you want to buy.</p></article>
+        <article><span>02</span><h3>We Check</h3><p>Compare available offers, prices and shipping.</p></article>
+        <article><span>03</span><h3>Choose</h3><p>Pick the offer that makes the most sense and shop directly.</p></article>
       </div>
     </div>
-    <div class="footer-disclaimer">
-      <p>&copy; 2026 CheckerDiscount. All rights reserved. We may earn an affiliate commission on qualifying purchases.</p>
-    </div>
-  </footer>
+  </section>
 
-  <script src="js/app.js"></script>
+  <section class="hunt-section" id="hunt">
+    <div class="container hunt-card">
+      <div>
+        <span class="section-label">PRICE HUNT</span>
+        <h2>Want it cheaper?</h2>
+        <p>Set your target price. Later, Checker Discount can watch the market and tell you when the price reaches it.</p>
+      </div>
+      <form id="huntForm" class="hunt-form">
+        <input id="huntProduct" type="text" placeholder="Product name">
+        <div class="target-input"><span>$</span><input id="targetPrice" type="number" min="1" step="1" placeholder="Target price"></div>
+        <button type="submit">START PRICE HUNT</button>
+      </form>
+      <div class="hunt-message" id="huntMessage"></div>
+    </div>
+  </section>
+
+  <section class="ad-section" aria-label="Advertisement">
+    <div class="container ad-slot">ADVERTISEMENT</div>
+  </section>
+</main>
+
+<section class="section container" id="why-checker"><div class="trust"><div class="trust-grid"><div><div class="eyebrow">Why Checker Discount</div><h2>We don't just show discounts. We check the price.</h2><p>Our goal is simple: help you understand what you are really paying before you visit a store.</p></div><div class="trust-list"><div class="trust-item">✓ Compare multiple stores</div><div class="trust-item">✓ Include shipping when available</div><div class="trust-item">✓ Show availability clearly</div><div class="trust-item">✓ Identify the lowest total price</div><div class="trust-item">✓ Sponsored deals are clearly labeled</div><div class="trust-item">✓ No misleading “best price” claims</div></div></div></div></section>
+<footer class="site-footer"><div class="container footer-main"><div class="footer-brand-wrap"><div class="footer-brand">CHECKER DISCOUNT</div><div class="footer-copy">Is It Really a Deal? We check prices and deals so you can find the price worth paying.</div></div><div class="footer-col"><h4>Explore</h4><a href="#deals">Today's Deals</a><a href="#best">Best Prices</a><a href="#hunt">Price Hunt</a><a href="#categories">Categories</a></div><div class="footer-col"><h4>For Shoppers</h4><a href="#how">How It Works</a><a href="#alerts">Price Alerts</a><a href="#why-checker">Deal Verification</a><a href="#faq">FAQ</a></div><div class="footer-col"><h4>Company</h4><a href="#about">About Us</a><a href="#contact">Contact</a><a href="#privacy">Privacy Policy</a><a href="#terms">Terms of Use</a><div class="social"><span>f</span><span>𝕏</span><span>in</span></div></div></div><div class="container footer-bottom"><div>© 2026 Checker Discount. All rights reserved.</div><div>Prices and availability may change at the retailer.</div></div></footer>
+
+<script src="js/config.js"></script>
+<script src="js/data.js"></script>
+<script src="js/deal-engine.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
