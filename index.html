@@ -1,206 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CheckerDiscount — AI Deal Discovery & Price Comparison</title>
-    <meta name="description" content="Automated price comparison, discount verification, and deal intelligence platform. Find, Compare, and Save with confidence.">
-    <link rel="canonical" href="https://checkerdiscount.com/">
-    
-    <!-- Open Graph Metadata -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://checkerdiscount.com/">
-    <meta property="og:title" content="CheckerDiscount — Smart Deal Discovery Platform">
-    <meta property="og:description" content="Stop falling for inflated discounts. Real-time verified price drops across major retailers.">
-    
-    <!-- System Stylesheet -->
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CheckerDiscount - Global AI Deal & Discount Engine</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <!-- Header Navigation -->
-    <header class="site-header">
-        <div class="container header-container">
-            <a href="/" class="brand-logo">
-                <span class="logo-icon">⚡</span>
-                <span class="logo-text">Checker<span class="logo-accent">Discount</span></span>
-            </a>
-            
-            <div class="search-bar-container">
-                <input type="text" id="searchInput" placeholder="Search products, brands, or electronics..." aria-label="Search deals">
-                <button id="searchBtn" type="button" aria-label="Submit search">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                </button>
-            </div>
-
-            <nav class="nav-links">
-                <a href="#deals" class="nav-link active">Top Deals</a>
-                <a href="#categories" class="nav-link">Categories</a>
-                <a href="#stores" class="nav-link">Stores</a>
-            </nav>
-        </div>
-    </header>
-
-    <!-- AdSense Placement Area: Top Leaderboard -->
-    <aside class="ad-container container ad-top-leaderboard" aria-label="Advertisement Area">
-        <div class="ad-placeholder">
-            <span class="ad-badge">Advertisement</span>
-            <div class="ad-content-slot"><!-- Google AdSense Code Inject Slot --></div>
-        </div>
-    </aside>
-
-    <main class="main-content">
-        <!-- Hero Section -->
-        <section class="hero-section">
-            <div class="container hero-container">
-                <div class="hero-badge">AI-Powered Price Intelligence</div>
-                <h1 class="hero-title">Find True Deals. Compare Stores. Save Real Money.</h1>
-                <p class="hero-subtitle">Our automated verification engine scans top merchants every 15 minutes, calculates true historical discounts, and flags artificially inflated prices.</p>
-                
-                <div class="hero-stats">
-                    <div class="stat-item"><span class="stat-value" id="totalDealsCount">0</span> Deals Verified</div>
-                    <div class="stat-divider"></div>
-                    <div class="stat-item"><span class="stat-value">15m</span> Sync Frequency</div>
-                    <div class="stat-divider"></div>
-                    <div class="stat-item"><span class="stat-value">100%</span> Automated Engine</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Categories Bar -->
-        <section class="categories-section" id="categories">
-            <div class="container">
-                <h2 class="section-title">Explore Categories</h2>
-                <div class="categories-scroll" id="categoriesContainer">
-                    <!-- Dynamic rendering via app.js -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Dynamic Deals Discovery Engine UI -->
-        <section class="deals-section container" id="deals">
-            <!-- Filter & Sort Control Bar -->
-            <div class="filter-control-panel">
-                <div class="filter-group">
-                    <label for="categoryFilter">Category:</label>
-                    <select id="categoryFilter" class="form-control">
-                        <option value="all">All Categories</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label for="storeFilter">Store:</label>
-                    <select id="storeFilter" class="form-control">
-                        <option value="all">All Stores</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label for="minDiscountFilter">Min Discount:</label>
-                    <select id="minDiscountFilter" class="form-control">
-                        <option value="0">Any Discount</option>
-                        <option value="15">15% OFF or higher</option>
-                        <option value="30">30% OFF or higher</option>
-                        <option value="50">50% OFF or higher</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label for="sortOrder">Sort By:</label>
-                    <select id="sortOrder" class="form-control">
-                        <option value="deal_score">Best Deal Score</option>
-                        <option value="discount_desc">Highest Discount %</option>
-                        <option value="price_asc">Lowest Price</option>
-                        <option value="rating_desc">Highest Product Rating</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="section-header-flex">
-                <h2 class="section-title">Verified Today's Best Deals</h2>
-                <span class="live-pulse"><span class="pulse-dot"></span> Live Deal Feed</span>
-            </div>
-
-            <!-- Deal Cards Grid Target -->
-            <div class="deals-grid" id="dealsGrid">
-                <!-- Javascript dynamic hydration target -->
-            </div>
-        </section>
-
-        <!-- AdSense Placement Area: Mid Content Banner -->
-        <aside class="ad-container container ad-mid-banner" aria-label="Advertisement Area">
-            <div class="ad-placeholder">
-                <span class="ad-badge">Sponsored Advertisement</span>
-                <div class="ad-content-slot"><!-- Google AdSense Code Inject Slot --></div>
-            </div>
-        </aside>
-
-        <!-- Store Multi-Comparison Feature Spotlight -->
-        <section class="store-comparison-spotlight container" id="stores">
-            <h2 class="section-title">Supported Retail Stores</h2>
-            <div class="stores-supported-grid" id="storesGrid">
-                <!-- JS Hydrated -->
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="site-footer">
-        <div class="container footer-container">
-            <div class="footer-col brand-col">
-                <a href="/" class="brand-logo footer-logo">
-                    <span class="logo-icon">⚡</span>
-                    <span class="logo-text">Checker<span class="logo-accent">Discount</span></span>
-                </a>
-                <p class="footer-desc">Next-generation automated deal intelligence platform. We monitor prices, verify discount claims, and match offers across top retailers.</p>
-            </div>
-            
-            <div class="footer-col">
-                <h3 class="footer-heading">Platform</h3>
-                <ul class="footer-links">
-                    <li><a href="#deals">Today's Deals</a></li>
-                    <li><a href="#categories">Category Index</a></li>
-                    <li><a href="#stores">Merchant Stores</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-col">
-                <h3 class="footer-heading">Legal & Info</h3>
-                <ul class="footer-links">
-                    <li><a href="/privacy-policy">Privacy Policy</a></li>
-                    <li><a href="/terms">Terms of Service</a></li>
-                    <li><a href="/contact">Contact Support</a></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="affiliate-disclosure-bar">
-            <div class="container">
-                <p><strong>Affiliate Disclosure:</strong> CheckerDiscount.com is an independent product comparison & deal intelligence platform. When you purchase products through links on our site, we may earn an affiliate commission from our partner merchants at no additional cost to you. Product prices and availability are accurate as of the last checked timestamp and are subject to change.</p>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <div class="container text-center">
-                <p>&copy; 2026 CheckerDiscount.com. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Store Offer Comparison Modal Template -->
-    <div id="compareModal" class="modal-backdrop" aria-hidden="true">
-        <div class="modal-box" role="dialog" aria-labelledby="modalTitle">
-            <div class="modal-header">
-                <h3 id="modalTitle" class="modal-title">Multi-Store Price Comparison</h3>
-                <button id="closeModalBtn" class="modal-close" aria-label="Close modal">&times;</button>
-            </div>
-            <div class="modal-body" id="modalBody">
-                <!-- JS Hydrated comparison table -->
-            </div>
-        </div>
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <a href="#" class="logo">
+      Checker<span>Discount</span>
+    </a>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search products, flights, software, coupons...">
     </div>
+  </header>
 
-    <!-- Application Logic -->
-    <script src="js/app.js"></script>
+  <!-- Hero Section -->
+  <section class="hero">
+    <span class="hero-badge">AI-Powered Global Intelligence</span>
+    <h1>Find True Deals. Save Real Money.</h1>
+    <p>Compare real-time prices across retail stores, flight tickets, software subscriptions, and merchant coupons.</p>
+
+    <!-- Multi-Category Filter Tabs -->
+    <div class="vertical-tabs">
+      <button class="tab-btn active" data-category="all">All Deals</button>
+      <button class="tab-btn" data-category="retail">Retail Products</button>
+      <button class="tab-btn" data-category="flights">Flights & Travel</button>
+      <button class="tab-btn" data-category="software">Software & Apps</button>
+      <button class="tab-btn" data-category="coupons">Merchant Coupons</button>
+    </div>
+  </section>
+
+  <!-- Main Grid Section -->
+  <main class="main-container">
+    <div class="deals-grid" id="dealsGrid">
+      <!-- Dynamic Deals Load Here from app.js -->
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div>
+        <h3>CheckerDiscount.com</h3>
+        <p>The world's standard smart price comparison and deal verification engine.</p>
+      </div>
+    </div>
+    <div class="footer-disclaimer">
+      <p>&copy; 2026 CheckerDiscount. All rights reserved. We may earn an affiliate commission on qualifying purchases.</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
 </body>
 </html>
