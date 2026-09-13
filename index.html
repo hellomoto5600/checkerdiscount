@@ -3,167 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checker Discount - Calculator & Savings Tracker</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background-color: #f4f7f6;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        header {
-            background: linear-gradient(135deg, #0052d4, #4364f7, #6fb1fc);
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        header h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-        }
-        header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-        .container {
-            max-width: 500px;
-            margin: 30px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            width: 90%;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #444;
-        }
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 1rem;
-            outline: none;
-            transition: border 0.3s;
-        }
-        input:focus {
-            border-color: #4364f7;
-        }
-        button {
-            width: 100%;
-            padding: 14px;
-            background-color: #4364f7;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background-color: #0052d4;
-        }
-        .result-box {
-            margin-top: 25px;
-            padding: 20px;
-            background-color: #eef2ff;
-            border-radius: 8px;
-            border-left: 5px solid #4364f7;
-            display: none;
-        }
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-        }
-        .result-item.final {
-            font-weight: bold;
-            color: #2b8a3e;
-            font-size: 1.3rem;
-            border-top: 1px solid #ddd;
-            padding-top: 10px;
-            margin-bottom: 0;
-        }
-        footer {
-            margin-top: auto;
-            text-align: center;
-            padding: 20px;
-            background: #222;
-            color: #aaa;
-            font-size: 0.9rem;
-        }
-    </style>
+    <title>CheckerDiscount — AI Deal Discovery & Price Comparison</title>
+    <meta name="description" content="Automated price comparison, discount verification, and deal intelligence platform. Find, Compare, and Save with confidence.">
+    <link rel="canonical" href="https://checkerdiscount.com/">
+    
+    <!-- Open Graph Metadata -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://checkerdiscount.com/">
+    <meta property="og:title" content="CheckerDiscount — Smart Deal Discovery Platform">
+    <meta property="og:description" content="Stop falling for inflated discounts. Real-time verified price drops across major retailers.">
+    
+    <!-- System Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <header>
-        <h1>Checker Discount</h1>
-        <p>Calculate your savings and final product prices instantly</p>
+    <!-- Header Navigation -->
+    <header class="site-header">
+        <div class="container header-container">
+            <a href="/" class="brand-logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">Checker<span class="logo-accent">Discount</span></span>
+            </a>
+            
+            <div class="search-bar-container">
+                <input type="text" id="searchInput" placeholder="Search products, brands, or electronics..." aria-label="Search deals">
+                <button id="searchBtn" type="button" aria-label="Submit search">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </button>
+            </div>
+
+            <nav class="nav-links">
+                <a href="#deals" class="nav-link active">Top Deals</a>
+                <a href="#categories" class="nav-link">Categories</a>
+                <a href="#stores" class="nav-link">Stores</a>
+            </nav>
+        </div>
     </header>
 
-    <div class="container">
-        <div class="form-group">
-            <label for="originalPrice">Original Price</label>
-            <input type="number" id="originalPrice" placeholder="e.g. 100">
+    <!-- AdSense Placement Area: Top Leaderboard -->
+    <aside class="ad-container container ad-top-leaderboard" aria-label="Advertisement Area">
+        <div class="ad-placeholder">
+            <span class="ad-badge">Advertisement</span>
+            <div class="ad-content-slot"><!-- Google AdSense Code Inject Slot --></div>
         </div>
+    </aside>
 
-        <div class="form-group">
-            <label for="discountPercent">Discount Percentage (%)</label>
-            <input type="number" id="discountPercent" placeholder="e.g. 20">
-        </div>
-
-        <button onclick="calculateDiscount()">Calculate Discount</button>
-
-        <div class="result-box" id="resultBox">
-            <div class="result-item">
-                <span>You Save:</span>
-                <span id="savingsAmount">$0.00</span>
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container hero-container">
+                <div class="hero-badge">AI-Powered Price Intelligence</div>
+                <h1 class="hero-title">Find True Deals. Compare Stores. Save Real Money.</h1>
+                <p class="hero-subtitle">Our automated verification engine scans top merchants every 15 minutes, calculates true historical discounts, and flags artificially inflated prices.</p>
+                
+                <div class="hero-stats">
+                    <div class="stat-item"><span class="stat-value" id="totalDealsCount">0</span> Deals Verified</div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item"><span class="stat-value">15m</span> Sync Frequency</div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item"><span class="stat-value">100%</span> Automated Engine</div>
+                </div>
             </div>
-            <div class="result-item final">
-                <span>Final Price:</span>
-                <span id="finalPrice">$0.00</span>
+        </section>
+
+        <!-- Categories Bar -->
+        <section class="categories-section" id="categories">
+            <div class="container">
+                <h2 class="section-title">Explore Categories</h2>
+                <div class="categories-scroll" id="categoriesContainer">
+                    <!-- Dynamic rendering via app.js -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Deals Discovery Engine UI -->
+        <section class="deals-section container" id="deals">
+            <!-- Filter & Sort Control Bar -->
+            <div class="filter-control-panel">
+                <div class="filter-group">
+                    <label for="categoryFilter">Category:</label>
+                    <select id="categoryFilter" class="form-control">
+                        <option value="all">All Categories</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="storeFilter">Store:</label>
+                    <select id="storeFilter" class="form-control">
+                        <option value="all">All Stores</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="minDiscountFilter">Min Discount:</label>
+                    <select id="minDiscountFilter" class="form-control">
+                        <option value="0">Any Discount</option>
+                        <option value="15">15% OFF or higher</option>
+                        <option value="30">30% OFF or higher</option>
+                        <option value="50">50% OFF or higher</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="sortOrder">Sort By:</label>
+                    <select id="sortOrder" class="form-control">
+                        <option value="deal_score">Best Deal Score</option>
+                        <option value="discount_desc">Highest Discount %</option>
+                        <option value="price_asc">Lowest Price</option>
+                        <option value="rating_desc">Highest Product Rating</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="section-header-flex">
+                <h2 class="section-title">Verified Today's Best Deals</h2>
+                <span class="live-pulse"><span class="pulse-dot"></span> Live Deal Feed</span>
+            </div>
+
+            <!-- Deal Cards Grid Target -->
+            <div class="deals-grid" id="dealsGrid">
+                <!-- Javascript dynamic hydration target -->
+            </div>
+        </section>
+
+        <!-- AdSense Placement Area: Mid Content Banner -->
+        <aside class="ad-container container ad-mid-banner" aria-label="Advertisement Area">
+            <div class="ad-placeholder">
+                <span class="ad-badge">Sponsored Advertisement</span>
+                <div class="ad-content-slot"><!-- Google AdSense Code Inject Slot --></div>
+            </div>
+        </aside>
+
+        <!-- Store Multi-Comparison Feature Spotlight -->
+        <section class="store-comparison-spotlight container" id="stores">
+            <h2 class="section-title">Supported Retail Stores</h2>
+            <div class="stores-supported-grid" id="storesGrid">
+                <!-- JS Hydrated -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container footer-container">
+            <div class="footer-col brand-col">
+                <a href="/" class="brand-logo footer-logo">
+                    <span class="logo-icon">⚡</span>
+                    <span class="logo-text">Checker<span class="logo-accent">Discount</span></span>
+                </a>
+                <p class="footer-desc">Next-generation automated deal intelligence platform. We monitor prices, verify discount claims, and match offers across top retailers.</p>
+            </div>
+            
+            <div class="footer-col">
+                <h3 class="footer-heading">Platform</h3>
+                <ul class="footer-links">
+                    <li><a href="#deals">Today's Deals</a></li>
+                    <li><a href="#categories">Category Index</a></li>
+                    <li><a href="#stores">Merchant Stores</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3 class="footer-heading">Legal & Info</h3>
+                <ul class="footer-links">
+                    <li><a href="/privacy-policy">Privacy Policy</a></li>
+                    <li><a href="/terms">Terms of Service</a></li>
+                    <li><a href="/contact">Contact Support</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="affiliate-disclosure-bar">
+            <div class="container">
+                <p><strong>Affiliate Disclosure:</strong> CheckerDiscount.com is an independent product comparison & deal intelligence platform. When you purchase products through links on our site, we may earn an affiliate commission from our partner merchants at no additional cost to you. Product prices and availability are accurate as of the last checked timestamp and are subject to change.</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container text-center">
+                <p>&copy; 2026 CheckerDiscount.com. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Store Offer Comparison Modal Template -->
+    <div id="compareModal" class="modal-backdrop" aria-hidden="true">
+        <div class="modal-box" role="dialog" aria-labelledby="modalTitle">
+            <div class="modal-header">
+                <h3 id="modalTitle" class="modal-title">Multi-Store Price Comparison</h3>
+                <button id="closeModalBtn" class="modal-close" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- JS Hydrated comparison table -->
             </div>
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2026 Checker Discount. All rights reserved.</p>
-    </footer>
-
-    <script>
-        function calculateDiscount() {
-            const price = parseFloat(document.getElementById('originalPrice').value);
-            const discount = parseFloat(document.getElementById('discountPercent').value);
-            
-            if (isNaN(price) || isNaN(discount) || price <= 0 || discount < 0) {
-                alert('Please enter valid numbers for price and discount.');
-                return;
-            }
-
-            const savings = (price * discount) / 100;
-            const final = price - savings;
-
-            document.getElementById('savingsAmount').innerText = '$' + savings.toFixed(2);
-            document.getElementById('finalPrice').innerText = '$' + final.toFixed(2);
-            document.getElementById('resultBox').style.display = 'block';
-        }
-    </script>
-
+    <!-- Application Logic -->
+    <script src="js/app.js"></script>
 </body>
 </html>
