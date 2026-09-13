@@ -1,26 +1,24 @@
-/**
- * CHECKER DISCOUNT - CONFIGURATION ENGINE
- * Central system configuration for application settings, flags, and endpoints.
- */
+/* ==========================================================================
+   CHECKER DISCOUNT - CONFIGURATION & CONSTANTS
+   ========================================================================== */
 
-const CONFIG = {
-    APP_NAME: "CHECKER DISCOUNT",
-    SLOGAN: "Is It Really a Deal?",
-    VERSION: "1.0.0-stage1",
-    CURRENCY: "$",
-    IS_DEMO_MODE: true,
-    
-    // UI Settings
-    ENABLE_ANIMATIONS: true,
-    
-    // Future API Endpoint Configuration Shells
-    API_ENDPOINTS: {
-        SEARCH_PRODUCTS: null,
-        PRICE_HISTORY: null,
-        AFFILIATE_CLICK: null
-    }
+const APP_CONFIG = {
+  appName: "CheckerDiscount",
+  currencySymbol: "$",
+  defaultShippingEstimate: 4.99,
+  
+  // Supported Stores Setup
+  stores: {
+    amazon: { name: "Amazon", color: "#FF9900", trustScore: 9.8 },
+    ebay: { name: "eBay", color: "#E53238", trustScore: 9.2 },
+    walmart: { name: "Walmart", color: "#0071DC", trustScore: 9.5 },
+    aliexpress: { name: "AliExpress", color: "#FF4747", trustScore: 8.5 }
+  },
+
+  // Deal Scoring Criteria
+  dealThresholds: {
+    great: 75, // Score >= 75 means Genuine High-Value Deal
+    good: 50,  // Score >= 50 means Decent Savings
+    fair: 30   // Score < 30 means Fake / Inflated Price
+  }
 };
-
-// Freeze configuration to prevent runtime corruption
-Object.freeze(CONFIG);
-console.log(`[Config Loaded] ${CONFIG.APP_NAME} v${CONFIG.VERSION}`);
