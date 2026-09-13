@@ -87,3 +87,42 @@ function renderSearchResults(products, query) {
   resultsContainer.innerHTML = html;
   resultsContainer.scrollIntoView({ behavior: 'smooth' });
 }
+// ==========================================
+// PRICE HUNT FUNCTIONALITY
+// ==========================================
+document.addEventListener("DOMContentLoaded", () => {
+  const huntBtn = document.querySelector(".price-hunt-section button");
+  const inputs = document.querySelectorAll(".price-hunt-section input");
+
+  if (huntBtn) {
+    huntBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      
+      const productName = inputs[0]?.value.trim();
+      const targetPrice = inputs[1]?.value.trim();
+
+      if (!productName || !targetPrice) {
+        alert("Please enter both product name and target price.");
+        return;
+      }
+
+      // Save Alert to LocalStorage
+      const huntAlert = {
+        product: productName,
+        targetPrice: parseFloat(targetPrice),
+        date: new Date().toLocaleDateString()
+      };
+
+      let existingHunts = JSON.parse(localStorage.getItem("checker_hunts") || "[]");
+      existingHunts.push(huntAlert);
+      localStorage.setItem("checker_hunts", JSON.stringify(existingHunts));
+
+      // Visual Confirmation Message
+      alert(`Price Hunt set! We will track "${productName}" and alert you when the price hits $${targetPrice}.`);
+      
+      // Clear inputs
+      inputs[0].value = "";
+      inputs[1].value = "";
+    });
+  }
+});
