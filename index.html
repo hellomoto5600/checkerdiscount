@@ -4,123 +4,138 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checker Discount - Is It Really a Deal?</title>
+  <!-- CSS Link -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- SITE HEADER -->
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="#" class="brand-logo">CHECKER<span>DISCOUNT</span></a>
-      <nav class="main-nav">
-        <a href="#best-deals" class="nav-link">Best Deals</a>
-        <a href="#how-it-works" class="nav-link">How It Works</a>
-        <a href="#price-hunt" class="nav-link">Price Hunt</a>
+  <!-- 1. Main Premium Header -->
+  <header class="main-header">
+    <div class="header-container">
+      <div class="logo">
+        <span class="highlight">CHECKER</span> DISCOUNT
+      </div>
+      <nav class="top-nav">
+        <a href="#">Electronics</a>
+        <a href="#">Laptops</a>
+        <a href="#">Gaming</a>
+        <a href="#">Fashion</a>
       </nav>
+      <div class="header-actions">
+        <span class="hunts-counter">🎯 Active Hunts: <span id="hunt-count">0</span></span>
+      </div>
     </div>
   </header>
 
-  <!-- HERO SECTION -->
-  <section class="hero-section">
-    <div class="container">
-      <h1 class="hero-title">Is It Really a Deal?</h1>
-      <p class="hero-subtitle">Compare real prices across stores and find the deal worth paying for.</p>
+  <!-- 2. Top Advertisement Slot (Monetization) -->
+  <div class="container">
+    <div class="ad-space leaderboard">
+      <span>Advertisement Space (728x90) - Adsense / EPN Banner Here</span>
+    </div>
+  </div>
+
+  <!-- 3. Main Content & Sidebar Layout -->
+  <div class="container layout-main">
+    
+    <!-- Main Left Area -->
+    <main class="content-area">
       
-      <div class="search-box-container">
-        <form class="search-form" onsubmit="event.preventDefault();">
-          <input type="text" class="search-input" placeholder="Search product, brand or service..." required>
-          <button type="submit" class="btn-primary">CHECK DEAL</button>
-        </form>
-      </div>
-
-      <div class="quick-checks">
-        <span>Quick Checks:</span>
-        <a href="#" class="quick-tag">Today's Best Deals</a>
-        <a href="#" class="quick-tag">Biggest Savings</a>
-        <a href="#price-hunt" class="quick-tag">Price Hunt</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- PRICE HUNT SECTION -->
-  <section id="price-hunt" class="price-hunt-section">
-    <div class="container">
-      <div class="hunt-card">
-        <div class="hunt-header">
-          <h2 class="hunt-title">PRICE HUNT</h2>
-          <p class="hunt-subtitle">Set a target price and we will track the real cost for you.</p>
+      <!-- Hero / Search Section -->
+      <div class="hero-section">
+        <h1>Find the <span class="highlight">Real Price</span>. Never Overpay.</h1>
+        <p>Our unbiased engine compares total costs (including shipping) across top stores.</p>
+        
+        <div class="search-box">
+          <input type="text" id="search-input" placeholder="Paste a product link or search (e.g., iPhone 15)...">
+          <button id="search-btn" class="btn primary-btn">Search Deals</button>
         </div>
-        <form class="hunt-form-grid" onsubmit="event.preventDefault();">
-          <div class="form-group">
-            <label for="prod-name">Product Name</label>
-            <input type="text" id="prod-name" class="form-control" placeholder="e.g. Sony WH-1000XM5">
+      </div>
+
+      <!-- Trending Deals Container (JS injects cards here) -->
+      <h2 id="search-heading">Trending Deals</h2>
+      <div id="results-container">
+        <!-- Javascript Card data goes here -->
+      </div>
+
+      <!-- Price Hunt Section -->
+      <div class="price-hunt-section">
+        <h3>🎯 PRICE HUNT (Automated Tracker)</h3>
+        <p class="subtext">Set your target price. We'll monitor the web and alert you when the price drops.</p>
+        <div class="form-group">
+          <div>
+            <label class="subtext">PRODUCT NAME</label>
+            <input type="text" placeholder="e.g. Sony WH-1000XM5" style="width:100%; margin-top:5px; padding:10px;">
           </div>
-          <div class="form-group">
-            <label for="target-price">Target Price ($)</label>
-            <input type="number" id="target-price" class="form-control" placeholder="e.g. 299">
+          <div>
+            <label class="subtext">TARGET PRICE ($)</label>
+            <input type="number" placeholder="e.g. 199" style="width:100%; margin-top:5px; padding:10px;">
           </div>
-          <button type="submit" class="btn-primary">START PRICE HUNT</button>
-        </form>
+          <div style="display: flex; align-items: flex-end;">
+            <button class="btn secondary-btn" style="width: 100%;">START PRICE HUNT</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Right Sidebar Area -->
+    <aside class="sidebar">
+      <!-- Sidebar Ad Slot 1 -->
+      <div class="ad-space sidebar-ad">
+        <span>Sidebar Ad (300x250)</span>
+      </div>
+      
+      <!-- How It Works Widget -->
+      <div class="widget">
+        <h3>How It Works</h3>
+        <ul class="steps-list">
+          <li><strong>1. Search:</strong> Enter any product name.</li>
+          <li><strong>2. Compare:</strong> We fetch real prices + shipping costs.</li>
+          <li><strong>3. Decide:</strong> See our "Deal Score" before you buy.</li>
+        </ul>
+      </div>
+      
+      <!-- Sidebar Ad Slot 2 -->
+      <div class="ad-space sidebar-ad">
+        <span>Sticky Sidebar Ad</span>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- 4. Professional Footer & Legal Disclosures -->
+  <footer class="main-footer">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <h4>CHECKER DISCOUNT</h4>
+        <p class="tagline">"Is It Really a Deal?"</p>
+        <p class="desc">The most transparent price comparison engine. We prioritize real costs over marketing hype.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <a href="#">Home</a>
+        <a href="#">Trending Deals</a>
+        <a href="#">Price Hunt Setup</a>
+        <a href="#">Contact Us</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal & Policies</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
       </div>
     </div>
-  </section>
-
-  <!-- FEATURES SECTION -->
-  <section id="how-it-works" class="features-section">
-    <div class="container">
-      <h2 class="section-heading">Why Checker Discount?</h2>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">$</div>
-          <h3 class="feature-title">Real Total Price</h3>
-          <p class="feature-desc">We calculate product price plus shipping so you see the true total cost.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">✓</div>
-          <h3 class="feature-title">Multi-Store Verification</h3>
-          <p class="feature-desc">We check prices across major retailers to confirm if a sale is genuinely cheap.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">★</div>
-          <h3 class="feature-title">Unbiased Results</h3>
-          <p class="feature-desc">Our ranking is strictly based on the lowest price, never merchant preference.</p>
-        </div>
+    
+    <div class="footer-bottom container">
+      <!-- eBay/Amazon Affiliate Required Disclosure -->
+      <div class="affiliate-disclosure">
+        <strong>Affiliate Disclosure:</strong> Checker Discount is a participant in the eBay Partner Network and Amazon Services LLC Associates Program. When you click on links to various merchants on this site and make a purchase, this can result in this site earning a commission. This does not affect our unbiased Deal Score or ranking system.
       </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div>
-          <div class="footer-brand">CHECKERDISCOUNT</div>
-          <p class="footer-tagline">We check deals. We don't sell your trust.</p>
-        </div>
-        <div>
-          <h4 class="footer-title">Navigation</h4>
-          <ul class="footer-links">
-            <li><a href="#best-deals">Best Deals</a></li>
-            <li><a href="#how-it-works">How It Works</a></li>
-            <li><a href="#price-hunt">Price Hunt</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="footer-title">Legal & Disclosures</h4>
-          <ul class="footer-links">
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms of Service</a></li>
-            <li><a href="#">Affiliate Disclosure</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        &copy; 2026 Checker Discount. All rights reserved.
-      </div>
+      <p class="copyright">&copy; 2026 CheckerDiscount.com. All rights reserved.</p>
     </div>
   </footer>
 
-  <!-- JAVASCRIPT FILES -->
+  <!-- Connect JavaScript Files -->
   <script src="js/config.js"></script>
   <script src="js/data.js"></script>
   <script src="js/deal-engine.js"></script>
