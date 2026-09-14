@@ -3,44 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checker Discount - Live Deals & Refund Tracker</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>CheckerDiscount - Real-Time Price Drops & Refund Radar</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Top Bar -->
-    <header class="navbar">
-        <div class="logo">Checker Discount</div>
-        <div class="status-badge">⚡ Ad-Free & High-Trust</div>
+    <header>
+        <div class="logo-container">
+            <div class="logo-icon">CD</div>
+            <div class="logo-text">CheckerDiscount</div>
+        </div>
+        <div class="trust-badge">
+            <span>🛡️</span> 100% Verified Price Drops & Refund Radar
+        </div>
     </header>
 
-    <!-- Hero Section -->
-    <main class="container">
-        <section class="hero">
-            <h1>Track Real Discounts & Claim Refunds</h1>
-            <p>Monitored directly via Cloudflare D1 Database</p>
-        </section>
+    <div class="main-container">
+        <div class="hero-section">
+            <h1>Track Real-Time Price Drops & Claim Refunds</h1>
+            <p>Automated intelligence protecting US & EU shoppers from overpaying on retail purchases.</p>
+        </div>
 
-        <!-- Live Products Grid -->
-        <section class="products-section">
-            <h2>Latest Verified Discounts</h2>
-            <div id="product-grid" class="grid">
-                <p class="loading">Loading deals from database...</p>
+        <div class="grid-layout">
+            <!-- Left Column: Live Verified Deals Feed -->
+            <div class="card">
+                <h3>🔥 Live Verified Market Deals</h3>
+                <div id="discountsContainer">
+                    <p style="color: var(--text-muted); text-align: center;">Syncing live international data streams...</p>
+                </div>
             </div>
-        </section>
 
-        <!-- Claim Refund Form -->
-        <section class="refund-section">
-            <h2>Track Price Drop Refund</h2>
-            <form id="refundForm" class="form-card">
-                <input type="text" id="storeName" placeholder="Store Name (e.g. Amazon)" required>
-                <input type="number" step="0.01" id="purchasePrice" placeholder="Purchase Price ($)" required>
-                <input type="number" step="0.01" id="currentPrice" placeholder="Current Price ($)" required>
-                <button type="submit" class="btn">Calculate & Track Refund</button>
-            </form>
-            <div id="refundResult" class="result-message"></div>
-        </section>
-    </main>
+            <!-- Right Column: Instant Refund Claim Calculator -->
+            <div class="card">
+                <h3>💡 Price Drop Refund Estimator</h3>
+                <form id="refundForm">
+                    <div class="form-group">
+                        <label>Retailer / Store Name</label>
+                        <input type="text" class="form-control" placeholder="e.g. Amazon, Walmart" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Purchase Price ($)</label>
+                        <input type="number" step="0.01" class="form-control" placeholder="149.99" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Current Drop Price ($)</label>
+                        <input type="number" step="0.01" class="form-control" placeholder="119.99" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Calculate Claimable Refund</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script src="js/app.js"></script>
 </body>
