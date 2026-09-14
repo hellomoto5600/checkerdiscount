@@ -6,24 +6,61 @@
 
     <title>CheckerDiscount - Real-Time Price Drops & Refund Radar</title>
 
+    <!-- Premium modern font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
+
+        /* =========================================================
+           CHECKERDISCOUNT — PREMIUM US/EU SHOPPING STYLE
+           STRUCTURE KEPT INTACT
+        ========================================================= */
+
         :root {
-            --bg-deep: #f7f9fc;
+
+            /* Backgrounds */
+            --bg-deep: #f6f8fb;
             --bg-card: #ffffff;
+            --bg-soft: #f8fafc;
+            --bg-blue-soft: #eff6ff;
+            --bg-green-soft: #f0fdf4;
+
+            /* Borders */
             --border-color: #e5e7eb;
+            --border-light: #edf0f4;
 
+            /* Brand */
             --accent-blue: #2563eb;
-            --accent-blue-light: #eff6ff;
+            --accent-blue-dark: #1d4ed8;
+            --accent-blue-soft: #eff6ff;
+
+            /* Savings */
             --accent-green: #16a34a;
-            --accent-green-light: #f0fdf4;
+            --accent-green-dark: #15803d;
 
+            /* Text */
             --text-main: #111827;
-            --text-muted: #6b7280;
-            --text-light: #9ca3af;
+            --text-dark: #172033;
+            --text-muted: #64748b;
+            --text-light: #94a3b8;
 
-            --shadow-card: 0 10px 30px rgba(15, 23, 42, 0.06);
-            --shadow-hover: 0 16px 40px rgba(15, 23, 42, 0.10);
+            /* Effects */
+            --shadow-card:
+                0 8px 30px rgba(15, 23, 42, 0.055);
+
+            --shadow-hover:
+                0 15px 40px rgba(15, 23, 42, 0.09);
+
+            --radius-card: 16px;
+            --radius-input: 10px;
         }
+
+
+        /* =========================================================
+           GLOBAL
+        ========================================================= */
 
         * {
             box-sizing: border-box;
@@ -34,10 +71,19 @@
         }
 
         body {
-            background-color: var(--bg-deep);
+
+            background:
+                radial-gradient(
+                    circle at 50% -10%,
+                    rgba(37, 99, 235, 0.045),
+                    transparent 35%
+                ),
+                var(--bg-deep);
+
             color: var(--text-main);
+
             font-family:
-                Inter,
+                "Inter",
                 -apple-system,
                 BlinkMacSystemFont,
                 "Segoe UI",
@@ -48,164 +94,260 @@
 
             margin: 0;
             padding: 0;
+
             line-height: 1.5;
+
             -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
         }
 
-        /* =========================
+
+        /* =========================================================
            HEADER
-        ========================= */
+        ========================================================= */
 
         header {
+
             border-bottom: 1px solid rgba(229, 231, 235, 0.9);
-            background: rgba(255, 255, 255, 0.94);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+
+            background:
+                rgba(255, 255, 255, 0.94);
+
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
 
             position: sticky;
             top: 0;
             z-index: 100;
 
-            padding: 16px 24px;
+            padding: 15px 28px;
 
             display: flex;
             justify-content: space-between;
             align-items: center;
 
-            box-shadow: 0 1px 8px rgba(15, 23, 42, 0.03);
+            box-shadow:
+                0 1px 10px rgba(15, 23, 42, 0.035);
         }
 
+
         .logo-container {
+
             display: flex;
             align-items: center;
             gap: 11px;
         }
 
+
         .logo-icon {
-            background: linear-gradient(135deg, #2563eb, #3b82f6);
+
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb 0%,
+                    #3b82f6 100%
+                );
+
             color: white;
 
             font-weight: 800;
-            padding: 8px 11px;
 
-            border-radius: 9px;
-            font-size: 17px;
+            border-radius: 11px;
 
-            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.22);
+            font-size: 16px;
+
+            letter-spacing: -0.5px;
+
+            box-shadow:
+                0 7px 18px rgba(37, 99, 235, 0.22);
         }
 
+
         .logo-text {
+
             font-size: 20px;
+
             font-weight: 800;
-            letter-spacing: -0.6px;
+
+            letter-spacing: -0.7px;
+
             color: #111827;
         }
 
+
+        /* =========================================================
+           TRUST BADGE
+        ========================================================= */
+
         .trust-badge {
-            background: var(--accent-green-light);
-            color: #15803d;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #f0fdf4,
+                    #ecfdf5
+                );
+
+            color: var(--accent-green-dark);
 
             border: 1px solid #bbf7d0;
 
             padding: 7px 13px;
+
             border-radius: 999px;
 
             font-size: 12px;
+
             font-weight: 700;
 
             display: flex;
             align-items: center;
+
             gap: 6px;
+
+            white-space: nowrap;
         }
 
-        /* =========================
-           MAIN
-        ========================= */
+
+        .trust-badge span {
+
+            font-size: 13px;
+        }
+
+
+        /* =========================================================
+           MAIN CONTAINER
+        ========================================================= */
 
         .main-container {
-            max-width: 1200px;
+
+            max-width: 1180px;
+
             margin: 0 auto;
-            padding: 65px 20px 70px;
+
+            padding:
+                68px 24px
+                80px;
         }
 
-        /* =========================
+
+        /* =========================================================
            HERO
-        ========================= */
+        ========================================================= */
 
         .hero-section {
+
             text-align: center;
-            margin-bottom: 48px;
+
+            margin-bottom: 50px;
         }
 
+
         .hero-section h1 {
-            font-size: clamp(32px, 5vw, 48px);
-            line-height: 1.12;
+
+            font-size:
+                clamp(34px, 5vw, 50px);
+
+            line-height: 1.08;
 
             font-weight: 800;
 
-            letter-spacing: -1.5px;
+            letter-spacing: -2px;
 
-            margin: 0 auto 16px;
+            margin:
+                0 auto 17px;
 
-            color: #111827;
+            color: #101827;
 
             max-width: 850px;
         }
 
+
         .hero-section h1::after {
+
             content: "";
+
             display: block;
 
-            width: 55px;
+            width: 52px;
             height: 4px;
 
-            margin: 20px auto 0;
+            margin: 21px auto 0;
 
-            border-radius: 10px;
+            border-radius: 20px;
 
-            background: linear-gradient(
-                90deg,
-                #2563eb,
-                #22c55e
-            );
+            background:
+                linear-gradient(
+                    90deg,
+                    #2563eb,
+                    #22c55e
+                );
         }
 
+
         .hero-section p {
+
             color: var(--text-muted);
 
-            font-size: 16px;
-            line-height: 1.7;
+            font-size: 15px;
+
+            line-height: 1.75;
 
             max-width: 650px;
 
-            margin: 20px auto 0;
+            margin:
+                21px auto 0;
         }
 
-        /* =========================
-           GRID
-        ========================= */
+
+        /* =========================================================
+           MAIN GRID
+        ========================================================= */
 
         .grid-layout {
+
             display: grid;
-            grid-template-columns: 2fr 1fr;
+
+            grid-template-columns:
+                minmax(0, 2fr)
+                minmax(310px, 1fr);
+
             gap: 28px;
+
             align-items: start;
         }
 
-        /* =========================
+
+        /* =========================================================
            CARDS
-        ========================= */
+        ========================================================= */
 
         .card {
-            background-color: var(--bg-card);
 
-            border: 1px solid var(--border-color);
+            background:
+                rgba(255, 255, 255, 0.98);
 
-            border-radius: 16px;
+            border:
+                1px solid var(--border-color);
 
-            padding: 26px;
+            border-radius:
+                var(--radius-card);
 
-            box-shadow: var(--shadow-card);
+            padding: 27px;
+
+            box-shadow:
+                var(--shadow-card);
+
+            position: relative;
+
+            overflow: hidden;
 
             transition:
                 transform 0.25s ease,
@@ -213,62 +355,161 @@
                 border-color 0.25s ease;
         }
 
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hover);
-            border-color: #dbe3ef;
+
+        /* subtle top accent */
+
+        .card::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+            right: 0;
+
+            height: 2px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(37, 99, 235, 0.8),
+                    rgba(34, 197, 94, 0.65)
+                );
+
+            opacity: 0.75;
         }
+
+
+        .card:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                var(--shadow-hover);
+
+            border-color:
+                #dce3ec;
+        }
+
 
         .card h3 {
+
             margin-top: 0;
 
-            font-size: 18px;
-            font-weight: 750;
-
-            color: #111827;
-
-            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 21px;
 
             padding-bottom: 15px;
-            margin-bottom: 22px;
 
-            letter-spacing: -0.2px;
+            border-bottom:
+                1px solid var(--border-light);
+
+            font-size: 17px;
+
+            font-weight: 750;
+
+            color: var(--text-dark);
+
+            letter-spacing:
+                -0.3px;
+
+            display: flex;
+
+            align-items: center;
         }
 
-        /* =========================
-           FORM
-        ========================= */
 
-        .form-group {
-            margin-bottom: 17px;
+        /* =========================================================
+           DEALS CONTAINER
+        ========================================================= */
+
+        #discountsContainer {
+
+            min-height: 180px;
         }
 
-        .form-group label {
-            display: block;
+
+        #discountsContainer > p {
+
+            margin: 0;
+
+            padding: 30px 20px;
+
+            border:
+                1px dashed #d8e0ea;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #fafcff,
+                    #f8fafc
+                );
+
+            color:
+                var(--text-muted) !important;
 
             font-size: 13px;
 
-            color: #4b5563;
+            text-align: center;
+
+            letter-spacing:
+                0.05px;
+        }
+
+
+        /* =========================================================
+           FORM
+        ========================================================= */
+
+        .form-group {
+
+            margin-bottom: 18px;
+        }
+
+
+        .form-group label {
+
+            display: block;
+
+            font-size: 12px;
+
+            color: #475569;
 
             margin-bottom: 7px;
 
-            font-weight: 650;
+            font-weight: 700;
+
+            letter-spacing:
+                0.05px;
         }
 
+
         .form-control {
+
             width: 100%;
 
-            background: #ffffff;
+            background:
+                #ffffff;
 
-            border: 1px solid #d1d5db;
+            border:
+                1px solid #d6dce5;
 
-            border-radius: 9px;
+            border-radius:
+                var(--radius-input);
 
-            padding: 12px 14px;
+            padding:
+                12px 14px;
 
-            color: #111827;
+            color:
+                #111827;
 
             font-size: 14px;
+
+            font-family:
+                inherit;
 
             box-sizing: border-box;
 
@@ -280,199 +521,382 @@
                 background-color 0.2s ease;
         }
 
+
         .form-control::placeholder {
-            color: #9ca3af;
+
+            color:
+                #a0a9b7;
         }
+
 
         .form-control:hover {
-            border-color: #9ca3af;
+
+            border-color:
+                #b8c2d0;
         }
+
 
         .form-control:focus {
-            border-color: var(--accent-blue);
 
-            background: #ffffff;
+            border-color:
+                var(--accent-blue);
+
+            background:
+                #ffffff;
 
             box-shadow:
-                0 0 0 3px rgba(37, 99, 235, 0.10);
+                0 0 0 3px
+                rgba(37, 99, 235, 0.09);
         }
 
-        /* =========================
+
+        /* =========================================================
            PRIMARY BUTTON
-        ========================= */
+        ========================================================= */
 
         .btn-primary {
+
             width: 100%;
 
-            background: linear-gradient(
-                135deg,
-                #2563eb,
-                #1d4ed8
-            );
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb 0%,
+                    #1d4ed8 100%
+                );
 
-            color: #ffffff;
+            color:
+                #ffffff;
 
-            font-weight: 750;
+            font-weight:
+                700;
 
-            border: none;
+            border:
+                none;
 
-            padding: 13px 16px;
+            padding:
+                13px 16px;
 
-            border-radius: 9px;
+            border-radius:
+                10px;
 
-            cursor: pointer;
+            cursor:
+                pointer;
 
-            font-size: 14px;
+            font-size:
+                14px;
 
-            letter-spacing: 0.05px;
+            font-family:
+                inherit;
+
+            letter-spacing:
+                -0.05px;
+
+            margin-top:
+                7px;
+
+            box-shadow:
+                0 8px 20px
+                rgba(37, 99, 235, 0.20);
 
             transition:
                 transform 0.2s ease,
                 box-shadow 0.2s ease,
                 opacity 0.2s ease;
-
-            margin-top: 8px;
-
-            box-shadow:
-                0 7px 18px rgba(37, 99, 235, 0.20);
         }
+
 
         .btn-primary:hover {
-            opacity: 0.96;
 
-            transform: translateY(-1px);
+            opacity:
+                0.97;
+
+            transform:
+                translateY(-1px);
 
             box-shadow:
-                0 10px 24px rgba(37, 99, 235, 0.27);
+                0 11px 25px
+                rgba(37, 99, 235, 0.28);
         }
+
 
         .btn-primary:active {
-            transform: translateY(0);
+
+            transform:
+                translateY(0);
+
+            box-shadow:
+                0 5px 12px
+                rgba(37, 99, 235, 0.18);
         }
 
-        /* =========================
-           DEAL FEED AREA
-        ========================= */
 
-        #discountsContainer {
-            min-height: 180px;
+        /* =========================================================
+           INPUT NUMBER ARROWS
+        ========================================================= */
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+
+            opacity: 0.45;
         }
 
-        #discountsContainer > p {
-            background: #f8fafc;
 
-            border: 1px dashed #dbe3ef;
-
-            border-radius: 10px;
-
-            padding: 28px 15px;
-
-            margin: 0;
-        }
-
-        /* =========================
+        /* =========================================================
            MOBILE
-        ========================= */
+        ========================================================= */
+
+        @media (max-width: 900px) {
+
+            .grid-layout {
+
+                grid-template-columns:
+                    1fr;
+            }
+        }
+
 
         @media (max-width: 768px) {
 
             header {
-                padding: 14px 16px;
+
+                padding:
+                    13px 17px;
             }
+
+
+            .logo-icon {
+
+                width: 38px;
+                height: 38px;
+
+                border-radius: 10px;
+
+                font-size: 14px;
+            }
+
 
             .logo-text {
-                font-size: 18px;
+
+                font-size:
+                    18px;
             }
+
 
             .trust-badge {
-                font-size: 11px;
-                padding: 6px 9px;
+
+                font-size:
+                    10px;
+
+                padding:
+                    6px 9px;
             }
 
-            .trust-badge span {
-                display: none;
-            }
 
             .main-container {
-                padding: 42px 15px 55px;
+
+                padding:
+                    45px 16px
+                    55px;
             }
+
 
             .hero-section {
-                margin-bottom: 34px;
+
+                margin-bottom:
+                    35px;
             }
+
 
             .hero-section h1 {
-                font-size: 32px;
-                letter-spacing: -1px;
+
+                font-size:
+                    32px;
+
+                letter-spacing:
+                    -1.2px;
             }
+
 
             .hero-section p {
-                font-size: 15px;
+
+                font-size:
+                    14px;
             }
+
 
             .grid-layout {
-                grid-template-columns: 1fr;
-                gap: 20px;
+
+                gap:
+                    20px;
             }
 
+
             .card {
-                padding: 21px;
-                border-radius: 14px;
+
+                padding:
+                    22px;
+
+                border-radius:
+                    14px;
             }
         }
 
-        @media (max-width: 480px) {
+
+        @media (max-width: 520px) {
 
             header {
-                align-items: center;
+
+                gap: 10px;
             }
 
+
             .logo-container {
+
                 gap: 8px;
             }
 
-            .logo-icon {
-                font-size: 15px;
-                padding: 7px 9px;
-            }
 
             .logo-text {
-                font-size: 17px;
+
+                font-size:
+                    16px;
             }
+
 
             .trust-badge {
-                max-width: 145px;
-                text-align: center;
-                line-height: 1.2;
+
+                max-width:
+                    150px;
+
+                white-space:
+                    normal;
+
+                text-align:
+                    center;
+
+                line-height:
+                    1.2;
             }
+
+
+            .trust-badge span {
+
+                display:
+                    none;
+            }
+
+
+            .main-container {
+
+                padding-top:
+                    38px;
+            }
+
 
             .hero-section h1 {
-                font-size: 29px;
+
+                font-size:
+                    29px;
+
+                line-height:
+                    1.12;
             }
 
+
             .hero-section p {
-                font-size: 14px;
+
+                font-size:
+                    13.5px;
+
+                line-height:
+                    1.65;
+            }
+
+
+            .card {
+
+                padding:
+                    19px;
+            }
+
+
+            .card h3 {
+
+                font-size:
+                    16px;
             }
         }
+
+
+        /* =========================================================
+           ACCESSIBILITY
+        ========================================================= */
+
+        button:focus-visible,
+        input:focus-visible {
+
+            outline:
+                3px solid
+                rgba(37, 99, 235, 0.18);
+
+            outline-offset:
+                2px;
+        }
+
+
+        /* =========================================================
+           REDUCED MOTION
+        ========================================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            * {
+
+                scroll-behavior:
+                    auto !important;
+
+                transition:
+                    none !important;
+            }
+        }
+
     </style>
 </head>
 
+
 <body>
 
+
     <header>
+
         <div class="logo-container">
-            <div class="logo-icon">CD</div>
-            <div class="logo-text">CheckerDiscount</div>
+
+            <div class="logo-icon">
+                CD
+            </div>
+
+            <div class="logo-text">
+                CheckerDiscount
+            </div>
+
         </div>
 
+
         <div class="trust-badge">
+
             <span>🛡️</span>
+
             100% Verified Price Drops & Refund Radar
+
         </div>
+
     </header>
 
 
+
     <div class="main-container">
+
 
         <div class="hero-section">
 
@@ -488,7 +912,9 @@
         </div>
 
 
+
         <div class="grid-layout">
+
 
             <!-- Left Column: Live Verified Deals Feed -->
 
@@ -497,6 +923,7 @@
                 <h3>
                     🔥 Live Verified Market Deals
                 </h3>
+
 
                 <div id="discountsContainer">
 
@@ -509,6 +936,7 @@
             </div>
 
 
+
             <!-- Right Column: Instant Refund Claim Calculator -->
 
             <div class="card">
@@ -517,7 +945,9 @@
                     💡 Price Drop Refund Estimator
                 </h3>
 
+
                 <form id="refundForm">
+
 
                     <div class="form-group">
 
@@ -533,6 +963,7 @@
                         >
 
                     </div>
+
 
 
                     <div class="form-group">
@@ -552,6 +983,7 @@
                     </div>
 
 
+
                     <div class="form-group">
 
                         <label>
@@ -569,6 +1001,7 @@
                     </div>
 
 
+
                     <button
                         type="submit"
                         class="btn-primary"
@@ -576,18 +1009,21 @@
                         Calculate Claimable Refund
                     </button>
 
+
                 </form>
 
             </div>
+
 
         </div>
 
     </div>
 
 
+
+    <!-- Existing JavaScript connection — DO NOT CHANGE -->
+
     <script src="js/app.js"></script>
 
 </body>
 </html>
-
-[/writing]
