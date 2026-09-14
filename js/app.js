@@ -1,4 +1,4 @@
-const API_URL = "https://checkerdiscount-api.hamraahirn32.workers.dev";
+const API_URL = "https://deal-api.hamraahirm32.workers.dev";
 
 document.addEventListener("DOMContentLoaded", () => {
     fetchDiscounts();
@@ -14,7 +14,7 @@ async function fetchDiscounts() {
                     document.querySelector("main");
     
     try {
-        const response = await fetch(`${API_URL}/api/discounts`);
+        const response = await fetch(`${API_URL}/api/deals`);
         if (!response.ok) {
             throw new Error(`HTTP Error Status: ${response.status}`);
         }
