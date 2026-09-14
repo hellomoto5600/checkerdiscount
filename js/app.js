@@ -12,23 +12,23 @@ document.addEventListener("DOMContentLoaded", () => {
 async function fetchProducts() {
     const grid = document.getElementById("product-grid");
     try {
-        const res = await fetch(`${API_URL}/api/products`);
+        const res = await fetch(API_URL + "/api/products");
         const data = await res.json();
 
-        if (data.length === 0) {
+        if (!Array.isArray(data) || data.length === 0) {
             grid.innerHTML = "<p>No discounts logged yet.</p>";
             return;
         }
 
         grid.innerHTML = data.map(item => `
             <div class="card">
-                <h3>${item.title}</h3>
-                <p class="store">${item.store_name} • ${item.category || 'General'}</p>
-                <p class="price">$${item.current_price} ${item.currency}</p>
+                <h3>${item.title || 'Product'}</h3>
+                <p class="store">${item.store_name || 'Store'} • ${item.category || 'General'}</p>
+                <p class="price">$${item.current_price || '0.00'} ${item.currency || 'USD'}</p>
             </div>
         `).join("");
     } catch (err) {
-        grid.innerHTML = "<p style='color:#f85149;'>Failed to load deals from Cloudflare Worker.</p>";
+        grid.innerHTML = "<p style='color:#f85149;'>Connecting to Database...</p>";
     }
 }
 
@@ -48,7 +48,7 @@ async function handleRefundSubmit(e) {
     }
 
     try {
-        const res = await fetch(`${API_URL}/api/refunds`, {
+        const res = await fetch(API_URL + "/api/refunds", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -63,9 +63,12 @@ async function handleRefundSubmit(e) {
             resultDiv.style.color = "#3fb950";
             resultDiv.innerText = `Success! Savings of $${savings.toFixed(2)} tracked in database.`;
             document.getElementById("refundForm").reset();
+        } else {
+            resultDiv.style.color = "#f85149";
+            resultDiv.innerText = "Error saving refund claim.";
         }
     } catch (err) {
         resultDiv.style.color = "#f85149";
-        resultDiv.innerText = "Error saving refund claim.";
+        resultDiv.innerText = "Error connecting to server.";
     }
 }
