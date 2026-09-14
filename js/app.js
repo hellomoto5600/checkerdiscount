@@ -1,4 +1,4 @@
-const API_URL = "https://deal-api.hamraahirm32.workers.dev";
+const API_URL = "https://deal-api.hamraahirn32.workers.dev/api/deals";
 
 document.addEventListener("DOMContentLoaded", () => {
     fetchDiscounts();
