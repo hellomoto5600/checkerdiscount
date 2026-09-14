@@ -1,4 +1,4 @@
-const API_URL = "https://deal-api.hamraahirn32.workers.dev/api/deals";
+const API_URL = "https://deal-api.hamraahirm32.workers.dev/api/deals";
 
 document.addEventListener("DOMContentLoaded", () => {
     fetchDiscounts();
@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function fetchDiscounts() {
-    // Try multiple possible container IDs or fallback to any content area
     let container = document.getElementById("discountsContainer") || 
                     document.getElementById("discounts-container") || 
                     document.getElementById("dealsContainer") ||
@@ -14,7 +13,7 @@ async function fetchDiscounts() {
                     document.querySelector("main");
     
     try {
-        const response = await fetch(`${API_URL}/api/deals`);
+        const response = await fetch(API_URL);
         if (!response.ok) {
             throw new Error(`HTTP Error Status: ${response.status}`);
         }
@@ -46,7 +45,7 @@ async function fetchDiscounts() {
             card.style.cssText = "background: #1a202c; border: 1px solid #2d3748; padding: 16px; border-radius: 8px; margin-bottom: 12px; color: #fff; text-align: left;";
             
             const title = item.title || item.name || item.store_name || "Verified Deal";
-            const desc = item.description || item.details || "Direct price drop deal";
+            const desc = item.description || item.details || item.store || "Direct price drop deal";
             const originalPrice = item.original_price || item.old_price || item.price || "0.00";
             const discountPrice = item.discounted_price || item.new_price || item.sale_price || "0.00";
             const link = item.url || item.link || "#";
@@ -56,7 +55,7 @@ async function fetchDiscounts() {
                     <h4 style="margin: 0; color: #63b3ed; font-size: 16px;">${title}</h4>
                     <span style="background: #276749; color: #9ae6b4; padding: 3px 8px; border-radius: 4px; font-size: 12px;">Verified</span>
                 </div>
-                <p style="margin: 8px 0; color: #cbd5e0; font-size: 14px;">${desc}</p>
+                <p style="margin: 8px 0; color: #cbd5e0; font-size: 14px;">Store: ${desc}</p>
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
                     <div style="font-size: 14px;">
                         <span style="color: #a0aec0; text-decoration: line-through; margin-right: 8px;">$${originalPrice}</span>
