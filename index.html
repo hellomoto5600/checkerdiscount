@@ -4,72 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>CheckerDiscount - Verified Deals & Price Savings</title>
+    <title>CheckerDiscount | Find Better Deals & Real Savings</title>
 
-    <meta
-        name="description"
-        content="Discover verified online deals, compare prices and find genuine savings from trusted retailers."
-    >
+    <meta name="description"
+          content="CheckerDiscount helps you discover verified deals, compare savings and check retailer offers before you buy.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-
         /* =========================================================
-           CHECKERDISCOUNT
-           FINAL PROFESSIONAL LIGHT DESIGN
-           API / DATABASE STRUCTURE PRESERVED
+           CHECKERDISCOUNT DESIGN SYSTEM
+           Change colors here later — no need to edit the whole site.
         ========================================================= */
 
         :root {
+            --brand: #155EEF;
+            --brand-dark: #0B3B91;
+            --brand-soft: #EEF4FF;
 
-            --bg-deep: #f6f8fc;
-            --bg-card: #ffffff;
-            --bg-soft: #f8fafc;
+            --navy: #0B1220;
+            --text: #172033;
+            --muted: #667085;
 
-            --border-color: #e5e7eb;
-            --border-light: #eef1f5;
+            --green: #12B76A;
+            --green-dark: #087443;
+            --green-soft: #ECFDF3;
 
-            --blue: #2563eb;
-            --blue-dark: #1d4ed8;
-            --blue-soft: #eff6ff;
+            --orange: #F79009;
+            --orange-soft: #FFF7E8;
 
-            --green: #16a34a;
-            --green-dark: #15803d;
-            --green-soft: #f0fdf4;
+            --background: #F6F8FC;
+            --white: #FFFFFF;
 
-            --orange: #f97316;
-            --orange-dark: #ea580c;
-            --orange-soft: #fff7ed;
+            --border: #E4EAF2;
+            --shadow: 0 12px 35px rgba(16, 24, 40, 0.07);
 
-            --red: #dc2626;
-            --red-soft: #fef2f2;
-
-            --navy: #0f172a;
-            --text-main: #111827;
-            --text-muted: #64748b;
-            --text-light: #94a3b8;
-
-            --shadow:
-                0 8px 30px rgba(15, 23, 42, 0.055);
-
-            --shadow-hover:
-                0 18px 45px rgba(15, 23, 42, 0.12);
+            --radius: 18px;
+            --max-width: 1200px;
         }
-
-
-        /* =========================================================
-           GLOBAL
-        ========================================================= */
 
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         html {
@@ -77,83 +56,751 @@
         }
 
         body {
-
-            margin: 0;
-            padding: 0;
-
-            background:
-                radial-gradient(
-                    circle at 50% -15%,
-                    rgba(37, 99, 235, 0.06),
-                    transparent 38%
-                ),
-                var(--bg-deep);
-
-            color: var(--text-main);
-
-            font-family:
-                "Inter",
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Roboto,
-                Helvetica,
-                Arial,
-                sans-serif;
-
-            line-height: 1.5;
-
-            -webkit-font-smoothing: antialiased;
-            text-rendering: optimizeLegibility;
+            font-family: "Inter", Arial, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
         }
-
 
         a {
-            -webkit-tap-highlight-color: transparent;
+            text-decoration: none;
+            color: inherit;
         }
 
+        button,
+        input {
+            font-family: inherit;
+        }
 
         /* =========================================================
            HEADER
         ========================================================= */
 
-        header {
-
+        .site-header {
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.96);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(12px);
+        }
+
+        .nav-container {
+            max-width: var(--max-width);
+            margin: auto;
+            height: 76px;
+            padding: 0 22px;
 
             display: flex;
             align-items: center;
             justify-content: space-between;
-
-            padding: 15px 28px;
-
-            background:
-                rgba(255, 255, 255, 0.95);
-
-            border-bottom:
-                1px solid rgba(229, 231, 235, 0.9);
-
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-
-            box-shadow:
-                0 1px 10px rgba(15, 23, 42, 0.035);
+            gap: 30px;
         }
 
+        /* =========================================================
+           LOGO
+        ========================================================= */
 
-        .logo-container {
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            font-weight: 800;
+            color: var(--navy);
+            font-size: 20px;
+            white-space: nowrap;
+        }
+
+        .logo-placeholder {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
 
             display: flex;
             align-items: center;
+            justify-content: center;
 
-            gap: 11px;
+            color: white;
+            font-weight: 800;
+            font-size: 17px;
+
+            background: linear-gradient(
+                135deg,
+                var(--brand),
+                var(--brand-dark)
+            );
+
+            box-shadow: 0 8px 20px rgba(21, 94, 239, 0.22);
         }
 
+        /*
+        WHEN YOUR REAL LOGO IS READY:
 
-        .logo-icon {
+        Replace the logo-placeholder div with:
 
+        <img src="images/logo.png"
+             alt="CheckerDiscount"
+             class="real-logo">
+
+        */
+
+        .real-logo {
+            width: 44px;
+            height: 44px;
+            object-fit: contain;
+        }
+
+        .brand-name span {
+            color: var(--brand);
+        }
+
+        /* =========================================================
+           NAVIGATION
+        ========================================================= */
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .main-nav a {
+            padding: 9px 13px;
+            border-radius: 9px;
+
+            color: #475467;
+            font-size: 14px;
+            font-weight: 600;
+
+            transition: 0.2s ease;
+        }
+
+        .main-nav a:hover {
+            color: var(--brand);
+            background: var(--brand-soft);
+        }
+
+        .nav-deals {
+            color: var(--brand) !important;
+        }
+
+        .nav-cta {
+            background: var(--brand) !important;
+            color: white !important;
+            padding: 10px 16px !important;
+        }
+
+        .nav-cta:hover {
+            background: var(--brand-dark) !important;
+            color: white !important;
+        }
+
+        .menu-button {
+            display: none;
+            border: 0;
+            background: transparent;
+            font-size: 26px;
+            cursor: pointer;
+            color: var(--navy);
+        }
+
+        /* =========================================================
+           HERO
+        ========================================================= */
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+
+            background:
+                radial-gradient(
+                    circle at 85% 20%,
+                    rgba(21, 94, 239, 0.13),
+                    transparent 32%
+                ),
+                radial-gradient(
+                    circle at 10% 90%,
+                    rgba(18, 183, 106, 0.09),
+                    transparent 28%
+                ),
+                #ffffff;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero-container {
+            max-width: var(--max-width);
+            min-height: 560px;
+            margin: auto;
+            padding: 75px 22px 70px;
+
+            display: grid;
+            grid-template-columns: 1.08fr 0.92fr;
+            align-items: center;
+            gap: 70px;
+        }
+
+        .hero-content {
+            max-width: 650px;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px 13px;
+            border-radius: 999px;
+
+            background: var(--green-soft);
+            color: var(--green-dark);
+
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+
+            margin-bottom: 22px;
+        }
+
+        .eyebrow-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--green);
+        }
+
+        .hero h1 {
+            font-size: clamp(42px, 5vw, 67px);
+            line-height: 1.05;
+            letter-spacing: -2.5px;
+            color: var(--navy);
+            margin-bottom: 22px;
+            font-weight: 800;
+        }
+
+        .hero h1 .highlight {
+            color: var(--brand);
+        }
+
+        .hero h1 .saving-highlight {
+            color: var(--green);
+        }
+
+        .hero-description {
+            max-width: 590px;
+
+            color: var(--muted);
+            font-size: 17px;
+            line-height: 1.75;
+
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .primary-button,
+        .secondary-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            min-height: 48px;
+            padding: 0 20px;
+
+            border-radius: 11px;
+            font-size: 14px;
+            font-weight: 700;
+
+            transition: 0.2s ease;
+        }
+
+        .primary-button {
+            background: var(--brand);
+            color: white;
+            box-shadow: 0 10px 22px rgba(21, 94, 239, 0.20);
+        }
+
+        .primary-button:hover {
+            background: var(--brand-dark);
+            transform: translateY(-2px);
+        }
+
+        .secondary-button {
+            background: white;
+            color: var(--navy);
+            border: 1px solid var(--border);
+        }
+
+        .secondary-button:hover {
+            border-color: var(--brand);
+            color: var(--brand);
+            transform: translateY(-2px);
+        }
+
+        .hero-trust {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            flex-wrap: wrap;
+
+            margin-top: 28px;
+            padding-top: 22px;
+
+            border-top: 1px solid var(--border);
+
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .hero-trust span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .trust-check {
+            color: var(--green);
+            font-weight: 800;
+        }
+
+        /* =========================================================
+           HERO PREVIEW CARD
+        ========================================================= */
+
+        .hero-preview {
+            position: relative;
+        }
+
+        .preview-window {
+            position: relative;
+
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+
+            padding: 20px;
+
+            box-shadow:
+                0 25px 70px rgba(16, 24, 40, 0.12),
+                0 5px 18px rgba(16, 24, 40, 0.05);
+        }
+
+        .preview-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+
+        .preview-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--muted);
+        }
+
+        .verified-label {
+            padding: 6px 9px;
+            border-radius: 7px;
+
+            background: var(--green-soft);
+            color: var(--green-dark);
+
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .preview-product {
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 18px;
+        }
+
+        .preview-store {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 600;
+
+            margin-bottom: 12px;
+        }
+
+        .preview-store strong {
+            color: var(--navy);
+        }
+
+        .preview-product h3 {
+            color: var(--navy);
+            font-size: 17px;
+            line-height: 1.4;
+            margin-bottom: 16px;
+        }
+
+        .preview-price-row {
+            display: flex;
+            align-items: end;
+            gap: 9px;
+            margin-bottom: 14px;
+        }
+
+        .preview-old {
+            color: #98A2B3;
+            text-decoration: line-through;
+            font-size: 13px;
+        }
+
+        .preview-new {
+            color: var(--navy);
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .preview-save {
+            display: inline-flex;
+
+            padding: 6px 9px;
+            border-radius: 7px;
+
+            background: var(--orange-soft);
+            color: #B54708;
+
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .preview-button {
+            width: 100%;
+            min-height: 43px;
+
+            border: 0;
+            border-radius: 9px;
+
+            background: var(--brand);
+            color: white;
+
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .floating-saving {
+            position: absolute;
+            right: -25px;
+            bottom: -22px;
+
+            background: var(--green);
+            color: white;
+
+            padding: 15px 18px;
+            border-radius: 14px;
+
+            box-shadow: 0 15px 30px rgba(18, 183, 106, 0.24);
+        }
+
+        .floating-saving small {
+            display: block;
+            font-size: 10px;
+            opacity: 0.9;
+        }
+
+        .floating-saving strong {
+            display: block;
+            font-size: 21px;
+        }
+
+        /* =========================================================
+           MAIN
+        ========================================================= */
+
+        .main-content {
+            max-width: var(--max-width);
+            margin: auto;
+            padding: 65px 22px 80px;
+        }
+
+        .section-heading {
+            margin-bottom: 24px;
+        }
+
+        .section-kicker {
+            color: var(--brand);
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            margin-bottom: 7px;
+        }
+
+        .section-heading h2 {
+            color: var(--navy);
+            font-size: 29px;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* =========================================================
+           MAIN GRID
+        ========================================================= */
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.75fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .content-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 22px;
+            box-shadow: var(--shadow);
+        }
+
+        /* =========================================================
+           DEALS
+        ========================================================= */
+
+        .deals-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+
+            margin-bottom: 18px;
+        }
+
+        .deals-header h2 {
+            color: var(--navy);
+            font-size: 20px;
+        }
+
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+
+            background: var(--green-soft);
+            color: var(--green-dark);
+
+            padding: 6px 9px;
+            border-radius: 999px;
+
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+        }
+
+        /* =========================================================
+           DEAL CARD
+        ========================================================= */
+
+        .discount-card {
+            position: relative;
+
+            display: flex;
+            gap: 18px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff,
+                    #fbfcff
+                );
+
+            border: 1px solid var(--border);
+            border-radius: 16px;
+
+            padding: 20px;
+            margin-bottom: 15px;
+
+            overflow: hidden;
+
+            transition:
+                transform 0.22s ease,
+                box-shadow 0.22s ease,
+                border-color 0.22s ease;
+        }
+
+        .discount-card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+
+            width: 4px;
+
+            background: linear-gradient(
+                180deg,
+                var(--brand),
+                var(--green)
+            );
+        }
+
+        .discount-card:hover {
+            transform: translateY(-3px);
+            border-color: #C9D7F5;
+
+            box-shadow: 0 15px 35px rgba(16, 24, 40, 0.08);
+        }
+
+        .deal-image {
+            width: 145px;
+            min-width: 145px;
+            height: 145px;
+
+            border-radius: 12px;
+
+            background: #F8FAFC;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            overflow: hidden;
+        }
+
+        .deal-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .deal-card-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .deal-top-line {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+
+            margin-bottom: 7px;
+        }
+
+        .deal-store {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .deal-store-check {
+            color: var(--green);
+        }
+
+        .deal-discount {
+            flex-shrink: 0;
+
+            padding: 5px 8px;
+            border-radius: 7px;
+
+            background: var(--orange-soft);
+            color: #B54708;
+
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .deal-title {
+            color: var(--navy);
+
+            font-size: 16px;
+            line-height: 1.45;
+            font-weight: 700;
+
+            margin-bottom: 12px;
+        }
+
+        .deal-prices {
+            display: flex;
+            align-items: baseline;
+            gap: 9px;
+            flex-wrap: wrap;
+
+            margin-bottom: 5px;
+        }
+
+        .deal-old-price {
+            color: #98A2B3;
+            text-decoration: line-through;
+            font-size: 13px;
+        }
+
+        .deal-new-price {
+            color: var(--navy);
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        .deal-saving {
+            color: var(--green-dark);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .deal-message {
+            color: var(--muted);
+            font-size: 11px;
+            margin-bottom: 13px;
+        }
+
+        .deal-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            min-height: 39px;
+            padding: 0 14px;
+
+            border-radius: 8px;
+
+            background: var(--brand);
+            color: white;
+
+            font-size: 12px;
+            font-weight: 700;
+
+            transition: 0.2s ease;
+        }
+
+        .deal-button:hover {
+            background: var(--brand-dark);
+            transform: translateY(-1px);
+        }
+
+        /* =========================================================
+           SAVINGS CALCULATOR
+        ========================================================= */
+
+        .calculator-card {
+            position: sticky;
+            top: 98px;
+        }
+
+        .calculator-icon {
             width: 42px;
             height: 42px;
 
@@ -163,1457 +810,660 @@
 
             border-radius: 11px;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #2563eb,
-                    #3b82f6
-                );
-
-            color: white;
-
-            font-size: 16px;
-            font-weight: 800;
-
-            letter-spacing: -0.5px;
-
-            box-shadow:
-                0 7px 18px rgba(37, 99, 235, 0.22);
-        }
-
-
-        .logo-text {
-
-            color: var(--text-main);
+            background: var(--brand-soft);
+            color: var(--brand);
 
             font-size: 20px;
-            font-weight: 800;
 
-            letter-spacing: -0.7px;
+            margin-bottom: 15px;
         }
 
+        .calculator-card h2 {
+            color: var(--navy);
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
 
-        /* =========================================================
-           TRUST BADGE
-        ========================================================= */
+        .calculator-card > p {
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
 
-        .trust-badge {
+        .form-group {
+            margin-bottom: 14px;
+        }
 
-            display: flex;
-            align-items: center;
+        .form-group label {
+            display: block;
 
-            gap: 6px;
-
-            padding: 7px 13px;
-
-            border-radius: 999px;
-
-            background:
-                var(--green-soft);
-
-            border:
-                1px solid #bbf7d0;
-
-            color:
-                var(--green-dark);
-
+            color: #344054;
             font-size: 12px;
             font-weight: 700;
 
-            white-space: nowrap;
+            margin-bottom: 6px;
         }
 
-
-        /* =========================================================
-           MAIN
-        ========================================================= */
-
-        .main-container {
-
-            max-width: 1180px;
-
-            margin: 0 auto;
-
-            padding:
-                68px 24px 80px;
-        }
-
-
-        /* =========================================================
-           HERO
-        ========================================================= */
-
-        .hero-section {
-
-            text-align: center;
-
-            margin-bottom: 50px;
-        }
-
-
-        .hero-section h1 {
-
-            position: relative;
-
+        .form-group input {
             width: 100%;
+            height: 43px;
 
-            min-height: 108px;
+            padding: 0 12px;
 
-            margin:
-                0 auto 17px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
 
-            color: transparent;
+            background: white;
+            color: var(--text);
 
-            font-size:
-                clamp(34px, 5vw, 50px);
-
-            line-height: 1.08;
-
-            font-weight: 800;
-
-            letter-spacing: -2px;
-        }
-
-
-        .hero-section h1::before {
-
-            content:
-                "Find Deals Worth Clicking";
-
-            position: absolute;
-
-            left: 0;
-            right: 0;
-            top: 0;
-
-            color:
-                var(--text-main);
-
-            animation:
-                heroTextChange 12s infinite;
-        }
-
-
-        .hero-section h1::after {
-
-            content: "";
-
-            position: absolute;
-
-            left: 50%;
-
-            transform:
-                translateX(-50%);
-
-            bottom: 0;
-
-            width: 52px;
-            height: 4px;
-
-            border-radius: 20px;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    var(--blue),
-                    #22c55e
-                );
-        }
-
-
-        @keyframes heroTextChange {
-
-            0%, 20% {
-                content: "Find Deals Worth Clicking";
-                opacity: 1;
-            }
-
-            23% {
-                content: "Discover Real Savings";
-                opacity: 0;
-                transform: translateY(7px);
-            }
-
-            25%, 45% {
-                content: "Discover Real Savings";
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-            48% {
-                content: "Compare Before You Buy";
-                opacity: 0;
-                transform: translateY(7px);
-            }
-
-            50%, 70% {
-                content: "Compare Before You Buy";
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-            73% {
-                content: "Don't Overpay for Products";
-                opacity: 0;
-                transform: translateY(7px);
-            }
-
-            75%, 95% {
-                content: "Don't Overpay for Products";
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-            98% {
-                content: "Find Deals Worth Clicking";
-                opacity: 0;
-                transform: translateY(7px);
-            }
-
-            100% {
-                content: "Find Deals Worth Clicking";
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-
-        .hero-section p {
-
-            max-width: 650px;
-
-            margin:
-                21px auto 0;
-
-            color:
-                var(--text-muted);
-
-            font-size: 15px;
-
-            line-height: 1.75;
-        }
-
-
-        /* =========================================================
-           GRID
-        ========================================================= */
-
-        .grid-layout {
-
-            display: grid;
-
-            grid-template-columns:
-                minmax(0, 2fr)
-                minmax(310px, 1fr);
-
-            gap: 28px;
-
-            align-items: start;
-        }
-
-
-        /* =========================================================
-           MAIN CARDS
-        ========================================================= */
-
-        .card {
-
-            position: relative;
-
-            overflow: hidden;
-
-            padding: 27px;
-
-            background:
-                rgba(255, 255, 255, 0.98);
-
-            border:
-                1px solid var(--border-color);
-
-            border-radius: 18px;
-
-            box-shadow:
-                var(--shadow);
-
-            transition:
-                transform 0.25s ease,
-                box-shadow 0.25s ease,
-                border-color 0.25s ease;
-        }
-
-
-        .card::before {
-
-            content: "";
-
-            position: absolute;
-
-            top: 0;
-            left: 0;
-            right: 0;
-
-            height: 2px;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    rgba(37, 99, 235, 0.85),
-                    rgba(34, 197, 94, 0.65)
-                );
-        }
-
-
-        .card:hover {
-
-            transform:
-                translateY(-2px);
-
-            box-shadow:
-                var(--shadow-hover);
-
-            border-color:
-                #dce3ec;
-        }
-
-
-        .card h3 {
-
-            margin-top: 0;
-            margin-bottom: 21px;
-
-            padding-bottom: 15px;
-
-            border-bottom:
-                1px solid var(--border-light);
-
-            color:
-                var(--text-main);
-
-            font-size: 17px;
-
-            font-weight: 750;
-
-            letter-spacing:
-                -0.3px;
-        }
-
-
-        /* =========================================================
-           DEAL AREA
-        ========================================================= */
-
-        #discountsContainer {
-
-            min-height: 180px;
-        }
-
-
-        #discountsContainer > p {
-
-            margin: 0;
-
-            padding: 30px 20px;
-
-            background:
-                linear-gradient(
-                    180deg,
-                    #fbfdff,
-                    #f8fafc
-                );
-
-            border:
-                1px dashed #d8e0ea;
-
-            border-radius: 12px;
-
-            color:
-                var(--text-muted) !important;
+            outline: none;
 
             font-size: 13px;
 
-            text-align: center;
+            transition: 0.2s ease;
         }
 
+        .form-group input:focus {
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px rgba(21, 94, 239, 0.09);
+        }
+
+        .calculate-button {
+            width: 100%;
+            height: 44px;
+
+            border: 0;
+            border-radius: 9px;
+
+            background: var(--navy);
+            color: white;
+
+            font-size: 13px;
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        .calculate-button:hover {
+            background: var(--brand);
+        }
+
+        #refundResult {
+            margin-top: 15px;
+            padding: 13px;
+
+            border-radius: 10px;
+
+            background: var(--green-soft);
+            color: var(--green-dark);
+
+            font-size: 12px;
+            font-weight: 600;
+        }
 
         /* =========================================================
-           PROFESSIONAL DEAL CARD
+           AD PLACEHOLDER
         ========================================================= */
 
-        .discount-card {
+        .ad-slot {
+            margin-top: 25px;
 
-            position: relative;
-
-            overflow: hidden;
-
-            display: flex;
-
-            flex-direction: column;
-
-            margin-bottom: 18px;
-
-            padding: 0;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    #ffffff,
-                    #fbfdff
-                );
-
-            border:
-                1px solid #e2e8f0;
-
-            border-radius: 17px;
-
-            box-shadow:
-                0 8px 25px rgba(15, 23, 42, 0.055);
-
-            transition:
-                transform 0.25s ease,
-                box-shadow 0.25s ease,
-                border-color 0.25s ease;
-        }
-
-
-        .discount-card:last-child {
-            margin-bottom: 0;
-        }
-
-
-        .discount-card:hover {
-
-            transform:
-                translateY(-4px);
-
-            border-color:
-                #cbd5e1;
-
-            box-shadow:
-                0 18px 42px rgba(15, 23, 42, 0.12);
-        }
-
-
-        .discount-card::before {
-
-            content: "";
-
-            position: absolute;
-
-            left: 0;
-            top: 0;
-            bottom: 0;
-
-            width: 4px;
-
-            background:
-                linear-gradient(
-                    180deg,
-                    #2563eb,
-                    #22c55e
-                );
-        }
-
-
-        .deal-card-content {
+            min-height: 90px;
 
             display: flex;
-
-            align-items: stretch;
-
-            min-height: 205px;
-        }
-
-
-        /* =========================================================
-           DEAL IMAGE
-        ========================================================= */
-
-        .deal-image {
-
-            width: 220px;
-
-            min-width: 220px;
-
-            display: flex;
-
             align-items: center;
             justify-content: center;
 
-            padding: 24px;
+            border: 1px dashed #CBD5E1;
+            border-radius: 12px;
 
-            background:
-                linear-gradient(
-                    145deg,
-                    #f8fafc,
-                    #ffffff
-                );
+            color: #98A2B3;
 
-            border-right:
-                1px solid #edf1f5;
-        }
-
-
-        .deal-image img {
-
-            display: block;
-
-            width: 100%;
-            height: 155px;
-
-            object-fit: contain;
-
-            mix-blend-mode: multiply;
-
-            transition:
-                transform 0.3s ease;
-        }
-
-
-        .discount-card:hover .deal-image img {
-
-            transform:
-                scale(1.04);
-        }
-
-
-        /* =========================================================
-           DEAL INFO
-        ========================================================= */
-
-        .deal-info {
-
-            position: relative;
-
-            flex: 1;
-
-            padding: 21px 22px 20px;
-        }
-
-
-        .deal-store {
-
-            display: inline-flex;
-
-            align-items: center;
-
-            gap: 6px;
-
-            margin-bottom: 9px;
-
-            padding: 5px 9px;
-
-            border-radius: 6px;
-
-            background:
-                #f8fafc;
-
-            border:
-                1px solid #e2e8f0;
-
-            color:
-                #475569;
+            background: rgba(255,255,255,0.6);
 
             font-size: 11px;
-
-            font-weight: 800;
-
-            letter-spacing:
-                0.25px;
-
-            text-transform:
-                uppercase;
         }
-
-
-        .deal-store::before {
-
-            content:
-                "✓";
-
-            display: inline-flex;
-
-            align-items: center;
-            justify-content: center;
-
-            width: 16px;
-            height: 16px;
-
-            border-radius: 50%;
-
-            background:
-                var(--green-soft);
-
-            color:
-                var(--green-dark);
-
-            font-size: 10px;
-        }
-
-
-        .deal-title {
-
-            margin:
-                0 92px 13px 0;
-
-            color:
-                var(--navy);
-
-            font-size: 17px;
-
-            line-height: 1.4;
-
-            font-weight: 750;
-
-            letter-spacing:
-                -0.35px;
-        }
-
 
         /* =========================================================
-           DISCOUNT BADGE
+           FOOTER
         ========================================================= */
 
-        .deal-discount {
-
-            position: absolute;
-
-            top: 18px;
-            right: 18px;
-
-            display: inline-flex;
-
-            align-items: center;
-            justify-content: center;
-
-            min-width: 76px;
-
-            padding:
-                7px 10px;
-
-            border-radius:
-                999px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #fff1f2,
-                    #ffe4e6
-                );
-
-            border:
-                1px solid #fecdd3;
-
-            color:
-                #be123c;
-
-            font-size:
-                12px;
-
-            font-weight:
-                800;
-
-            letter-spacing:
-                0.2px;
-
-            box-shadow:
-                0 4px 12px rgba(225, 29, 72, 0.08);
+        .site-footer {
+            background: var(--navy);
+            color: white;
         }
 
+        .footer-container {
+            max-width: var(--max-width);
+            margin: auto;
+            padding: 55px 22px 25px;
+        }
 
-        /* =========================================================
-           PRICING
-        ========================================================= */
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr 1fr 1fr;
+            gap: 45px;
 
-        .deal-pricing {
+            padding-bottom: 40px;
+            border-bottom: 1px solid rgba(255,255,255,0.10);
+        }
 
+        .footer-brand {
+            max-width: 340px;
+        }
+
+        .footer-brand-title {
             display: flex;
+            align-items: center;
+            gap: 10px;
 
-            align-items: flex-end;
-
-            flex-wrap: wrap;
-
-            gap: 9px;
+            font-size: 19px;
+            font-weight: 800;
 
             margin-bottom: 14px;
         }
 
-
-        .deal-old-price {
-
-            color:
-                #94a3b8;
-
-            font-size:
-                13px;
-
-            text-decoration:
-                line-through;
-
-            text-decoration-thickness:
-                1.5px;
-        }
-
-
-        .deal-new-price {
-
-            color:
-                #0f172a;
-
-            font-size:
-                27px;
-
-            line-height:
-                1;
-
-            font-weight:
-                800;
-
-            letter-spacing:
-                -1px;
-        }
-
-
-        .deal-saving {
-
-            display: inline-flex;
-
-            align-items: center;
-
-            padding:
-                4px 8px;
-
-            border-radius:
-                6px;
-
-            background:
-                var(--green-soft);
-
-            color:
-                var(--green-dark);
-
-            font-size:
-                11px;
-
-            font-weight:
-                800;
-        }
-
-
-        /* =========================================================
-           DEAL MESSAGE
-        ========================================================= */
-
-        .deal-message {
+        .footer-logo {
+            width: 36px;
+            height: 36px;
 
             display: flex;
-
-            align-items: center;
-
-            gap: 7px;
-
-            margin-bottom: 16px;
-
-            color:
-                #475569;
-
-            font-size:
-                12px;
-
-            font-weight:
-                600;
-        }
-
-
-        .deal-message::before {
-
-            content:
-                "💡";
-        }
-
-
-        /* =========================================================
-           DEAL BUTTON
-        ========================================================= */
-
-        .deal-button {
-
-            display: inline-flex;
-
             align-items: center;
             justify-content: center;
 
-            gap: 8px;
+            border-radius: 10px;
 
-            min-width: 160px;
+            background: var(--brand);
 
-            padding:
-                11px 17px;
-
-            border-radius:
-                9px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #2563eb,
-                    #1d4ed8
-                );
-
-            color:
-                #ffffff;
-
-            text-decoration:
-                none;
-
-            font-size:
-                13px;
-
-            font-weight:
-                800;
-
-            box-shadow:
-                0 8px 18px rgba(37, 99, 235, 0.20);
-
-            transition:
-                transform 0.2s ease,
-                box-shadow 0.2s ease,
-                background 0.2s ease;
+            font-size: 14px;
+            font-weight: 800;
         }
 
-
-        .deal-button::after {
-
-            content:
-                "→";
-
-            font-size:
-                17px;
-
-            line-height:
-                1;
-
-            transition:
-                transform 0.2s ease;
+        .footer-brand p {
+            color: #98A2B3;
+            font-size: 12px;
+            line-height: 1.8;
         }
 
+        .footer-column h3 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
 
-        .deal-button:hover {
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #1d4ed8,
-                    #1e40af
-                );
-
-            transform:
-                translateY(-2px);
-
-            box-shadow:
-                0 12px 24px rgba(37, 99, 235, 0.30);
+            margin-bottom: 14px;
         }
 
-
-        .deal-button:hover::after {
-
-            transform:
-                translateX(3px);
-        }
-
-
-        .deal-button:active {
-
-            transform:
-                translateY(0);
-        }
-
-
-        /* =========================================================
-           FORM
-        ========================================================= */
-
-        .form-group {
-
-            margin-bottom: 18px;
-        }
-
-
-        .form-group label {
-
+        .footer-column a {
             display: block;
 
-            margin-bottom: 7px;
-
-            color:
-                #475569;
-
+            color: #98A2B3;
             font-size: 12px;
 
-            font-weight: 700;
+            margin-bottom: 10px;
+
+            transition: 0.2s ease;
         }
 
-
-        .form-control {
-
-            width: 100%;
-
-            padding:
-                12px 14px;
-
-            background:
-                #ffffff;
-
-            border:
-                1px solid #d6dce5;
-
-            border-radius:
-                10px;
-
-            color:
-                #111827;
-
-            font-family:
-                inherit;
-
-            font-size:
-                14px;
-
-            outline:
-                none;
-
-            transition:
-                border-color 0.2s ease,
-                box-shadow 0.2s ease;
+        .footer-column a:hover {
+            color: white;
         }
 
+        .footer-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
 
-        .form-control::placeholder {
+            padding-top: 22px;
 
-            color:
-                #a0a9b7;
+            color: #667085;
+            font-size: 11px;
         }
 
-
-        .form-control:hover {
-
-            border-color:
-                #b8c2d0;
+        .footer-disclaimer {
+            max-width: 600px;
         }
-
-
-        .form-control:focus {
-
-            border-color:
-                var(--blue);
-
-            box-shadow:
-                0 0 0 3px
-                rgba(37, 99, 235, 0.09);
-        }
-
 
         /* =========================================================
-           BUTTON
-        ========================================================= */
-
-        .btn-primary {
-
-            width: 100%;
-
-            margin-top: 7px;
-
-            padding:
-                13px 16px;
-
-            border:
-                none;
-
-            border-radius:
-                10px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--blue),
-                    var(--blue-dark)
-                );
-
-            color:
-                #ffffff;
-
-            font-family:
-                inherit;
-
-            font-size:
-                14px;
-
-            font-weight:
-                700;
-
-            cursor:
-                pointer;
-
-            box-shadow:
-                0 8px 20px
-                rgba(37, 99, 235, 0.20);
-
-            transition:
-                transform 0.2s ease,
-                box-shadow 0.2s ease,
-                opacity 0.2s ease;
-        }
-
-
-        .btn-primary:hover {
-
-            opacity:
-                0.97;
-
-            transform:
-                translateY(-1px);
-
-            box-shadow:
-                0 11px 25px
-                rgba(37, 99, 235, 0.28);
-        }
-
-
-        .btn-primary:active {
-
-            transform:
-                translateY(0);
-        }
-
-
-        /* =========================================================
-           MOBILE DEAL CARD
+           RESPONSIVE
         ========================================================= */
 
         @media (max-width: 900px) {
 
-            .grid-layout {
+            .main-nav {
+                display: none;
 
-                grid-template-columns:
-                    1fr;
+                position: absolute;
+                top: 76px;
+                left: 0;
+                right: 0;
+
+                background: white;
+
+                border-bottom: 1px solid var(--border);
+
+                padding: 12px 22px;
+
+                flex-direction: column;
+                align-items: stretch;
+
+                box-shadow: 0 15px 30px rgba(16,24,40,0.08);
+            }
+
+            .main-nav.open {
+                display: flex;
+            }
+
+            .main-nav a {
+                padding: 12px;
+            }
+
+            .menu-button {
+                display: block;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 45px;
+            }
+
+            .hero-content {
+                max-width: 700px;
+            }
+
+            .hero-preview {
+                max-width: 560px;
+                width: 100%;
+                margin: auto;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .calculator-card {
+                position: static;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
             }
         }
 
+        @media (max-width: 600px) {
 
-        @media (max-width: 680px) {
-
-            .deal-card-content {
-
-                display:
-                    block;
+            .nav-container {
+                height: 68px;
             }
 
+            .main-nav {
+                top: 68px;
+            }
+
+            .hero-container {
+                padding-top: 50px;
+                padding-bottom: 50px;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+                letter-spacing: -1.8px;
+            }
+
+            .hero-description {
+                font-size: 15px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .primary-button,
+            .secondary-button {
+                width: 100%;
+            }
+
+            .floating-saving {
+                right: 10px;
+                bottom: -18px;
+            }
+
+            .content-card {
+                padding: 16px;
+            }
+
+            .discount-card {
+                flex-direction: column;
+            }
 
             .deal-image {
-
                 width: 100%;
-                min-width: 0;
-
-                height: 180px;
-
-                padding: 20px;
-
-                border-right:
-                    none;
-
-                border-bottom:
-                    1px solid #edf1f5;
+                height: 170px;
             }
 
-
-            .deal-image img {
-
-                height:
-                    140px;
+            .deal-top-line {
+                align-items: flex-start;
             }
-
-
-            .deal-info {
-
-                padding:
-                    18px;
-            }
-
 
             .deal-title {
-
-                margin-right:
-                    80px;
-
-                font-size:
-                    16px;
+                font-size: 15px;
             }
 
-
-            .deal-new-price {
-
-                font-size:
-                    25px;
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 28px;
             }
 
-
-            .deal-button {
-
-                width:
-                    100%;
+            .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
-
-
-        @media (max-width: 768px) {
-
-            header {
-
-                padding:
-                    13px 17px;
-            }
-
-
-            .logo-icon {
-
-                width: 38px;
-                height: 38px;
-
-                border-radius:
-                    10px;
-
-                font-size:
-                    14px;
-            }
-
-
-            .logo-text {
-
-                font-size:
-                    18px;
-            }
-
-
-            .trust-badge {
-
-                padding:
-                    6px 9px;
-
-                font-size:
-                    10px;
-            }
-
-
-            .main-container {
-
-                padding:
-                    45px 16px 55px;
-            }
-
-
-            .hero-section {
-
-                margin-bottom:
-                    35px;
-            }
-
-
-            .hero-section h1 {
-
-                min-height:
-                    104px;
-
-                font-size:
-                    32px;
-
-                letter-spacing:
-                    -1.2px;
-            }
-
-
-            .hero-section p {
-
-                font-size:
-                    14px;
-            }
-
-
-            .grid-layout {
-
-                gap:
-                    20px;
-            }
-
-
-            .card {
-
-                padding:
-                    22px;
-
-                border-radius:
-                    14px;
-            }
-        }
-
-
-        @media (max-width: 520px) {
-
-            header {
-
-                gap:
-                    10px;
-            }
-
-
-            .logo-container {
-
-                gap:
-                    8px;
-            }
-
-
-            .logo-text {
-
-                font-size:
-                    16px;
-            }
-
-
-            .trust-badge {
-
-                max-width:
-                    145px;
-
-                white-space:
-                    normal;
-
-                text-align:
-                    center;
-
-                line-height:
-                    1.2;
-            }
-
-
-            .trust-badge span {
-
-                display:
-                    none;
-            }
-
-
-            .main-container {
-
-                padding-top:
-                    38px;
-            }
-
-
-            .hero-section h1 {
-
-                min-height:
-                    98px;
-
-                font-size:
-                    29px;
-
-                line-height:
-                    1.12;
-            }
-
-
-            .hero-section p {
-
-                font-size:
-                    13.5px;
-
-                line-height:
-                    1.65;
-            }
-
-
-            .card {
-
-                padding:
-                    19px;
-            }
-
-
-            .card h3 {
-
-                font-size:
-                    16px;
-            }
-
-
-            .deal-discount {
-
-                top:
-                    14px;
-
-                right:
-                    14px;
-            }
-
-
-            .deal-title {
-
-                margin-right:
-                    70px;
-            }
-        }
-
-
-        /* =========================================================
-           ACCESSIBILITY
-        ========================================================= */
-
-        button:focus-visible,
-        input:focus-visible,
-        a:focus-visible {
-
-            outline:
-                3px solid
-                rgba(37, 99, 235, 0.18);
-
-            outline-offset:
-                2px;
-        }
-
-
-        @media (prefers-reduced-motion: reduce) {
-
-            .hero-section h1::before {
-
-                animation:
-                    none;
-            }
-
-            *,
-            *::before,
-            *::after {
-
-                scroll-behavior:
-                    auto !important;
-
-                transition:
-                    none !important;
-            }
-        }
-
     </style>
 </head>
 
-
 <body>
 
-    <!-- =========================================================
-         HEADER
-    ========================================================= -->
+<!-- =========================================================
+     HEADER
+========================================================= -->
 
-    <header>
+<header class="site-header">
 
-        <div class="logo-container">
+    <div class="nav-container">
 
-            <div class="logo-icon">
-                CD
+        <a href="index.html" class="brand">
+
+            <!-- TEMPORARY LOGO -->
+            <div class="logo-placeholder">CD</div>
+
+            <div class="brand-name">
+                Checker<span>Discount</span>
             </div>
 
-            <div class="logo-text">
-                CheckerDiscount
+        </a>
+
+        <nav class="main-nav" id="mainNav">
+
+            <a href="index.html">Home</a>
+
+            <a href="#deals" class="nav-deals">
+                Deals
+            </a>
+
+            <a href="#savings">
+                Savings Checker
+            </a>
+
+            <a href="about.html">
+                About
+            </a>
+
+            <a href="contact.html">
+                Contact
+            </a>
+
+        </nav>
+
+        <button
+            class="menu-button"
+            id="menuButton"
+            aria-label="Open menu">
+            ☰
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="hero">
+
+    <div class="hero-container">
+
+        <div class="hero-content">
+
+            <div class="hero-eyebrow">
+                <span class="eyebrow-dot"></span>
+                SMARTER SHOPPING • REAL SAVINGS
             </div>
-
-        </div>
-
-
-        <div class="trust-badge">
-
-            <span>🛡️</span>
-
-            Verified Deals & Price Savings
-
-        </div>
-
-    </header>
-
-
-    <!-- =========================================================
-         MAIN
-    ========================================================= -->
-
-    <div class="main-container">
-
-
-        <!-- =====================================================
-             HERO
-        ===================================================== -->
-
-        <div class="hero-section">
 
             <h1>
-                Find Deals Worth Clicking
+                Find Better Deals.
+                <span class="highlight">Keep More</span>
+                <span class="saving-highlight">Money.</span>
             </h1>
 
-            <p>
-                Discover verified deals, see the real savings,
+            <p class="hero-description">
+                Discover verified deals, understand the real savings,
                 and check the retailer's offer before you buy.
+                CheckerDiscount makes deal hunting simpler.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="#deals" class="primary-button">
+                    Explore Verified Deals →
+                </a>
+
+                <a href="#savings" class="secondary-button">
+                    Check Your Savings
+                </a>
+
+            </div>
+
+            <div class="hero-trust">
+
+                <span>
+                    <span class="trust-check">✓</span>
+                    Verified deals
+                </span>
+
+                <span>
+                    <span class="trust-check">✓</span>
+                    Clear savings
+                </span>
+
+                <span>
+                    <span class="trust-check">✓</span>
+                    Trusted retailers
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- HERO DEAL PREVIEW -->
+
+        <div class="hero-preview">
+
+            <div class="preview-window">
+
+                <div class="preview-top">
+
+                    <span class="preview-label">
+                        DEAL PREVIEW
+                    </span>
+
+                    <span class="verified-label">
+                        ✓ VERIFIED
+                    </span>
+
+                </div>
+
+                <div class="preview-product">
+
+                    <div class="preview-store">
+                        Available at <strong>Amazon</strong>
+                    </div>
+
+                    <h3>
+                        Hamilton Beach Power Deluxe
+                        6-Speed Electric Hand Mixer
+                    </h3>
+
+                    <div class="preview-price-row">
+
+                        <span class="preview-old">
+                            $31.95
+                        </span>
+
+                        <span class="preview-new">
+                            $24.97
+                        </span>
+
+                    </div>
+
+                    <div class="preview-save">
+                        SAVE $6.98 • 21.85% OFF
+                    </div>
+
+                    <br>
+
+                    <button class="preview-button">
+                        Check This Deal →
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="floating-saving">
+
+                <small>Potential Savings</small>
+
+                <strong>$6.98</strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     MAIN CONTENT
+========================================================= -->
+
+<main class="main-content">
+
+
+    <!-- =====================================================
+         DEALS SECTION
+    ====================================================== -->
+
+    <section id="deals">
+
+        <div class="section-heading">
+
+            <div class="section-kicker">
+                DEAL DISCOVERY
+            </div>
+
+            <h2>
+                Deals Worth Checking
+            </h2>
+
+            <p>
+                Browse verified offers and compare the savings before you buy.
             </p>
 
         </div>
 
 
-        <!-- =====================================================
-             TWO COLUMN CONTENT
-        ===================================================== -->
-
-        <div class="grid-layout">
+        <div class="content-grid">
 
 
-            <!-- =================================================
-                 LIVE DEALS
-            ================================================= -->
+            <!-- DEALS CARD -->
 
-            <div class="card">
+            <div class="content-card">
 
-                <h3>
-                    🔥 Live Verified Market Deals
-                </h3>
+                <div class="deals-header">
 
+                    <h2>
+                        🔥 Live Verified Market Deals
+                    </h2>
+
+                    <span class="live-badge">
+                        <span class="live-dot"></span>
+                        VERIFIED
+                    </span>
+
+                </div>
+
+
+                <!-- IMPORTANT:
+                     Your existing app.js loads deals here.
+                     DO NOT CHANGE THIS ID.
+                -->
 
                 <div id="discountsContainer">
 
-                    <p>
-                        Finding today's verified deals...
+                    <p style="
+                        color:#667085;
+                        font-size:13px;
+                        padding:20px 0;
+                    ">
+                        Loading verified deals...
                     </p>
 
+                </div>
+
+
+                <div class="ad-slot">
+                    Advertisement Space
                 </div>
 
             </div>
 
 
             <!-- =================================================
-                 REFUND ESTIMATOR
-            ================================================= -->
+                 SAVINGS CHECKER
+            ================================================== -->
 
-            <div class="card">
+            <div class="content-card calculator-card" id="savings">
 
-                <h3>
-                    💡 Price Drop Refund Estimator
-                </h3>
+                <div class="calculator-icon">
+                    $
+                </div>
 
+                <h2>
+                    Price Drop Savings Checker
+                </h2>
+
+                <p>
+                    See the potential difference between what you paid
+                    and the retailer's current price.
+                </p>
+
+
+                <!-- IMPORTANT:
+                     Your existing app.js uses refundForm.
+                     DO NOT CHANGE THIS ID.
+                -->
 
                 <form id="refundForm">
 
-
                     <div class="form-group">
 
-                        <label>
-                            Retailer / Store Name
+                        <label for="retailer">
+                            Retailer / Store
                         </label>
 
                         <input
                             type="text"
-                            class="form-control"
-                            placeholder="e.g. Amazon, Walmart"
+                            id="retailer"
+                            placeholder="e.g. Amazon"
                             required
                         >
 
@@ -1622,15 +1472,16 @@
 
                     <div class="form-group">
 
-                        <label>
-                            Purchase Price ($)
+                        <label for="purchasePrice">
+                            Purchase Price
                         </label>
 
                         <input
                             type="number"
+                            id="purchasePrice"
                             step="0.01"
-                            class="form-control"
-                            placeholder="149.99"
+                            min="0"
+                            placeholder="e.g. 39.99"
                             required
                         >
 
@@ -1639,15 +1490,16 @@
 
                     <div class="form-group">
 
-                        <label>
-                            Current Price ($)
+                        <label for="currentPrice">
+                            Current Price
                         </label>
 
                         <input
                             type="number"
+                            id="currentPrice"
                             step="0.01"
-                            class="form-control"
-                            placeholder="119.99"
+                            min="0"
+                            placeholder="e.g. 29.99"
                             required
                         >
 
@@ -1656,27 +1508,170 @@
 
                     <button
                         type="submit"
-                        class="btn-primary"
-                    >
+                        class="calculate-button">
                         Calculate Potential Savings
                     </button>
 
-
                 </form>
+
+
+                <div id="refundResult" style="display:none;"></div>
 
             </div>
 
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="site-footer">
+
+    <div class="footer-container">
+
+        <div class="footer-grid">
+
+
+            <!-- BRAND -->
+
+            <div class="footer-brand">
+
+                <div class="footer-brand-title">
+
+                    <div class="footer-logo">
+                        CD
+                    </div>
+
+                    CheckerDiscount
+
+                </div>
+
+                <p>
+                    CheckerDiscount helps shoppers discover verified
+                    deals, understand savings and make better buying
+                    decisions.
+                </p>
+
+            </div>
+
+
+            <!-- EXPLORE -->
+
+            <div class="footer-column">
+
+                <h3>
+                    Explore
+                </h3>
+
+                <a href="index.html">
+                    Home
+                </a>
+
+                <a href="#deals">
+                    Deals
+                </a>
+
+                <a href="#savings">
+                    Savings Checker
+                </a>
+
+            </div>
+
+
+            <!-- COMPANY -->
+
+            <div class="footer-column">
+
+                <h3>
+                    Company
+                </h3>
+
+                <a href="about.html">
+                    About Us
+                </a>
+
+                <a href="contact.html">
+                    Contact
+                </a>
+
+            </div>
+
+
+            <!-- LEGAL -->
+
+            <div class="footer-column">
+
+                <h3>
+                    Legal
+                </h3>
+
+                <a href="privacy.html">
+                    Privacy Policy
+                </a>
+
+                <a href="terms.html">
+                    Terms of Use
+                </a>
+
+                <a href="affiliate-disclosure.html">
+                    Affiliate Disclosure
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <div>
+                © 2026 CheckerDiscount. All rights reserved.
+            </div>
+
+            <div class="footer-disclaimer">
+                Some links may be affiliate links. We may earn a
+                commission when you make a purchase through qualifying links.
+            </div>
 
         </div>
 
     </div>
 
+</footer>
 
-    <!-- =========================================================
-         JAVASCRIPT
-    ========================================================= -->
 
-    <script src="js/app.js"></script>
+<!-- =========================================================
+     MOBILE MENU ONLY
+     Your main app.js remains untouched.
+========================================================= -->
+
+<script>
+    const menuButton = document.getElementById("menuButton");
+    const mainNav = document.getElementById("mainNav");
+
+    menuButton.addEventListener("click", function () {
+        mainNav.classList.toggle("open");
+    });
+
+    document.querySelectorAll(".main-nav a").forEach(function (link) {
+        link.addEventListener("click", function () {
+            mainNav.classList.remove("open");
+        });
+    });
+</script>
+
+
+<!-- =========================================================
+     YOUR EXISTING APPLICATION JAVASCRIPT
+     DO NOT CHANGE THE FILE NAME/PATH
+========================================================= -->
+
+<script src="js/app.js"></script>
 
 </body>
 </html>
