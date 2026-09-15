@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Privacy Policy | CheckerDiscount</title>
+    <meta name="description" content="Read the CheckerDiscount Privacy Policy to understand how information may be handled when you use our website.">
+
+    <style>
+        :root {
+            --brand: #155EEF;
+            --brand-dark: #0B3B91;
+            --brand-soft: #EEF4FF;
+            --navy: #0B1220;
+            --text: #172033;
+            --muted: #667085;
+            --green: #12B76A;
+            --green-soft: #ECFDF3;
+            --background: #F6F8FC;
+            --white: #FFFFFF;
+            --border: #E4EAF2;
+            --shadow: 0 12px 35px rgba(16, 24, 40, 0.07);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        header {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-inner {
+            max-width: 1180px;
+            margin: auto;
+            padding: 16px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 21px;
+            font-weight: 800;
+            color: var(--navy);
+        }
+
+        .logo-placeholder {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--brand);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 26px;
+        }
+
+        nav a {
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        nav a:hover {
+            color: var(--brand);
+        }
+
+        .menu-btn {
+            display: none;
+            border: 0;
+            background: transparent;
+            font-size: 26px;
+            cursor: pointer;
+        }
+
+        .page-hero {
+            background: linear-gradient(135deg, #EEF4FF 0%, #FFFFFF 60%, #ECFDF3 100%);
+            padding: 75px 20px 65px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .page-hero span {
+            display: inline-block;
+            background: var(--green-soft);
+            color: #087443;
+            padding: 7px 13px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .page-hero h1 {
+            font-size: 42px;
+            line-height: 1.15;
+            color: var(--navy);
+            margin-bottom: 16px;
+        }
+
+        .page-hero p {
+            max-width: 700px;
+            margin: auto;
+            color: var(--muted);
+            font-size: 17px;
+        }
+
+        .content {
+            max-width: 900px;
+            margin: 50px auto 80px;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 32px;
+            margin-bottom: 22px;
+            box-shadow: var(--shadow);
+        }
+
+        .card h2 {
+            font-size: 23px;
+            color: var(--navy);
+            margin-bottom: 13px;
+        }
+
+        .card h3 {
+            font-size: 18px;
+            color: var(--text);
+            margin: 20px 0 8px;
+        }
+
+        .card p {
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+
+        .card p:last-child {
+            margin-bottom: 0;
+        }
+
+        ul {
+            margin: 10px 0 15px 22px;
+            color: var(--muted);
+        }
+
+        li {
+            margin-bottom: 9px;
+        }
+
+        .highlight {
+            background: var(--brand-soft);
+            border: 1px solid #D7E4FF;
+        }
+
+        footer {
+            background: var(--navy);
+            color: white;
+            padding: 42px 20px 28px;
+        }
+
+        .footer-inner {
+            max-width: 1180px;
+            margin: auto;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-brand {
+            font-size: 21px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .footer-description {
+            color: #AAB4C5;
+            max-width: 430px;
+            font-size: 14px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .footer-links a {
+            color: #D9E1EE;
+            font-size: 14px;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.12);
+            margin-top: 30px;
+            padding-top: 20px;
+            color: #8E99AC;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+
+            .header-inner {
+                padding: 13px 16px;
+            }
+
+            nav {
+                display: none;
+                position: absolute;
+                top: 69px;
+                left: 0;
+                right: 0;
+                background: white;
+                border-bottom: 1px solid var(--border);
+                padding: 18px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            nav.active {
+                display: flex;
+            }
+
+            .menu-btn {
+                display: block;
+            }
+
+            .page-hero {
+                padding: 55px 18px 50px;
+            }
+
+            .page-hero h1 {
+                font-size: 32px;
+            }
+
+            .page-hero p {
+                font-size: 15px;
+            }
+
+            .content {
+                margin-top: 30px;
+                margin-bottom: 50px;
+            }
+
+            .card {
+                padding: 23px;
+                border-radius: 15px;
+            }
+
+            .card h2 {
+                font-size: 20px;
+            }
+
+            .footer-top {
+                flex-direction: column;
+            }
+
+            .footer-links {
+                gap: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+
+        <a href="index.html" class="brand">
+            <div class="logo-placeholder">CD</div>
+            <span>CheckerDiscount</span>
+        </a>
+
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+
+        <nav id="mainNav">
+            <a href="index.html">Home</a>
+            <a href="index.html#deals">Deals</a>
+            <a href="index.html#savings">Savings Checker</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+    </div>
+</header>
+
+<section class="page-hero">
+    <span>Your Privacy Matters</span>
+
+    <h1>Privacy Policy</h1>
+
+    <p>
+        This Privacy Policy explains how information may be handled when
+        you visit and use CheckerDiscount.
+    </p>
+</section>
+
+<main class="content">
+
+    <section class="card highlight">
+        <h2>Overview</h2>
+
+        <p>
+            CheckerDiscount is committed to respecting your privacy.
+            This Privacy Policy explains the general types of information
+            that may be collected or processed when you use our website
+            and how that information may be used.
+        </p>
+
+        <p>
+            By using CheckerDiscount, you agree to the practices described
+            in this Privacy Policy.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>Information We May Collect</h2>
+
+        <p>
+            Depending on how you use the website, certain information may
+            be collected automatically or provided by you.
+        </p>
+
+        <h3>Information You Provide</h3>
+
+        <p>
+            If you voluntarily contact us or otherwise provide information,
+            we may receive the information you choose to provide.
+        </p>
+
+        <h3>Automatically Collected Information</h3>
+
+        <p>
+            Like many websites, basic technical information may be
+            automatically processed by web hosting, security, analytics,
+            advertising or similar services.
+        </p>
+
+        <p>
+            This may include information such as browser type, device type,
+            approximate location, pages visited, referring pages and
+            general usage information.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>Cookies and Similar Technologies</h2>
+
+        <p>
+            CheckerDiscount or third-party services used by the website
+            may use cookies or similar technologies to improve website
+            functionality, understand website usage, measure performance,
+            or provide relevant advertising where applicable.
+        </p>
+
+        <p>
+            You can usually control or disable cookies through your browser
+            settings. Disabling certain cookies may affect some website
+            functionality.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>How Information May Be Used</h2>
+
+        <p>
+            Information may be used for purposes such as:
+        </p>
+
+        <ul>
+            <li>Operating and maintaining CheckerDiscount.</li>
+            <li>Improving website performance and user experience.</li>
+            <li>Understanding how visitors use the website.</li>
+            <li>Maintaining website security and preventing abuse.</li>
+            <li>Responding to questions or messages.</li>
+            <li>Supporting advertising and affiliate activities where applicable.</li>
+        </ul>
+    </section>
+
+
+    <section class="card">
+        <h2>Affiliate Links</h2>
+
+        <p>
+            CheckerDiscount may use affiliate links. When you click certain
+            links and make a qualifying purchase, we may receive a commission
+            from the applicable retailer or affiliate program.
+        </p>
+
+        <p>
+            Affiliate links generally do not increase the price you pay.
+        </p>
+
+        <p>
+            For more information, please see our
+            <a href="affiliate-disclosure.html"
+               style="color: var(--brand); font-weight: 700;">
+                Affiliate Disclosure
+            </a>.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>Third-Party Websites</h2>
+
+        <p>
+            CheckerDiscount may contain links to third-party websites,
+            including online retailers and other external services.
+        </p>
+
+        <p>
+            When you leave CheckerDiscount and visit another website,
+            that website's own privacy policy and terms apply.
+        </p>
+
+        <p>
+            We are not responsible for the privacy practices, content or
+            security policies of third-party websites.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>Advertising</h2>
+
+        <p>
+            CheckerDiscount may display advertisements from third-party
+            advertising providers in the future.
+        </p>
+
+        <p>
+            Advertising providers may use cookies or similar technologies
+            according to their own policies.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>Data Security</h2>
+
+        <p>
+            We take reasonable steps to help protect information associated
+            with the website. However, no website or internet transmission
+            can be guaranteed to be completely secure.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>Children's Privacy</h2>
+
+        <p>
+            CheckerDiscount is not intended to knowingly collect personal
+            information from children.
+        </p>
+
+        <p>
+            If you believe that a child has provided personal information
+            through the website, please contact us so that the situation
+            can be reviewed.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>Changes to This Privacy Policy</h2>
+
+        <p>
+            We may update this Privacy Policy from time to time as the
+            website, services and business practices develop.
+        </p>
+
+        <p>
+            Any updated version will be published on this page.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>Contact</h2>
+
+        <p>
+            If you have questions about this Privacy Policy, please visit
+            our Contact page.
+        </p>
+
+        <p>
+            <a href="contact.html"
+               style="color: var(--brand); font-weight: 700;">
+                Contact CheckerDiscount →
+            </a>
+        </p>
+    </section>
+
+</main>
+
+
+<footer>
+    <div class="footer-inner">
+
+        <div class="footer-top">
+
+            <div>
+                <div class="footer-brand">CheckerDiscount</div>
+
+                <p class="footer-description">
+                    Helping shoppers discover better deals and make
+                    smarter buying decisions.
+                </p>
+            </div>
+
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms</a>
+                <a href="affiliate-disclosure.html">Affiliate Disclosure</a>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            © 2026 CheckerDiscount. All rights reserved.
+        </div>
+
+    </div>
+</footer>
+
+
+<script>
+    function toggleMenu() {
+        document.getElementById("mainNav").classList.toggle("active");
+    }
+</script>
+
+</body>
+</html>
