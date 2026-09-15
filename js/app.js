@@ -5,19 +5,26 @@ document.addEventListener("DOMContentLoaded", () => {
     setupRefundForm();
 });
 
+
+/* =========================================================
+   LOAD VERIFIED DEALS
+========================================================= */
+
 async function fetchDiscounts() {
+
     const container =
         document.getElementById("discountsContainer") ||
         document.getElementById("discounts-container") ||
-        document.getElementById("dealsContainer") ||
-        document.querySelector(".latest-discounts");
+        document.getElementById("dealsContainer");
 
     if (!container) {
-        console.error("Deals container not found.");
+        console.error("CheckerDiscount: deals container not found.");
         return;
     }
 
+
     try {
+
         const response = await fetch(API_URL, {
             method: "GET",
             headers: {
@@ -25,60 +32,114 @@ async function fetchDiscounts() {
             }
         });
 
+
         if (!response.ok) {
-            throw new Error(`HTTP Error Status: ${response.status}`);
+            throw new Error(
+                `HTTP Error Status: ${response.status}`
+            );
         }
+
 
         const result = await response.json();
 
-        console.log("CheckerDiscount API Response:", result);
 
-        /*
-         * Our Worker API returns:
-         *
-         * {
-         *   success: true,
-         *   count: 1,
-         *   deals: [...]
-         * }
-         */
+        console.log(
+            "CheckerDiscount API Response:",
+            result
+        );
 
-        const deals = Array.isArray(result.deals)
-            ? result.deals
-            : [];
+
+        const deals =
+            Array.isArray(result.deals)
+                ? result.deals
+                : [];
+
 
         if (deals.length === 0) {
+
             container.innerHTML = `
-                <div style="text-align:center; padding:30px;">
-                    <p>No active deals found right now.</p>
+                <div style="
+                    text-align:center;
+                    padding:30px 20px;
+                    color:#64748b;
+                ">
+                    <div style="
+                        font-size:28px;
+                        margin-bottom:8px;
+                    ">
+                        🔎
+                    </div>
+
+                    <strong>
+                        No verified deals available right now.
+                    </strong>
+
+                    <div style="
+                        margin-top:6px;
+                        font-size:12px;
+                    ">
+                        Check back soon for new savings.
+                    </div>
                 </div>
             `;
+
             return;
         }
 
-        /*
-         * IMPORTANT:
-         * We only replace the deal content.
-         * The existing website structure/design remains unchanged.
-         */
 
         container.innerHTML = "";
 
+
         deals.forEach(deal => {
-            const card = document.createElement("div");
 
-            card.className = "discount-card";
+            const card =
+                document.createElement("div");
 
-            const title = deal.title || "Verified Deal";
-            const store = deal.store || "Online Store";
 
-            const oldPrice = Number(deal.old_price || 0);
-            const newPrice = Number(deal.new_price || 0);
-            const discount = Number(deal.discount_percent || 0);
+            card.className =
+                "discount-card";
 
-            const currency = deal.currency || "USD";
-            const link = deal.url || "#";
-            const imageUrl = deal.image_url || "";
+
+            const title =
+                deal.title ||
+                "Verified Deal";
+
+
+            const store =
+                deal.store ||
+                "Online Store";
+
+
+            const oldPrice =
+                Number(deal.old_price || 0);
+
+
+            const newPrice =
+                Number(deal.new_price || 0);
+
+
+            const discount =
+                Number(deal.discount_percent || 0);
+
+
+            const currency =
+                deal.currency ||
+                "USD";
+
+
+            const link =
+                deal.url ||
+                "#";
+
+
+            const imageUrl =
+                deal.image_url ||
+                "";
+
+
+            /* -------------------------------------------------
+               CURRENCY
+            ------------------------------------------------- */
 
             const currencySymbol =
                 currency === "USD" ? "$" :
@@ -88,61 +149,137 @@ async function fetchDiscounts() {
                 currency === "AUD" ? "A$" :
                 currency;
 
-            card.innerHTML = `
-                <div class="deal-card-content">
 
-                    ${
-                        imageUrl
-                        ? `
+            /* -------------------------------------------------
+               SAVINGS
+            ------------------------------------------------- */
+
+            const savings =
+                oldPrice > newPrice
+                    ? oldPrice - newPrice
+                    : 0;
+
+
+            const savingsText =
+                savings > 0
+                    ? `SAVE ${currencySymbol}${savings.toFixed(2)}`
+                    : "";
+
+
+            /* -------------------------------------------------
+               IMAGE
+            ------------------------------------------------- */
+
+            const imageHTML =
+                imageUrl
+                    ? `
                         <div class="deal-image">
+
                             <img
                                 src="${escapeHtml(imageUrl)}"
                                 alt="${escapeHtml(title)}"
                                 loading="lazy"
-                                onerror="this.parentElement.style.display='none';"
+                                onerror="
+                                    this.parentElement.style.display='none';
+                                "
                             >
+
                         </div>
-                        `
-                        : ""
-                    }
+                    `
+                    : "";
+
+
+            /* -------------------------------------------------
+               CARD
+            ------------------------------------------------- */
+
+            card.innerHTML = `
+
+                <div class="deal-card-content">
+
+
+                    ${imageHTML}
+
 
                     <div class="deal-info">
+
+
+                        <!-- STORE -->
 
                         <div class="deal-store">
                             ${escapeHtml(store)}
                         </div>
 
+
+                        <!-- DISCOUNT -->
+
+                        ${
+                            discount > 0
+                                ? `
+                                    <span class="deal-discount">
+                                        ${discount.toFixed(0)}% OFF
+                                    </span>
+                                `
+                                : ""
+                        }
+
+
+                        <!-- TITLE -->
+
                         <h3 class="deal-title">
                             ${escapeHtml(title)}
                         </h3>
 
+
+                        <!-- PRICES -->
+
                         <div class="deal-pricing">
+
 
                             ${
                                 oldPrice > 0
-                                ? `
-                                <span class="deal-old-price">
-                                    ${currencySymbol}${oldPrice.toFixed(2)}
-                                </span>
-                                `
-                                : ""
+                                    ? `
+                                        <span class="deal-old-price">
+                                            ${currencySymbol}${oldPrice.toFixed(2)}
+                                        </span>
+                                    `
+                                    : ""
                             }
 
-                            <span class="deal-new-price">
-                                ${currencySymbol}${newPrice.toFixed(2)}
-                            </span>
 
                             ${
-                                discount > 0
-                                ? `
-                                <span class="deal-discount">
-                                    ${discount.toFixed(0)}% OFF
-                                </span>
-                                `
-                                : ""
+                                newPrice > 0
+                                    ? `
+                                        <span class="deal-new-price">
+                                            ${currencySymbol}${newPrice.toFixed(2)}
+                                        </span>
+                                    `
+                                    : ""
                             }
 
+
+                            ${
+                                savings > 0
+                                    ? `
+                                        <span class="deal-saving">
+                                            ${savingsText}
+                                        </span>
+                                    `
+                                    : ""
+                            }
+
+
                         </div>
+
+
+                        <!-- DEAL MESSAGE -->
+
+                        <div class="deal-message">
+                            Worth checking before you buy.
+                        </div>
+
+
+                        <!-- CTA -->
 
                         <a
                             href="${escapeHtml(link)}"
@@ -150,101 +287,170 @@ async function fetchDiscounts() {
                             rel="nofollow sponsored noopener"
                             class="deal-button"
                         >
-                            Check Deal
+                            Check This Deal
                         </a>
+
 
                     </div>
 
                 </div>
             `;
 
+
             container.appendChild(card);
+
         });
 
+
     } catch (error) {
-        console.error("Error fetching CheckerDiscount deals:", error);
+
+        console.error(
+            "CheckerDiscount deal loading error:",
+            error
+        );
+
 
         container.innerHTML = `
-            <div style="text-align:center; padding:30px;">
-                <p>Unable to load deals right now.</p>
+
+            <div style="
+                text-align:center;
+                padding:30px 20px;
+                color:#64748b;
+            ">
+
+                <div style="
+                    font-size:28px;
+                    margin-bottom:8px;
+                ">
+                    ⚠️
+                </div>
+
+                <strong>
+                    Deals are temporarily unavailable.
+                </strong>
+
+                <div style="
+                    margin-top:6px;
+                    font-size:12px;
+                ">
+                    Please try again shortly.
+                </div>
+
             </div>
+
         `;
     }
 }
 
 
-/*
- * Basic HTML escaping.
- * This protects the page if product titles or store names
- * contain special HTML characters.
- */
+/* =========================================================
+   HTML ESCAPING
+========================================================= */
+
 function escapeHtml(value) {
+
     return String(value)
+
         .replace(/&/g, "&amp;")
+
         .replace(/</g, "&lt;")
+
         .replace(/>/g, "&gt;")
+
         .replace(/"/g, "&quot;")
+
         .replace(/'/g, "&#039;");
 }
 
 
-/*
- * Refund Calculator
- * Existing functionality preserved.
- */
+/* =========================================================
+   REFUND / SAVINGS ESTIMATOR
+========================================================= */
+
 function setupRefundForm() {
 
     const form =
-        document.getElementById("refundForm") ||
-        document.querySelector("form");
+        document.getElementById("refundForm");
 
-    if (!form) return;
 
-    form.addEventListener("submit", (e) => {
+    if (!form) {
+        return;
+    }
 
-        e.preventDefault();
 
-        const inputs = form.querySelectorAll("input");
+    form.addEventListener(
+        "submit",
+        (e) => {
 
-        let purchasePrice = 0;
-        let currentPrice = 0;
+            e.preventDefault();
 
-        inputs.forEach(input => {
 
-            const val = parseFloat(input.value);
+            const inputs =
+                form.querySelectorAll("input");
 
-            if (!isNaN(val) && val > 0) {
 
-                if (purchasePrice === 0) {
-                    purchasePrice = val;
-                } else {
-                    currentPrice = val;
+            let purchasePrice = 0;
+            let currentPrice = 0;
+
+
+            inputs.forEach(input => {
+
+                const value =
+                    parseFloat(input.value);
+
+
+                if (
+                    !isNaN(value) &&
+                    value > 0
+                ) {
+
+                    if (
+                        purchasePrice === 0
+                    ) {
+
+                        purchasePrice =
+                            value;
+
+                    } else {
+
+                        currentPrice =
+                            value;
+                    }
                 }
-            }
-        });
+            });
 
-        if (purchasePrice > 0 && currentPrice > 0) {
 
-            const refundAmount = purchasePrice - currentPrice;
-
-            if (refundAmount > 0) {
+            if (
+                purchasePrice <= 0 ||
+                currentPrice <= 0
+            ) {
 
                 alert(
-                    `Great news! You are eligible for a price-protection refund of $${refundAmount.toFixed(2)}. You can claim this from your retailer.`
+                    "Please enter valid purchase and current prices."
+                );
+
+                return;
+            }
+
+
+            const difference =
+                purchasePrice -
+                currentPrice;
+
+
+            if (difference > 0) {
+
+                alert(
+                    `Potential savings: $${difference.toFixed(2)}. Check your retailer's price-protection or refund policy to see whether you qualify.`
                 );
 
             } else {
 
                 alert(
-                    "Your purchase price is already lower than or equal to the current drop price."
+                    "The current price is not lower than your purchase price."
                 );
             }
 
-        } else {
-
-            alert(
-                "Please enter valid purchase and current drop prices to calculate your refund."
-            );
         }
-    });
+    );
 }
