@@ -22,7 +22,6 @@ async function fetchDiscounts() {
         return;
     }
 
-
     try {
 
         const response = await fetch(API_URL, {
@@ -32,28 +31,23 @@ async function fetchDiscounts() {
             }
         });
 
-
         if (!response.ok) {
             throw new Error(
                 `HTTP Error Status: ${response.status}`
             );
         }
 
-
         const result = await response.json();
-
 
         console.log(
             "CheckerDiscount API Response:",
             result
         );
 
-
         const deals =
             Array.isArray(result.deals)
                 ? result.deals
                 : [];
-
 
         if (deals.length === 0) {
 
@@ -86,7 +80,6 @@ async function fetchDiscounts() {
             return;
         }
 
-
         container.innerHTML = "";
 
 
@@ -94,7 +87,6 @@ async function fetchDiscounts() {
 
             const card =
                 document.createElement("div");
-
 
             card.className =
                 "discount-card";
@@ -142,12 +134,7 @@ async function fetchDiscounts() {
             ------------------------------------------------- */
 
             const currencySymbol =
-                currency === "USD" ? "$" :
-                currency === "GBP" ? "£" :
-                currency === "EUR" ? "€" :
-                currency === "CAD" ? "C$" :
-                currency === "AUD" ? "A$" :
-                currency;
+                getCurrencySymbol(currency);
 
 
             /* -------------------------------------------------
@@ -197,12 +184,9 @@ async function fetchDiscounts() {
 
                 <div class="deal-card-content">
 
-
                     ${imageHTML}
 
-
                     <div class="deal-info">
-
 
                         <!-- STORE -->
 
@@ -234,7 +218,6 @@ async function fetchDiscounts() {
                         <!-- PRICES -->
 
                         <div class="deal-pricing">
-
 
                             ${
                                 oldPrice > 0
@@ -268,7 +251,6 @@ async function fetchDiscounts() {
                                     : ""
                             }
 
-
                         </div>
 
 
@@ -296,7 +278,6 @@ async function fetchDiscounts() {
                             <button
                                 type="button"
                                 class="share-deal-button"
-                                onclick="shareDeal(${escapeShareData(deal)})"
                                 aria-label="Share this deal"
                             >
                                 ↗ Share
@@ -309,6 +290,28 @@ async function fetchDiscounts() {
 
                 </div>
             `;
+
+
+            /* -------------------------------------------------
+               SHARE BUTTON
+            ------------------------------------------------- */
+
+            const shareButton =
+                card.querySelector(
+                    ".share-deal-button"
+                );
+
+
+            if (shareButton) {
+
+                shareButton.addEventListener(
+                    "click",
+                    () => {
+                        shareDeal(deal);
+                    }
+                );
+
+            }
 
 
             container.appendChild(card);
@@ -393,8 +396,15 @@ function shareDeal(deal) {
             : "";
 
 
+    /*
+       IMPORTANT:
+       We share the CheckerDiscount page URL,
+       not the raw Amazon/store URL.
+
+       This gives us a proper shareable website link.
+    */
+
     const dealUrl =
-        deal.url ||
         window.location.href;
 
 
@@ -406,7 +416,7 @@ function shareDeal(deal) {
 
 
     /* ---------------------------------------------------------
-       MOBILE / MODERN BROWSER
+       NATIVE MOBILE SHARE
     --------------------------------------------------------- */
 
     if (
@@ -414,20 +424,47 @@ function shareDeal(deal) {
         typeof navigator.share === "function"
     ) {
 
-        navigator.share({
-            title: title,
-            text: shareText,
-            url: dealUrl
-        }).catch(() => {
-            /* User cancelled sharing */
-        });
+        try {
 
-        return;
+            const sharePromise =
+                navigator.share({
+                    title: title,
+                    text: shareText,
+                    url: dealUrl
+                });
+
+
+            /*
+               navigator.share() normally returns a Promise.
+               We safely handle rejection when user cancels.
+            */
+
+            if (
+                sharePromise &&
+                typeof sharePromise.catch === "function"
+            ) {
+
+                sharePromise.catch(() => {
+                    /* User cancelled sharing */
+                });
+
+            }
+
+            return;
+
+        } catch (error) {
+
+            console.log(
+                "Native share unavailable:",
+                error
+            );
+
+        }
     }
 
 
     /* ---------------------------------------------------------
-       DESKTOP FALLBACK
+       DESKTOP / FALLBACK SHARE
     --------------------------------------------------------- */
 
     showSharePopup(
@@ -479,7 +516,7 @@ function showSharePopup(
 
         <div
             class="cd-share-overlay"
-            onclick="closeSharePopup()">
+            data-share-close="true">
         </div>
 
 
@@ -489,7 +526,7 @@ function showSharePopup(
             <button
                 type="button"
                 class="cd-share-close"
-                onclick="closeSharePopup()"
+                data-share-close="true"
                 aria-label="Close">
                 ×
             </button>
@@ -554,8 +591,7 @@ function showSharePopup(
 
             <button
                 type="button"
-                class="cd-copy-link"
-                onclick="copyDealLink('${escapeShareAttribute(url)}')">
+                class="cd-copy-link">
                 Copy Deal Link
             </button>
 
@@ -570,6 +606,44 @@ function showSharePopup(
 
 
     document.body.appendChild(popup);
+
+
+    /* ---------------------------------------------------------
+       CLOSE BUTTONS
+    --------------------------------------------------------- */
+
+    popup
+        .querySelectorAll("[data-share-close]")
+        .forEach(element => {
+
+            element.addEventListener(
+                "click",
+                closeSharePopup
+            );
+
+        });
+
+
+    /* ---------------------------------------------------------
+       COPY BUTTON
+    --------------------------------------------------------- */
+
+    const copyButton =
+        popup.querySelector(
+            ".cd-copy-link"
+        );
+
+
+    if (copyButton) {
+
+        copyButton.addEventListener(
+            "click",
+            () => {
+                copyDealLink(url);
+            }
+        );
+
+    }
 }
 
 
@@ -599,40 +673,91 @@ async function copyDealLink(url) {
 
     try {
 
-        await navigator.clipboard.writeText(
-            url
-        );
+        if (
+            navigator.clipboard &&
+            typeof navigator.clipboard.writeText === "function"
+        ) {
+
+            await navigator.clipboard.writeText(
+                url
+            );
+
+        } else {
+
+            throw new Error(
+                "Clipboard API unavailable"
+            );
+
+        }
 
 
         showCopyMessage();
+
 
     } catch (error) {
 
-        /* Older browser fallback */
+        /* -----------------------------------------------------
+           OLD BROWSER FALLBACK
+        ----------------------------------------------------- */
 
-        const tempInput =
-            document.createElement("input");
+        try {
 
-
-        tempInput.value =
-            url;
-
-
-        document.body.appendChild(
-            tempInput
-        );
+            const tempInput =
+                document.createElement("input");
 
 
-        tempInput.select();
+            tempInput.type =
+                "text";
 
 
-        document.execCommand("copy");
+            tempInput.value =
+                url;
 
 
-        tempInput.remove();
+            tempInput.style.position =
+                "fixed";
 
 
-        showCopyMessage();
+            tempInput.style.left =
+                "-9999px";
+
+
+            document.body.appendChild(
+                tempInput
+            );
+
+
+            tempInput.focus();
+
+
+            tempInput.select();
+
+
+            document.execCommand(
+                "copy"
+            );
+
+
+            tempInput.remove();
+
+
+            showCopyMessage();
+
+
+        } catch (fallbackError) {
+
+            console.error(
+                "Copy failed:",
+                fallbackError
+            );
+
+
+            alert(
+                "Unable to copy the link automatically. Please copy it manually."
+            );
+
+        }
+
     }
 }
 
@@ -654,45 +779,23 @@ function showCopyMessage() {
         message.textContent =
             "✓ Deal link copied";
 
+
         message.style.marginTop =
             "12px";
+
 
         message.style.color =
             "#087443";
 
+
         message.style.fontSize =
             "13px";
 
+
         message.style.fontWeight =
             "600";
+
     }
-}
-
-
-/* =========================================================
-   SHARE DATA SAFETY
-========================================================= */
-
-function escapeShareData(deal) {
-
-    return JSON.stringify(deal)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-
-/* =========================================================
-   SHARE ATTRIBUTE SAFETY
-========================================================= */
-
-function escapeShareAttribute(value) {
-
-    return String(value)
-        .replace(/\\/g, "\\\\")
-        .replace(/'/g, "\\'");
 }
 
 
