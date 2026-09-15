@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Terms & Conditions | CheckerDiscount</title>
+    <meta name="description" content="Read the Terms and Conditions for using CheckerDiscount.">
+
+    <style>
+        :root {
+            --brand: #155EEF;
+            --brand-dark: #0B3B91;
+            --brand-soft: #EEF4FF;
+            --navy: #0B1220;
+            --text: #172033;
+            --muted: #667085;
+            --green: #12B76A;
+            --green-soft: #ECFDF3;
+            --background: #F6F8FC;
+            --white: #FFFFFF;
+            --border: #E4EAF2;
+            --shadow: 0 12px 35px rgba(16, 24, 40, 0.07);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        header {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-inner {
+            max-width: 1180px;
+            margin: auto;
+            padding: 16px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 21px;
+            font-weight: 800;
+            color: var(--navy);
+        }
+
+        .logo-placeholder {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--brand);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 26px;
+        }
+
+        nav a {
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        nav a:hover {
+            color: var(--brand);
+        }
+
+        .menu-btn {
+            display: none;
+            border: 0;
+            background: transparent;
+            font-size: 26px;
+            cursor: pointer;
+        }
+
+        .page-hero {
+            background: linear-gradient(135deg, #EEF4FF 0%, #FFFFFF 60%, #ECFDF3 100%);
+            padding: 75px 20px 65px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .page-hero span {
+            display: inline-block;
+            background: var(--green-soft);
+            color: #087443;
+            padding: 7px 13px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .page-hero h1 {
+            font-size: 42px;
+            line-height: 1.15;
+            color: var(--navy);
+            margin-bottom: 16px;
+        }
+
+        .page-hero p {
+            max-width: 700px;
+            margin: auto;
+            color: var(--muted);
+            font-size: 17px;
+        }
+
+        .content {
+            max-width: 900px;
+            margin: 50px auto 80px;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 32px;
+            margin-bottom: 22px;
+            box-shadow: var(--shadow);
+        }
+
+        .card h2 {
+            font-size: 23px;
+            color: var(--navy);
+            margin-bottom: 13px;
+        }
+
+        .card h3 {
+            font-size: 18px;
+            color: var(--text);
+            margin: 20px 0 8px;
+        }
+
+        .card p {
+            color: var(--muted);
+            margin-bottom: 14px;
+        }
+
+        .card p:last-child {
+            margin-bottom: 0;
+        }
+
+        ul {
+            margin: 10px 0 15px 22px;
+            color: var(--muted);
+        }
+
+        li {
+            margin-bottom: 9px;
+        }
+
+        .highlight {
+            background: var(--brand-soft);
+            border: 1px solid #D7E4FF;
+        }
+
+        footer {
+            background: var(--navy);
+            color: white;
+            padding: 42px 20px 28px;
+        }
+
+        .footer-inner {
+            max-width: 1180px;
+            margin: auto;
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-brand {
+            font-size: 21px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .footer-description {
+            color: #AAB4C5;
+            max-width: 430px;
+            font-size: 14px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            align-items: center;
+        }
+
+        .footer-links a {
+            color: #D9E1EE;
+            font-size: 14px;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.12);
+            margin-top: 30px;
+            padding-top: 20px;
+            color: #8E99AC;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+
+            .header-inner {
+                padding: 13px 16px;
+            }
+
+            nav {
+                display: none;
+                position: absolute;
+                top: 69px;
+                left: 0;
+                right: 0;
+                background: white;
+                border-bottom: 1px solid var(--border);
+                padding: 18px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            nav.active {
+                display: flex;
+            }
+
+            .menu-btn {
+                display: block;
+            }
+
+            .page-hero {
+                padding: 55px 18px 50px;
+            }
+
+            .page-hero h1 {
+                font-size: 32px;
+            }
+
+            .page-hero p {
+                font-size: 15px;
+            }
+
+            .content {
+                margin-top: 30px;
+                margin-bottom: 50px;
+            }
+
+            .card {
+                padding: 23px;
+                border-radius: 15px;
+            }
+
+            .card h2 {
+                font-size: 20px;
+            }
+
+            .footer-top {
+                flex-direction: column;
+            }
+
+            .footer-links {
+                gap: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+
+        <a href="index.html" class="brand">
+            <div class="logo-placeholder">CD</div>
+            <span>CheckerDiscount</span>
+        </a>
+
+        <button class="menu-btn" onclick="toggleMenu()">☰</button>
+
+        <nav id="mainNav">
+            <a href="index.html">Home</a>
+            <a href="index.html#deals">Deals</a>
+            <a href="index.html#savings">Savings Checker</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+    </div>
+</header>
+
+<section class="page-hero">
+    <span>Website Terms</span>
+
+    <h1>Terms & Conditions</h1>
+
+    <p>
+        These terms explain the basic rules for using CheckerDiscount
+        and the information provided through our website.
+    </p>
+</section>
+
+<main class="content">
+
+    <section class="card highlight">
+        <h2>1. Acceptance of These Terms</h2>
+
+        <p>
+            By accessing or using CheckerDiscount, you agree to follow
+            these Terms & Conditions.
+        </p>
+
+        <p>
+            If you do not agree with these terms, please do not use
+            the website.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>2. About CheckerDiscount</h2>
+
+        <p>
+            CheckerDiscount is a deal discovery and comparison website
+            designed to help users find and evaluate online shopping offers.
+        </p>
+
+        <p>
+            Products and offers displayed on CheckerDiscount may be
+            provided by or linked to third-party retailers.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>3. Deal and Price Information</h2>
+
+        <p>
+            We aim to provide useful and accurate deal information.
+            However, prices, discounts, product availability, shipping
+            costs, promotions and other details may change without notice.
+        </p>
+
+        <p>
+            A deal displayed on CheckerDiscount may become unavailable
+            or change after it is published.
+        </p>
+
+        <p>
+            You should always confirm the final price, availability and
+            purchase conditions on the retailer's website before buying.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>4. Third-Party Retailers</h2>
+
+        <p>
+            CheckerDiscount may link to third-party stores and websites.
+        </p>
+
+        <p>
+            When you click a link and leave CheckerDiscount, you are
+            interacting directly with the third-party website.
+        </p>
+
+        <p>
+            CheckerDiscount does not control the products, prices,
+            shipping, warranties, returns, refunds or customer service
+            policies of third-party retailers.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>5. Affiliate Links</h2>
+
+        <p>
+            Some links on CheckerDiscount may be affiliate links.
+            We may receive a commission when a qualifying purchase is
+            completed through certain links.
+        </p>
+
+        <p>
+            Affiliate commissions generally do not increase the price
+            paid by the customer.
+        </p>
+
+        <p>
+            Please see our
+            <a href="affiliate-disclosure.html"
+               style="color: var(--brand); font-weight: 700;">
+                Affiliate Disclosure
+            </a>
+            for more information.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>6. Website Use</h2>
+
+        <p>
+            You agree to use CheckerDiscount only for lawful purposes.
+        </p>
+
+        <p>
+            You must not knowingly attempt to damage, disrupt, abuse,
+            overload or interfere with the operation or security of
+            the website.
+        </p>
+
+        <p>
+            You must not use automated methods to abuse, attack or
+            excessively burden the website or its systems.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>7. Intellectual Property</h2>
+
+        <p>
+            Unless otherwise stated, the CheckerDiscount website design,
+            branding, original text and other original website materials
+            are owned by or used by CheckerDiscount with appropriate rights.
+        </p>
+
+        <p>
+            You may not copy, reproduce, modify or redistribute substantial
+            portions of our original website content without permission,
+            except where permitted by applicable law.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>8. No Guarantee</h2>
+
+        <p>
+            CheckerDiscount is provided on an "as available" basis.
+        </p>
+
+        <p>
+            We do not guarantee that the website will always be available,
+            error-free, completely accurate or uninterrupted.
+        </p>
+
+        <p>
+            We also do not guarantee that a particular deal, product or
+            retailer offer will remain available.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>9. Purchases and Transactions</h2>
+
+        <p>
+            CheckerDiscount does not directly sell products listed through
+            third-party retailer links unless specifically stated otherwise.
+        </p>
+
+        <p>
+            Any purchase made after leaving CheckerDiscount is subject to
+            the terms, policies and conditions of the applicable retailer.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>10. Limitation of Responsibility</h2>
+
+        <p>
+            To the extent permitted by applicable law, CheckerDiscount
+            is not responsible for losses or damages arising from reliance
+            on third-party product information, prices, availability,
+            retailer websites or transactions conducted with third parties.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>11. Changes to These Terms</h2>
+
+        <p>
+            We may update these Terms & Conditions from time to time as
+            CheckerDiscount develops.
+        </p>
+
+        <p>
+            Updated terms will be published on this page. Your continued
+            use of the website after changes are published means that you
+            accept the updated terms.
+        </p>
+    </section>
+
+
+    <section class="card">
+        <h2>12. Contact</h2>
+
+        <p>
+            If you have questions about these Terms & Conditions,
+            please visit our Contact page.
+        </p>
+
+        <p>
+            <a href="contact.html"
+               style="color: var(--brand); font-weight: 700;">
+                Contact CheckerDiscount →
+            </a>
+        </p>
+    </section>
+
+</main>
+
+
+<footer>
+    <div class="footer-inner">
+
+        <div class="footer-top">
+
+            <div>
+                <div class="footer-brand">CheckerDiscount</div>
+
+                <p class="footer-description">
+                    Helping shoppers discover better deals and make
+                    smarter buying decisions.
+                </p>
+            </div>
+
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms</a>
+                <a href="affiliate-disclosure.html">Affiliate Disclosure</a>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            © 2026 CheckerDiscount. All rights reserved.
+        </div>
+
+    </div>
+</footer>
+
+
+<script>
+    function toggleMenu() {
+        document.getElementById("mainNav").classList.toggle("active");
+    }
+</script>
+
+</body>
+</html>
