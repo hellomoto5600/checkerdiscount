@@ -4,28 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>CheckerDiscount - Real-Time Price Drops & Refund Radar</title>
+    <title>CheckerDiscount - Verified Deals & Price Savings</title>
+
+    <meta
+        name="description"
+        content="Discover verified online deals, compare prices and find genuine savings from trusted retailers."
+    >
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 
     <style>
 
         /* =========================================================
            CHECKERDISCOUNT
-           DESIGN ONLY
-           EXISTING STRUCTURE + JS PRESERVED
+           FINAL PROFESSIONAL LIGHT DESIGN
+           API / DATABASE STRUCTURE PRESERVED
         ========================================================= */
 
         :root {
 
-            --bg-deep: #f7f9fc;
+            --bg-deep: #f6f8fc;
             --bg-card: #ffffff;
             --bg-soft: #f8fafc;
 
             --border-color: #e5e7eb;
-            --border-light: #edf0f4;
+            --border-light: #eef1f5;
 
             --blue: #2563eb;
             --blue-dark: #1d4ed8;
@@ -34,6 +43,13 @@
             --green: #16a34a;
             --green-dark: #15803d;
             --green-soft: #f0fdf4;
+
+            --orange: #f97316;
+            --orange-dark: #ea580c;
+            --orange-soft: #fff7ed;
+
+            --red: #dc2626;
+            --red-soft: #fef2f2;
 
             --navy: #0f172a;
             --text-main: #111827;
@@ -44,7 +60,7 @@
                 0 8px 30px rgba(15, 23, 42, 0.055);
 
             --shadow-hover:
-                0 16px 40px rgba(15, 23, 42, 0.10);
+                0 18px 45px rgba(15, 23, 42, 0.12);
         }
 
 
@@ -68,7 +84,7 @@
             background:
                 radial-gradient(
                     circle at 50% -15%,
-                    rgba(37, 99, 235, 0.055),
+                    rgba(37, 99, 235, 0.06),
                     transparent 38%
                 ),
                 var(--bg-deep);
@@ -92,6 +108,11 @@
         }
 
 
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+
         /* =========================================================
            HEADER
         ========================================================= */
@@ -109,7 +130,7 @@
             padding: 15px 28px;
 
             background:
-                rgba(255, 255, 255, 0.94);
+                rgba(255, 255, 255, 0.95);
 
             border-bottom:
                 1px solid rgba(229, 231, 235, 0.9);
@@ -257,7 +278,7 @@
         .hero-section h1::before {
 
             content:
-                "Track Real-Time Price Drops";
+                "Find Deals Worth Clicking";
 
             position: absolute;
 
@@ -268,11 +289,8 @@
             color:
                 var(--text-main);
 
-            opacity: 1;
-
             animation:
-                heroTextChange 12s
-                infinite;
+                heroTextChange 12s infinite;
         }
 
 
@@ -305,107 +323,57 @@
 
         @keyframes heroTextChange {
 
-            0%,
-            20% {
-
-                content:
-                    "Track Real-Time Price Drops";
-
+            0%, 20% {
+                content: "Find Deals Worth Clicking";
                 opacity: 1;
-
-                transform:
-                    translateY(0);
             }
 
             23% {
-
-                content:
-                    "Find Better Prices Automatically";
-
+                content: "Discover Real Savings";
                 opacity: 0;
-
-                transform:
-                    translateY(7px);
+                transform: translateY(7px);
             }
 
-            25%,
-            45% {
-
-                content:
-                    "Find Better Prices Automatically";
-
+            25%, 45% {
+                content: "Discover Real Savings";
                 opacity: 1;
-
-                transform:
-                    translateY(0);
+                transform: translateY(0);
             }
 
             48% {
-
-                content:
-                    "Discover Hidden Savings";
-
+                content: "Compare Before You Buy";
                 opacity: 0;
-
-                transform:
-                    translateY(7px);
+                transform: translateY(7px);
             }
 
-            50%,
-            70% {
-
-                content:
-                    "Discover Hidden Savings";
-
+            50%, 70% {
+                content: "Compare Before You Buy";
                 opacity: 1;
-
-                transform:
-                    translateY(0);
+                transform: translateY(0);
             }
 
             73% {
-
-                content:
-                    "Check Potential Refunds";
-
+                content: "Don't Overpay for Products";
                 opacity: 0;
-
-                transform:
-                    translateY(7px);
+                transform: translateY(7px);
             }
 
-            75%,
-            95% {
-
-                content:
-                    "Check Potential Refunds";
-
+            75%, 95% {
+                content: "Don't Overpay for Products";
                 opacity: 1;
-
-                transform:
-                    translateY(0);
+                transform: translateY(0);
             }
 
             98% {
-
-                content:
-                    "Track Real-Time Price Drops";
-
+                content: "Find Deals Worth Clicking";
                 opacity: 0;
-
-                transform:
-                    translateY(7px);
+                transform: translateY(7px);
             }
 
             100% {
-
-                content:
-                    "Track Real-Time Price Drops";
-
+                content: "Find Deals Worth Clicking";
                 opacity: 1;
-
-                transform:
-                    translateY(0);
+                transform: translateY(0);
             }
         }
 
@@ -445,7 +413,7 @@
 
 
         /* =========================================================
-           CARDS
+           MAIN CARDS
         ========================================================= */
 
         .card {
@@ -462,7 +430,7 @@
             border:
                 1px solid var(--border-color);
 
-            border-radius: 16px;
+            border-radius: 18px;
 
             box-shadow:
                 var(--shadow);
@@ -564,6 +532,499 @@
             font-size: 13px;
 
             text-align: center;
+        }
+
+
+        /* =========================================================
+           PROFESSIONAL DEAL CARD
+        ========================================================= */
+
+        .discount-card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            display: flex;
+
+            flex-direction: column;
+
+            margin-bottom: 18px;
+
+            padding: 0;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffffff,
+                    #fbfdff
+                );
+
+            border:
+                1px solid #e2e8f0;
+
+            border-radius: 17px;
+
+            box-shadow:
+                0 8px 25px rgba(15, 23, 42, 0.055);
+
+            transition:
+                transform 0.25s ease,
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+        }
+
+
+        .discount-card:last-child {
+            margin-bottom: 0;
+        }
+
+
+        .discount-card:hover {
+
+            transform:
+                translateY(-4px);
+
+            border-color:
+                #cbd5e1;
+
+            box-shadow:
+                0 18px 42px rgba(15, 23, 42, 0.12);
+        }
+
+
+        .discount-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            top: 0;
+            bottom: 0;
+
+            width: 4px;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #2563eb,
+                    #22c55e
+                );
+        }
+
+
+        .deal-card-content {
+
+            display: flex;
+
+            align-items: stretch;
+
+            min-height: 205px;
+        }
+
+
+        /* =========================================================
+           DEAL IMAGE
+        ========================================================= */
+
+        .deal-image {
+
+            width: 220px;
+
+            min-width: 220px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 24px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #f8fafc,
+                    #ffffff
+                );
+
+            border-right:
+                1px solid #edf1f5;
+        }
+
+
+        .deal-image img {
+
+            display: block;
+
+            width: 100%;
+            height: 155px;
+
+            object-fit: contain;
+
+            mix-blend-mode: multiply;
+
+            transition:
+                transform 0.3s ease;
+        }
+
+
+        .discount-card:hover .deal-image img {
+
+            transform:
+                scale(1.04);
+        }
+
+
+        /* =========================================================
+           DEAL INFO
+        ========================================================= */
+
+        .deal-info {
+
+            position: relative;
+
+            flex: 1;
+
+            padding: 21px 22px 20px;
+        }
+
+
+        .deal-store {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            margin-bottom: 9px;
+
+            padding: 5px 9px;
+
+            border-radius: 6px;
+
+            background:
+                #f8fafc;
+
+            border:
+                1px solid #e2e8f0;
+
+            color:
+                #475569;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            letter-spacing:
+                0.25px;
+
+            text-transform:
+                uppercase;
+        }
+
+
+        .deal-store::before {
+
+            content:
+                "✓";
+
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            width: 16px;
+            height: 16px;
+
+            border-radius: 50%;
+
+            background:
+                var(--green-soft);
+
+            color:
+                var(--green-dark);
+
+            font-size: 10px;
+        }
+
+
+        .deal-title {
+
+            margin:
+                0 92px 13px 0;
+
+            color:
+                var(--navy);
+
+            font-size: 17px;
+
+            line-height: 1.4;
+
+            font-weight: 750;
+
+            letter-spacing:
+                -0.35px;
+        }
+
+
+        /* =========================================================
+           DISCOUNT BADGE
+        ========================================================= */
+
+        .deal-discount {
+
+            position: absolute;
+
+            top: 18px;
+            right: 18px;
+
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            min-width: 76px;
+
+            padding:
+                7px 10px;
+
+            border-radius:
+                999px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff1f2,
+                    #ffe4e6
+                );
+
+            border:
+                1px solid #fecdd3;
+
+            color:
+                #be123c;
+
+            font-size:
+                12px;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                0.2px;
+
+            box-shadow:
+                0 4px 12px rgba(225, 29, 72, 0.08);
+        }
+
+
+        /* =========================================================
+           PRICING
+        ========================================================= */
+
+        .deal-pricing {
+
+            display: flex;
+
+            align-items: flex-end;
+
+            flex-wrap: wrap;
+
+            gap: 9px;
+
+            margin-bottom: 14px;
+        }
+
+
+        .deal-old-price {
+
+            color:
+                #94a3b8;
+
+            font-size:
+                13px;
+
+            text-decoration:
+                line-through;
+
+            text-decoration-thickness:
+                1.5px;
+        }
+
+
+        .deal-new-price {
+
+            color:
+                #0f172a;
+
+            font-size:
+                27px;
+
+            line-height:
+                1;
+
+            font-weight:
+                800;
+
+            letter-spacing:
+                -1px;
+        }
+
+
+        .deal-saving {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            padding:
+                4px 8px;
+
+            border-radius:
+                6px;
+
+            background:
+                var(--green-soft);
+
+            color:
+                var(--green-dark);
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+        }
+
+
+        /* =========================================================
+           DEAL MESSAGE
+        ========================================================= */
+
+        .deal-message {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            margin-bottom: 16px;
+
+            color:
+                #475569;
+
+            font-size:
+                12px;
+
+            font-weight:
+                600;
+        }
+
+
+        .deal-message::before {
+
+            content:
+                "💡";
+        }
+
+
+        /* =========================================================
+           DEAL BUTTON
+        ========================================================= */
+
+        .deal-button {
+
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            gap: 8px;
+
+            min-width: 160px;
+
+            padding:
+                11px 17px;
+
+            border-radius:
+                9px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #1d4ed8
+                );
+
+            color:
+                #ffffff;
+
+            text-decoration:
+                none;
+
+            font-size:
+                13px;
+
+            font-weight:
+                800;
+
+            box-shadow:
+                0 8px 18px rgba(37, 99, 235, 0.20);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+        }
+
+
+        .deal-button::after {
+
+            content:
+                "→";
+
+            font-size:
+                17px;
+
+            line-height:
+                1;
+
+            transition:
+                transform 0.2s ease;
+        }
+
+
+        .deal-button:hover {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1d4ed8,
+                    #1e40af
+                );
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 12px 24px rgba(37, 99, 235, 0.30);
+        }
+
+
+        .deal-button:hover::after {
+
+            transform:
+                translateX(3px);
+        }
+
+
+        .deal-button:active {
+
+            transform:
+                translateY(0);
         }
 
 
@@ -721,15 +1182,11 @@
 
             transform:
                 translateY(0);
-
-            box-shadow:
-                0 5px 12px
-                rgba(37, 99, 235, 0.18);
         }
 
 
         /* =========================================================
-           MOBILE
+           MOBILE DEAL CARD
         ========================================================= */
 
         @media (max-width: 900px) {
@@ -738,6 +1195,71 @@
 
                 grid-template-columns:
                     1fr;
+            }
+        }
+
+
+        @media (max-width: 680px) {
+
+            .deal-card-content {
+
+                display:
+                    block;
+            }
+
+
+            .deal-image {
+
+                width: 100%;
+                min-width: 0;
+
+                height: 180px;
+
+                padding: 20px;
+
+                border-right:
+                    none;
+
+                border-bottom:
+                    1px solid #edf1f5;
+            }
+
+
+            .deal-image img {
+
+                height:
+                    140px;
+            }
+
+
+            .deal-info {
+
+                padding:
+                    18px;
+            }
+
+
+            .deal-title {
+
+                margin-right:
+                    80px;
+
+                font-size:
+                    16px;
+            }
+
+
+            .deal-new-price {
+
+                font-size:
+                    25px;
+            }
+
+
+            .deal-button {
+
+                width:
+                    100%;
             }
         }
 
@@ -921,6 +1443,23 @@
                 font-size:
                     16px;
             }
+
+
+            .deal-discount {
+
+                top:
+                    14px;
+
+                right:
+                    14px;
+            }
+
+
+            .deal-title {
+
+                margin-right:
+                    70px;
+            }
         }
 
 
@@ -929,7 +1468,8 @@
         ========================================================= */
 
         button:focus-visible,
-        input:focus-visible {
+        input:focus-visible,
+        a:focus-visible {
 
             outline:
                 3px solid
@@ -948,6 +1488,16 @@
                     none;
             }
 
+            *,
+            *::before,
+            *::after {
+
+                scroll-behavior:
+                    auto !important;
+
+                transition:
+                    none !important;
+            }
         }
 
     </style>
@@ -956,6 +1506,9 @@
 
 <body>
 
+    <!-- =========================================================
+         HEADER
+    ========================================================= -->
 
     <header>
 
@@ -976,36 +1529,48 @@
 
             <span>🛡️</span>
 
-            100% Verified Price Drops & Refund Radar
+            Verified Deals & Price Savings
 
         </div>
 
     </header>
 
 
+    <!-- =========================================================
+         MAIN
+    ========================================================= -->
 
     <div class="main-container">
 
 
+        <!-- =====================================================
+             HERO
+        ===================================================== -->
+
         <div class="hero-section">
 
             <h1>
-                Track Real-Time Price Drops & Claim Refunds
+                Find Deals Worth Clicking
             </h1>
 
             <p>
-                Automated intelligence protecting US & EU shoppers
-                from overpaying on retail purchases.
+                Discover verified deals, see the real savings,
+                and check the retailer's offer before you buy.
             </p>
 
         </div>
 
 
+        <!-- =====================================================
+             TWO COLUMN CONTENT
+        ===================================================== -->
 
         <div class="grid-layout">
 
 
-            <!-- Left Column: Live Verified Deals Feed -->
+            <!-- =================================================
+                 LIVE DEALS
+            ================================================= -->
 
             <div class="card">
 
@@ -1013,10 +1578,11 @@
                     🔥 Live Verified Market Deals
                 </h3>
 
+
                 <div id="discountsContainer">
 
-                    <p style="color: var(--text-muted); text-align: center;">
-                        Syncing live international data streams...
+                    <p>
+                        Finding today's verified deals...
                     </p>
 
                 </div>
@@ -1024,8 +1590,9 @@
             </div>
 
 
-
-            <!-- Right Column: Instant Refund Claim Calculator -->
+            <!-- =================================================
+                 REFUND ESTIMATOR
+            ================================================= -->
 
             <div class="card">
 
@@ -1073,7 +1640,7 @@
                     <div class="form-group">
 
                         <label>
-                            Current Drop Price ($)
+                            Current Price ($)
                         </label>
 
                         <input
@@ -1091,7 +1658,7 @@
                         type="submit"
                         class="btn-primary"
                     >
-                        Calculate Claimable Refund
+                        Calculate Potential Savings
                     </button>
 
 
@@ -1105,11 +1672,11 @@
     </div>
 
 
-
-    <!-- JAVASCRIPT FILE LINK -->
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================= -->
 
     <script src="js/app.js"></script>
-
 
 </body>
 </html>
