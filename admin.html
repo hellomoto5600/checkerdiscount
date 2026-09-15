@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>CheckerDiscount Admin</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f7fb;
+      color: #172033;
+    }
+
+    .container {
+      width: min(1200px, 94%);
+      margin: 30px auto;
+    }
+
+    .header {
+      background: white;
+      border: 1px solid #e3e7ef;
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+    }
+
+    .header h1 {
+      margin: 0 0 7px;
+      font-size: 28px;
+    }
+
+    .header p {
+      margin: 0;
+      color: #687386;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e3e7ef;
+      border-radius: 18px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #d8dee9;
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+      background: white;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #2864ff;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 17px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: #2864ff;
+      color: white;
+    }
+
+    .success {
+      background: #168653;
+      color: white;
+    }
+
+    .warning {
+      background: #e89a00;
+      color: white;
+    }
+
+    .danger {
+      background: #d93025;
+      color: white;
+    }
+
+    .secondary {
+      background: #edf1f7;
+      color: #253047;
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .status {
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin-top: 15px;
+      display: none;
+      font-size: 14px;
+    }
+
+    .status.show {
+      display: block;
+    }
+
+    .status.ok {
+      background: #eaf8f0;
+      color: #12683f;
+    }
+
+    .status.error {
+      background: #fff0ef;
+      color: #a51d14;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 13px 10px;
+      border-bottom: 1px solid #edf0f5;
+      vertical-align: middle;
+    }
+
+    th {
+      font-size: 13px;
+      color: #697386;
+      background: #f8f9fc;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .pending {
+      background: #fff4d6;
+      color: #8a5a00;
+    }
+
+    .verified {
+      background: #e7f7ee;
+      color: #117343;
+    }
+
+    .expired {
+      background: #f0f1f4;
+      color: #687386;
+    }
+
+    .small-actions {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    .small-actions button {
+      padding: 7px 10px;
+      font-size: 12px;
+    }
+
+    .login-box {
+      max-width: 500px;
+      margin: 80px auto;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .deal-title {
+      font-weight: 700;
+      max-width: 300px;
+    }
+
+    .muted {
+      color: #737d8e;
+      font-size: 13px;
+    }
+
+    @media (max-width: 700px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .full {
+        grid-column: auto;
+      }
+
+      .container {
+        width: 92%;
+      }
+
+      .header h1 {
+        font-size: 23px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOGIN -->
+  <div id="loginScreen" class="container login-box">
+
+    <div class="card">
+
+      <h1>CheckerDiscount Admin</h1>
+
+      <p class="muted">
+        Enter your Admin Key to manage deals.
+      </p>
+
+      <br>
+
+      <label for="adminKey">Admin Key</label>
+
+      <input
+        id="adminKey"
+        type="password"
+        placeholder="Enter your ADMIN_KEY"
+        autocomplete="off"
+      >
+
+      <div class="actions">
+        <button class="primary" onclick="login()">
+          Connect
+        </button>
+      </div>
+
+      <div id="loginStatus" class="status"></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ADMIN PANEL -->
+  <div id="adminPanel" class="container hidden">
+
+    <div class="header">
+
+      <h1>CheckerDiscount Admin</h1>
+
+      <p>
+        Manage, verify and remove your deals.
+      </p>
+
+      <div class="actions">
+
+        <button class="primary" onclick="loadDeals()">
+          Refresh Deals
+        </button>
+
+        <button class="secondary" onclick="logout()">
+          Logout
+        </button>
+
+      </div>
+
+      <div id="mainStatus" class="status"></div>
+
+    </div>
+
+
+    <!-- ADD DEAL -->
+    <div class="card">
+
+      <h2>Add New Deal</h2>
+
+      <div class="grid">
+
+        <div class="full">
+
+          <label for="title">
+            Product Title *
+          </label>
+
+          <input
+            id="title"
+            type="text"
+            placeholder="Example: Sony WH-1000XM5 Wireless Headphones"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label for="store">
+            Store *
+          </label>
+
+          <input
+            id="store"
+            type="text"
+            placeholder="Example: Amazon US"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label for="currency">
+            Currency
+          </label>
+
+          <select id="currency">
+
+            <option value="USD">USD</option>
+            <option value="GBP">GBP</option>
+            <option value="EUR">EUR</option>
+            <option value="CAD">CAD</option>
+
+          </select>
+
+        </div>
+
+
+        <div>
+
+          <label for="oldPrice">
+            Old / Reference Price *
+          </label>
+
+          <input
+            id="oldPrice"
+            type="number"
+            step="0.01"
+            min="0"
+            placeholder="399.99"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label for="newPrice">
+            Current Deal Price *
+          </label>
+
+          <input
+            id="newPrice"
+            type="number"
+            step="0.01"
+            min="0"
+            placeholder="299.99"
+          >
+
+        </div>
+
+
+        <div class="full">
+
+          <label for="url">
+            Product URL *
+          </label>
+
+          <input
+            id="url"
+            type="url"
+            placeholder="https://..."
+          >
+
+        </div>
+
+
+        <div>
+
+          <label for="asin">
+            Amazon ASIN
+          </label>
+
+          <input
+            id="asin"
+            type="text"
+            placeholder="Example: B09XXXXXXX"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label for="imageUrl">
+            Product Image URL
+          </label>
+
+          <input
+            id="imageUrl"
+            type="url"
+            placeholder="https://..."
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="actions">
+
+        <button
+          class="primary"
+          id="addButton"
+          onclick="addDeal()"
+        >
+          Add Deal
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- DEAL LIST -->
+    <div class="card">
+
+      <h2>All Deals</h2>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>ID</th>
+              <th>Product</th>
+              <th>Store</th>
+              <th>Prices</th>
+              <th>Discount</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+
+          </thead>
+
+          <tbody id="dealTableBody">
+
+            <tr>
+              <td colspan="7">
+                Loading...
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+<script>
+
+  /*
+    IMPORTANT:
+    This is your real Worker API URL.
+  */
+
+  const API_BASE =
+    "https://dealflash-api-khabrahim32.workers.dev";
+
+
+  let ADMIN_KEY = "";
+
+
+  // --------------------------------------------------
+  // LOGIN
+  // --------------------------------------------------
+
+  async function login() {
+
+    const key =
+      document.getElementById("adminKey").value.trim();
+
+    if (!key) {
+
+      showStatus(
+        "loginStatus",
+        "Please enter your Admin Key.",
+        false
+      );
+
+      return;
+    }
+
+
+    ADMIN_KEY = key;
+
+
+    try {
+
+      const response = await fetch(
+        API_BASE + "/api/admin/deals",
+        {
+          method: "GET",
+
+          headers: {
+            "X-Admin-Key": ADMIN_KEY
+          }
+        }
+      );
+
+
+      const data = await response.json();
+
+
+      if (!response.ok) {
+
+        ADMIN_KEY = "";
+
+        showStatus(
+          "loginStatus",
+          data.error || "Unauthorized",
+          false
+        );
+
+        return;
+      }
+
+
+      document
+        .getElementById("loginScreen")
+        .classList.add("hidden");
+
+      document
+        .getElementById("adminPanel")
+        .classList.remove("hidden");
+
+
+      loadDeals();
+
+    } catch (error) {
+
+      ADMIN_KEY = "";
+
+      showStatus(
+        "loginStatus",
+        "Could not connect to the API.",
+        false
+      );
+
+    }
+
+  }
+
+
+  // --------------------------------------------------
+  // LOGOUT
+  // --------------------------------------------------
+
+  function logout() {
+
+    ADMIN_KEY = "";
+
+    document
+      .getElementById("adminPanel")
+      .classList.add("hidden");
+
+    document
+      .getElementById("loginScreen")
+      .classList.remove("hidden");
+
+    document
+      .getElementById("adminKey")
+      .value = "";
+
+  }
+
+
+  // --------------------------------------------------
+  // LOAD DEALS
+  // --------------------------------------------------
+
+  async function loadDeals() {
+
+    try {
+
+      const response = await fetch(
+        API_BASE + "/api/admin/deals",
+        {
+          method: "GET",
+
+          headers: {
+            "X-Admin-Key": ADMIN_KEY
+          }
+        }
+      );
+
+
+      const data = await response.json();
+
+
+      if (!response.ok) {
+
+        showStatus(
+          "mainStatus",
+          data.error || "Could not load deals.",
+          false
+        );
+
+        return;
+      }
+
+
+      renderDeals(data.deals || []);
+
+
+    } catch (error) {
+
+      showStatus(
+        "mainStatus",
+        "Could not connect to the API.",
+        false
+      );
+
+    }
+
+  }
+
+
+  // --------------------------------------------------
+  // ADD DEAL
+  // --------------------------------------------------
+
+  async function addDeal() {
+
+    const title =
+      document.getElementById("title").value.trim();
+
+    const store =
+      document.getElementById("store").value.trim();
+
+    const oldPrice =
+      Number(document.getElementById("oldPrice").value);
+
+    const newPrice =
+      Number(document.getElementById("newPrice").value);
+
+    const url =
+      document.getElementById("url").value.trim();
+
+    const currency =
+      document.getElementById("currency").value;
+
+    const asin =
+      document.getElementById("asin").value.trim();
+
+    const imageUrl =
+      document.getElementById("imageUrl").value.trim();
+
+
+    if (!title || !store || !url) {
+
+      showStatus(
+        "mainStatus",
+        "Please fill all required fields.",
+        false
+      );
+
+      return;
+    }
+
+
+    if (
+      !Number.isFinite(oldPrice) ||
+      !Number.isFinite(newPrice)
+    ) {
+
+      showStatus(
+        "mainStatus",
+        "Please enter valid prices.",
+        false
+      );
+
+      return;
+    }
+
+
+    if (newPrice >= oldPrice) {
+
+      showStatus(
+        "mainStatus",
+        "Deal price must be lower than the reference price.",
+        false
+      );
+
+      return;
+    }
+
+
+    const button =
+      document.getElementById("addButton");
+
+    button.disabled = true;
+    button.textContent = "Adding...";
+
+
+    try {
+
+      const response = await fetch(
+        API_BASE + "/api/admin/deals",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+            "X-Admin-Key": ADMIN_KEY
+          },
+
+          body: JSON.stringify({
+
+            title: title,
+
+            store: store,
+
+            old_price: oldPrice,
+
+            new_price: newPrice,
+
+            url: url,
+
+            currency: currency,
+
+            asin: asin,
+
+            image_url: imageUrl
+
+          })
+
+        }
+      );
+
+
+      const data = await response.json();
+
+
+      if (!response.ok) {
+
+        showStatus(
+          "mainStatus",
+          data.error || "Could not add deal.",
+          false
+        );
+
+        return;
+      }
+
+
+      showStatus(
+        "mainStatus",
+        "Deal added successfully as PENDING.",
+        true
+      );
+
+
+      clearForm();
+
+      loadDeals();
+
+
+    } catch (error) {
+
+      showStatus(
+        "mainStatus",
+        "Could not connect to the API.",
+        false
+      );
+
+    } finally {
+
+      button.disabled = false;
+      button.textContent = "Add Deal";
+
+    }
+
+  }
+
+
+  // --------------------------------------------------
+  // VERIFY
+  // --------------------------------------------------
+
+  async function verifyDeal(id) {
+
+    if (
+      !confirm(
+        "Have you manually checked this deal and confirmed that the product, price and link are correct?"
+      )
+    ) {
+      return;
+    }
+
+
+    await dealAction(
+      id,
+      "verify",
+      "Deal verified successfully."
+    );
+
+  }
+
+
+  // --------------------------------------------------
+  // EXPIRE
+  // --------------------------------------------------
+
+  async function expireDeal(id) {
+
+    if (
+      !confirm(
+        "Mark this deal as EXPIRED?"
+      )
+    ) {
+      return;
+    }
+
+
+    await dealAction(
+      id,
+      "expire",
+      "Deal marked as expired."
+    );
+
+  }
+
+
+  // --------------------------------------------------
+  // DELETE
+  // --------------------------------------------------
+
+  async function deleteDeal(id) {
+
+    if (
+      !confirm(
+        "Delete this deal permanently?"
+      )
+    ) {
+      return;
+    }
+
+
+    try {
+
+      const response = await fetch(
+        API_BASE + "/api/admin/deals/" + id,
+        {
+          method: "DELETE",
+
+          headers: {
+            "X-Admin-Key": ADMIN_KEY
+          }
+        }
+      );
+
+
+      const data = await response.json();
+
+
+      if (!response.ok) {
+
+        showStatus(
+          "mainStatus",
+          data.error || "Delete failed.",
+          false
+        );
+
+        return;
+      }
+
+
+      showStatus(
+        "mainStatus",
+        "Deal deleted.",
+        true
+      );
+
+
+      loadDeals();
+
+
+    } catch (error) {
+
+      showStatus(
+        "mainStatus",
+        "Could not connect to the API.",
+        false
+      );
+
+    }
+
+  }
+
+
+  // --------------------------------------------------
+  // VERIFY / EXPIRE ACTION
+  // --------------------------------------------------
+
+  async function dealAction(id, action, successMessage) {
+
+    try {
+
+      const response = await fetch(
+        API_BASE +
+        "/api/admin/deals/" +
+        id +
+        "/" +
+        action,
+        {
+          method: "POST",
+
+          headers: {
+            "X-Admin-Key": ADMIN_KEY
+          }
+        }
+      );
+
+
+      const data = await response.json();
+
+
+      if (!response.ok) {
+
+        showStatus(
+          "mainStatus",
+          data.error || "Action failed.",
+          false
+        );
+
+        return;
+      }
+
+
+      showStatus(
+        "mainStatus",
+        successMessage,
+        true
+      );
+
+
+      loadDeals();
+
+
+    } catch (error) {
+
+      showStatus(
+        "mainStatus",
+        "Could not connect to the API.",
+        false
+      );
+
+    }
+
+  }
+
+
+  // --------------------------------------------------
+  // RENDER DEALS
+  // --------------------------------------------------
+
+  function renderDeals(deals) {
+
+    const tbody =
+      document.getElementById("dealTableBody");
+
+
+    if (!deals.length) {
+
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7">
+            No deals found.
+          </td>
+        </tr>
+      `;
+
+      return;
+    }
+
+
+    tbody.innerHTML =
+      deals.map(deal => {
+
+        const status =
+          String(
+            deal.verification_status || "PENDING"
+          ).toUpperCase();
+
+
+        let statusClass = "pending";
+
+        if (status === "VERIFIED") {
+          statusClass = "verified";
+        }
+
+        if (status === "EXPIRED") {
+          statusClass = "expired";
+        }
+
+
+        const oldPrice =
+          Number(deal.old_price || 0).toFixed(2);
+
+        const newPrice =
+          Number(deal.new_price || 0).toFixed(2);
+
+        const discount =
+          Number(
+            deal.discount_percent || 0
+          ).toFixed(2);
+
+
+        let actions = "";
+
+
+        if (status === "PENDING") {
+
+          actions += `
+            <button
+              class="success"
+              onclick="verifyDeal(${deal.id})"
+            >
+              Verify
+            </button>
+          `;
+
+          actions += `
+            <button
+              class="warning"
+              onclick="expireDeal(${deal.id})"
+            >
+              Expire
+            </button>
+          `;
+
+        }
+
+
+        if (status === "VERIFIED") {
+
+          actions += `
+            <button
+              class="warning"
+              onclick="expireDeal(${deal.id})"
+            >
+              Expire
+            </button>
+          `;
+
+        }
+
+
+        actions += `
+          <button
+            class="danger"
+            onclick="deleteDeal(${deal.id})"
+          >
+            Delete
+          </button>
+        `;
+
+
+        return `
+          <tr>
+
+            <td>
+              ${deal.id}
+            </td>
+
+            <td>
+              <div class="deal-title">
+                ${escapeHtml(deal.title || "")}
+              </div>
+            </td>
+
+            <td>
+              ${escapeHtml(deal.store || "")}
+            </td>
+
+            <td>
+              ${escapeHtml(deal.currency || "USD")}
+              ${newPrice}
+              <br>
+              <span class="muted">
+                Was ${oldPrice}
+              </span>
+            </td>
+
+            <td>
+              <strong>
+                ${discount}%
+              </strong>
+            </td>
+
+            <td>
+              <span class="badge ${statusClass}">
+                ${status}
+              </span>
+            </td>
+
+            <td>
+              <div class="small-actions">
+                ${actions}
+              </div>
+            </td>
+
+          </tr>
+        `;
+
+      }).join("");
+
+  }
+
+
+  // --------------------------------------------------
+  // CLEAR FORM
+  // --------------------------------------------------
+
+  function clearForm() {
+
+    document.getElementById("title").value = "";
+    document.getElementById("store").value = "";
+    document.getElementById("oldPrice").value = "";
+    document.getElementById("newPrice").value = "";
+    document.getElementById("url").value = "";
+    document.getElementById("asin").value = "";
+    document.getElementById("imageUrl").value = "";
+
+  }
+
+
+  // --------------------------------------------------
+  // STATUS MESSAGE
+  // --------------------------------------------------
+
+  function showStatus(elementId, message, success) {
+
+    const element =
+      document.getElementById(elementId);
+
+    element.textContent = message;
+
+    element.className =
+      "status show " +
+      (success ? "ok" : "error");
+
+  }
+
+
+  // --------------------------------------------------
+  // BASIC HTML ESCAPE
+  // --------------------------------------------------
+
+  function escapeHtml(value) {
+
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  }
+
+</script>
+
+</body>
+</html>
