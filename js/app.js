@@ -279,16 +279,30 @@ async function fetchDiscounts() {
                         </div>
 
 
-                        <!-- CTA -->
+                        <!-- CTA BUTTONS -->
 
-                        <a
-                            href="${escapeHtml(link)}"
-                            target="_blank"
-                            rel="nofollow sponsored noopener"
-                            class="deal-button"
-                        >
-                            Check This Deal
-                        </a>
+                        <div class="deal-actions">
+
+                            <a
+                                href="${escapeHtml(link)}"
+                                target="_blank"
+                                rel="nofollow sponsored noopener"
+                                class="deal-button"
+                            >
+                                Check This Deal
+                            </a>
+
+
+                            <button
+                                type="button"
+                                class="share-deal-button"
+                                onclick="shareDeal(${escapeShareData(deal)})"
+                                aria-label="Share this deal"
+                            >
+                                ↗ Share
+                            </button>
+
+                        </div>
 
 
                     </div>
@@ -340,6 +354,360 @@ async function fetchDiscounts() {
 
         `;
     }
+}
+
+
+/* =========================================================
+   SHARE DEAL
+========================================================= */
+
+function shareDeal(deal) {
+
+    const title =
+        deal.title ||
+        "Great Deal on CheckerDiscount";
+
+
+    const currency =
+        deal.currency ||
+        "USD";
+
+
+    const newPrice =
+        Number(deal.new_price || 0);
+
+
+    const discount =
+        Number(deal.discount_percent || 0);
+
+
+    const priceText =
+        newPrice > 0
+            ? `${getCurrencySymbol(currency)}${newPrice.toFixed(2)}`
+            : "";
+
+
+    const discountText =
+        discount > 0
+            ? `${discount.toFixed(0)}% OFF`
+            : "";
+
+
+    const dealUrl =
+        deal.url ||
+        window.location.href;
+
+
+    const shareText =
+        `${title}\n` +
+        `${priceText}` +
+        `${discountText ? " • " + discountText : ""}` +
+        `\n\nFound on CheckerDiscount`;
+
+
+    /* ---------------------------------------------------------
+       MOBILE / MODERN BROWSER
+    --------------------------------------------------------- */
+
+    if (
+        navigator.share &&
+        typeof navigator.share === "function"
+    ) {
+
+        navigator.share({
+            title: title,
+            text: shareText,
+            url: dealUrl
+        }).catch(() => {
+            /* User cancelled sharing */
+        });
+
+        return;
+    }
+
+
+    /* ---------------------------------------------------------
+       DESKTOP FALLBACK
+    --------------------------------------------------------- */
+
+    showSharePopup(
+        title,
+        shareText,
+        dealUrl
+    );
+}
+
+
+/* =========================================================
+   SHARE POPUP
+========================================================= */
+
+function showSharePopup(
+    title,
+    text,
+    url
+) {
+
+    const oldPopup =
+        document.getElementById(
+            "cdSharePopup"
+        );
+
+
+    if (oldPopup) {
+        oldPopup.remove();
+    }
+
+
+    const encodedText =
+        encodeURIComponent(text);
+
+
+    const encodedUrl =
+        encodeURIComponent(url);
+
+
+    const popup =
+        document.createElement("div");
+
+
+    popup.id =
+        "cdSharePopup";
+
+
+    popup.innerHTML = `
+
+        <div
+            class="cd-share-overlay"
+            onclick="closeSharePopup()">
+        </div>
+
+
+        <div class="cd-share-box">
+
+
+            <button
+                type="button"
+                class="cd-share-close"
+                onclick="closeSharePopup()"
+                aria-label="Close">
+                ×
+            </button>
+
+
+            <div class="cd-share-icon">
+                ↗
+            </div>
+
+
+            <h3>
+                Share This Deal
+            </h3>
+
+
+            <p>
+                ${escapeHtml(title)}
+            </p>
+
+
+            <div class="cd-share-buttons">
+
+
+                <a
+                    href="https://wa.me/?text=${encodedText}%20${encodedUrl}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="cd-share-option">
+                    WhatsApp
+                </a>
+
+
+                <a
+                    href="https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="cd-share-option">
+                    Facebook
+                </a>
+
+
+                <a
+                    href="https://t.me/share/url?url=${encodedUrl}&text=${encodedText}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="cd-share-option">
+                    Telegram
+                </a>
+
+
+                <a
+                    href="https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="cd-share-option">
+                    X
+                </a>
+
+
+            </div>
+
+
+            <button
+                type="button"
+                class="cd-copy-link"
+                onclick="copyDealLink('${escapeShareAttribute(url)}')">
+                Copy Deal Link
+            </button>
+
+
+            <div
+                id="cdCopyMessage">
+            </div>
+
+
+        </div>
+    `;
+
+
+    document.body.appendChild(popup);
+}
+
+
+/* =========================================================
+   CLOSE SHARE POPUP
+========================================================= */
+
+function closeSharePopup() {
+
+    const popup =
+        document.getElementById(
+            "cdSharePopup"
+        );
+
+
+    if (popup) {
+        popup.remove();
+    }
+}
+
+
+/* =========================================================
+   COPY DEAL LINK
+========================================================= */
+
+async function copyDealLink(url) {
+
+    try {
+
+        await navigator.clipboard.writeText(
+            url
+        );
+
+
+        showCopyMessage();
+
+    } catch (error) {
+
+        /* Older browser fallback */
+
+        const tempInput =
+            document.createElement("input");
+
+
+        tempInput.value =
+            url;
+
+
+        document.body.appendChild(
+            tempInput
+        );
+
+
+        tempInput.select();
+
+
+        document.execCommand("copy");
+
+
+        tempInput.remove();
+
+
+        showCopyMessage();
+    }
+}
+
+
+/* =========================================================
+   COPY MESSAGE
+========================================================= */
+
+function showCopyMessage() {
+
+    const message =
+        document.getElementById(
+            "cdCopyMessage"
+        );
+
+
+    if (message) {
+
+        message.textContent =
+            "✓ Deal link copied";
+
+        message.style.marginTop =
+            "12px";
+
+        message.style.color =
+            "#087443";
+
+        message.style.fontSize =
+            "13px";
+
+        message.style.fontWeight =
+            "600";
+    }
+}
+
+
+/* =========================================================
+   SHARE DATA SAFETY
+========================================================= */
+
+function escapeShareData(deal) {
+
+    return JSON.stringify(deal)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* =========================================================
+   SHARE ATTRIBUTE SAFETY
+========================================================= */
+
+function escapeShareAttribute(value) {
+
+    return String(value)
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'");
+}
+
+
+/* =========================================================
+   CURRENCY SYMBOL
+========================================================= */
+
+function getCurrencySymbol(currency) {
+
+    return currency === "USD" ? "$" :
+           currency === "GBP" ? "£" :
+           currency === "EUR" ? "€" :
+           currency === "CAD" ? "C$" :
+           currency === "AUD" ? "A$" :
+           currency;
 }
 
 
