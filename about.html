@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>About Us | CheckerDiscount</title>
+
+    <meta name="description"
+          content="Learn more about CheckerDiscount and our mission to help shoppers discover better deals and make smarter buying decisions.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <style>
+        :root {
+            --brand: #155EEF;
+            --brand-dark: #0B3B91;
+            --navy: #0B1220;
+            --text: #172033;
+            --muted: #667085;
+            --background: #F6F8FC;
+            --white: #FFFFFF;
+            --border: #E4EAF2;
+            --green: #12B76A;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Inter", Arial, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav {
+            max-width: 1100px;
+            margin: auto;
+            min-height: 74px;
+            padding: 0 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 19px;
+            color: var(--navy);
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+            color: white;
+            font-weight: 800;
+        }
+
+        .brand span {
+            color: var(--brand);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 6px;
+        }
+
+        .nav-links a {
+            padding: 9px 12px;
+            border-radius: 8px;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            color: var(--brand);
+            background: #EEF4FF;
+        }
+
+        .page-header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 70px 20px;
+            text-align: center;
+        }
+
+        .page-header small {
+            color: var(--brand);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .7px;
+            text-transform: uppercase;
+        }
+
+        .page-header h1 {
+            margin: 10px 0;
+            color: var(--navy);
+            font-size: 44px;
+            letter-spacing: -1.5px;
+        }
+
+        .page-header p {
+            max-width: 650px;
+            margin: auto;
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .content {
+            max-width: 900px;
+            margin: auto;
+            padding: 55px 20px 80px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 32px;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            color: var(--navy);
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .card ul {
+            padding-left: 20px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .card li {
+            margin-bottom: 8px;
+        }
+
+        .footer {
+            background: var(--navy);
+            color: white;
+            padding: 35px 20px;
+            text-align: center;
+        }
+
+        .footer p {
+            color: #98A2B3;
+            font-size: 11px;
+            margin-bottom: 12px;
+        }
+
+        .footer a {
+            color: #98A2B3;
+            font-size: 11px;
+            margin: 0 8px;
+        }
+
+        .footer a:hover {
+            color: white;
+        }
+
+        @media(max-width:700px) {
+            .nav-links {
+                display: none;
+            }
+
+            .page-header h1 {
+                font-size: 35px;
+            }
+
+            .card {
+                padding: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="nav">
+
+        <a href="index.html" class="brand">
+            <div class="logo">CD</div>
+            Checker<span>Discount</span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="index.html#deals">Deals</a>
+            <a href="index.html#savings">Savings Checker</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+    </div>
+</header>
+
+
+<section class="page-header">
+
+    <small>ABOUT CHECKERDISCOUNT</small>
+
+    <h1>Helping You Shop Smarter</h1>
+
+    <p>
+        CheckerDiscount was created to make online deal discovery
+        simpler, clearer and more useful for everyday shoppers.
+    </p>
+
+</section>
+
+
+<main class="content">
+
+    <div class="card">
+
+        <h2>Our Mission</h2>
+
+        <p>
+            Online shopping can be confusing. The same product may be
+            available from different retailers at different prices.
+        </p>
+
+        <p>
+            CheckerDiscount aims to help shoppers discover attractive
+            offers, understand potential savings and check the retailer's
+            deal before making a purchase.
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>What We Do</h2>
+
+        <p>
+            We curate and display selected deals from retailers and
+            provide useful information to help shoppers make better
+            purchasing decisions.
+        </p>
+
+        <ul>
+            <li>Discover selected deals and offers.</li>
+            <li>Show reference prices and deal prices where available.</li>
+            <li>Calculate potential savings.</li>
+            <li>Provide links to retailer offers.</li>
+            <li>Make deal information easier to understand.</li>
+        </ul>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>Our Approach</h2>
+
+        <p>
+            We believe a good deal website should be simple and
+            transparent. We do not want to overwhelm shoppers with
+            unnecessary information.
+        </p>
+
+        <p>
+            Our goal is to help users quickly understand what an offer
+            is, how much they could potentially save, and where they
+            can check the retailer's current offer.
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>Affiliate Relationships</h2>
+
+        <p>
+            Some links on CheckerDiscount may be affiliate links.
+            This means we may receive a commission when a qualifying
+            purchase is made through certain links.
+        </p>
+
+        <p>
+            Affiliate relationships do not change the price you pay
+            at the retailer.
+        </p>
+
+    </div>
+
+</main>
+
+
+<footer class="footer">
+
+    <p>
+        © 2026 CheckerDiscount. All rights reserved.
+    </p>
+
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="affiliate-disclosure.html">Affiliate Disclosure</a>
+
+</footer>
+
+</body>
+</html>
