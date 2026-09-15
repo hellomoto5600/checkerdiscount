@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Contact Us | CheckerDiscount</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <style>
+        :root {
+            --brand: #155EEF;
+            --brand-dark: #0B3B91;
+            --navy: #0B1220;
+            --text: #172033;
+            --muted: #667085;
+            --background: #F6F8FC;
+            --white: #FFFFFF;
+            --border: #E4EAF2;
+            --green: #12B76A;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Inter", Arial, sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav {
+            max-width: 1100px;
+            margin: auto;
+            min-height: 74px;
+            padding: 0 20px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+            color: white;
+        }
+
+        .brand span {
+            color: var(--brand);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 6px;
+        }
+
+        .nav-links a {
+            padding: 9px 12px;
+            border-radius: 8px;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            background: #EEF4FF;
+            color: var(--brand);
+        }
+
+        .page {
+            max-width: 850px;
+            margin: auto;
+            padding: 75px 20px 100px;
+        }
+
+        .page h1 {
+            color: var(--navy);
+            font-size: 43px;
+            margin-bottom: 12px;
+        }
+
+        .intro {
+            color: var(--muted);
+            font-size: 15px;
+            margin-bottom: 35px;
+        }
+
+        .contact-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 32px;
+            box-shadow: 0 12px 35px rgba(16,24,40,.06);
+        }
+
+        .contact-card h2 {
+            color: var(--navy);
+            font-size: 21px;
+            margin-bottom: 12px;
+        }
+
+        .contact-card p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 18px;
+        }
+
+        .contact-item {
+            padding: 17px;
+            background: #F8FAFC;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            margin-top: 12px;
+        }
+
+        .contact-item strong {
+            display: block;
+            color: var(--navy);
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .contact-item span {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .footer {
+            background: var(--navy);
+            color: white;
+            text-align: center;
+            padding: 35px 20px;
+        }
+
+        .footer p {
+            color: #98A2B3;
+            font-size: 11px;
+            margin-bottom: 12px;
+        }
+
+        .footer a {
+            color: #98A2B3;
+            font-size: 11px;
+            margin: 0 8px;
+        }
+
+        @media(max-width:700px) {
+            .nav-links {
+                display: none;
+            }
+
+            .page h1 {
+                font-size: 35px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="nav">
+
+        <a href="index.html" class="brand">
+            <div class="logo">CD</div>
+            Checker<span>Discount</span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="index.html#deals">Deals</a>
+            <a href="index.html#savings">Savings Checker</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+    </div>
+
+</header>
+
+
+<main class="page">
+
+    <h1>Contact Us</h1>
+
+    <p class="intro">
+        Have a question, suggestion or problem with a deal?
+        We would be happy to hear from you.
+    </p>
+
+
+    <div class="contact-card">
+
+        <h2>Get in Touch</h2>
+
+        <p>
+            For questions about CheckerDiscount, deal information,
+            website issues or general feedback, please contact us
+            using the contact details provided on this page.
+        </p>
+
+        <div class="contact-item">
+            <strong>General Questions</strong>
+            <span>
+                Please use our official contact channel for general
+                questions and website feedback.
+            </span>
+        </div>
+
+        <div class="contact-item">
+            <strong>Deal Information</strong>
+            <span>
+                If you notice incorrect or outdated deal information,
+                please let us know so we can review it.
+            </span>
+        </div>
+
+        <div class="contact-item">
+            <strong>Business & Partnership</strong>
+            <span>
+                For partnership, advertising or business enquiries,
+                please contact our team through the official channel.
+            </span>
+        </div>
+
+    </div>
+
+</main>
+
+
+<footer class="footer">
+
+    <p>
+        © 2026 CheckerDiscount. All rights reserved.
+    </p>
+
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="affiliate-disclosure.html">Affiliate Disclosure</a>
+
+</footer>
+
+</body>
+</html>
