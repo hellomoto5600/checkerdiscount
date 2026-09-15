@@ -1,207 +1,425 @@
-// ============================================================
-// CheckerDiscount - Main App JavaScript
-// Version: 4.0
-// ============================================================
+/* =========================================================
+   CHECKERDISCOUNT - APP.JS
+   Version 5.0
+   ========================================================= */
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
 
-
-// ============================================================
-// PAGE LOAD
-// ============================================================
+/* =========================================================
+   PAGE LOAD
+   ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
     loadDeals();
     setupSavingsChecker();
     setupMobileMenu();
+    setupSharePopup();
 });
 
 
-// ============================================================
-// LOAD VERIFIED DEALS
-// ============================================================
+/* =========================================================
+   LOAD VERIFIED DEALS
+   ========================================================= */
 
 async function loadDeals() {
     const container = document.getElementById("discountsContainer");
 
-    if (!container) return;
+    if (!container) {
+        console.error("discountsContainer not found.");
+        return;
+    }
 
     container.innerHTML = `
         <div style="
             text-align:center;
             padding:40px 20px;
-            color:#667085;
-            width:100%;
+            color:#64748b;
         ">
-            Loading verified deals...
+            Loading today's verified deals...
         </div>
     `;
 
     try {
-        const response = await fetch(API_BASE + "/api/deals", {
+        const response = await fetch(`${API_BASE}/api/deals`, {
             method: "GET",
+            headers: {
+                "Accept": "application/json"
+            },
             cache: "no-store"
         });
 
         if (!response.ok) {
-            throw new Error("API request failed");
+            throw new Error(`API error: ${response.status}`);
         }
 
         const result = await response.json();
+
+        console.log("CheckerDiscount API:", result);
 
         const deals = Array.isArray(result.deals)
             ? result.deals
             : [];
 
+        container.innerHTML = "";
+
         if (deals.length === 0) {
             container.innerHTML = `
                 <div style="
                     text-align:center;
-                    padding:50px 20px;
-                    color:#667085;
-                    width:100%;
+                    padding:45px 20px;
+                    color:#64748b;
                 ">
-                    <h3 style="margin-bottom:8px;color:#172033;">
-                        No verified deals yet
+                    <div style="
+                        font-size:42px;
+                        margin-bottom:12px;
+                    ">🔎</div>
+
+                    <h3 style="
+                        margin:0 0 8px;
+                        color:#1e293b;
+                    ">
+                        No verified deals available
                     </h3>
-                    <p>
-                        New verified deals will appear here soon.
+
+                    <p style="margin:0;">
+                        Please check again soon.
                     </p>
                 </div>
             `;
+
             return;
         }
 
-        container.innerHTML = "";
-
-        deals.forEach(deal => {
+        deals.forEach((deal) => {
             renderDeal(deal, container);
         });
 
     } catch (error) {
-
-        console.error("CheckerDiscount API Error:", error);
+        console.error("Failed to load deals:", error);
 
         container.innerHTML = `
             <div style="
                 text-align:center;
-                padding:45px 20px;
-                color:#667085;
-                width:100%;
+                padding:40px 20px;
+                color:#dc2626;
             ">
-                <h3 style="color:#172033;margin-bottom:8px;">
-                    Deals are temporarily unavailable
+                <div style="
+                    font-size:40px;
+                    margin-bottom:10px;
+                ">⚠️</div>
+
+                <h3 style="
+                    margin:0 0 8px;
+                ">
+                    Unable to load deals
                 </h3>
-                <p>
+
+                <p style="
+                    margin:0 0 18px;
+                    color:#64748b;
+                ">
                     Please refresh the page and try again.
                 </p>
+
+                <button
+                    onclick="loadDeals()"
+                    style="
+                        border:0;
+                        background:#2563eb;
+                        color:#fff;
+                        padding:10px 18px;
+                        border-radius:8px;
+                        cursor:pointer;
+                        font-weight:600;
+                    "
+                >
+                    Try Again
+                </button>
             </div>
         `;
     }
 }
 
 
-// ============================================================
-// RENDER DEAL CARD
-// ============================================================
+/* =========================================================
+   RENDER ONE DEAL
+   IMPORTANT:
+   Every deal gets its OWN discount-card
+   and its OWN VERIFIED badge.
+   ========================================================= */
 
 function renderDeal(deal, container) {
 
-    const oldPrice = Number(deal.old_price || 0);
-    const newPrice = Number(deal.new_price || 0);
-    const discount = Number(deal.discount_percent || 0);
+    const card = document.createElement("article");
 
-    const currency = deal.currency || "USD";
+    /*
+     * IMPORTANT FIX:
+     * Your CSS uses .discount-card.
+     * Old JS was using .deal-card.
+     */
+    card.className = "discount-card";
 
-    const symbol = getCurrencySymbol(currency);
+    /*
+     * Give every card a unique identity.
+     * This prevents one product's UI elements
+     * from being confused with another product.
+     */
+    if (deal.id !== undefined && deal.id !== null) {
+        card.dataset.dealId = String(deal.id);
+    }
 
-    const savings = Math.max(oldPrice - newPrice, 0);
+    const title = escapeHTML(deal.title || "Untitled Product");
+    const store = escapeHTML(deal.store || "Store");
 
-    const imageHTML = deal.image_url
+    const oldPrice = Number(deal.old_price);
+    const newPrice = Number(deal.new_price);
+
+    const currency = escapeHTML(
+        deal.currency || "USD"
+    );
+
+    let discount = Number(deal.discount_percent);
+
+    /*
+     * Safety fallback:
+     * If API doesn't provide discount_percent,
+     * calculate it automatically.
+     */
+    if (
+        !Number.isFinite(discount) &&
+        Number.isFinite(oldPrice) &&
+        Number.isFinite(newPrice) &&
+        oldPrice > newPrice
+    ) {
+        discount =
+            ((oldPrice - newPrice) / oldPrice) * 100;
+    }
+
+    if (!Number.isFinite(discount)) {
+        discount = 0;
+    }
+
+    discount = Math.round(discount * 100) / 100;
+
+    const savings =
+        Number.isFinite(oldPrice) &&
+        Number.isFinite(newPrice)
+            ? Math.max(oldPrice - newPrice, 0)
+            : 0;
+
+    const productUrl = safeHttpUrl(deal.url);
+
+    const imageUrl = safeHttpUrl(
+        deal.image_url
+    );
+
+    /*
+     * -------------------------------------------------------
+     * PRODUCT IMAGE
+     * -------------------------------------------------------
+     */
+
+    const imageHTML = imageUrl
         ? `
-            <div class="deal-image-wrap">
+            <div class="deal-image">
                 <img
-                    src="${escapeHTML(deal.image_url)}"
-                    alt="${escapeHTML(deal.title || "Deal")}"
-                    class="deal-image"
+                    src="${escapeAttribute(imageUrl)}"
+                    alt="${escapeAttribute(title)}"
                     loading="lazy"
+                    onerror="this.style.display='none';"
                 >
             </div>
         `
+        : `
+            <div class="deal-image">
+                <div style="
+                    width:100%;
+                    height:100%;
+                    min-height:160px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    background:#f8fafc;
+                    color:#94a3b8;
+                    font-size:42px;
+                ">
+                    🛍️
+                </div>
+            </div>
+        `;
+
+
+    /*
+     * -------------------------------------------------------
+     * VERIFIED BADGE
+     * -------------------------------------------------------
+     *
+     * IMPORTANT:
+     * This badge is CREATED INSIDE EACH CARD.
+     * It is not one global badge.
+     */
+
+    const isVerified =
+        String(deal.verification_status || "")
+            .toUpperCase() === "VERIFIED";
+
+    const verifiedBadgeHTML = isVerified
+        ? `
+            <span
+                class="deal-verified-badge"
+                style="
+                    display:inline-flex;
+                    align-items:center;
+                    gap:5px;
+                    padding:5px 9px;
+                    border-radius:999px;
+                    background:#ecfdf5;
+                    color:#047857;
+                    border:1px solid #a7f3d0;
+                    font-size:11px;
+                    font-weight:700;
+                    line-height:1;
+                    white-space:nowrap;
+                "
+            >
+                <span style="font-size:12px;">✓</span>
+                VERIFIED
+            </span>
+        `
         : "";
 
-    const card = document.createElement("article");
 
-    card.className = "deal-card";
+    /*
+     * -------------------------------------------------------
+     * DEAL CARD HTML
+     * -------------------------------------------------------
+     */
 
     card.innerHTML = `
         ${imageHTML}
 
         <div class="deal-card-content">
 
-            <div class="deal-store">
-                ${escapeHTML(deal.store || "Store")}
+            <div
+                class="deal-top-line"
+                style="
+                    display:flex;
+                    align-items:center;
+                    gap:8px;
+                    flex-wrap:wrap;
+                "
+            >
+
+                <div class="deal-store">
+                    ${store}
+                </div>
+
+                <div class="deal-discount">
+                    ${discount.toFixed(0)}% OFF
+                </div>
+
+                ${verifiedBadgeHTML}
+
             </div>
 
-            <div class="deal-discount">
-                ${Math.round(discount)}% OFF
-            </div>
 
             <h3 class="deal-title">
-                ${escapeHTML(
-                    deal.title || "Special Deal"
-                )}
+                ${title}
             </h3>
+
 
             <div class="deal-price-row">
 
-                ${
-                    oldPrice > 0
-                    ? `
-                        <span class="deal-old-price">
-                            ${symbol}${oldPrice.toFixed(2)}
-                        </span>
-                    `
-                    : ""
-                }
-
-                <span class="deal-new-price">
-                    ${symbol}${newPrice.toFixed(2)}
-                </span>
+                <div class="deal-price">
+                    ${formatMoney(newPrice, currency)}
+                </div>
 
                 ${
-                    savings > 0
+                    Number.isFinite(oldPrice)
                     ? `
-                        <span class="deal-save">
-                            SAVE ${symbol}${savings.toFixed(2)}
-                        </span>
+                        <div class="deal-old-price">
+                            ${formatMoney(oldPrice, currency)}
+                        </div>
                     `
                     : ""
                 }
 
             </div>
 
-            <p class="deal-note">
-                Worth checking before you buy.
-            </p>
 
-            <div class="deal-actions">
+            ${
+                savings > 0
+                ? `
+                    <div class="deal-savings">
+                        You save ${formatMoney(savings, currency)}
+                    </div>
+                `
+                : ""
+            }
 
-                <a
-                    href="${escapeHTML(deal.url || "#")}"
-                    target="_blank"
-                    rel="nofollow sponsored noopener"
-                    class="deal-button"
-                >
-                    Check This Deal
-                </a>
+
+            <div
+                style="
+                    margin-top:8px;
+                    color:#64748b;
+                    font-size:13px;
+                "
+            >
+                Verified deal checked by CheckerDiscount.
+            </div>
+
+
+            <div
+                style="
+                    display:flex;
+                    align-items:center;
+                    gap:10px;
+                    flex-wrap:wrap;
+                    margin-top:15px;
+                "
+            >
+
+                ${
+                    productUrl
+                    ? `
+                        <a
+                            class="check-deal-btn"
+                            href="${escapeAttribute(productUrl)}"
+                            target="_blank"
+                            rel="nofollow sponsored noopener noreferrer"
+                        >
+                            Check This Deal
+                        </a>
+                    `
+                    : `
+                        <button
+                            type="button"
+                            disabled
+                            style="
+                                opacity:.5;
+                                cursor:not-allowed;
+                            "
+                        >
+                            Deal Link Unavailable
+                        </button>
+                    `
+                }
+
 
                 <button
                     type="button"
-                    class="share-deal-button"
-                    aria-label="Share this deal"
+                    class="share-deal-btn"
+                    data-deal-id="${escapeAttribute(
+                        String(deal.id ?? "")
+                    )}"
+                    data-deal-title="${escapeAttribute(
+                        deal.title || ""
+                    )}"
+                    data-deal-url="${escapeAttribute(
+                        productUrl || ""
+                    )}"
                 >
-                    ↗ Share
+                    Share
                 </button>
 
             </div>
@@ -209,809 +427,102 @@ function renderDeal(deal, container) {
         </div>
     `;
 
-    // --------------------------------------------------------
-    // SHARE BUTTON
-    // --------------------------------------------------------
 
-    const shareButton = card.querySelector(
-        ".share-deal-button"
-    );
+    /*
+     * -------------------------------------------------------
+     * SHARE BUTTON FOR THIS SPECIFIC CARD
+     * -------------------------------------------------------
+     */
+
+    const shareButton =
+        card.querySelector(".share-deal-btn");
 
     if (shareButton) {
+        shareButton.addEventListener("click", () => {
 
-        shareButton.addEventListener("click", function(event) {
+            const shareTitle =
+                shareButton.dataset.dealTitle ||
+                "CheckerDiscount Deal";
 
-            event.preventDefault();
-            event.stopPropagation();
+            const shareUrl =
+                shareButton.dataset.dealUrl ||
+                window.location.href;
 
-            shareDeal(deal);
-
+            shareDeal(
+                shareTitle,
+                shareUrl
+            );
         });
-
     }
+
+
+    /*
+     * -------------------------------------------------------
+     * ADD THIS CARD AS A SEPARATE ELEMENT
+     * -------------------------------------------------------
+     */
 
     container.appendChild(card);
 }
 
 
-// ============================================================
-// SHARE DEAL
-// ============================================================
+/* =========================================================
+   MONEY FORMAT
+   ========================================================= */
 
-async function shareDeal(deal) {
+function formatMoney(value, currency = "USD") {
 
-    const title =
-        deal.title ||
-        "Great Deal on CheckerDiscount";
+    if (!Number.isFinite(Number(value))) {
+        return "—";
+    }
 
-    const currency =
-        deal.currency ||
-        "USD";
+    try {
+        return new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: currency,
+            maximumFractionDigits: 2
+        }).format(Number(value));
 
-    const newPrice =
-        Number(deal.new_price || 0);
+    } catch (error) {
 
-    const discount =
-        Number(deal.discount_percent || 0);
+        return `${currency} ${Number(value).toFixed(2)}`;
+    }
+}
 
-    const symbol =
-        getCurrencySymbol(currency);
 
-    const priceText =
-        newPrice > 0
-            ? `${symbol}${newPrice.toFixed(2)}`
-            : "";
+/* =========================================================
+   SAFE HTTP URL
+   ========================================================= */
 
-    const discountText =
-        discount > 0
-            ? `${Math.round(discount)}% OFF`
-            : "";
+function safeHttpUrl(value) {
 
-    /*
-     * Share the actual deal URL.
-     * This keeps the shared link connected to the deal.
-     */
-    const dealUrl =
-        deal.url ||
-        window.location.href;
+    if (!value) {
+        return "";
+    }
 
-    const shareText =
-        `${title}\n` +
-        `${priceText}` +
-        `${discountText ? " • " + discountText : ""}` +
-        `\n\nFound on CheckerDiscount`;
+    try {
 
-    // --------------------------------------------------------
-    // MOBILE / SUPPORTED BROWSERS
-    // --------------------------------------------------------
+        const url = new URL(value);
 
-    if (
-        navigator.share &&
-        typeof navigator.share === "function"
-    ) {
-
-        try {
-
-            const sharePromise =
-                navigator.share({
-                    title: title,
-                    text: shareText,
-                    url: dealUrl
-                });
-
-            if (
-                sharePromise &&
-                typeof sharePromise.catch === "function"
-            ) {
-                sharePromise.catch(() => {
-                    // User cancelled sharing.
-                });
-            }
-
-            return;
-
-        } catch (error) {
-            console.log(
-                "Native sharing unavailable:",
-                error
-            );
+        if (
+            url.protocol === "https:" ||
+            url.protocol === "http:"
+        ) {
+            return url.href;
         }
-    }
 
-    // --------------------------------------------------------
-    // DESKTOP FALLBACK
-    // --------------------------------------------------------
+        return "";
 
-    showDesktopSharePopup(
-        title,
-        shareText,
-        dealUrl
-    );
-}
+    } catch (error) {
 
-
-// ============================================================
-// DESKTOP SHARE POPUP
-// ============================================================
-
-function showDesktopSharePopup(
-    title,
-    shareText,
-    dealUrl
-) {
-
-    // Remove any existing popup first.
-    const oldPopup =
-        document.getElementById(
-            "checkerdiscount-share-popup"
-        );
-
-    if (oldPopup) {
-        oldPopup.remove();
-    }
-
-
-    // --------------------------------------------------------
-    // OVERLAY
-    // --------------------------------------------------------
-
-    const overlay =
-        document.createElement("div");
-
-    overlay.id =
-        "checkerdiscount-share-popup";
-
-
-    // --------------------------------------------------------
-    // INLINE STYLING
-    // No external CSS required.
-    // --------------------------------------------------------
-
-    overlay.style.cssText = `
-        position: fixed !important;
-        inset: 0 !important;
-        width: 100vw !important;
-        height: 100vh !important;
-        background: rgba(11,18,32,0.58) !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        padding: 20px !important;
-        box-sizing: border-box !important;
-        z-index: 2147483647 !important;
-        margin: 0 !important;
-    `;
-
-
-    // --------------------------------------------------------
-    // POPUP BOX
-    // --------------------------------------------------------
-
-    const box =
-        document.createElement("div");
-
-    box.style.cssText = `
-        position: relative !important;
-        width: min(460px, 100%) !important;
-        max-width: 460px !important;
-        background: #ffffff !important;
-        border-radius: 18px !important;
-        padding: 28px !important;
-        box-sizing: border-box !important;
-        box-shadow: 0 25px 70px rgba(0,0,0,0.25) !important;
-        font-family: Arial, Helvetica, sans-serif !important;
-        color: #172033 !important;
-    `;
-
-
-    // --------------------------------------------------------
-    // CLOSE BUTTON
-    // --------------------------------------------------------
-
-    const closeButton =
-        document.createElement("button");
-
-    closeButton.type = "button";
-
-    closeButton.innerHTML = "×";
-
-    closeButton.setAttribute(
-        "aria-label",
-        "Close"
-    );
-
-    closeButton.style.cssText = `
-        position: absolute !important;
-        top: 12px !important;
-        right: 14px !important;
-        width: 36px !important;
-        height: 36px !important;
-        border: 0 !important;
-        background: #f2f4f7 !important;
-        color: #344054 !important;
-        border-radius: 50% !important;
-        font-size: 25px !important;
-        line-height: 32px !important;
-        cursor: pointer !important;
-    `;
-
-    closeButton.addEventListener(
-        "click",
-        closeSharePopup
-    );
-
-
-    // --------------------------------------------------------
-    // TITLE
-    // --------------------------------------------------------
-
-    const heading =
-        document.createElement("h2");
-
-    heading.textContent =
-        "Share This Deal";
-
-    heading.style.cssText = `
-        margin: 0 42px 10px 0 !important;
-        font-size: 24px !important;
-        line-height: 1.3 !important;
-        font-weight: 700 !important;
-        color: #0b1220 !important;
-    `;
-
-
-    // --------------------------------------------------------
-    // PRODUCT TITLE
-    // --------------------------------------------------------
-
-    const product =
-        document.createElement("p");
-
-    product.textContent = title;
-
-    product.style.cssText = `
-        margin: 0 0 22px 0 !important;
-        font-size: 15px !important;
-        line-height: 1.5 !important;
-        color: #667085 !important;
-    `;
-
-
-    // --------------------------------------------------------
-    // SHARE BUTTONS CONTAINER
-    // --------------------------------------------------------
-
-    const buttons =
-        document.createElement("div");
-
-    buttons.style.cssText = `
-        display: grid !important;
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        gap: 10px !important;
-        width: 100% !important;
-    `;
-
-
-    // --------------------------------------------------------
-    // BUTTON CREATOR
-    // --------------------------------------------------------
-
-    function createShareButton(
-        label,
-        background,
-        action
-    ) {
-
-        const button =
-            document.createElement("button");
-
-        button.type = "button";
-
-        button.textContent = label;
-
-        button.style.cssText = `
-            min-height: 48px !important;
-            border: 0 !important;
-            border-radius: 10px !important;
-            background: ${background} !important;
-            color: #ffffff !important;
-            font-size: 14px !important;
-            font-weight: 600 !important;
-            cursor: pointer !important;
-            padding: 10px 14px !important;
-            box-sizing: border-box !important;
-        `;
-
-        button.addEventListener(
-            "click",
-            action
-        );
-
-        return button;
-    }
-
-
-    // --------------------------------------------------------
-    // WHATSAPP
-    // --------------------------------------------------------
-
-    buttons.appendChild(
-        createShareButton(
-            "WhatsApp",
-            "#25D366",
-            function() {
-
-                const url =
-                    "https://wa.me/?text=" +
-                    encodeURIComponent(
-                        shareText +
-                        "\n" +
-                        dealUrl
-                    );
-
-                window.open(
-                    url,
-                    "_blank",
-                    "noopener,noreferrer"
-                );
-            }
-        )
-    );
-
-
-    // --------------------------------------------------------
-    // FACEBOOK
-    // --------------------------------------------------------
-
-    buttons.appendChild(
-        createShareButton(
-            "Facebook",
-            "#1877F2",
-            function() {
-
-                const url =
-                    "https://www.facebook.com/sharer/sharer.php?u=" +
-                    encodeURIComponent(
-                        dealUrl
-                    );
-
-                window.open(
-                    url,
-                    "_blank",
-                    "noopener,noreferrer"
-                );
-            }
-        )
-    );
-
-
-    // --------------------------------------------------------
-    // TELEGRAM
-    // --------------------------------------------------------
-
-    buttons.appendChild(
-        createShareButton(
-            "Telegram",
-            "#229ED9",
-            function() {
-
-                const url =
-                    "https://t.me/share/url?url=" +
-                    encodeURIComponent(
-                        dealUrl
-                    ) +
-                    "&text=" +
-                    encodeURIComponent(
-                        shareText
-                    );
-
-                window.open(
-                    url,
-                    "_blank",
-                    "noopener,noreferrer"
-                );
-            }
-        )
-    );
-
-
-    // --------------------------------------------------------
-    // X
-    // --------------------------------------------------------
-
-    buttons.appendChild(
-        createShareButton(
-            "X",
-            "#111111",
-            function() {
-
-                const url =
-                    "https://twitter.com/intent/tweet?text=" +
-                    encodeURIComponent(
-                        shareText
-                    ) +
-                    "&url=" +
-                    encodeURIComponent(
-                        dealUrl
-                    );
-
-                window.open(
-                    url,
-                    "_blank",
-                    "noopener,noreferrer"
-                );
-            }
-        )
-    );
-
-
-    // --------------------------------------------------------
-    // COPY LINK
-    // --------------------------------------------------------
-
-    const copyButton =
-        document.createElement("button");
-
-    copyButton.type = "button";
-
-    copyButton.textContent =
-        "Copy Deal Link";
-
-    copyButton.style.cssText = `
-        grid-column: 1 / -1 !important;
-        min-height: 48px !important;
-        border: 1px solid #d0d5dd !important;
-        border-radius: 10px !important;
-        background: #ffffff !important;
-        color: #155eef !important;
-        font-size: 14px !important;
-        font-weight: 600 !important;
-        cursor: pointer !important;
-        padding: 10px 14px !important;
-    `;
-
-    copyButton.addEventListener(
-        "click",
-        async function() {
-
-            try {
-
-                await navigator.clipboard.writeText(
-                    dealUrl
-                );
-
-                copyButton.textContent =
-                    "✓ Link Copied";
-
-                setTimeout(() => {
-                    copyButton.textContent =
-                        "Copy Deal Link";
-                }, 1800);
-
-            } catch (error) {
-
-                // Older browsers fallback.
-                const temp =
-                    document.createElement("textarea");
-
-                temp.value = dealUrl;
-
-                temp.style.position = "fixed";
-                temp.style.left = "-9999px";
-
-                document.body.appendChild(temp);
-
-                temp.focus();
-                temp.select();
-
-                try {
-                    document.execCommand("copy");
-
-                    copyButton.textContent =
-                        "✓ Link Copied";
-
-                    setTimeout(() => {
-                        copyButton.textContent =
-                            "Copy Deal Link";
-                    }, 1800);
-
-                } catch (copyError) {
-
-                    alert(
-                        "Please copy this link:\n\n" +
-                        dealUrl
-                    );
-
-                }
-
-                temp.remove();
-            }
-        }
-    );
-
-    buttons.appendChild(
-        copyButton
-    );
-
-
-    // --------------------------------------------------------
-    // ADD EVERYTHING
-    // --------------------------------------------------------
-
-    box.appendChild(closeButton);
-    box.appendChild(heading);
-    box.appendChild(product);
-    box.appendChild(buttons);
-
-    overlay.appendChild(box);
-
-    document.body.appendChild(
-        overlay
-    );
-
-
-    // --------------------------------------------------------
-    // CLICK OUTSIDE = CLOSE
-    // --------------------------------------------------------
-
-    overlay.addEventListener(
-        "click",
-        function(event) {
-
-            if (event.target === overlay) {
-                closeSharePopup();
-            }
-
-        }
-    );
-
-
-    // --------------------------------------------------------
-    // ESC KEY = CLOSE
-    // --------------------------------------------------------
-
-    document.addEventListener(
-        "keydown",
-        handleShareEscape
-    );
-
-
-    // Prevent page behind popup from scrolling.
-    document.body.style.overflow = "hidden";
-}
-
-
-// ============================================================
-// CLOSE SHARE POPUP
-// ============================================================
-
-function closeSharePopup() {
-
-    const popup =
-        document.getElementById(
-            "checkerdiscount-share-popup"
-        );
-
-    if (popup) {
-        popup.remove();
-    }
-
-    document.removeEventListener(
-        "keydown",
-        handleShareEscape
-    );
-
-    document.body.style.overflow = "";
-}
-
-
-// ============================================================
-// ESC KEY HANDLER
-// ============================================================
-
-function handleShareEscape(event) {
-
-    if (event.key === "Escape") {
-        closeSharePopup();
+        return "";
     }
 }
 
 
-// ============================================================
-// CURRENCY SYMBOL
-// ============================================================
-
-function getCurrencySymbol(currency) {
-
-    const map = {
-        USD: "$",
-        GBP: "£",
-        EUR: "€",
-        AED: "د.إ",
-        OMR: "ر.ع",
-        SAR: "﷼",
-        INR: "₹",
-        CAD: "C$",
-        AUD: "A$"
-    };
-
-    return map[currency] || currency + " ";
-}
-
-
-// ============================================================
-// SAVINGS CHECKER
-// ============================================================
-
-function setupSavingsChecker() {
-
-    const form =
-        document.getElementById(
-            "refundForm"
-        );
-
-    if (!form) return;
-
-    form.addEventListener(
-        "submit",
-        function(event) {
-
-            event.preventDefault();
-
-            const purchaseInput =
-                form.querySelector(
-                    '[name="purchasePrice"]'
-                ) ||
-                form.querySelector(
-                    '[name="purchase_price"]'
-                ) ||
-                document.getElementById(
-                    "purchasePrice"
-                );
-
-            const currentInput =
-                form.querySelector(
-                    '[name="currentPrice"]'
-                ) ||
-                form.querySelector(
-                    '[name="current_price"]'
-                ) ||
-                document.getElementById(
-                    "currentPrice"
-                );
-
-            if (!purchaseInput || !currentInput) {
-                return;
-            }
-
-            const purchasePrice =
-                Number(
-                    purchaseInput.value
-                );
-
-            const currentPrice =
-                Number(
-                    currentInput.value
-                );
-
-            if (
-                !Number.isFinite(purchasePrice) ||
-                !Number.isFinite(currentPrice) ||
-                purchasePrice <= 0 ||
-                currentPrice < 0
-            ) {
-                showSavingsResult(
-                    "Please enter valid prices."
-                );
-                return;
-            }
-
-            const savings =
-                purchasePrice -
-                currentPrice;
-
-            if (savings <= 0) {
-
-                showSavingsResult(
-                    "There may be no savings based on these prices."
-                );
-
-                return;
-            }
-
-            const percentage =
-                (
-                    (savings /
-                        purchasePrice) *
-                    100
-                ).toFixed(1);
-
-            showSavingsResult(
-                `Potential savings: $${savings.toFixed(2)} (${percentage}%)`
-            );
-        }
-    );
-}
-
-
-// ============================================================
-// SAVINGS RESULT
-// ============================================================
-
-function showSavingsResult(message) {
-
-    let result =
-        document.getElementById(
-            "savingsResult"
-        );
-
-    if (!result) {
-
-        result =
-            document.createElement("div");
-
-        result.id =
-            "savingsResult";
-
-        result.style.cssText = `
-            margin-top:16px;
-            padding:14px 16px;
-            border-radius:10px;
-            background:#ECFDF3;
-            color:#087443;
-            font-weight:600;
-        `;
-
-        const form =
-            document.getElementById(
-                "refundForm"
-            );
-
-        if (form) {
-            form.appendChild(result);
-        }
-    }
-
-    result.textContent = message;
-}
-
-
-// ============================================================
-// MOBILE MENU
-// ============================================================
-
-function setupMobileMenu() {
-
-    const menuButton =
-        document.querySelector(
-            ".mobile-menu-button"
-        );
-
-    const nav =
-        document.querySelector(
-            ".main-nav"
-        );
-
-    if (!menuButton || !nav) {
-        return;
-    }
-
-    menuButton.addEventListener(
-        "click",
-        function() {
-
-            nav.classList.toggle(
-                "mobile-open"
-            );
-
-        }
-    );
-}
-
-
-// ============================================================
-// SECURITY / HTML ESCAPE
-// ============================================================
+/* =========================================================
+   HTML ESCAPE
+   ========================================================= */
 
 function escapeHTML(value) {
 
@@ -1024,10 +535,516 @@ function escapeHTML(value) {
 }
 
 
-// ============================================================
-// BACKWARD COMPATIBILITY
-// ============================================================
+/* =========================================================
+   ATTRIBUTE ESCAPE
+   ========================================================= */
 
-// Allows older HTML/JS references to still find shareDeal.
-window.shareDeal = shareDeal;
-window.closeSharePopup = closeSharePopup;
+function escapeAttribute(value) {
+
+    return escapeHTML(value);
+}
+
+
+/* =========================================================
+   SHARE DEAL
+   ========================================================= */
+
+async function shareDeal(title, url) {
+
+    const shareData = {
+        title: title || "CheckerDiscount Deal",
+        text: `Check this deal on CheckerDiscount: ${title || ""}`,
+        url: url || window.location.href
+    };
+
+    /*
+     * Native mobile/browser sharing
+     */
+
+    if (
+        navigator.share &&
+        typeof navigator.share === "function"
+    ) {
+
+        try {
+
+            await navigator.share(shareData);
+
+            return;
+
+        } catch (error) {
+
+            /*
+             * User cancelled share.
+             * Do nothing.
+             */
+
+            if (error && error.name === "AbortError") {
+                return;
+            }
+        }
+    }
+
+
+    /*
+     * Desktop fallback
+     */
+
+    try {
+
+        await navigator.clipboard.writeText(
+            url || window.location.href
+        );
+
+        showTemporaryMessage(
+            "Deal link copied!"
+        );
+
+    } catch (error) {
+
+        showSharePopup(
+            title,
+            url
+        );
+    }
+}
+
+
+/* =========================================================
+   SHARE POPUP
+   ========================================================= */
+
+function setupSharePopup() {
+
+    document.addEventListener(
+        "click",
+        (event) => {
+
+            const popupClose =
+                event.target.closest(
+                    "[data-share-close]"
+                );
+
+            if (popupClose) {
+                closeSharePopup();
+            }
+
+        }
+    );
+
+
+    document.addEventListener(
+        "keydown",
+        (event) => {
+
+            if (event.key === "Escape") {
+                closeSharePopup();
+            }
+
+        }
+    );
+}
+
+
+function showSharePopup(title, url) {
+
+    closeSharePopup();
+
+    const popup =
+        document.createElement("div");
+
+    popup.id = "checkerSharePopup";
+
+    popup.style.cssText = `
+        position:fixed;
+        inset:0;
+        z-index:99999;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        background:rgba(15,23,42,.45);
+        padding:20px;
+    `;
+
+    popup.innerHTML = `
+        <div
+            style="
+                width:min(420px,100%);
+                background:#fff;
+                border-radius:16px;
+                padding:24px;
+                box-shadow:0 20px 60px rgba(0,0,0,.18);
+            "
+        >
+
+            <div
+                style="
+                    display:flex;
+                    align-items:center;
+                    justify-content:space-between;
+                    gap:15px;
+                    margin-bottom:16px;
+                "
+            >
+
+                <strong
+                    style="
+                        color:#0f172a;
+                        font-size:18px;
+                    "
+                >
+                    Share Deal
+                </strong>
+
+                <button
+                    type="button"
+                    data-share-close
+                    style="
+                        border:0;
+                        background:#f1f5f9;
+                        width:34px;
+                        height:34px;
+                        border-radius:50%;
+                        cursor:pointer;
+                        font-size:18px;
+                    "
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div
+                style="
+                    font-size:14px;
+                    color:#475569;
+                    margin-bottom:15px;
+                    line-height:1.5;
+                "
+            >
+                ${escapeHTML(title)}
+            </div>
+
+
+            <div
+                style="
+                    display:flex;
+                    gap:8px;
+                "
+            >
+
+                <input
+                    id="checkerShareUrl"
+                    value="${escapeAttribute(url)}"
+                    readonly
+                    style="
+                        flex:1;
+                        min-width:0;
+                        border:1px solid #cbd5e1;
+                        border-radius:8px;
+                        padding:10px;
+                        font-size:13px;
+                    "
+                >
+
+                <button
+                    type="button"
+                    id="checkerCopyShare"
+                    style="
+                        border:0;
+                        background:#2563eb;
+                        color:#fff;
+                        padding:10px 14px;
+                        border-radius:8px;
+                        cursor:pointer;
+                        font-weight:600;
+                    "
+                >
+                    Copy
+                </button>
+
+            </div>
+
+        </div>
+    `;
+
+    document.body.appendChild(popup);
+
+
+    const copyButton =
+        document.getElementById(
+            "checkerCopyShare"
+        );
+
+    const input =
+        document.getElementById(
+            "checkerShareUrl"
+        );
+
+    if (copyButton && input) {
+
+        copyButton.addEventListener(
+            "click",
+            async () => {
+
+                try {
+
+                    await navigator.clipboard.writeText(
+                        input.value
+                    );
+
+                    copyButton.textContent =
+                        "Copied!";
+
+                    setTimeout(() => {
+                        copyButton.textContent =
+                            "Copy";
+                    }, 1500);
+
+                } catch (error) {
+
+                    input.select();
+                    document.execCommand("copy");
+
+                    copyButton.textContent =
+                        "Copied!";
+                }
+            }
+        );
+    }
+
+
+    popup.addEventListener(
+        "click",
+        (event) => {
+
+            if (event.target === popup) {
+                closeSharePopup();
+            }
+
+        }
+    );
+}
+
+
+function closeSharePopup() {
+
+    const popup =
+        document.getElementById(
+            "checkerSharePopup"
+        );
+
+    if (popup) {
+        popup.remove();
+    }
+}
+
+
+/* =========================================================
+   TEMPORARY MESSAGE
+   ========================================================= */
+
+function showTemporaryMessage(message) {
+
+    const oldMessage =
+        document.getElementById(
+            "checkerTemporaryMessage"
+        );
+
+    if (oldMessage) {
+        oldMessage.remove();
+    }
+
+    const element =
+        document.createElement("div");
+
+    element.id =
+        "checkerTemporaryMessage";
+
+    element.textContent =
+        message;
+
+    element.style.cssText = `
+        position:fixed;
+        left:50%;
+        bottom:25px;
+        transform:translateX(-50%);
+        z-index:99999;
+        background:#0f172a;
+        color:#fff;
+        padding:11px 18px;
+        border-radius:999px;
+        font-size:14px;
+        font-weight:600;
+        box-shadow:0 10px 30px rgba(0,0,0,.18);
+    `;
+
+    document.body.appendChild(element);
+
+    setTimeout(() => {
+
+        element.remove();
+
+    }, 2200);
+}
+
+
+/* =========================================================
+   SAVINGS CHECKER
+   ========================================================= */
+
+function setupSavingsChecker() {
+
+    const form =
+        document.getElementById(
+            "savingsCheckerForm"
+        );
+
+    if (!form) {
+        return;
+    }
+
+    form.addEventListener(
+        "submit",
+        (event) => {
+
+            event.preventDefault();
+
+            const oldInput =
+                form.querySelector(
+                    "[name='oldPrice'], #oldPrice"
+                );
+
+            const newInput =
+                form.querySelector(
+                    "[name='newPrice'], #newPrice"
+                );
+
+            if (!oldInput || !newInput) {
+                return;
+            }
+
+            const oldPrice =
+                Number(oldInput.value);
+
+            const newPrice =
+                Number(newInput.value);
+
+            const result =
+                document.getElementById(
+                    "savingsResult"
+                );
+
+            if (!result) {
+                return;
+            }
+
+            if (
+                !Number.isFinite(oldPrice) ||
+                !Number.isFinite(newPrice) ||
+                oldPrice <= 0 ||
+                newPrice < 0
+            ) {
+
+                result.textContent =
+                    "Please enter valid prices.";
+
+                return;
+            }
+
+            if (newPrice >= oldPrice) {
+
+                result.textContent =
+                    "There is no saving at this price.";
+
+                return;
+            }
+
+            const saving =
+                oldPrice - newPrice;
+
+            const percentage =
+                (saving / oldPrice) * 100;
+
+            result.innerHTML = `
+                You save
+                <strong>
+                    ${formatMoney(saving, "USD")}
+                </strong>
+                (${percentage.toFixed(1)}%).
+            `;
+        }
+    );
+}
+
+
+/* =========================================================
+   MOBILE MENU
+   ========================================================= */
+
+function setupMobileMenu() {
+
+    const menuButton =
+        document.querySelector(
+            ".mobile-menu-btn"
+        );
+
+    const mobileMenu =
+        document.querySelector(
+            ".mobile-menu"
+        );
+
+    if (!menuButton || !mobileMenu) {
+        return;
+    }
+
+    menuButton.addEventListener(
+        "click",
+        () => {
+
+            mobileMenu.classList.toggle(
+                "active"
+            );
+
+            menuButton.classList.toggle(
+                "active"
+            );
+        }
+    );
+
+
+    /*
+     * Close menu after clicking a link
+     */
+
+    mobileMenu
+        .querySelectorAll("a")
+        .forEach((link) => {
+
+            link.addEventListener(
+                "click",
+                () => {
+
+                    mobileMenu.classList.remove(
+                        "active"
+                    );
+
+                    menuButton.classList.remove(
+                        "active"
+                    );
+                }
+            );
+
+        });
+}
+
+
+/* =========================================================
+   OPTIONAL GLOBAL REFRESH
+   ========================================================= */
+
+window.refreshCheckerDiscountDeals =
+    function () {
+        loadDeals();
+    };
