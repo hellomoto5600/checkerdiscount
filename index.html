@@ -1166,6 +1166,190 @@
 </head>
 
 <body>
+    /* =========================================================
+   SAVINGS POPUP
+   ========================================================= */
+
+.savings-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+}
+
+.savings-modal.active {
+    display: flex;
+}
+
+.savings-modal-overlay {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(15, 23, 42, 0.48);
+    backdrop-filter: blur(4px);
+}
+
+.savings-modal-box {
+    position: relative;
+    z-index: 2;
+
+    width: 100%;
+    max-width: 390px;
+
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+
+    padding: 30px 24px 24px;
+
+    text-align: center;
+
+    box-shadow: 0 25px 70px rgba(15, 23, 42, 0.22);
+
+    animation: savingsPopupIn 0.22s ease;
+}
+
+@keyframes savingsPopupIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+.savings-modal-close {
+    position: absolute;
+
+    top: 10px;
+    right: 12px;
+
+    width: 34px;
+    height: 34px;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: #f3f4f6;
+    color: #475467;
+
+    font-size: 24px;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+.savings-modal-close:hover {
+    background: #e5e7eb;
+}
+
+.savings-modal-icon {
+    width: 54px;
+    height: 54px;
+
+    margin: 0 auto 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background: var(--brand-soft);
+    color: var(--brand);
+
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.savings-modal-label {
+    color: #667085;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    margin-bottom: 5px;
+}
+
+.savings-modal-amount {
+    color: var(--navy);
+
+    font-size: 36px;
+    font-weight: 800;
+
+    line-height: 1.15;
+
+    margin-bottom: 8px;
+}
+
+.savings-modal-percent {
+    color: var(--green-dark);
+
+    font-size: 14px;
+    font-weight: 700;
+
+    margin-bottom: 20px;
+}
+
+.savings-modal-details {
+    padding: 13px;
+
+    border-radius: 10px;
+
+    background: #f8fafc;
+    color: #475467;
+
+    font-size: 12px;
+    line-height: 1.6;
+
+    margin-bottom: 18px;
+}
+
+.savings-modal-done {
+    width: 100%;
+    height: 44px;
+
+    border: 0;
+    border-radius: 9px;
+
+    background: var(--navy);
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.savings-modal-done:hover {
+    background: var(--brand);
+}
+
+@media (max-width: 480px) {
+
+    .savings-modal {
+        padding: 16px;
+    }
+
+    .savings-modal-box {
+        padding: 28px 18px 20px;
+    }
+
+    .savings-modal-amount {
+        font-size: 32px;
+    }
+
+}
 
 <!-- =========================================================
      HEADER
@@ -1427,103 +1611,140 @@
             </div>
 
 
-            <!-- =================================================
-                 SAVINGS CHECKER
-            ================================================== -->
+           <div class="content-card calculator-card" id="savings">
 
-            <div class="content-card calculator-card" id="savings">
+    <div class="calculator-icon">
+        $
+    </div>
 
-                <div class="calculator-icon">
-                    $
-                </div>
+    <h2>
+        Price Drop Savings Checker
+    </h2>
 
-                <h2>
-                    Price Drop Savings Checker
-                </h2>
+    <p>
+        See the potential difference between what you paid
+        and the retailer's current price.
+    </p>
 
-                <p>
-                    See the potential difference between what you paid
-                    and the retailer's current price.
-                </p>
+    <form id="refundForm" onsubmit="return false;">
 
+        <div class="form-group">
 
-                <!-- IMPORTANT:
-                     Your existing app.js uses refundForm.
-                     DO NOT CHANGE THIS ID.
-                -->
+            <label for="retailer">
+                Retailer / Store
+            </label>
 
-                <form id="refundForm">
-
-                    <div class="form-group">
-
-                        <label for="retailer">
-                            Retailer / Store
-                        </label>
-
-                        <input
-                            type="text"
-                            id="retailer"
-                            placeholder="e.g. Amazon"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="purchasePrice">
-                            Purchase Price
-                        </label>
-
-                        <input
-                            type="number"
-                            id="purchasePrice"
-                            step="0.01"
-                            min="0"
-                            placeholder="e.g. 39.99"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="currentPrice">
-                            Current Price
-                        </label>
-
-                        <input
-                            type="number"
-                            id="currentPrice"
-                            step="0.01"
-                            min="0"
-                            placeholder="e.g. 29.99"
-                            required
-                        >
-
-                    </div>
-
-
-                    <button
-                        type="submit"
-                        class="calculate-button">
-                        Calculate Potential Savings
-                    </button>
-
-                </form>
-
-
-                <div id="refundResult" style="display:none;"></div>
-
-            </div>
+            <input
+                type="text"
+                id="retailer"
+                placeholder="e.g. Amazon"
+                autocomplete="off"
+                required
+            >
 
         </div>
 
-    </section>
+        <div class="form-group">
 
-</main>
+            <label for="purchasePrice">
+                Purchase Price
+            </label>
+
+            <input
+                type="number"
+                id="purchasePrice"
+                step="0.01"
+                min="0"
+                placeholder="e.g. 39.99"
+                required
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label for="currentPrice">
+                Current Price
+            </label>
+
+            <input
+                type="number"
+                id="currentPrice"
+                step="0.01"
+                min="0"
+                placeholder="e.g. 29.99"
+                required
+            >
+
+        </div>
+
+        <button
+            type="submit"
+            class="calculate-button"
+            id="calculateSavingsButton">
+            Calculate Potential Savings
+        </button>
+
+    </form>
+
+    <div id="refundResult" style="display:none;"></div>
+
+</div>
+
+
+<!-- =========================================================
+     SAVINGS RESULT POPUP
+     ========================================================= -->
+
+<div id="savingsModal" class="savings-modal" aria-hidden="true">
+
+    <div class="savings-modal-overlay"></div>
+
+    <div class="savings-modal-box">
+
+        <button
+            type="button"
+            class="savings-modal-close"
+            id="closeSavingsModal"
+            aria-label="Close">
+            ×
+        </button>
+
+        <div class="savings-modal-icon">
+            $
+        </div>
+
+        <div class="savings-modal-label">
+            Potential Savings
+        </div>
+
+        <div
+            class="savings-modal-amount"
+            id="savingsModalAmount">
+            $0.00
+        </div>
+
+        <div
+            class="savings-modal-percent"
+            id="savingsModalPercent">
+            You could save 0%
+        </div>
+
+        <div
+            class="savings-modal-details"
+            id="savingsModalDetails">
+        </div>
+
+        <button
+            type="button"
+            class="savings-modal-done"
+            id="savingsModalDone">
+            Done
+        </button>
+
+    </div>
+
+</div>
 
 
 <!-- =========================================================
