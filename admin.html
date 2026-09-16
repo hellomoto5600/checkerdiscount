@@ -1,1111 +1,681 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>CheckerDiscount Admin Panel</title>
+    <title>CheckerDiscount Admin V9</title>
 
-<style>
+    <style>
+        body {
+            font-family: Inter, Arial, sans-serif;
+            background: #f6f8fc;
+            color: #172033;
+            margin: 0;
+        }
 
-* {
-    box-sizing: border-box;
-}
+        .wrap {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px 18px;
+        }
 
-body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f5f7fb;
-    color: #182230;
-}
+        .card {
+            background: #ffffff;
+            border: 1px solid #e4eaf2;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 28px #10182812;
+        }
 
-.container {
-    width: min(1400px, 94%);
-    margin: 30px auto;
-}
+        h1 {
+            margin-top: 0;
+        }
 
-.header {
-    background: #ffffff;
-    border: 1px solid #e4e8ef;
-    border-radius: 18px;
-    padding: 24px;
-    margin-bottom: 20px;
-}
+        h2 {
+            margin-top: 0;
+        }
 
-.header h1 {
-    margin: 0 0 6px;
-    font-size: 28px;
-}
+        input,
+        button,
+        select {
+            padding: 11px;
+            border: 1px solid #d0d5dd;
+            border-radius: 9px;
+            font: inherit;
+        }
 
-.header p {
-    margin: 0;
-    color: #667085;
-}
+        input {
+            width: 100%;
+            box-sizing: border-box;
+        }
 
-.card {
-    background: #ffffff;
-    border: 1px solid #e4e8ef;
-    border-radius: 18px;
-    padding: 22px;
-    margin-bottom: 20px;
-}
+        button {
+            cursor: pointer;
+            background: #155eef;
+            color: #ffffff;
+            border: 0;
+        }
 
-.card h2 {
-    margin-top: 0;
-}
+        button:hover {
+            opacity: 0.9;
+        }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-}
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
 
-.field {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
+        .actions {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
 
-.field.full {
-    grid-column: 1 / -1;
-}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
 
-label {
-    font-size: 13px;
-    font-weight: 700;
-}
+        th,
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #eeeeee;
+            text-align: left;
+        }
 
-input,
-select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #d5dae3;
-    border-radius: 10px;
-    font-size: 14px;
-    outline: none;
-}
+        th {
+            background: #f8fafc;
+        }
 
-input:focus,
-select:focus {
-    border-color: #2563eb;
-}
+        small {
+            color: #667085;
+        }
 
-button {
-    border: 0;
-    border-radius: 10px;
-    padding: 11px 15px;
-    font-weight: 700;
-    cursor: pointer;
-}
+        #msg {
+            margin-bottom: 0;
+            font-weight: 600;
+        }
 
-.primary {
-    background: #2563eb;
-    color: white;
-}
+        @media (max-width: 700px) {
 
-.success {
-    background: #16a34a;
-    color: white;
-}
+            .grid {
+                grid-template-columns: 1fr;
+            }
 
-.warning {
-    background: #f59e0b;
-    color: white;
-}
+            table {
+                display: block;
+                overflow: auto;
+                white-space: nowrap;
+            }
 
-.danger {
-    background: #dc2626;
-    color: white;
-}
+            .wrap {
+                padding: 20px 12px;
+            }
 
-.secondary {
-    background: #eef2f7;
-    color: #273244;
-}
-
-.featured-btn {
-    background: #fff7d6;
-    color: #9a6700;
-    border: 1px solid #f2cf5b;
-}
-
-.featured-active {
-    background: #16a34a;
-    color: white;
-}
-
-.message {
-    margin-top: 15px;
-    padding: 12px;
-    border-radius: 10px;
-    display: none;
-}
-
-.message.show {
-    display: block;
-}
-
-.message.ok {
-    background: #dcfce7;
-    color: #166534;
-}
-
-.message.error {
-    background: #fee2e2;
-    color: #991b1b;
-}
-
-.table-wrap {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 1100px;
-}
-
-th,
-td {
-    padding: 12px;
-    border-bottom: 1px solid #edf0f4;
-    text-align: left;
-    vertical-align: middle;
-}
-
-th {
-    background: #f8fafc;
-    font-size: 13px;
-}
-
-.title-cell {
-    min-width: 260px;
-    font-weight: 700;
-}
-
-.price {
-    white-space: nowrap;
-}
-
-.status {
-    display: inline-block;
-    padding: 5px 9px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 800;
-}
-
-.status.pending {
-    background: #fff7ed;
-    color: #c2410c;
-}
-
-.status.verified {
-    background: #dcfce7;
-    color: #166534;
-}
-
-.status.expired {
-    background: #f1f5f9;
-    color: #64748b;
-}
-
-.featured-badge {
-    display: inline-block;
-    margin-top: 5px;
-    padding: 4px 8px;
-    border-radius: 999px;
-    background: #fff7d6;
-    color: #946200;
-    font-size: 10px;
-    font-weight: 800;
-}
-
-.actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-    min-width: 280px;
-}
-
-.topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 15px;
-}
-
-.count {
-    color: #667085;
-    font-size: 14px;
-}
-
-@media (max-width: 700px) {
-
-    .grid {
-        grid-template-columns: 1fr;
-    }
-
-    .field.full {
-        grid-column: auto;
-    }
-
-    .container {
-        width: 96%;
-        margin: 15px auto;
-    }
-
-    .card {
-        padding: 16px;
-    }
-
-    .header h1 {
-        font-size: 22px;
-    }
-}
-
-</style>
+            .card {
+                padding: 16px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="container">
+    <div class="wrap">
 
-    <div class="header">
-        <h1>CheckerDiscount Admin Panel</h1>
-        <p>Manage deals, verification and Featured Deal.</p>
-    </div>
+        <h1>CheckerDiscount Admin</h1>
 
-    <!-- LOGIN -->
-
-    <div class="card" id="loginCard">
-
-        <h2>Admin Access</h2>
-
-        <div class="field">
-            <label>Admin Key</label>
-
-            <input
-                type="password"
-                id="adminKey"
-                placeholder="Enter your ADMIN_KEY"
-            >
-        </div>
-
-        <br>
-
-        <button
-            class="primary"
-            onclick="saveAdminKey()"
-        >
-            Open Admin Panel
-        </button>
-
-    </div>
-
-
-    <!-- MAIN PANEL -->
-
-    <div id="panel" style="display:none;">
-
-        <!-- ADD DEAL -->
-
+        <!-- Admin Login -->
         <div class="card">
 
-            <h2>Add New Deal</h2>
+            <label for="key">
+                <strong>Admin Key</strong>
+            </label>
+
+            <input
+                id="key"
+                type="password"
+                placeholder="Enter ADMIN_KEY"
+            >
+
+            <button
+                id="load"
+                style="margin-top: 10px;"
+            >
+                Login / Load
+            </button>
+
+            <p id="msg"></p>
+
+        </div>
+
+
+        <!-- Add Deal -->
+        <div class="card">
+
+            <h2>Add Deal</h2>
 
             <form id="dealForm">
 
                 <div class="grid">
 
-                    <div class="field full">
-                        <label>Product Title</label>
+                    <input
+                        id="title"
+                        placeholder="Title"
+                        required
+                    >
 
-                        <input
-                            id="title"
-                            required
-                            placeholder="Example: Hamilton Beach Power Deluxe Mixer"
-                        >
-                    </div>
+                    <input
+                        id="store"
+                        placeholder="Store"
+                        required
+                    >
 
+                    <input
+                        id="old"
+                        type="number"
+                        step="0.01"
+                        placeholder="Old price"
+                        required
+                    >
 
-                    <div class="field">
-                        <label>Store</label>
+                    <input
+                        id="new"
+                        type="number"
+                        step="0.01"
+                        placeholder="New price"
+                        required
+                    >
 
-                        <input
-                            id="store"
-                            required
-                            placeholder="Amazon"
-                        >
-                    </div>
+                    <input
+                        id="url"
+                        placeholder="Product URL"
+                        required
+                    >
 
+                    <input
+                        id="image"
+                        placeholder="Image URL"
+                    >
 
-                    <div class="field">
-                        <label>Currency</label>
+                    <input
+                        id="asin"
+                        placeholder="ASIN"
+                    >
 
-                        <input
-                            id="currency"
-                            value="USD"
-                            maxlength="10"
-                        >
-                    </div>
-
-
-                    <div class="field">
-                        <label>Old Price</label>
-
-                        <input
-                            id="old_price"
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            required
-                        >
-                    </div>
-
-
-                    <div class="field">
-                        <label>New Price</label>
-
-                        <input
-                            id="new_price"
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            required
-                        >
-                    </div>
-
-
-                    <div class="field full">
-                        <label>Product URL</label>
-
-                        <input
-                            id="url"
-                            type="url"
-                            required
-                            placeholder="https://..."
-                        >
-                    </div>
-
-
-                    <div class="field full">
-                        <label>Image URL</label>
-
-                        <input
-                            id="image_url"
-                            type="url"
-                            placeholder="https://..."
-                        >
-                    </div>
-
-
-                    <div class="field">
-                        <label>Amazon ASIN</label>
-
-                        <input
-                            id="asin"
-                            maxlength="10"
-                            placeholder="B07YcDk3E"
-                        >
-                    </div>
-
-
-                    <div class="field">
-                        <label>Source Type</label>
-
-                        <select id="source_type">
-                            <option value="manual">Manual</option>
-                            <option value="api">API</option>
-                            <option value="affiliate">Affiliate</option>
-                        </select>
-                    </div>
+                    <input
+                        id="currency"
+                        value="USD"
+                        placeholder="Currency"
+                    >
 
                 </div>
 
-                <br>
-
                 <button
                     type="submit"
-                    class="primary"
+                    style="margin-top: 12px;"
                 >
                     Add Deal
                 </button>
 
             </form>
 
-            <div
-                id="formMessage"
-                class="message"
-            ></div>
+        </div>
+
+
+        <!-- Add Coupon -->
+        <div class="card">
+
+            <h2>Add Coupon</h2>
+
+            <form id="couponForm">
+
+                <div class="grid">
+
+                    <input
+                        id="cstore"
+                        placeholder="Store"
+                        required
+                    >
+
+                    <input
+                        id="ctitle"
+                        placeholder="Coupon title"
+                        required
+                    >
+
+                    <input
+                        id="ccode"
+                        placeholder="Code"
+                    >
+
+                    <input
+                        id="cdiscount"
+                        placeholder="e.g. 15% OFF"
+                    >
+
+                    <input
+                        id="curl"
+                        placeholder="Coupon URL"
+                    >
+
+                    <input
+                        id="cexpire"
+                        placeholder="Expiry date/time"
+                    >
+
+                </div>
+
+                <button
+                    type="submit"
+                    style="margin-top: 12px;"
+                >
+                    Add Coupon
+                </button>
+
+            </form>
 
         </div>
 
 
-        <!-- DEAL LIST -->
-
+        <!-- Deals -->
         <div class="card">
 
-            <div class="topbar">
+            <h2>Deals</h2>
 
-                <div>
-                    <h2 style="margin-bottom:5px;">
-                        Deals
-                    </h2>
-
-                    <div
-                        class="count"
-                        id="dealCount"
-                    >
-                        Loading...
-                    </div>
-                </div>
-
-                <button
-                    class="secondary"
-                    onclick="loadDeals()"
-                >
-                    Refresh
-                </button>
-
-            </div>
-
-
-            <div class="table-wrap">
-
-                <table>
-
-                    <thead>
-
-                        <tr>
-
-                            <th>ID</th>
-                            <th>Product</th>
-                            <th>Store</th>
-                            <th>Price</th>
-                            <th>Discount</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody id="dealsTable">
-
-                    </tbody>
-
-                </table>
-
+            <div id="deals">
+                Login to load.
             </div>
 
         </div>
 
     </div>
 
-</div>
 
+    <script>
 
-<script>
+        const API = "https://deal-api.hamraahirn32.workers.dev";
 
-const API_BASE =
-    "https://deal-api.hamraahirn32.workers.dev";
+        let KEY = "";
 
-let ADMIN_KEY = "";
 
+        // Shortcut for getElementById
+        const $ = (id) => document.getElementById(id);
 
-/*
-============================================================
-LOGIN
-============================================================
-*/
 
-function saveAdminKey() {
+        // API helper
+        async function api(path, options = {}) {
 
-    const key =
-        document.getElementById("adminKey").value.trim();
-
-    if (!key) {
-        alert("Please enter Admin Key.");
-        return;
-    }
-
-    ADMIN_KEY = key;
-
-    document.getElementById("loginCard").style.display =
-        "none";
-
-    document.getElementById("panel").style.display =
-        "block";
-
-    loadDeals();
-}
-
-
-/*
-============================================================
-API HELPER
-============================================================
-*/
-
-async function api(
-    endpoint,
-    options = {}
-) {
-
-    const headers = {
-        ...(options.headers || {}),
-        "X-Admin-Key": ADMIN_KEY
-    };
-
-    if (
-        options.body &&
-        typeof options.body !== "string"
-    ) {
-        headers["Content-Type"] =
-            "application/json";
-
-        options.body =
-            JSON.stringify(options.body);
-    }
-
-    const response =
-        await fetch(
-            API_BASE + endpoint,
-            {
-                ...options,
-                headers
-            }
-        );
-
-    const data =
-        await response.json();
-
-    if (!response.ok) {
-        throw new Error(
-            data.error || "Request failed"
-        );
-    }
-
-    return data;
-}
-
-
-/*
-============================================================
-LOAD DEALS
-============================================================
-*/
-
-async function loadDeals() {
-
-    const table =
-        document.getElementById("dealsTable");
-
-    table.innerHTML = `
-        <tr>
-            <td colspan="7">
-                Loading deals...
-            </td>
-        </tr>
-    `;
-
-    try {
-
-        const data =
-            await api("/api/admin/deals");
-
-        const deals =
-            data.deals || [];
-
-        document.getElementById("dealCount")
-            .textContent =
-            `${deals.length} deal(s)`;
-
-        if (!deals.length) {
-
-            table.innerHTML = `
-                <tr>
-                    <td colspan="7">
-                        No deals found.
-                    </td>
-                </tr>
-            `;
-
-            return;
-        }
-
-        table.innerHTML =
-            deals.map(renderDeal).join("");
-
-    } catch (error) {
-
-        table.innerHTML = `
-            <tr>
-                <td colspan="7">
-                    Error: ${escapeHtml(error.message)}
-                </td>
-            </tr>
-        `;
-    }
-}
-
-
-/*
-============================================================
-RENDER DEAL
-============================================================
-*/
-
-function renderDeal(deal) {
-
-    const featured =
-        Number(deal.is_featured) === 1;
-
-    const status =
-        String(
-            deal.verification_status || ""
-        ).toUpperCase();
-
-    let statusClass = "pending";
-
-    if (status === "VERIFIED") {
-        statusClass = "verified";
-    }
-
-    if (status === "EXPIRED") {
-        statusClass = "expired";
-    }
-
-    let featuredButton = "";
-
-    if (featured) {
-
-        featuredButton = `
-            <button
-                class="featured-active"
-                onclick="removeFeatured(${deal.id})"
-            >
-                ⭐ Featured
-            </button>
-        `;
-
-    } else if (status === "VERIFIED") {
-
-        featuredButton = `
-            <button
-                class="featured-btn"
-                onclick="setFeatured(${deal.id})"
-            >
-                ⭐ Set as Featured
-            </button>
-        `;
-    }
-
-    let verifyButton = "";
-
-    if (status === "PENDING") {
-
-        verifyButton = `
-            <button
-                class="success"
-                onclick="verifyDeal(${deal.id})"
-            >
-                Verify
-            </button>
-        `;
-    }
-
-    let expireButton = "";
-
-    if (status === "VERIFIED") {
-
-        expireButton = `
-            <button
-                class="warning"
-                onclick="expireDeal(${deal.id})"
-            >
-                Expire
-            </button>
-        `;
-    }
-
-    return `
-        <tr>
-
-            <td>
-                #${deal.id}
-            </td>
-
-            <td class="title-cell">
-
-                ${escapeHtml(deal.title)}
-
-                ${
-                    featured
-                    ? `
-                        <div class="featured-badge">
-                            ⭐ FEATURED DEAL
-                        </div>
-                    `
-                    : ""
-                }
-
-            </td>
-
-            <td>
-                ${escapeHtml(deal.store)}
-            </td>
-
-            <td class="price">
-
-                ${escapeHtml(deal.currency || "USD")}
-                ${Number(deal.new_price).toFixed(2)}
-
-                <br>
-
-                <del>
-                    ${Number(deal.old_price).toFixed(2)}
-                </del>
-
-            </td>
-
-            <td>
-                ${Number(
-                    deal.discount_percent || 0
-                ).toFixed(2)}%
-            </td>
-
-            <td>
-
-                <span class="status ${statusClass}">
-                    ${status}
-                </span>
-
-            </td>
-
-            <td>
-
-                <div class="actions">
-
-                    ${featuredButton}
-
-                    ${verifyButton}
-
-                    ${expireButton}
-
-                    <button
-                        class="danger"
-                        onclick="deleteDeal(${deal.id})"
-                    >
-                        Delete
-                    </button>
-
-                </div>
-
-            </td>
-
-        </tr>
-    `;
-}
-
-
-/*
-============================================================
-SET FEATURED
-============================================================
-*/
-
-async function setFeatured(id) {
-
-    if (
-        !confirm(
-            "Set this deal as the Featured Deal?"
-        )
-    ) {
-        return;
-    }
-
-    try {
-
-        await api(
-            `/api/admin/deals/${id}/featured`,
-            {
-                method: "POST"
-            }
-        );
-
-        alert(
-            "Featured Deal updated successfully."
-        );
-
-        loadDeals();
-
-    } catch (error) {
-
-        alert(
-            "Error: " + error.message
-        );
-    }
-}
-
-
-/*
-============================================================
-REMOVE FEATURED
-============================================================
-*/
-
-async function removeFeatured(id) {
-
-    if (
-        !confirm(
-            "Remove Featured status from this deal?"
-        )
-    ) {
-        return;
-    }
-
-    try {
-
-        await api(
-            `/api/admin/deals/${id}/unfeatured`,
-            {
-                method: "POST"
-            }
-        );
-
-        loadDeals();
-
-    } catch (error) {
-
-        alert(
-            "Error: " + error.message
-        );
-    }
-}
-
-
-/*
-============================================================
-VERIFY
-============================================================
-*/
-
-async function verifyDeal(id) {
-
-    if (
-        !confirm(
-            "Verify this deal?"
-        )
-    ) {
-        return;
-    }
-
-    try {
-
-        await api(
-            `/api/admin/deals/${id}/verify`,
-            {
-                method: "POST"
-            }
-        );
-
-        loadDeals();
-
-    } catch (error) {
-
-        alert(
-            "Error: " + error.message
-        );
-    }
-}
-
-
-/*
-============================================================
-EXPIRE
-============================================================
-*/
-
-async function expireDeal(id) {
-
-    if (
-        !confirm(
-            "Expire this deal?"
-        )
-    ) {
-        return;
-    }
-
-    try {
-
-        await api(
-            `/api/admin/deals/${id}/expire`,
-            {
-                method: "POST"
-            }
-        );
-
-        loadDeals();
-
-    } catch (error) {
-
-        alert(
-            "Error: " + error.message
-        );
-    }
-}
-
-
-/*
-============================================================
-DELETE
-============================================================
-*/
-
-async function deleteDeal(id) {
-
-    if (
-        !confirm(
-            "Delete this deal permanently?"
-        )
-    ) {
-        return;
-    }
-
-    try {
-
-        await api(
-            `/api/admin/deals/${id}`,
-            {
-                method: "DELETE"
-            }
-        );
-
-        loadDeals();
-
-    } catch (error) {
-
-        alert(
-            "Error: " + error.message
-        );
-    }
-}
-
-
-/*
-============================================================
-ADD DEAL
-============================================================
-*/
-
-document
-    .getElementById("dealForm")
-    .addEventListener(
-        "submit",
-        async function(event) {
-
-            event.preventDefault();
-
-            const body = {
-
-                title:
-                    document.getElementById("title").value,
-
-                store:
-                    document.getElementById("store").value,
-
-                old_price:
-                    Number(
-                        document.getElementById("old_price").value
-                    ),
-
-                new_price:
-                    Number(
-                        document.getElementById("new_price").value
-                    ),
-
-                currency:
-                    document.getElementById("currency").value,
-
-                url:
-                    document.getElementById("url").value,
-
-                image_url:
-                    document.getElementById("image_url").value,
-
-                asin:
-                    document.getElementById("asin").value,
-
-                source_type:
-                    document.getElementById("source_type").value
-
+            options.headers = {
+                ...(options.headers || {}),
+                "X-Admin-Key": KEY,
+                "Content-Type": "application/json"
             };
 
-            const message =
-                document.getElementById(
-                    "formMessage"
+            const response = await fetch(
+                API + path,
+                options
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.error || "Request failed"
                 );
+            }
+
+            return data;
+        }
+
+
+        // Message
+        function msg(text) {
+            $("msg").textContent = text;
+        }
+
+
+        // Login / Load
+        async function load() {
+
+            KEY = $("key").value.trim();
+
+            if (!KEY) {
+                msg("Enter Admin Key.");
+                return;
+            }
 
             try {
 
-                const result =
-                    await api(
-                        "/api/admin/deals",
-                        {
-                            method: "POST",
-                            body
-                        }
-                    );
+                await refresh();
 
-                message.className =
-                    "message show ok";
-
-                message.textContent =
-                    `Deal added successfully. ID: ${result.id}`;
-
-                document
-                    .getElementById("dealForm")
-                    .reset();
-
-                document
-                    .getElementById("currency")
-                    .value = "USD";
-
-                loadDeals();
+                msg("Connected.");
 
             } catch (error) {
 
-                message.className =
-                    "message show error";
+                msg(error.message);
 
-                message.textContent =
-                    error.message;
+            }
+        }
+
+
+        // Refresh deals
+        async function refresh() {
+
+            const data = await api(
+                "/api/admin/deals"
+            );
+
+            if (!data.deals || data.deals.length === 0) {
+
+                $("deals").innerHTML = `
+                    <p>No deals found.</p>
+                `;
+
+                return;
             }
 
+
+            const rows = data.deals.map((deal) => {
+
+                let featuredButton = "";
+
+
+                // Featured button
+                if (Number(deal.is_featured) === 1) {
+
+                    featuredButton = `
+                        <button
+                            onclick="act('/api/admin/deals/${deal.id}/unfeatured')"
+                        >
+                            Unfeature
+                        </button>
+                    `;
+
+                } else if (
+                    deal.verification_status === "VERIFIED"
+                ) {
+
+                    featuredButton = `
+                        <button
+                            onclick="act('/api/admin/deals/${deal.id}/featured')"
+                        >
+                            Set Featured
+                        </button>
+                    `;
+
+                }
+
+
+                // Verify button
+                const verifyButton =
+                    deal.verification_status !== "VERIFIED"
+                        ? `
+                            <button
+                                onclick="act('/api/admin/deals/${deal.id}/verify')"
+                            >
+                                Verify
+                            </button>
+                        `
+                        : "";
+
+
+                return `
+                    <tr>
+
+                        <td>
+                            ${deal.id}
+                        </td>
+
+                        <td>
+                            ${esc(deal.title)}
+
+                            ${
+                                Number(deal.is_featured) === 1
+                                    ? " ⭐"
+                                    : ""
+                            }
+                        </td>
+
+                        <td>
+                            ${esc(deal.store)}
+                        </td>
+
+                        <td>
+                            ${deal.currency || "USD"}
+                            ${Number(deal.new_price).toFixed(2)}
+                        </td>
+
+                        <td>
+                            ${esc(deal.verification_status)}
+                        </td>
+
+                        <td>
+
+                            <div class="actions">
+
+                                ${verifyButton}
+
+                                ${featuredButton}
+
+                                <button
+                                    onclick="act('/api/admin/deals/${deal.id}/expire')"
+                                >
+                                    Expire
+                                </button>
+
+                                <button
+                                    onclick="delDeal(${deal.id})"
+                                >
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+                `;
+
+            }).join("");
+
+
+            $("deals").innerHTML = `
+
+                <table>
+
+                    <tr>
+
+                        <th>ID</th>
+                        <th>Deal</th>
+                        <th>Store</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+
+                    </tr>
+
+                    ${rows}
+
+                </table>
+
+            `;
         }
-    );
 
 
-/*
-============================================================
-ESCAPE HTML
-============================================================
-*/
+        // Action
+        async function act(path) {
 
-function escapeHtml(value) {
+            try {
 
-    return String(value || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
+                await api(
+                    path,
+                    {
+                        method: "POST"
+                    }
+                );
 
-</script>
+                await refresh();
+
+            } catch (error) {
+
+                alert(error.message);
+
+            }
+        }
+
+
+        // Delete deal
+        async function delDeal(id) {
+
+            if (!confirm("Delete this deal?")) {
+                return;
+            }
+
+            try {
+
+                await api(
+                    "/api/admin/deals/" + id,
+                    {
+                        method: "DELETE"
+                    }
+                );
+
+                await refresh();
+
+            } catch (error) {
+
+                alert(error.message);
+
+            }
+        }
+
+
+        // Escape HTML
+        function esc(value) {
+
+            return String(value ?? "")
+                .replace(
+                    /[&<>"']/g,
+                    (char) => {
+
+                        return {
+                            "&": "&amp;",
+                            "<": "&lt;",
+                            ">": "&gt;",
+                            '"': "&quot;",
+                            "'": "&#39;"
+                        }[char];
+
+                    }
+                );
+        }
+
+
+        // Login button
+        $("load").onclick = load;
+
+
+        // Add Deal
+        $("dealForm").onsubmit = async (event) => {
+
+            event.preventDefault();
+
+            try {
+
+                await api(
+                    "/api/admin/deals",
+                    {
+                        method: "POST",
+
+                        body: JSON.stringify({
+
+                            title: $("title").value,
+
+                            store: $("store").value,
+
+                            old_price: $("old").value,
+
+                            new_price: $("new").value,
+
+                            url: $("url").value,
+
+                            image_url: $("image").value,
+
+                            asin: $("asin").value,
+
+                            currency: $("currency").value
+
+                        })
+                    }
+                );
+
+
+                event.target.reset();
+
+                $("currency").value = "USD";
+
+                await refresh();
+
+                msg("Deal added.");
+
+            } catch (error) {
+
+                alert(error.message);
+
+            }
+        };
+
+
+        // Add Coupon
+        $("couponForm").onsubmit = async (event) => {
+
+            event.preventDefault();
+
+            try {
+
+                await api(
+                    "/api/admin/coupons",
+                    {
+                        method: "POST",
+
+                        body: JSON.stringify({
+
+                            store: $("cstore").value,
+
+                            title: $("ctitle").value,
+
+                            code: $("ccode").value,
+
+                            discount_text: $("cdiscount").value,
+
+                            url: $("curl").value,
+
+                            expires_at: $("cexpire").value
+
+                        })
+                    }
+                );
+
+
+                event.target.reset();
+
+                msg("Coupon added.");
+
+            } catch (error) {
+
+                alert(error.message);
+
+            }
+        };
+
+    </script>
 
 </body>
+
 </html>
