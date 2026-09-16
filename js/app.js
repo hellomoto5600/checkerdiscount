@@ -1,5 +1,4 @@
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
-const FEATURED_DEAL_ID = 47;
 
 let allDeals = [];
 let searchText = "";
@@ -353,7 +352,10 @@ async function loadDeals() {
 }
 
 function showFeatured() {
-    let deal = allDeals.find(d => Number(d.id) === FEATURED_DEAL_ID);
+    const featuredDeal = allDeals.find(
+        d => Number(d.is_featured) === 1
+    );
+    let deal = featuredDeal;
     if (!deal && allDeals.length) deal = allDeals[0];
     if (!deal) return;
 
@@ -488,7 +490,9 @@ function renderDeals() {
     const box = document.getElementById("discountsContainer");
     if (!box) return;
 
-    let deals = allDeals.filter(d => Number(d.id) !== FEATURED_DEAL_ID);
+    let deals = allDeals.filter(
+        d => Number(d.is_featured) !== 1
+    );
 
     if (searchText) {
         deals = deals.filter(d => {
