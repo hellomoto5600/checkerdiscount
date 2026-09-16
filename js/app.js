@@ -82,12 +82,16 @@
             ${esc(deal.title)}
           </h3>
 
-          <div class="deal-price-row" style="display:flex;align-items:baseline;gap:8px;margin-bottom:10px;">
+          <div class="deal-price-row" style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px;">
             <strong style="font-size:18px;font-weight:700;color:#101828;">${money(newPrice, deal.currency)}</strong>
             ${oldPrice > 0 ? `<del style="font-size:13px;color:#98a2b3;">${money(oldPrice, deal.currency)}</del>` : ""}
           </div>
 
-          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px;">
+          <div style="font-size:12px;color:#027a48;font-weight:600;margin-bottom:12px;background:#f7fff9;padding:6px 10px;border-radius:6px;display:inline-block;border:1px solid #b7e8cd;">
+            SAVE ${money(saving, deal.currency)} · ${discount.toFixed(2)}% OFF
+          </div>
+
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px;">
             <a
               href="${esc(deal.url)}"
               target="_blank"
@@ -128,8 +132,7 @@
 
   function renderDeals() {
     const box = $("discountsContainer");
-    if (!box) return;
-
+    
     const verifiedDeals = allDeals.filter(
       (deal) => String(deal.verification_status || "VERIFIED").toUpperCase() === "VERIFIED"
     );
@@ -138,33 +141,45 @@
       (deal) => Number(deal.is_featured) === 1
     );
 
+    // ہیرو سیکشن کے اندر فیچر ڈیل شو کرنا
+    const heroPreview = document.querySelector(".deal-preview, .hero-deal-box, [data-hero-preview]");
+    if (featured) {
+      const oldP = Number(featured.old_price);
+      const newP = Number(featured.new_price);
+      const saveAmount = Math.max(0, oldP - newP);
+      const disc = Number(featured.discount_percent || 0);
+
+      // اگر ویب سائٹ پر ہیرو پریویو کا کوئی کنٹینر موجود ہے تو وہاں ڈیٹا اپڈیٹ کر دیں
+      const previewContainer = $("heroDealPreview") || heroPreview;
+      if (previewContainer) {
+        previewContainer.innerHTML = `
+          <div style="font-size:11px;font-weight:700;color:#027a48;margin-bottom:6px;">✓ VERIFIED FEATURED DEAL</div>
+          <div style="font-size:12px;color:#475467;margin-bottom:4px;">Available at ${esc(featured.store)}</div>
+          <h4 style="font-size:16px;font-weight:600;color:#1d2939;margin:0 0 10px 0;line-height:1.3;">${esc(featured.title)}</h4>
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:12px;">
+            <strong style="font-size:22px;font-weight:800;color:#101828;">${money(newP, featured.currency)}</strong>
+            ${oldP > 0 ? `<del style="color:#98a2b3;font-size:14px;">${money(oldP, featured.currency)}</del>` : ""}
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <a href="${esc(featured.url)}" target="_blank" rel="noopener noreferrer sponsored" style="background:#026aa2;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;display:inline-block;">Check This Deal →</a>
+          </div>
+          <div style="margin-top:10px;font-size:12px;color:#027a48;font-weight:600;">SAVE ${money(saveAmount, featured.currency)} (${disc.toFixed(0)}% OFF)</div>
+        `;
+      }
+    }
+
+    if (!box) return;
+
+    // عام لسٹ میں صرف ریگولر ڈیلز شو ہوں گی (یا اگر چاہیں تو تمام ویریفائیڈ)
     const regular = verifiedDeals.filter(
       (deal) => Number(deal.is_featured) !== 1
     );
 
     let html = "";
-
-    if (featured) {
-      html += `
-        <div class="featured-v10" style="border:2px solid #12B76A;background:#F7FFF9;border-radius:16px;padding:18px;margin-bottom:18px">
-          <div style="font-size:11px;font-weight:800;color:#087443;letter-spacing:.5px;margin-bottom:10px">
-            ⭐ FEATURED VERIFIED DEAL
-          </div>
-          ${dealCard(featured)}
-        </div>
-      `;
-    }
-
     if (regular.length) {
       html += regular.map(dealCard).join("");
-    }
-
-    if (!html) {
-      html = `
-        <div class="tool-empty">
-          No verified deals are available right now.
-        </div>
-      `;
+    } else if (!featured) {
+      html = `<div class="tool-empty">No verified deals are available right now.</div>`;
     }
 
     box.innerHTML = html;
@@ -198,11 +213,7 @@
     } catch (error) {
       console.error("CheckerDiscount deal loading error:", error);
       if (box) {
-        box.innerHTML = `
-          <div class="tool-empty">
-            Deals could not be loaded right now. Please try again.
-          </div>
-        `;
+        box.innerHTML = `<div class="tool-empty">Deals could not be loaded right now. Please try again.</div>`;
       }
     }
   }
@@ -220,14 +231,16 @@
     try {
       if (navigator.share) {
         await navigator.share(shareData);
-      } else if (navigator.clipboard) {
-        await navigator.clipboard.writeText(deal.url);
-        alert("Deal link copied to clipboard.");
       } else {
-        window.prompt("Copy this deal link:", deal.url);
+        // لیپ ٹاپ یا ڈیسک ٹاپ کے لیے خوبصورت پاپ اپ/پرامپٹ جو لنک اور آپشن دے
+        const userChoice = prompt("Copy this deal link to share:", deal.url);
+        if (userChoice !== null && navigator.clipboard) {
+          navigator.clipboard.writeText(deal.url);
+          alert("Link copied to clipboard!");
+        }
       }
     } catch {
-      // User cancelled share.
+      // User cancelled share
     }
   }
 
@@ -353,6 +366,60 @@
     }
   }
 
+  // فائنل پرائس کیلکولیٹر ٹھیک کیا گیا
+  function finalPrice() {
+    const price = Number($("fpPrice")?.value) || 0;
+    const coupon = Number($("fpCoupon")?.value) || 0;
+    const shipping = Number($("fpShipping")?.value) || 0;
+    const tax = Number($("fpTax")?.value) || 0;
+    const out = $("finalPriceResult");
+
+    if (!out) return;
+
+    const total = Math.max(0, price - coupon) + shipping + tax;
+
+    out.innerHTML = `
+      <div style="background:#f7fff9;border:1px solid #b7ebce;border-radius:12px;padding:16px;margin-top:10px;">
+        <small style="color:#087443;font-weight:700;">ESTIMATED FINAL COST</small>
+        <div style="font-size:26px;font-weight:800;color:#087443;">${money(total)}</div>
+        <div style="font-size:12px;color:#667085;margin-top:4px;">
+          ${money(price)} price − ${money(coupon)} coupon + ${money(shipping)} shipping + ${money(tax)} tax
+        </div>
+      </div>
+    `;
+  }
+
+  // ریفنڈ سیونگز کیلکولیٹر ٹھیک کیا گیا
+  function calculateRefundSavings() {
+    const retailer = $("retailer")?.value.trim() || "Store";
+    const purchasePrice = Number($("purchasePrice")?.value) || 0;
+    const currentPrice = Number($("currentPrice")?.value) || 0;
+    const out = $("refundResult");
+
+    if (!out) return;
+
+    const savings = Math.max(0, purchasePrice - currentPrice);
+
+    if (purchasePrice <= 0 || currentPrice < 0) {
+      out.style.display = "block";
+      out.innerHTML = `<div class="tool-empty">Please enter valid prices.</div>`;
+      return;
+    }
+
+    const percent = purchasePrice > 0 ? (savings / purchasePrice) * 100 : 0;
+
+    out.style.display = "block";
+    out.innerHTML = `
+      <div style="margin-top:16px;background:#F7FFF9;border:1px solid #B7E8CD;border-radius:12px;padding:16px;">
+        <div style="font-size:12px;color:#667085;font-weight:700;">${esc(retailer)} POTENTIAL SAVINGS</div>
+        <div style="font-size:26px;font-weight:800;color:#087443;">${money(savings)}</div>
+        <div style="font-size:12px;color:#667085;margin-top:5px;">
+          You paid ${money(purchasePrice)} and current price is ${money(currentPrice)} — ${percent.toFixed(1)}% lower.
+        </div>
+      </div>
+    `;
+  }
+
   function addWatch(title, target) {
     if (!title || !Number.isFinite(target) || target <= 0) return;
 
@@ -415,6 +482,16 @@
     $("couponForm")?.addEventListener("submit", (e) => {
       e.preventDefault();
       coupons();
+    });
+
+    $("finalPriceForm")?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      finalPrice();
+    });
+
+    $("refundForm")?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      calculateRefundSavings();
     });
 
     $("watchForm")?.addEventListener("submit", (e) => {
