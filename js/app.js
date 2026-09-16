@@ -1,17 +1,34 @@
 /* =========================================================
    CHECKERDISCOUNT - APP.JS
-   Version 8.0
-
-   Deals
-   Share
-   Savings Calculator
-   Search
-   Category Filter
+   Version 8.1
+   Deals + Featured Deal + Search + Category
+   Savings + Share + Mobile Menu
    ========================================================= */
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
 
+/*
+ * =========================================================
+ * FEATURED DEAL
+ * =========================================================
+ *
+ * TEST MODE:
+ * Deal ID 47 is currently used as Featured Deal.
+ *
+ * Later this can be controlled from Admin Panel/database.
+ */
+const FEATURED_DEAL_ID = 47;
+
+
+/* =========================================================
+   GLOBAL DEAL DATA
+   ========================================================= */
+
 let checkerDiscountDeals = [];
+
+let currentDealSearch = "";
+
+let currentDealCategory = "All";
 
 
 /* =========================================================
@@ -19,6 +36,8 @@ let checkerDiscountDeals = [];
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
+
+    injectDealStyles();
 
     loadDeals();
 
@@ -28,20 +47,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setupSharePopup();
 
-    injectDealButtonStyles();
-
 });
 
 
 /* =========================================================
-   DEAL BUTTON + SEARCH STYLES
+   INJECT DEAL / SAVINGS STYLES
    ========================================================= */
 
-function injectDealButtonStyles() {
+function injectDealStyles() {
 
     if (
         document.getElementById(
-            "checkerDealButtonStyles"
+            "checkerDiscountNewStyles"
         )
     ) {
         return;
@@ -53,10 +70,14 @@ function injectDealButtonStyles() {
 
 
     style.id =
-        "checkerDealButtonStyles";
+        "checkerDiscountNewStyles";
 
 
     style.textContent = `
+
+        /* =========================================
+           MAIN DEAL BUTTON
+           ========================================= */
 
         .checker-main-deal-btn {
 
@@ -119,6 +140,10 @@ function injectDealButtonStyles() {
         }
 
 
+        /* =========================================
+           SHARE BUTTON
+           ========================================= */
+
         .checker-share-btn {
 
             display:inline-flex !important;
@@ -166,95 +191,186 @@ function injectDealButtonStyles() {
         }
 
 
-        /* =====================================================
-           SEARCH AREA
-           ===================================================== */
+        /* =========================================
+           SAVINGS BADGE
+           ========================================= */
 
-        .checker-deal-tools {
+        .checker-potential-savings {
 
-            width:100%;
+            display:inline-flex;
 
-            margin:
-                0 0 25px;
+            flex-direction:column;
+
+            justify-content:center;
+
+            gap:2px;
 
             padding:
-                18px;
+                10px 15px;
+
+            min-width:118px;
 
             box-sizing:border-box;
 
-            background:#ffffff;
+            border-radius:12px;
 
-            border:
-                1px solid #e2e8f0;
+            background:
+                linear-gradient(
+                    135deg,
+                    #10b981,
+                    #16a34a
+                );
 
-            border-radius:14px;
+            color:#ffffff;
 
             box-shadow:
-                0 5px 18px
-                rgba(15,23,42,.05);
+                0 8px 20px
+                rgba(16,185,129,.22);
 
         }
 
 
-        .checker-deal-tools-row {
+        .checker-potential-savings-label {
 
-            display:grid;
+            font-size:11px;
 
-            grid-template-columns:
-                minmax(0, 1fr)
-                220px;
+            font-weight:600;
 
-            gap:12px;
+            line-height:1.2;
+
+            opacity:.92;
+
+        }
+
+
+        .checker-potential-savings-value {
+
+            font-size:20px;
+
+            font-weight:800;
+
+            line-height:1.1;
+
+        }
+
+
+        /* =========================================
+           LIMITED OFFER
+           ========================================= */
+
+        .checker-limited-offer {
+
+            display:inline-flex;
+
+            align-items:center;
+
+            gap:6px;
+
+            margin-top:10px;
+
+            padding:
+                6px 10px;
+
+            border-radius:7px;
+
+            background:#fff7ed;
+
+            border:
+                1px solid #fed7aa;
+
+            color:#c2410c;
+
+            font-size:11px;
+
+            font-weight:800;
+
+            letter-spacing:.2px;
+
+            line-height:1;
+
+            white-space:nowrap;
+
+        }
+
+
+        /* =========================================
+           VERIFIED
+           ========================================= */
+
+        .checker-verified-badge {
+
+            display:inline-flex;
+
+            align-items:center;
+
+            gap:5px;
+
+            padding:
+                5px 9px;
+
+            border-radius:999px;
+
+            background:#ecfdf5;
+
+            color:#047857;
+
+            border:
+                1px solid #a7f3d0;
+
+            font-size:11px;
+
+            font-weight:700;
+
+            line-height:1;
+
+        }
+
+
+        /* =========================================
+           SEARCH / CATEGORY
+           ========================================= */
+
+        .checker-deal-tools {
+
+            display:flex;
+
+            gap:10px;
+
+            flex-wrap:wrap;
+
+            margin:
+                0 0 22px;
 
         }
 
 
         .checker-search-wrap {
 
+            flex:
+                1 1 260px;
+
             position:relative;
 
-            width:100%;
-
         }
 
 
-        .checker-search-icon {
-
-            position:absolute;
-
-            left:14px;
-
-            top:50%;
-
-            transform:
-                translateY(-50%);
-
-            font-size:17px;
-
-            color:#94a3b8;
-
-            pointer-events:none;
-
-        }
-
-
-        .checker-deal-search {
+        .checker-search-input {
 
             width:100%;
-
-            height:48px;
 
             box-sizing:border-box;
 
+            min-height:48px;
+
             padding:
-                0 15px 0 42px;
+                0 16px 0 44px;
 
             border:
                 1px solid #dbe3ef;
 
-            border-radius:10px;
+            border-radius:12px;
 
-            background:#f8fafc;
+            background:#ffffff;
 
             color:#0f172a;
 
@@ -264,15 +380,12 @@ function injectDealButtonStyles() {
 
             transition:
                 border-color .2s ease,
-                box-shadow .2s ease,
-                background .2s ease;
+                box-shadow .2s ease;
 
         }
 
 
-        .checker-deal-search:focus {
-
-            background:#ffffff;
+        .checker-search-input:focus {
 
             border-color:#2563eb;
 
@@ -283,23 +396,42 @@ function injectDealButtonStyles() {
         }
 
 
-        .checker-category-filter {
+        .checker-search-icon {
 
-            width:100%;
+            position:absolute;
 
-            height:48px;
+            left:15px;
 
-            box-sizing:border-box;
+            top:50%;
+
+            transform:
+                translateY(-50%);
+
+            color:#64748b;
+
+            font-size:18px;
+
+            pointer-events:none;
+
+        }
+
+
+        .checker-category-select {
+
+            flex:
+                0 1 190px;
+
+            min-height:48px;
 
             padding:
-                0 13px;
+                0 14px;
 
             border:
                 1px solid #dbe3ef;
 
-            border-radius:10px;
+            border-radius:12px;
 
-            background:#f8fafc;
+            background:#ffffff;
 
             color:#334155;
 
@@ -312,44 +444,217 @@ function injectDealButtonStyles() {
         }
 
 
-        .checker-category-filter:focus {
+        .checker-results-count {
 
-            background:#ffffff;
+            margin:
+                -10px 0 18px;
 
-            border-color:#2563eb;
+            color:#64748b;
 
-            box-shadow:
-                0 0 0 3px
-                rgba(37,99,235,.10);
+            font-size:13px;
 
         }
 
 
-        .checker-search-status {
+        /* =========================================
+           FEATURED DEAL
+           ========================================= */
 
-            margin-top:10px;
+        .checker-featured-wrap {
+
+            margin:
+                0 0 30px;
+
+        }
+
+
+        .checker-featured-card {
+
+            position:relative;
+
+            overflow:hidden;
+
+            border:
+                1px solid #dbe3ef;
+
+            border-radius:18px;
+
+            background:#ffffff;
+
+            box-shadow:
+                0 12px 35px
+                rgba(15,23,42,.08);
+
+        }
+
+
+        .checker-featured-inner {
+
+            display:grid;
+
+            grid-template-columns:
+                minmax(0,1fr)
+                auto;
+
+            gap:20px;
+
+            align-items:center;
+
+            padding:24px;
+
+        }
+
+
+        .checker-featured-label {
+
+            display:inline-flex;
+
+            align-items:center;
+
+            gap:6px;
+
+            margin-bottom:12px;
+
+            padding:
+                6px 10px;
+
+            border-radius:999px;
+
+            background:#eff6ff;
+
+            color:#2563eb;
+
+            font-size:11px;
+
+            font-weight:800;
+
+            letter-spacing:.3px;
+
+        }
+
+
+        .checker-featured-title {
+
+            margin:0 0 10px;
+
+            color:#0f172a;
+
+            font-size:24px;
+
+            line-height:1.25;
+
+            font-weight:800;
+
+        }
+
+
+        .checker-featured-store {
+
+            margin-bottom:10px;
 
             color:#64748b;
 
-            font-size:12px;
+            font-size:14px;
+
+        }
+
+
+        .checker-featured-price {
+
+            display:flex;
+
+            align-items:baseline;
+
+            gap:10px;
+
+            flex-wrap:wrap;
+
+            margin-top:10px;
+
+        }
+
+
+        .checker-featured-new-price {
+
+            color:#0f172a;
+
+            font-size:30px;
+
+            font-weight:800;
+
+        }
+
+
+        .checker-featured-old-price {
+
+            color:#94a3b8;
+
+            font-size:16px;
+
+            text-decoration:line-through;
+
+        }
+
+
+        .checker-featured-actions {
+
+            display:flex;
+
+            align-items:center;
+
+            gap:10px;
+
+            flex-wrap:wrap;
+
+            margin-top:16px;
+
+        }
+
+
+        .checker-featured-saving-box {
+
+            min-width:145px;
 
         }
 
 
         @media (max-width:700px) {
 
-            .checker-deal-tools-row {
+            .checker-featured-inner {
 
                 grid-template-columns:1fr;
+
+                padding:20px;
+
+            }
+
+
+            .checker-featured-title {
+
+                font-size:21px;
+
+            }
+
+
+            .checker-featured-new-price {
+
+                font-size:26px;
+
+            }
+
+
+            .checker-featured-saving-box {
+
+                width:100%;
 
             }
 
         }
 
 
-        /* =====================================================
+        /* =========================================
            SHARE POPUP
-           ===================================================== */
+           ========================================= */
 
         .checker-share-overlay {
 
@@ -569,9 +874,9 @@ function injectDealButtonStyles() {
         }
 
 
-        /* =====================================================
+        /* =========================================
            SAVINGS MODAL
-           ===================================================== */
+           ========================================= */
 
         .checker-savings-overlay {
 
@@ -589,37 +894,31 @@ function injectDealButtonStyles() {
 
             padding:20px;
 
-            box-sizing:border-box;
-
             background:
-                rgba(15,23,42,.58);
+                rgba(15,23,42,.55);
 
             backdrop-filter:
-                blur(5px);
-
-            animation:
-                checkerSavingsFade
-                .18s ease-out;
+                blur(4px);
 
         }
 
 
-        .checker-savings-box {
+        .checker-savings-modal {
 
             position:relative;
 
             width:min(
-                430px,
+                390px,
                 100%
             );
 
+            padding:28px;
+
             box-sizing:border-box;
 
-            padding:30px 25px 25px;
+            border-radius:20px;
 
             background:#ffffff;
-
-            border-radius:20px;
 
             text-align:center;
 
@@ -629,20 +928,8 @@ function injectDealButtonStyles() {
 
             animation:
                 checkerSavingsIn
-                .22s ease-out;
-
-        }
-
-
-        @keyframes checkerSavingsFade {
-
-            from {
-                opacity:0;
-            }
-
-            to {
-                opacity:1;
-            }
+                .2s
+                ease-out;
 
         }
 
@@ -654,8 +941,8 @@ function injectDealButtonStyles() {
                 opacity:0;
 
                 transform:
-                    translateY(18px)
-                    scale(.96);
+                    translateY(15px)
+                    scale(.97);
 
             }
 
@@ -692,7 +979,7 @@ function injectDealButtonStyles() {
 
             color:#475569;
 
-            font-size:21px;
+            font-size:20px;
 
             cursor:pointer;
 
@@ -701,12 +988,12 @@ function injectDealButtonStyles() {
 
         .checker-savings-icon {
 
-            width:62px;
+            width:58px;
 
-            height:62px;
+            height:58px;
 
             margin:
-                0 auto 15px;
+                0 auto 12px;
 
             display:flex;
 
@@ -716,18 +1003,16 @@ function injectDealButtonStyles() {
 
             border-radius:50%;
 
-            background:#ecfdf5;
+            background:#dcfce7;
 
-            color:#059669;
+            color:#16a34a;
 
-            font-size:30px;
-
-            font-weight:800;
+            font-size:28px;
 
         }
 
 
-        .checker-savings-title {
+        .checker-savings-heading {
 
             margin:0;
 
@@ -735,7 +1020,7 @@ function injectDealButtonStyles() {
 
             font-size:20px;
 
-            font-weight:750;
+            font-weight:800;
 
         }
 
@@ -743,36 +1028,33 @@ function injectDealButtonStyles() {
         .checker-savings-amount {
 
             margin:
-                12px 0 4px;
+                10px 0 4px;
 
-            color:#059669;
+            color:#16a34a;
 
-            font-size:38px;
+            font-size:36px;
 
-            font-weight:850;
-
-            line-height:1.15;
+            font-weight:900;
 
         }
 
 
         .checker-savings-percent {
 
-            color:#166534;
+            color:#047857;
 
-            font-size:15px;
+            font-size:14px;
 
-            font-weight:700;
+            font-weight:800;
 
         }
 
 
         .checker-savings-details {
 
-            margin-top:17px;
+            margin-top:18px;
 
-            padding:
-                12px 14px;
+            padding:13px;
 
             border-radius:10px;
 
@@ -799,12 +1081,7 @@ function injectDealButtonStyles() {
 
             border-radius:10px;
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #2563eb,
-                    #4f46e5
-                );
+            background:#2563eb;
 
             color:#ffffff;
 
@@ -813,39 +1090,6 @@ function injectDealButtonStyles() {
             font-weight:700;
 
             cursor:pointer;
-
-        }
-
-
-        body.checker-modal-open {
-
-            overflow:hidden;
-
-        }
-
-
-        @media (max-width:480px) {
-
-            .checker-share-box {
-
-                padding:20px;
-
-            }
-
-
-            .checker-savings-box {
-
-                padding:
-                    28px 18px 20px;
-
-            }
-
-
-            .checker-savings-amount {
-
-                font-size:34px;
-
-            }
 
         }
 
@@ -941,43 +1185,20 @@ async function loadDeals() {
 
 
         checkerDiscountDeals =
-            deals.filter(
-                deal =>
-                    String(
-                        deal.verification_status ||
-                        ""
-                    ).toUpperCase() ===
-                    "VERIFIED"
-            );
+            deals;
 
 
-        container.innerHTML = "";
+        renderFeaturedDeal(
+            deals
+        );
 
 
         setupDealSearch(
-            container,
-            checkerDiscountDeals
-        );
-
-
-        if (
-            checkerDiscountDeals.length ===
-            0
-        ) {
-
-            showNoDeals(
-                container
-            );
-
-            return;
-
-        }
-
-
-        renderDeals(
-            checkerDiscountDeals,
             container
         );
+
+
+        renderFilteredDeals();
 
 
     } catch (error) {
@@ -1046,123 +1267,501 @@ async function loadDeals() {
 
 
 /* =========================================================
-   RENDER ALL DEALS
+   FEATURED DEAL
    ========================================================= */
 
-function renderDeals(
-    deals,
-    container
+function renderFeaturedDeal(
+    deals
 ) {
 
-    const oldCards =
-        container.querySelectorAll(
-            ".discount-card"
+    /*
+     * Find selected deal.
+     */
+
+    let featured =
+        deals.find(
+            deal =>
+                Number(deal.id) ===
+                Number(FEATURED_DEAL_ID)
         );
 
 
-    oldCards.forEach(
-        card => card.remove()
-    );
+    /*
+     * If selected deal does not exist,
+     * use first verified deal.
+     */
+
+    if (!featured && deals.length > 0) {
+
+        featured =
+            deals[0];
+
+    }
 
 
-    deals.forEach(
-        deal => {
+    /*
+     * Existing HTML hero section
+     */
 
-            renderDeal(
-                deal,
+    const heroSection =
+        findDealPreviewSection();
+
+
+    /*
+     * No verified deals.
+     */
+
+    if (!featured) {
+
+        if (heroSection) {
+
+            heroSection.innerHTML = `
+
+                <div style="
+                    padding:30px;
+                    text-align:center;
+                    color:#64748b;
+                ">
+
+                    No Featured Deal Available
+
+                </div>
+
+            `;
+
+        }
+
+        return;
+
+    }
+
+
+    /*
+     * Create featured HTML.
+     */
+
+    const featuredHTML =
+        buildFeaturedHTML(
+            featured
+        );
+
+
+    /*
+     * If existing Deal Preview section
+     * is found, replace its inside content.
+     */
+
+    if (heroSection) {
+
+        heroSection.innerHTML =
+            featuredHTML;
+
+        heroSection.classList.add(
+            "checker-featured-wrap"
+        );
+
+    } else {
+
+        /*
+         * Fallback:
+         * Insert a new Featured Deal
+         * before regular deals.
+         */
+
+        const container =
+            document.getElementById(
+                "discountsContainer"
+            );
+
+
+        if (
+            container &&
+            container.parentNode
+        ) {
+
+            const wrapper =
+                document.createElement(
+                    "div"
+                );
+
+
+            wrapper.className =
+                "checker-featured-wrap";
+
+
+            wrapper.innerHTML =
+                featuredHTML;
+
+
+            container.parentNode.insertBefore(
+                wrapper,
                 container
             );
 
         }
-    );
 
-
-    updateSearchStatus(
-        deals.length,
-        deals.length
-    );
+    }
 
 }
 
 
 /* =========================================================
-   NO DEALS
+   FIND EXISTING DEAL PREVIEW
    ========================================================= */
 
-function showNoDeals(
-    container
-) {
+function findDealPreviewSection() {
 
-    const existing =
-        container.querySelector(
-            ".checker-no-deals-message"
+    const elements =
+        document.querySelectorAll(
+            "section, article, div"
         );
 
 
-    if (existing) {
+    for (
+        const element of elements
+    ) {
 
-        existing.remove();
+        const text =
+            String(
+                element.textContent || ""
+            )
+                .replace(
+                    /\s+/g,
+                    " "
+                )
+                .trim()
+                .toUpperCase();
+
+
+        if (
+            text.startsWith(
+                "DEAL PREVIEW"
+            ) &&
+            text.length < 2500
+        ) {
+
+            /*
+             * Prefer this element itself.
+             */
+
+            return element;
+
+        }
 
     }
 
 
-    const message =
-        document.createElement(
-            "div"
+    return null;
+
+}
+
+
+/* =========================================================
+   BUILD FEATURED HTML
+   ========================================================= */
+
+function buildFeaturedHTML(
+    deal
+) {
+
+    const title =
+        escapeHTML(
+            deal.title ||
+            "Featured Deal"
         );
 
 
-    message.className =
-        "checker-no-deals-message";
+    const store =
+        escapeHTML(
+            deal.store ||
+            "Store"
+        );
 
 
-    message.innerHTML = `
+    const oldPrice =
+        Number(
+            deal.old_price
+        );
 
-        <div style="
-            text-align:center;
-            padding:45px 20px;
-            color:#64748b;
+
+    const newPrice =
+        Number(
+            deal.new_price
+        );
+
+
+    const currency =
+        escapeHTML(
+            deal.currency ||
+            "USD"
+        );
+
+
+    const productUrl =
+        safeHttpUrl(
+            deal.url
+        );
+
+
+    const savings =
+        Number.isFinite(oldPrice) &&
+        Number.isFinite(newPrice)
+
+            ? Math.max(
+                oldPrice -
+                newPrice,
+                0
+            )
+
+            : 0;
+
+
+    let discount =
+        Number(
+            deal.discount_percent
+        );
+
+
+    if (
+        !Number.isFinite(discount) ||
+        discount <= 0
+    ) {
+
+        if (
+            oldPrice > 0 &&
+            newPrice < oldPrice
+        ) {
+
+            discount =
+                (
+                    (
+                        oldPrice -
+                        newPrice
+                    ) /
+                    oldPrice
+                ) * 100;
+
+        }
+
+    }
+
+
+    if (
+        !Number.isFinite(discount)
+    ) {
+
+        discount = 0;
+
+    }
+
+
+    return `
+
+        <div class="
+            checker-featured-card
         ">
 
-            <div style="
-                font-size:42px;
-                margin-bottom:12px;
+            <div class="
+                checker-featured-inner
             ">
-                🔎
+
+
+                <div>
+
+
+                    <div class="
+                        checker-featured-label
+                    ">
+
+                        ⭐ FEATURED DEAL
+
+                        <span
+                            class="
+                                checker-verified-badge
+                            "
+                            style="
+                                margin-left:4px;
+                            "
+                        >
+                            ✓ VERIFIED
+                        </span>
+
+                    </div>
+
+
+                    <div class="
+                        checker-featured-store
+                    ">
+
+                        Available at
+
+                        <strong>
+                            ${store}
+                        </strong>
+
+                    </div>
+
+
+                    <h2 class="
+                        checker-featured-title
+                    ">
+
+                        ${title}
+
+                    </h2>
+
+
+                    <div class="
+                        checker-featured-price
+                    ">
+
+                        <span class="
+                            checker-featured-new-price
+                        ">
+
+                            ${formatMoney(
+                                newPrice,
+                                currency
+                            )}
+
+                        </span>
+
+
+                        <span class="
+                            checker-featured-old-price
+                        ">
+
+                            ${formatMoney(
+                                oldPrice,
+                                currency
+                            )}
+
+                        </span>
+
+
+                    </div>
+
+
+                    <div style="
+                        margin-top:10px;
+                    ">
+
+                        <strong style="
+                            color:#c2410c;
+                            font-size:14px;
+                        ">
+
+                            SAVE
+
+                            ${formatMoney(
+                                savings,
+                                currency
+                            )}
+
+                            ·
+
+                            ${discount.toFixed(2)}% OFF
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="
+                        checker-limited-offer
+                    ">
+
+                        🔥 LIMITED TIME OFFER
+
+                    </div>
+
+
+                    <div class="
+                        checker-featured-actions
+                    ">
+
+
+                        ${
+                            productUrl
+
+                                ? `
+
+                                    <a
+                                        class="
+                                            checker-main-deal-btn
+                                        "
+                                        href="${escapeAttribute(
+                                            productUrl
+                                        )}"
+                                        target="_blank"
+                                        rel="
+                                            nofollow
+                                            sponsored
+                                            noopener
+                                            noreferrer
+                                        "
+                                    >
+
+                                        Check This Deal →
+
+                                    </a>
+
+                                `
+
+                                : ""
+
+                        }
+
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="
+                    checker-potential-savings
+                    checker-featured-saving-box
+                ">
+
+                    <span class="
+                        checker-potential-savings-label
+                    ">
+
+                        Potential Savings
+
+                    </span>
+
+
+                    <span class="
+                        checker-potential-savings-value
+                    ">
+
+                        ${formatMoney(
+                            savings,
+                            currency
+                        )}
+
+                    </span>
+
+                </div>
+
+
             </div>
-
-
-            <h3 style="
-                margin:0 0 8px;
-                color:#1e293b;
-            ">
-                No verified deals available
-            </h3>
-
-
-            <p style="margin:0;">
-                Please check again soon.
-            </p>
 
         </div>
 
     `;
 
-
-    container.appendChild(
-        message
-    );
-
 }
 
 
 /* =========================================================
-   SEARCH + CATEGORY
+   SETUP SEARCH + CATEGORY
    ========================================================= */
 
 function setupDealSearch(
-    container,
-    deals
+    container
 ) {
 
     const oldTools =
@@ -1195,264 +1794,265 @@ function setupDealSearch(
     tools.innerHTML = `
 
         <div class="
-            checker-deal-tools-row
+            checker-search-wrap
         ">
 
-
-            <div class="
-                checker-search-wrap
+            <span class="
+                checker-search-icon
             ">
-
-                <span class="
-                    checker-search-icon
-                ">
-                    🔎
-                </span>
+                🔎
+            </span>
 
 
-                <input
-                    type="search"
-                    id="checkerDealSearch"
-                    class="checker-deal-search"
-                    placeholder="Search deals, products or stores..."
-                    autocomplete="off"
-                    aria-label="Search deals"
-                >
-
-            </div>
-
-
-            <select
-                id="checkerCategoryFilter"
-                class="checker-category-filter"
-                aria-label="Filter by category"
+            <input
+                type="search"
+                id="checkerDealSearch"
+                class="
+                    checker-search-input
+                "
+                placeholder="
+                    Search deals, products or stores...
+                "
+                autocomplete="off"
             >
 
-                <option value="all">
-                    All Categories
-                </option>
-
-            </select>
-
-
         </div>
 
 
-        <div
-            id="checkerSearchStatus"
-            class="checker-search-status"
+        <select
+            id="checkerDealCategory"
+            class="
+                checker-category-select
+            "
         >
-            Showing ${deals.length} verified deal${deals.length === 1 ? "" : "s"}
-        </div>
+
+            <option value="All">
+                All Categories
+            </option>
+
+            <option value="Electronics">
+                Electronics
+            </option>
+
+            <option value="Home & Kitchen">
+                Home & Kitchen
+            </option>
+
+            <option value="Fashion">
+                Fashion
+            </option>
+
+            <option value="Beauty">
+                Beauty
+            </option>
+
+            <option value="Sports">
+                Sports
+            </option>
+
+            <option value="Toys & Kids">
+                Toys & Kids
+            </option>
+
+            <option value="Automotive">
+                Automotive
+            </option>
+
+            <option value="Other">
+                Other
+            </option>
+
+        </select>
 
     `;
 
 
-    /*
-     * Put search area BEFORE
-     * the deal cards.
-     */
+    if (
+        container.parentNode
+    ) {
 
-    container.parentNode.insertBefore(
-        tools,
-        container
-    );
-
-
-    const searchInput =
-        tools.querySelector(
-            "#checkerDealSearch"
-        );
-
-
-    const categoryFilter =
-        tools.querySelector(
-            "#checkerCategoryFilter"
-        );
-
-
-    const categories =
-        getDealCategories(
-            deals
-        );
-
-
-    categories.forEach(
-        category => {
-
-            const option =
-                document.createElement(
-                    "option"
-                );
-
-
-            option.value =
-                category;
-
-
-            option.textContent =
-                category;
-
-
-            categoryFilter.appendChild(
-                option
-            );
-
-        }
-    );
-
-
-    function applyFilters() {
-
-        const search =
-            String(
-                searchInput.value || ""
-            )
-                .trim()
-                .toLowerCase();
-
-
-        const category =
-            categoryFilter.value;
-
-
-        const filtered =
-            deals.filter(
-                deal => {
-
-                    const title =
-                        String(
-                            deal.title || ""
-                        ).toLowerCase();
-
-
-                    const store =
-                        String(
-                            deal.store || ""
-                        ).toLowerCase();
-
-
-                    const asin =
-                        String(
-                            deal.asin || ""
-                        ).toLowerCase();
-
-
-                    const dealCategory =
-                        getDealCategory(
-                            deal
-                        ).toLowerCase();
-
-
-                    const matchesSearch =
-                        !search ||
-
-                        title.includes(
-                            search
-                        ) ||
-
-                        store.includes(
-                            search
-                        ) ||
-
-                        asin.includes(
-                            search
-                        );
-
-
-                    const matchesCategory =
-                        category ===
-                            "all" ||
-
-                        dealCategory ===
-                            category.toLowerCase();
-
-
-                    return (
-                        matchesSearch &&
-                        matchesCategory
-                    );
-
-                }
-            );
-
-
-        renderFilteredDeals(
-            filtered,
+        container.parentNode.insertBefore(
+            tools,
             container
-        );
-
-
-        updateSearchStatus(
-            filtered.length,
-            deals.length
         );
 
     }
 
 
-    searchInput.addEventListener(
-        "input",
-        applyFilters
-    );
+    const search =
+        document.getElementById(
+            "checkerDealSearch"
+        );
 
 
-    categoryFilter.addEventListener(
-        "change",
-        applyFilters
-    );
+    const category =
+        document.getElementById(
+            "checkerDealCategory"
+        );
+
+
+    if (search) {
+
+        search.value =
+            currentDealSearch;
+
+
+        search.addEventListener(
+            "input",
+            () => {
+
+                currentDealSearch =
+                    search.value
+                        .trim()
+                        .toLowerCase();
+
+
+                renderFilteredDeals();
+
+            }
+        );
+
+    }
+
+
+    if (category) {
+
+        category.value =
+            currentDealCategory;
+
+
+        category.addEventListener(
+            "change",
+            () => {
+
+                currentDealCategory =
+                    category.value;
+
+
+                renderFilteredDeals();
+
+            }
+        );
+
+    }
 
 }
 
 
 /* =========================================================
-   FILTERED DEAL RENDER
+   FILTER + RENDER REGULAR DEALS
    ========================================================= */
 
-function renderFilteredDeals(
-    deals,
-    container
-) {
+function renderFilteredDeals() {
 
-    const oldCards =
-        container.querySelectorAll(
-            ".discount-card"
+    const container =
+        document.getElementById(
+            "discountsContainer"
         );
 
 
-    oldCards.forEach(
-        card => card.remove()
-    );
+    if (!container) {
 
-
-    const oldMessage =
-        container.querySelector(
-            ".checker-filter-empty"
-        );
-
-
-    if (oldMessage) {
-
-        oldMessage.remove();
+        return;
 
     }
 
 
+    /*
+     * Remove Featured Deal from regular deals.
+     */
+
+    let regularDeals =
+        checkerDiscountDeals.filter(
+            deal =>
+                Number(deal.id) !==
+                Number(FEATURED_DEAL_ID)
+        );
+
+
+    /*
+     * Search
+     */
+
     if (
-        deals.length === 0
+        currentDealSearch
     ) {
 
-        const empty =
-            document.createElement(
-                "div"
+        regularDeals =
+            regularDeals.filter(
+                deal => {
+
+                    const title =
+                        String(
+                            deal.title ||
+                            ""
+                        ).toLowerCase();
+
+
+                    const store =
+                        String(
+                            deal.store ||
+                            ""
+                        ).toLowerCase();
+
+
+                    const asin =
+                        String(
+                            deal.asin ||
+                            ""
+                        ).toLowerCase();
+
+
+                    return (
+                        title.includes(
+                            currentDealSearch
+                        ) ||
+
+                        store.includes(
+                            currentDealSearch
+                        ) ||
+
+                        asin.includes(
+                            currentDealSearch
+                        )
+                    );
+
+                }
             );
 
-
-        empty.className =
-            "checker-filter-empty";
+    }
 
 
-        empty.innerHTML = `
+    /*
+     * Category
+     */
+
+    if (
+        currentDealCategory !==
+        "All"
+    ) {
+
+        regularDeals =
+            regularDeals.filter(
+                deal =>
+                    getDealCategory(
+                        deal
+                    ) ===
+                    currentDealCategory
+            );
+
+    }
+
+
+    /*
+     * Empty
+     */
+
+    if (
+        regularDeals.length === 0
+    ) {
+
+        container.innerHTML = `
 
             <div style="
                 text-align:center;
@@ -1461,8 +2061,8 @@ function renderFilteredDeals(
             ">
 
                 <div style="
-                    font-size:40px;
-                    margin-bottom:10px;
+                    font-size:42px;
+                    margin-bottom:12px;
                 ">
                     🔎
                 </div>
@@ -1472,12 +2072,19 @@ function renderFilteredDeals(
                     margin:0 0 8px;
                     color:#1e293b;
                 ">
-                    No matching deals found
+
+                    No deals found
+
                 </h3>
 
 
-                <p style="margin:0;">
-                    Try another search or category.
+                <p style="
+                    margin:0;
+                ">
+
+                    Try another search
+                    or category.
+
                 </p>
 
             </div>
@@ -1485,17 +2092,19 @@ function renderFilteredDeals(
         `;
 
 
-        container.appendChild(
-            empty
-        );
-
-
         return;
 
     }
 
 
-    deals.forEach(
+    /*
+     * Render
+     */
+
+    container.innerHTML = "";
+
+
+    regularDeals.forEach(
         deal => {
 
             renderDeal(
@@ -1506,94 +2115,82 @@ function renderFilteredDeals(
         }
     );
 
+
+    /*
+     * Result count
+     */
+
+    updateResultsCount(
+        regularDeals.length
+    );
+
 }
 
 
 /* =========================================================
-   SEARCH STATUS
+   RESULTS COUNT
    ========================================================= */
 
-function updateSearchStatus(
-    shown,
-    total
+function updateResultsCount(
+    count
 ) {
 
-    const status =
+    let countElement =
         document.getElementById(
-            "checkerSearchStatus"
+            "checkerResultsCount"
         );
 
 
-    if (!status) {
+    if (!countElement) {
 
-        return;
-
-    }
-
-
-    if (
-        shown === total
-    ) {
-
-        status.textContent =
-            `Showing ${total} verified deal${total === 1 ? "" : "s"}`;
-
-        return;
-
-    }
+        const container =
+            document.getElementById(
+                "discountsContainer"
+            );
 
 
-    status.textContent =
-        `Showing ${shown} of ${total} verified deals`;
+        if (
+            !container ||
+            !container.parentNode
+        ) {
 
-}
-
-
-/* =========================================================
-   CATEGORY LIST
-   ========================================================= */
-
-function getDealCategories(
-    deals
-) {
-
-    const categorySet =
-        new Set();
-
-
-    deals.forEach(
-        deal => {
-
-            const category =
-                getDealCategory(
-                    deal
-                );
-
-
-            if (category) {
-
-                categorySet.add(
-                    category
-                );
-
-            }
+            return;
 
         }
-    );
 
 
-    return Array.from(
-        categorySet
-    ).sort(
-        (a, b) =>
-            a.localeCompare(b)
-    );
+        countElement =
+            document.createElement(
+                "div"
+            );
+
+
+        countElement.id =
+            "checkerResultsCount";
+
+
+        countElement.className =
+            "checker-results-count";
+
+
+        container.parentNode.insertBefore(
+            countElement,
+            container
+        );
+
+    }
+
+
+    countElement.textContent =
+        `${count} verified deal${
+            count === 1 ? "" : "s"
+        } found`;
 
 }
 
 
 /* =========================================================
-   CATEGORY DETECTION
+   GET CATEGORY
    ========================================================= */
 
 function getDealCategory(
@@ -1601,13 +2198,15 @@ function getDealCategory(
 ) {
 
     /*
-     * If API already provides
-     * category, use it.
+     * If category is added later
+     * in D1, use it automatically.
      */
 
     if (
-        deal &&
-        deal.category
+        deal.category &&
+        String(
+            deal.category
+        ).trim()
     ) {
 
         return String(
@@ -1618,18 +2217,14 @@ function getDealCategory(
 
 
     const text =
-        `${deal?.title || ""} ${
-            deal?.store || ""
+        `${deal.title || ""} ${
+            deal.store || ""
         }`
             .toLowerCase();
 
 
-    /*
-     * Electronics
-     */
-
     if (
-        /laptop|computer|pc|monitor|keyboard|mouse|tablet|phone|iphone|android|smartphone|headphone|earbuds|speaker|tv|television|camera|printer|router|charger|electronic|gaming/.test(
+        /iphone|ipad|phone|mobile|laptop|computer|tablet|tv|television|headphone|earbuds|speaker|camera|monitor|keyboard|mouse|charger|usb|electronic|gaming|console/.test(
             text
         )
     ) {
@@ -1639,12 +2234,8 @@ function getDealCategory(
     }
 
 
-    /*
-     * Home & Kitchen
-     */
-
     if (
-        /mixer|blender|kitchen|cook|cooker|fryer|air fryer|vacuum|cleaner|home|furniture|chair|table|lamp|lighting|coffee maker|toaster|microwave|utensil/.test(
+        /mixer|blender|kitchen|cook|coffee|vacuum|home|furniture|chair|desk|pan|pot|oven|air fryer|appliance|bed|lamp/.test(
             text
         )
     ) {
@@ -1654,12 +2245,8 @@ function getDealCategory(
     }
 
 
-    /*
-     * Fashion
-     */
-
     if (
-        /shirt|t-shirt|jeans|dress|shoe|shoes|sneaker|jacket|coat|clothing|fashion|watch|bag|handbag|wallet/.test(
+        /shirt|shoe|shoes|dress|jeans|jacket|clothing|fashion|bag|handbag|watch|sneaker/.test(
             text
         )
     ) {
@@ -1669,12 +2256,8 @@ function getDealCategory(
     }
 
 
-    /*
-     * Beauty
-     */
-
     if (
-        /beauty|makeup|cosmetic|skincare|skin care|perfume|fragrance|hair|shampoo|conditioner|cream|lotion/.test(
+        /beauty|makeup|skin|skincare|hair|shampoo|perfume|cosmetic|lotion|cream/.test(
             text
         )
     ) {
@@ -1684,12 +2267,8 @@ function getDealCategory(
     }
 
 
-    /*
-     * Sports
-     */
-
     if (
-        /sport|fitness|gym|exercise|running|football|soccer|basketball|tennis|bicycle|bike|yoga|training/.test(
+        /sport|fitness|gym|football|soccer|basketball|tennis|running|bike|bicycle|exercise|yoga/.test(
             text
         )
     ) {
@@ -1699,12 +2278,8 @@ function getDealCategory(
     }
 
 
-    /*
-     * Toys
-     */
-
     if (
-        /toy|toys|lego|game|puzzle|kids|children|baby/.test(
+        /toy|toys|kids|baby|children|lego|doll|game/.test(
             text
         )
     ) {
@@ -1714,12 +2289,8 @@ function getDealCategory(
     }
 
 
-    /*
-     * Automotive
-     */
-
     if (
-        /car|auto|automotive|vehicle|motor|tire|tyre|dash cam|car charger/.test(
+        /car|auto|automotive|vehicle|truck|motorcycle|tire|tyre|dash cam/.test(
             text
         )
     ) {
@@ -1729,17 +2300,13 @@ function getDealCategory(
     }
 
 
-    /*
-     * Default
-     */
-
     return "Other";
 
 }
 
 
 /* =========================================================
-   RENDER DEAL
+   RENDER REGULAR DEAL
    ========================================================= */
 
 function renderDeal(
@@ -1763,9 +2330,7 @@ function renderDeal(
     ) {
 
         card.dataset.dealId =
-            String(
-                deal.id
-            );
+            String(deal.id);
 
     }
 
@@ -1810,32 +2375,7 @@ function renderDeal(
 
 
     if (
-        !Number.isFinite(
-            discount
-        ) &&
-        Number.isFinite(
-            oldPrice
-        ) &&
-        Number.isFinite(
-            newPrice
-        ) &&
-        oldPrice > newPrice
-    ) {
-
-        discount =
-            (
-                (oldPrice - newPrice)
-                /
-                oldPrice
-            ) * 100;
-
-    }
-
-
-    if (
-        !Number.isFinite(
-            discount
-        )
+        !Number.isFinite(discount)
     ) {
 
         discount = 0;
@@ -1843,19 +2383,27 @@ function renderDeal(
     }
 
 
-    discount =
-        Math.round(
-            discount * 100
-        ) / 100;
+    if (
+        discount <= 0 &&
+        oldPrice > 0 &&
+        newPrice < oldPrice
+    ) {
+
+        discount =
+            (
+                (
+                    oldPrice -
+                    newPrice
+                ) /
+                oldPrice
+            ) * 100;
+
+    }
 
 
     const savings =
-        Number.isFinite(
-            oldPrice
-        ) &&
-        Number.isFinite(
-            newPrice
-        )
+        Number.isFinite(oldPrice) &&
+        Number.isFinite(newPrice)
 
             ? Math.max(
                 oldPrice -
@@ -1876,6 +2424,14 @@ function renderDeal(
         safeHttpUrl(
             deal.image_url
         );
+
+
+    const isVerified =
+        String(
+            deal.verification_status ||
+            ""
+        ).toUpperCase() ===
+        "VERIFIED";
 
 
     const imageHTML =
@@ -1925,58 +2481,14 @@ function renderDeal(
             `;
 
 
-    const isVerified =
-        String(
-            deal.verification_status ||
-            ""
-        ).toUpperCase() ===
-        "VERIFIED";
-
-
-    const verifiedBadgeHTML =
-        isVerified
-
-            ? `
-
-                <span
-                    class="deal-verified-badge"
-                    style="
-                        display:inline-flex;
-                        align-items:center;
-                        gap:5px;
-                        padding:5px 9px;
-                        border-radius:999px;
-                        background:#ecfdf5;
-                        color:#047857;
-                        border:1px solid #a7f3d0;
-                        font-size:11px;
-                        font-weight:700;
-                        line-height:1;
-                        white-space:nowrap;
-                    "
-                >
-
-                    <span style="
-                        font-size:12px;
-                    ">
-                        ✓
-                    </span>
-
-                    VERIFIED
-
-                </span>
-
-            `
-
-            : "";
-
-
     card.innerHTML = `
 
         ${imageHTML}
 
 
-        <div class="deal-card-content">
+        <div class="
+            deal-card-content
+        ">
 
 
             <div
@@ -1989,29 +2501,62 @@ function renderDeal(
                 "
             >
 
-                <div class="deal-store">
+                <div class="
+                    deal-store
+                ">
+
                     ${store}
+
                 </div>
 
 
-                <div class="deal-discount">
+                <div class="
+                    deal-discount
+                ">
+
                     ${discount.toFixed(0)}% OFF
+
                 </div>
 
 
-                ${verifiedBadgeHTML}
+                ${
+                    isVerified
+
+                        ? `
+
+                            <span class="
+                                checker-verified-badge
+                            ">
+
+                                ✓ VERIFIED
+
+                            </span>
+
+                        `
+
+                        : ""
+
+                }
 
             </div>
 
 
-            <h3 class="deal-title">
+            <h3 class="
+                deal-title
+            ">
+
                 ${title}
+
             </h3>
 
 
-            <div class="deal-price-row">
+            <div class="
+                deal-price-row
+            ">
 
-                <div class="deal-price">
+                <div class="
+                    deal-price
+                ">
 
                     ${formatMoney(
                         newPrice,
@@ -2028,7 +2573,9 @@ function renderDeal(
 
                         ? `
 
-                            <div class="deal-old-price">
+                            <div class="
+                                deal-old-price
+                            ">
 
                                 ${formatMoney(
                                     oldPrice,
@@ -2040,6 +2587,7 @@ function renderDeal(
                         `
 
                         : ""
+
                 }
 
             </div>
@@ -2050,25 +2598,81 @@ function renderDeal(
 
                     ? `
 
-                        <div class="deal-savings">
+                        <div class="
+                            deal-savings
+                        ">
 
-                            You save
+                            SAVE
 
                             ${formatMoney(
                                 savings,
                                 currency
                             )}
 
+                            ·
+
+                            ${discount.toFixed(2)}% OFF
+
                         </div>
 
                     `
 
                     : ""
+
             }
 
 
+            <div class="
+                checker-limited-offer
+            ">
+
+                🔥 LIMITED TIME OFFER
+
+            </div>
+
+
             <div style="
-                margin-top:8px;
+                margin-top:14px;
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                gap:12px;
+                flex-wrap:wrap;
+            ">
+
+
+                <div class="
+                    checker-potential-savings
+                ">
+
+                    <span class="
+                        checker-potential-savings-label
+                    ">
+
+                        Potential Savings
+
+                    </span>
+
+
+                    <span class="
+                        checker-potential-savings-value
+                    ">
+
+                        ${formatMoney(
+                            savings,
+                            currency
+                        )}
+
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+            <div style="
+                margin-top:10px;
                 color:#64748b;
                 font-size:13px;
             ">
@@ -2079,15 +2683,14 @@ function renderDeal(
             </div>
 
 
-            <div
-                style="
-                    display:flex;
-                    align-items:center;
-                    gap:10px;
-                    flex-wrap:wrap;
-                    margin-top:15px;
-                "
-            >
+            <div style="
+                display:flex;
+                align-items:center;
+                gap:10px;
+                flex-wrap:wrap;
+                margin-top:15px;
+            ">
+
 
                 ${
                     productUrl
@@ -2095,21 +2698,26 @@ function renderDeal(
                         ? `
 
                             <a
-                                class="checker-main-deal-btn"
+                                class="
+                                    checker-main-deal-btn
+                                "
                                 href="${escapeAttribute(
                                     productUrl
                                 )}"
                                 target="_blank"
-                                rel="nofollow sponsored noopener noreferrer"
+                                rel="
+                                    nofollow
+                                    sponsored
+                                    noopener
+                                    noreferrer
+                                "
                             >
 
                                 <span>
                                     Check This Deal
                                 </span>
 
-                                <span style="
-                                    font-size:16px;
-                                ">
+                                <span>
                                     ↗
                                 </span>
 
@@ -2122,16 +2730,21 @@ function renderDeal(
                             <button
                                 type="button"
                                 disabled
-                                class="checker-main-deal-btn"
+                                class="
+                                    checker-main-deal-btn
+                                "
                                 style="
                                     opacity:.5 !important;
                                     cursor:not-allowed !important;
                                 "
                             >
+
                                 Deal Link Unavailable
+
                             </button>
 
                         `
+
                 }
 
 
@@ -2342,10 +2955,11 @@ function showSharePopup(
     overlay.innerHTML = `
 
         <div
-            class="checker-share-box"
+            class="
+                checker-share-box
+            "
             role="dialog"
             aria-modal="true"
-            aria-label="Share deal"
         >
 
             <div style="
@@ -2356,24 +2970,34 @@ function showSharePopup(
                 margin-bottom:5px;
             ">
 
-                <h3 class="checker-share-title">
+                <h3 class="
+                    checker-share-title
+                ">
+
                     Share this deal
+
                 </h3>
 
 
                 <button
                     type="button"
-                    class="checker-share-close"
+                    class="
+                        checker-share-close
+                    "
                     data-share-close
                     aria-label="Close"
                 >
+
                     ×
+
                 </button>
 
             </div>
 
 
-            <p class="checker-share-subtitle">
+            <p class="
+                checker-share-subtitle
+            ">
 
                 Share this deal with your
                 friends or copy the link.
@@ -2382,7 +3006,9 @@ function showSharePopup(
 
 
             <input
-                class="checker-share-url"
+                class="
+                    checker-share-url
+                "
                 value="${escapeAttribute(
                     url
                 )}"
@@ -2390,55 +3016,79 @@ function showSharePopup(
             >
 
 
-            <div class="checker-share-options">
+            <div class="
+                checker-share-options
+            ">
+
 
                 <a
-                    class="checker-share-option"
+                    class="
+                        checker-share-option
+                    "
                     href="${escapeAttribute(
                         whatsappUrl
                     )}"
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="
+                        noopener
+                        noreferrer
+                    "
                 >
-                    <span>💬</span>
-                    WhatsApp
+
+                    💬 WhatsApp
+
                 </a>
 
 
                 <a
-                    class="checker-share-option"
+                    class="
+                        checker-share-option
+                    "
                     href="${escapeAttribute(
                         facebookUrl
                     )}"
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="
+                        noopener
+                        noreferrer
+                    "
                 >
-                    <span>f</span>
-                    Facebook
+
+                    f Facebook
+
                 </a>
 
 
                 <a
-                    class="checker-share-option"
+                    class="
+                        checker-share-option
+                    "
                     href="${escapeAttribute(
                         xUrl
                     )}"
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="
+                        noopener
+                        noreferrer
+                    "
                 >
-                    <span>𝕏</span>
-                    X
+
+                    𝕏 X
+
                 </a>
 
 
                 <a
-                    class="checker-share-option"
+                    class="
+                        checker-share-option
+                    "
                     href="${escapeAttribute(
                         emailUrl
                     )}"
                 >
-                    <span>✉</span>
-                    Email
+
+                    ✉ Email
+
                 </a>
 
 
@@ -2450,9 +3100,11 @@ function showSharePopup(
                     "
                     id="checkerCopyShare"
                 >
-                    <span>🔗</span>
-                    Copy Link
+
+                    🔗 Copy Link
+
                 </button>
+
 
             </div>
 
@@ -2565,7 +3217,7 @@ function showSharePopup(
 
 
 /* =========================================================
-   CLOSE SHARE POPUP
+   CLOSE SHARE
    ========================================================= */
 
 function closeSharePopup() {
@@ -2586,7 +3238,7 @@ function closeSharePopup() {
 
 
 /* =========================================================
-   SHARE POPUP SETUP
+   SHARE ESCAPE KEY
    ========================================================= */
 
 function setupSharePopup() {
@@ -2613,15 +3265,10 @@ function setupSharePopup() {
 
 
 /* =========================================================
-   SAVINGS CALCULATOR
-   VERSION 8.0
+   SAVINGS CHECKER
    ========================================================= */
 
 function setupSavingsChecker() {
-
-    /*
-     * YOUR ACTUAL HTML IDs
-     */
 
     const form =
         document.getElementById(
@@ -2629,15 +3276,32 @@ function setupSavingsChecker() {
         );
 
 
-    const purchaseInput =
+    if (!form) {
+
+        console.warn(
+            "CheckerDiscount: refundForm not found."
+        );
+
+        return;
+
+    }
+
+
+    const oldInput =
         document.getElementById(
             "purchasePrice"
         );
 
 
-    const currentInput =
+    const newInput =
         document.getElementById(
             "currentPrice"
+        );
+
+
+    const retailerInput =
+        document.getElementById(
+            "retailer"
         );
 
 
@@ -2648,36 +3312,18 @@ function setupSavingsChecker() {
 
 
     if (
-        !form ||
-        !purchaseInput ||
-        !currentInput ||
-        !result
+        !oldInput ||
+        !newInput
     ) {
 
         console.warn(
-            "CheckerDiscount Savings Calculator: " +
-            "refundForm / purchasePrice / currentPrice / refundResult not found."
+            "CheckerDiscount: calculator price inputs not found."
         );
 
         return;
 
     }
 
-
-    /*
-     * MAKE SURE THIS FORM NEVER
-     * NAVIGATES TO ANOTHER SECTION.
-     */
-
-    form.setAttribute(
-        "action",
-        "javascript:void(0);"
-    );
-
-
-    /*
-     * PRICE CONVERTER
-     */
 
     function getPrice(
         value
@@ -2701,10 +3347,6 @@ function setupSavingsChecker() {
     }
 
 
-    /*
-     * CALCULATE
-     */
-
     function calculateSavings(
         event
     ) {
@@ -2718,277 +3360,89 @@ function setupSavingsChecker() {
         }
 
 
-        const purchasePrice =
+        const oldPrice =
             getPrice(
-                purchaseInput.value
+                oldInput.value
             );
 
 
-        const currentPrice =
+        const newPrice =
             getPrice(
-                currentInput.value
+                newInput.value
             );
 
 
-        /*
-         * VALIDATION
-         */
+        const retailer =
+            retailerInput &&
+            retailerInput.value.trim()
+
+                ? retailerInput.value.trim()
+
+                : "the retailer";
+
 
         if (
             !Number.isFinite(
-                purchasePrice
+                oldPrice
             ) ||
             !Number.isFinite(
-                currentPrice
+                newPrice
             ) ||
-            purchasePrice <= 0 ||
-            currentPrice < 0
+            oldPrice <= 0 ||
+            newPrice < 0
         ) {
 
-            result.style.display =
-                "block";
+            showCalculatorInlineError(
+                result,
+                "Please enter valid prices."
+            );
 
 
-            result.innerHTML = `
-
-                <div style="
-                    padding:14px;
-                    border-radius:10px;
-                    background:#fff7ed;
-                    border:1px solid #fed7aa;
-                    color:#c2410c;
-                    font-size:14px;
-                ">
-
-                    Please enter valid prices.
-
-                </div>
-
-            `;
-
-
-            return;
+            return false;
 
         }
 
-
-        /*
-         * CURRENT PRICE IS HIGHER
-         */
 
         if (
-            currentPrice >
-            purchasePrice
+            newPrice >= oldPrice
         ) {
 
-            const difference =
-                currentPrice -
-                purchasePrice;
+            showCalculatorInlineError(
+                result,
+                "There is no saving at this price."
+            );
 
 
-            const percentage =
-                (
-                    difference /
-                    purchasePrice
-                ) * 100;
-
-
-            result.style.display =
-                "block";
-
-
-            result.innerHTML = `
-
-                <div style="
-                    padding:16px;
-                    border-radius:12px;
-                    background:#fff7ed;
-                    border:1px solid #fed7aa;
-                    color:#c2410c;
-                ">
-
-                    The current price is
-
-                    <strong>
-                        ${formatMoney(
-                            difference,
-                            "USD"
-                        )}
-                    </strong>
-
-                    higher than your
-                    purchase price.
-
-                </div>
-
-            `;
-
-
-            showSavingsModal({
-                amount:0,
-                percentage:percentage,
-                purchasePrice:
-                    purchasePrice,
-                currentPrice:
-                    currentPrice,
-                noSaving:true,
-                higherBy:
-                    difference
-            });
-
-
-            return;
+            return false;
 
         }
 
-
-        /*
-         * SAME PRICE
-         */
-
-        if (
-            currentPrice ===
-            purchasePrice
-        ) {
-
-            result.style.display =
-                "block";
-
-
-            result.innerHTML = `
-
-                <div style="
-                    padding:16px;
-                    border-radius:12px;
-                    background:#f8fafc;
-                    border:1px solid #e2e8f0;
-                    color:#475569;
-                ">
-
-                    The current price is the
-                    same as your purchase price.
-                    There is no saving.
-
-                </div>
-
-            `;
-
-
-            showSavingsModal({
-                amount:0,
-                percentage:0,
-                purchasePrice:
-                    purchasePrice,
-                currentPrice:
-                    currentPrice,
-                noSaving:true,
-                higherBy:0
-            });
-
-
-            return;
-
-        }
-
-
-        /*
-         * ACTUAL SAVING
-         */
 
         const saving =
-            purchasePrice -
-            currentPrice;
+            oldPrice -
+            newPrice;
 
 
         const percentage =
             (
                 saving /
-                purchasePrice
+                oldPrice
             ) * 100;
 
 
-        result.style.display =
-            "block";
+        showSavingsModal(
+            retailer,
+            oldPrice,
+            newPrice,
+            saving,
+            percentage
+        );
 
 
-        result.innerHTML = `
-
-            <div style="
-                padding:18px;
-                border-radius:12px;
-                background:#f0fdf4;
-                border:1px solid #bbf7d0;
-                color:#166534;
-            ">
-
-                <div style="
-                    font-size:14px;
-                    margin-bottom:6px;
-                ">
-                    Potential Savings
-                </div>
-
-
-                <div style="
-                    font-size:26px;
-                    font-weight:800;
-                    line-height:1.2;
-                    margin-bottom:5px;
-                ">
-
-                    ${formatMoney(
-                        saving,
-                        "USD"
-                    )}
-
-                </div>
-
-
-                <div style="
-                    font-size:14px;
-                    font-weight:700;
-                ">
-
-                    You could save
-                    ${percentage.toFixed(1)}%
-
-                </div>
-
-            </div>
-
-        `;
-
-
-        /*
-         * SHOW POPUP
-         */
-
-        showSavingsModal({
-            amount:
-                saving,
-
-            percentage:
-                percentage,
-
-            purchasePrice:
-                purchasePrice,
-
-            currentPrice:
-                currentPrice,
-
-            noSaving:false,
-
-            higherBy:0
-        });
+        return false;
 
     }
 
-
-    /*
-     * FORM SUBMIT
-     *
-     * THIS IS THE IMPORTANT FIX.
-     */
 
     form.addEventListener(
         "submit",
@@ -2997,101 +3451,87 @@ function setupSavingsChecker() {
 
 
     /*
-     * EXTRA CLICK PROTECTION
+     * Protect against browser/form navigation.
      */
 
-    const calculateButton =
-        form.querySelector(
-            "button[type='submit'], input[type='submit']"
-        );
-
-
-    if (calculateButton) {
-
-        calculateButton.addEventListener(
-            "click",
-            event => {
-
-                event.preventDefault();
-
-                event.stopPropagation();
-
-                /*
-                 * Trigger calculation directly.
-                 */
-
-                if (
-                    typeof form.checkValidity ===
-                    "function" &&
-                    !form.checkValidity()
-                ) {
-
-                    form.reportValidity();
-
-                    return;
-
-                }
-
-
-                calculateSavings(
-                    event
-                );
-
-            }
-        );
-
-    }
-
-
-    /*
-     * ENTER KEY
-     */
-
-    purchaseInput.addEventListener(
-        "keydown",
+    form.addEventListener(
+        "click",
         event => {
 
+            const button =
+                event.target.closest(
+                    "button"
+                );
+
+
             if (
-                event.key ===
-                "Enter"
+                button &&
+                (
+                    button.type ===
+                        "submit" ||
+
+                    button.classList.contains(
+                        "calculate-button"
+                    )
+                )
             ) {
 
                 event.preventDefault();
 
-                calculateSavings(
-                    event
-                );
-
             }
 
-        }
-    );
-
-
-    currentInput.addEventListener(
-        "keydown",
-        event => {
-
-            if (
-                event.key ===
-                "Enter"
-            ) {
-
-                event.preventDefault();
-
-                calculateSavings(
-                    event
-                );
-
-            }
-
-        }
+        },
+        true
     );
 
 
     console.log(
-        "CheckerDiscount Savings Calculator 8.0: Ready"
+        "CheckerDiscount Savings Calculator: Ready"
     );
+
+}
+
+
+/* =========================================================
+   INLINE CALCULATOR ERROR
+   ========================================================= */
+
+function showCalculatorInlineError(
+    result,
+    message
+) {
+
+    if (!result) {
+
+        alert(message);
+
+        return;
+
+    }
+
+
+    result.style.display =
+        "block";
+
+
+    result.innerHTML = `
+
+        <div style="
+            padding:14px;
+            border-radius:10px;
+            background:#fff7ed;
+            border:1px solid #fed7aa;
+            color:#c2410c;
+            font-size:14px;
+        ">
+
+            ${escapeHTML(
+                message
+            )}
+
+        </div>
+
+    `;
 
 }
 
@@ -3101,7 +3541,11 @@ function setupSavingsChecker() {
    ========================================================= */
 
 function showSavingsModal(
-    data
+    retailer,
+    oldPrice,
+    newPrice,
+    saving,
+    percentage
 ) {
 
     closeSavingsModal();
@@ -3121,138 +3565,55 @@ function showSavingsModal(
         "checker-savings-overlay";
 
 
-    const amount =
-        Number(
-            data.amount || 0
-        );
-
-
-    const percentage =
-        Number(
-            data.percentage || 0
-        );
-
-
-    let title =
-        "Your Potential Savings";
-
-
-    let amountText =
-        formatMoney(
-            amount,
-            "USD"
-        );
-
-
-    let percentText =
-        `You could save ${percentage.toFixed(1)}%`;
-
-
-    let details =
-        `Purchase price: ${formatMoney(
-            data.purchasePrice,
-            "USD"
-        )}<br>
-        Current price: ${formatMoney(
-            data.currentPrice,
-            "USD"
-        )}`;
-
-
-    if (
-        data.noSaving
-    ) {
-
-        if (
-            data.higherBy > 0
-        ) {
-
-            title =
-                "No Savings Detected";
-
-
-            amountText =
-                "$0.00";
-
-
-            percentText =
-                "The current price is higher";
-
-
-            details =
-                `The current price is ${formatMoney(
-                    data.higherBy,
-                    "USD"
-                )} higher than your purchase price.`;
-
-        } else {
-
-            title =
-                "No Price Saving";
-
-
-            amountText =
-                "$0.00";
-
-
-            percentText =
-                "The prices are the same";
-
-
-            details =
-                `Purchase price and current price are both ${formatMoney(
-                    data.purchasePrice,
-                    "USD"
-                )}.`;
-
-        }
-
-    }
-
-
     overlay.innerHTML = `
 
         <div
-            class="checker-savings-box"
+            class="
+                checker-savings-modal
+            "
             role="dialog"
             aria-modal="true"
-            aria-labelledby="checkerSavingsTitle"
         >
-
 
             <button
                 type="button"
-                class="checker-savings-close"
-                id="checkerSavingsClose"
+                class="
+                    checker-savings-close
+                "
+                data-savings-close
                 aria-label="Close"
             >
+
                 ×
+
             </button>
 
 
             <div class="
                 checker-savings-icon
             ">
-                $
+
+                ✓
+
             </div>
 
 
-            <h2
-                id="checkerSavingsTitle"
-                class="checker-savings-title"
-            >
-                ${escapeHTML(
-                    title
-                )}
-            </h2>
+            <h3 class="
+                checker-savings-heading
+            ">
+
+                Potential Savings
+
+            </h3>
 
 
             <div class="
                 checker-savings-amount
             ">
 
-                ${escapeHTML(
-                    amountText
+                ${formatMoney(
+                    saving,
+                    "USD"
                 )}
 
             </div>
@@ -3262,9 +3623,7 @@ function showSavingsModal(
                 checker-savings-percent
             ">
 
-                ${escapeHTML(
-                    percentText
-                )}
+                ${percentage.toFixed(1)}% OFF
 
             </div>
 
@@ -3273,17 +3632,54 @@ function showSavingsModal(
                 checker-savings-details
             ">
 
-                ${details}
+                If the price dropped from
+
+                <strong>
+                    ${formatMoney(
+                        oldPrice,
+                        "USD"
+                    )}
+                </strong>
+
+                to
+
+                <strong>
+                    ${formatMoney(
+                        newPrice,
+                        "USD"
+                    )}
+                </strong>
+
+                at
+
+                <strong>
+                    ${escapeHTML(
+                        retailer
+                    )}
+                </strong>,
+
+                the potential saving is
+
+                <strong>
+                    ${formatMoney(
+                        saving,
+                        "USD"
+                    )}
+                </strong>.
 
             </div>
 
 
             <button
                 type="button"
-                class="checker-savings-done"
-                id="checkerSavingsDone"
+                class="
+                    checker-savings-done
+                "
+                data-savings-close
             >
+
                 Done
+
             </button>
 
         </div>
@@ -3296,50 +3692,15 @@ function showSavingsModal(
     );
 
 
-    document.body.classList.add(
-        "checker-modal-open"
-    );
-
-
-    const closeButton =
-        overlay.querySelector(
-            "#checkerSavingsClose"
-        );
-
-
-    const doneButton =
-        overlay.querySelector(
-            "#checkerSavingsDone"
-        );
-
-
-    if (closeButton) {
-
-        closeButton.addEventListener(
-            "click",
-            closeSavingsModal
-        );
-
-    }
-
-
-    if (doneButton) {
-
-        doneButton.addEventListener(
-            "click",
-            closeSavingsModal
-        );
-
-    }
-
-
     overlay.addEventListener(
         "click",
         event => {
 
             if (
-                event.target ===
-                overlay
+                event.target === overlay ||
+                event.target.closest(
+                    "[data-savings-close]"
+                )
             ) {
 
                 closeSavingsModal();
@@ -3369,11 +3730,6 @@ function closeSavingsModal() {
         modal.remove();
 
     }
-
-
-    document.body.classList.remove(
-        "checker-modal-open"
-    );
 
 }
 
@@ -3406,203 +3762,35 @@ function setupMobileMenu() {
     }
 
 
+    /*
+     * Prevent duplicate listener.
+     */
+
+    if (
+        menuButton.dataset
+            .checkerMenuReady ===
+        "1"
+    ) {
+
+        return;
+
+    }
+
+
+    menuButton.dataset
+        .checkerMenuReady =
+        "1";
+
+
     menuButton.addEventListener(
         "click",
-        () => {
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
 
             mobileMenu.classList.toggle(
                 "active"
-            );
-
-
-            menuButton.classList.toggle(
-                "active"
-            );
-
-        }
-    );
-
-
-    mobileMenu
-        .querySelectorAll("a")
-        .forEach(
-            link => {
-
-                link.addEventListener(
-                    "click",
-                    () => {
-
-                        mobileMenu.classList.remove(
-                            "active"
-                        );
-
-
-                        menuButton.classList.remove(
-                            "active"
-                        );
-
-                    }
-                );
-
-            }
-        );
-
-}
-
-
-/* =========================================================
-   MONEY FORMAT
-   ========================================================= */
-
-function formatMoney(
-    value,
-    currency = "USD"
-) {
-
-    if (
-        !Number.isFinite(
-            Number(value)
-        )
-    ) {
-
-        return "—";
-
-    }
-
-
-    try {
-
-        return new Intl.NumberFormat(
-            "en-US",
-            {
-                style:
-                    "currency",
-
-                currency:
-                    currency,
-
-                maximumFractionDigits:
-                    2
-            }
-        ).format(
-            Number(value)
-        );
-
-
-    } catch (error) {
-
-        return `
-            ${currency}
-            ${Number(value).toFixed(2)}
-        `;
-
-    }
-
-}
-
-
-/* =========================================================
-   SAFE URL
-   ========================================================= */
-
-function safeHttpUrl(
-    value
-) {
-
-    if (!value) {
-
-        return "";
-
-    }
-
-
-    try {
-
-        const url =
-            new URL(value);
-
-
-        if (
-            url.protocol ===
-                "https:" ||
-            url.protocol ===
-                "http:"
-        ) {
-
-            return url.href;
-
-        }
-
-
-        return "";
-
-
-    } catch (error) {
-
-        return "";
-
-    }
-
-}
-
-
-/* =========================================================
-   HTML ESCAPE
-   ========================================================= */
-
-function escapeHTML(
-    value
-) {
-
-    return String(
-        value ?? ""
-    )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-/* =========================================================
-   ATTRIBUTE ESCAPE
-   ========================================================= */
-
-function escapeAttribute(
-    value
-) {
-
-    return escapeHTML(
-        value
-    );
-
-}
-
-
-/* =========================================================
-   GLOBAL REFRESH
-   ========================================================= */
-
-window.refreshCheckerDiscountDeals =
-    function () {
-
-        loadDeals();
-
-    };
+          
