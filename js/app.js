@@ -148,6 +148,7 @@
       const saveAmount = Math.max(0, oldP - newP);
       const disc = Number(featured.discount_percent || 0);
 
+      // Hero Preview Card Update
       const previewContainer = $("heroDealPreview") || heroPreview;
       if (previewContainer) {
         previewContainer.innerHTML = `
@@ -164,11 +165,19 @@
           <div style="margin-top:10px;font-size:12px;color:#027a48;font-weight:600;">SAVE ${money(saveAmount, featured.currency)} (${disc.toFixed(0)}% OFF)</div>
         `;
       }
+
+      // Dynamic Floating Saving Box Update
+      const floatingBox = $("floatingSavingAmount");
+      if (floatingBox) {
+        floatingBox.innerHTML = `
+          <small>Potential Savings</small>
+          <strong>${money(saveAmount, featured.currency)}</strong>
+        `;
+      }
     }
 
     if (!box) return;
 
-    // تمام ویریفائیڈ ڈیلز اب لسٹ میں شو ہوں گی تاکہ فیچرڈ ڈیل بھی غائب نہ ہو
     const regular = verifiedDeals;
 
     let html = "";
