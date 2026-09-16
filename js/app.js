@@ -682,4 +682,3 @@ const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
 
   window.refreshCheckerDiscountDeals = loadDeals;
 
-})();
