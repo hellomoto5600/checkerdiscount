@@ -1,66 +1,248 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>CheckerDiscount Admin V9</title>
+    <title>CheckerDiscount Admin V10</title>
 
     <style>
+        :root {
+            --blue: #155eef;
+            --blue-dark: #004eeb;
+            --green: #12b76a;
+            --red: #d92d20;
+            --orange: #f79009;
+            --navy: #172033;
+            --muted: #667085;
+            --border: #e4eaf2;
+            --bg: #f6f8fc;
+        }
+
+        * { box-sizing: border-box; }
+
         body {
-            font-family: Inter, Arial, sans-serif;
-            background: #f6f8fc;
-            color: #172033;
             margin: 0;
+            font-family: Inter, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--navy);
         }
 
-        .wrap {
-            max-width: 1200px;
-            margin: auto;
-            padding: 30px 18px;
-        }
-
-        .card {
-            background: #ffffff;
-            border: 1px solid #e4eaf2;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 28px #10182812;
-        }
-
-        h1 {
-            margin-top: 0;
-        }
-
-        h2 {
-            margin-top: 0;
-        }
-
-        input,
         button,
-        select {
-            padding: 11px;
-            border: 1px solid #d0d5dd;
-            border-radius: 9px;
+        input,
+        select,
+        textarea {
             font: inherit;
-        }
-
-        input {
-            width: 100%;
-            box-sizing: border-box;
         }
 
         button {
             cursor: pointer;
-            background: #155eef;
-            color: #ffffff;
-            border: 0;
         }
 
-        button:hover {
-            opacity: 0.9;
+        .login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background:
+                radial-gradient(circle at 15% 20%, #155eef14, transparent 30%),
+                radial-gradient(circle at 85% 80%, #12b76a12, transparent 30%),
+                var(--bg);
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 430px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 30px;
+            box-shadow: 0 24px 70px #10182818;
+        }
+
+        .login-logo {
+            width: 54px;
+            height: 54px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--blue), #7f56d9);
+            color: white;
+            font-weight: 900;
+            margin-bottom: 18px;
+        }
+
+        .login-card h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        .login-card p {
+            color: var(--muted);
+            line-height: 1.6;
+            margin: 0 0 22px;
+        }
+
+        .field-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+        .input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #d0d5dd;
+            border-radius: 10px;
+            outline: none;
+            background: #fff;
+        }
+
+        .input:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px #155eef18;
+        }
+
+        .login-button,
+        .primary-button {
+            border: 0;
+            background: var(--blue);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-weight: 800;
+        }
+
+        .login-button {
+            width: 100%;
+            margin-top: 14px;
+        }
+
+        .message {
+            min-height: 20px;
+            margin-top: 12px !important;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .message.error { color: var(--red); }
+        .message.success { color: var(--green); }
+
+        .dashboard {
+            display: none;
+        }
+
+        .topbar {
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .topbar-inner,
+        .wrap {
+            max-width: 1250px;
+            margin: auto;
+            padding-left: 18px;
+            padding-right: 18px;
+        }
+
+        .topbar-inner {
+            min-height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            font-weight: 900;
+        }
+
+        .brand-mark {
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--blue);
+            color: white;
+        }
+
+        .logout-button {
+            border: 1px solid #d0d5dd;
+            background: #fff;
+            color: var(--navy);
+            padding: 9px 13px;
+            border-radius: 9px;
+            font-weight: 700;
+        }
+
+        .wrap {
+            padding-top: 26px;
+            padding-bottom: 50px;
+        }
+
+        .page-title {
+            margin-bottom: 22px;
+        }
+
+        .page-title h1 {
+            margin: 0 0 6px;
+            font-size: 30px;
+        }
+
+        .page-title p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+        }
+
+        .stat span {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 25px;
+            margin-top: 5px;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 28px #1018280c;
+        }
+
+        .card h2 {
+            margin: 0 0 16px;
+            font-size: 20px;
         }
 
         .grid {
@@ -69,56 +251,126 @@
             gap: 12px;
         }
 
-        .actions {
-            display: flex;
-            gap: 7px;
-            flex-wrap: wrap;
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #d0d5dd;
+            border-radius: 9px;
+        }
+
+        .form-button {
+            margin-top: 12px;
+            border: 0;
+            background: var(--blue);
+            color: #fff;
+            padding: 11px 15px;
+            border-radius: 9px;
+            font-weight: 800;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
         }
 
         table {
             width: 100%;
+            min-width: 900px;
             border-collapse: collapse;
             font-size: 13px;
         }
 
         th,
         td {
-            padding: 10px;
-            border-bottom: 1px solid #eeeeee;
+            padding: 12px 10px;
+            border-bottom: 1px solid #eee;
             text-align: left;
+            vertical-align: middle;
         }
 
         th {
             background: #f8fafc;
+            font-size: 12px;
+            color: #475467;
         }
 
-        small {
-            color: #667085;
+        .actions {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
         }
 
-        #msg {
-            margin-bottom: 0;
-            font-weight: 600;
+        .action {
+            border: 0;
+            padding: 8px 10px;
+            border-radius: 8px;
+            color: white;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .verify { background: var(--green); }
+        .featured { background: #7f56d9; }
+        .expire { background: var(--orange); }
+        .delete { background: var(--red); }
+        .neutral { background: #475467; }
+
+        .status {
+            display: inline-flex;
+            padding: 5px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .status.verified {
+            background: #ecfdf3;
+            color: #087443;
+        }
+
+        .status.pending {
+            background: #fffaeb;
+            color: #b54708;
+        }
+
+        .status.expired {
+            background: #fef3f2;
+            color: #b42318;
+        }
+
+        .status.featured {
+            background: #f4f3ff;
+            color: #5925dc;
+        }
+
+        .empty {
+            color: var(--muted);
+            padding: 15px 0;
+        }
+
+        .success-note {
+            color: var(--green);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 1000px) {
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         @media (max-width: 700px) {
-
+            .stats-grid,
             .grid {
                 grid-template-columns: 1fr;
             }
 
-            table {
-                display: block;
-                overflow: auto;
-                white-space: nowrap;
-            }
-
-            .wrap {
-                padding: 20px 12px;
-            }
-
-            .card {
-                padding: 16px;
+            .login-card {
+                padding: 24px;
             }
         }
     </style>
@@ -126,175 +378,187 @@
 
 <body>
 
-    <div class="wrap">
+    <!-- =====================================================
+         LOGIN SCREEN
+    ====================================================== -->
 
-        <h1>CheckerDiscount Admin</h1>
+    <section id="loginScreen" class="login-screen">
 
-        <!-- Admin Login -->
-        <div class="card">
+        <div class="login-card">
 
-            <label for="key">
-                <strong>Admin Key</strong>
+            <div class="login-logo">CD</div>
+
+            <h1>CheckerDiscount Admin</h1>
+
+            <p>
+                Enter your private Admin Key to open the dashboard.
+                Your key is not stored in this page.
+            </p>
+
+            <label class="field-label" for="key">
+                Admin Key
             </label>
 
             <input
                 id="key"
+                class="input"
                 type="password"
+                autocomplete="current-password"
                 placeholder="Enter ADMIN_KEY"
             >
 
-            <button
-                id="load"
-                style="margin-top: 10px;"
-            >
-                Login / Load
+            <button id="loginButton" class="login-button">
+                Login to Dashboard
             </button>
 
-            <p id="msg"></p>
+            <p id="loginMessage" class="message"></p>
 
         </div>
 
+    </section>
 
-        <!-- Add Deal -->
-        <div class="card">
 
-            <h2>Add Deal</h2>
+    <!-- =====================================================
+         DASHBOARD
+         Hidden until the API accepts the Admin Key.
+    ====================================================== -->
 
-            <form id="dealForm">
+    <section id="dashboard" class="dashboard">
 
-                <div class="grid">
+        <header class="topbar">
 
-                    <input
-                        id="title"
-                        placeholder="Title"
-                        required
-                    >
+            <div class="topbar-inner">
 
-                    <input
-                        id="store"
-                        placeholder="Store"
-                        required
-                    >
-
-                    <input
-                        id="old"
-                        type="number"
-                        step="0.01"
-                        placeholder="Old price"
-                        required
-                    >
-
-                    <input
-                        id="new"
-                        type="number"
-                        step="0.01"
-                        placeholder="New price"
-                        required
-                    >
-
-                    <input
-                        id="url"
-                        placeholder="Product URL"
-                        required
-                    >
-
-                    <input
-                        id="image"
-                        placeholder="Image URL"
-                    >
-
-                    <input
-                        id="asin"
-                        placeholder="ASIN"
-                    >
-
-                    <input
-                        id="currency"
-                        value="USD"
-                        placeholder="Currency"
-                    >
-
+                <div class="brand">
+                    <div class="brand-mark">CD</div>
+                    <div>CheckerDiscount Admin</div>
                 </div>
 
-                <button
-                    type="submit"
-                    style="margin-top: 12px;"
-                >
-                    Add Deal
+                <button id="logoutButton" class="logout-button">
+                    Logout
                 </button>
 
-            </form>
-
-        </div>
-
-
-        <!-- Add Coupon -->
-        <div class="card">
-
-            <h2>Add Coupon</h2>
-
-            <form id="couponForm">
-
-                <div class="grid">
-
-                    <input
-                        id="cstore"
-                        placeholder="Store"
-                        required
-                    >
-
-                    <input
-                        id="ctitle"
-                        placeholder="Coupon title"
-                        required
-                    >
-
-                    <input
-                        id="ccode"
-                        placeholder="Code"
-                    >
-
-                    <input
-                        id="cdiscount"
-                        placeholder="e.g. 15% OFF"
-                    >
-
-                    <input
-                        id="curl"
-                        placeholder="Coupon URL"
-                    >
-
-                    <input
-                        id="cexpire"
-                        placeholder="Expiry date/time"
-                    >
-
-                </div>
-
-                <button
-                    type="submit"
-                    style="margin-top: 12px;"
-                >
-                    Add Coupon
-                </button>
-
-            </form>
-
-        </div>
-
-
-        <!-- Deals -->
-        <div class="card">
-
-            <h2>Deals</h2>
-
-            <div id="deals">
-                Login to load.
             </div>
 
-        </div>
+        </header>
 
-    </div>
+
+        <main class="wrap">
+
+            <div class="page-title">
+                <h1>Dashboard</h1>
+                <p>Manage verified deals, approvals, featured offers and coupons.</p>
+            </div>
+
+
+            <!-- STATS -->
+
+            <div class="stats-grid">
+
+                <div class="stat">
+                    <span>Total Deals</span>
+                    <strong id="statTotal">0</strong>
+                </div>
+
+                <div class="stat">
+                    <span>Verified</span>
+                    <strong id="statVerified">0</strong>
+                </div>
+
+                <div class="stat">
+                    <span>Pending</span>
+                    <strong id="statPending">0</strong>
+                </div>
+
+                <div class="stat">
+                    <span>Expired</span>
+                    <strong id="statExpired">0</strong>
+                </div>
+
+                <div class="stat">
+                    <span>Featured</span>
+                    <strong id="statFeatured">0</strong>
+                </div>
+
+                <div class="stat">
+                    <span>Coupons</span>
+                    <strong id="statCoupons">0</strong>
+                </div>
+
+            </div>
+
+
+            <!-- ADD DEAL -->
+
+            <div class="card">
+
+                <h2>Add Deal</h2>
+
+                <form id="dealForm">
+
+                    <div class="grid">
+
+                        <input id="title" class="form-input" placeholder="Product title" required>
+                        <input id="store" class="form-input" placeholder="Store e.g. Amazon" required>
+                        <input id="old" class="form-input" type="number" step="0.01" placeholder="Old price" required>
+                        <input id="new" class="form-input" type="number" step="0.01" placeholder="New price" required>
+                        <input id="url" class="form-input full" placeholder="Product URL" required>
+                        <input id="image" class="form-input" placeholder="Image URL (optional)">
+                        <input id="asin" class="form-input" placeholder="ASIN (optional)">
+                        <input id="currency" class="form-input" value="USD" placeholder="Currency">
+                    </div>
+
+                    <button class="form-button" type="submit">
+                        + Add Deal
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- ADD COUPON -->
+
+            <div class="card">
+
+                <h2>Add Coupon</h2>
+
+                <form id="couponForm">
+
+                    <div class="grid">
+
+                        <input id="cstore" class="form-input" placeholder="Store" required>
+                        <input id="ctitle" class="form-input" placeholder="Coupon title" required>
+                        <input id="ccode" class="form-input" placeholder="Coupon code">
+                        <input id="cdiscount" class="form-input" placeholder="e.g. 15% OFF">
+                        <input id="curl" class="form-input full" placeholder="Coupon URL">
+                        <input id="cexpire" class="form-input" placeholder="Expiry date/time (optional)">
+                    </div>
+
+                    <button class="form-button" type="submit">
+                        + Add Coupon
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- DEAL APPROVAL TABLE -->
+
+            <div class="card">
+
+                <h2>Deal Approval & Management</h2>
+
+                <div id="deals">
+                    <div class="empty">Loading deals...</div>
+                </div>
+
+            </div>
+
+        </main>
+
+    </section>
 
 
     <script>
@@ -303,12 +567,16 @@
 
         let KEY = "";
 
-
-        // Shortcut for getElementById
         const $ = (id) => document.getElementById(id);
 
 
-        // API helper
+        function setLoginMessage(text, type = "") {
+            const box = $("loginMessage");
+            box.textContent = text;
+            box.className = "message" + (type ? " " + type : "");
+        }
+
+
         async function api(path, options = {}) {
 
             options.headers = {
@@ -317,210 +585,254 @@
                 "Content-Type": "application/json"
             };
 
-            const response = await fetch(
-                API + path,
-                options
-            );
+            const response = await fetch(API + path, options);
 
-            const data = await response.json();
+            let data;
+
+            try {
+                data = await response.json();
+            } catch {
+                throw new Error("The API returned an invalid response.");
+            }
 
             if (!response.ok) {
-                throw new Error(
-                    data.error || "Request failed"
-                );
+                throw new Error(data.error || "Request failed");
             }
 
             return data;
         }
 
 
-        // Message
-        function msg(text) {
-            $("msg").textContent = text;
-        }
+        async function login() {
 
+            const enteredKey = $("key").value.trim();
 
-        // Login / Load
-        async function load() {
-
-            KEY = $("key").value.trim();
-
-            if (!KEY) {
-                msg("Enter Admin Key.");
+            if (!enteredKey) {
+                setLoginMessage("Please enter your Admin Key.", "error");
                 return;
             }
+
+            KEY = enteredKey;
+
+            setLoginMessage("Checking Admin Key...");
 
             try {
 
-                await refresh();
+                await api("/api/admin/deals");
 
-                msg("Connected.");
+                $("loginScreen").style.display = "none";
+                $("dashboard").style.display = "block";
+
+                setLoginMessage("");
+
+                await refreshAll();
 
             } catch (error) {
 
-                msg(error.message);
+                KEY = "";
+                setLoginMessage(
+                    error.message === "Unauthorized"
+                        ? "Wrong Admin Key. Please try again."
+                        : error.message,
+                    "error"
+                );
 
             }
         }
 
 
-        // Refresh deals
-        async function refresh() {
+        function logout() {
 
-            const data = await api(
-                "/api/admin/deals"
-            );
+            KEY = "";
+            $("key").value = "";
+            $("dashboard").style.display = "none";
+            $("loginScreen").style.display = "flex";
+            setLoginMessage("Logged out.");
 
-            if (!data.deals || data.deals.length === 0) {
+        }
 
+
+        async function refreshAll() {
+            await Promise.all([
+                refreshDeals(),
+                refreshStats()
+            ]);
+        }
+
+
+        async function refreshStats() {
+
+            try {
+
+                const data = await api("/api/admin/stats");
+                const s = data.stats || {};
+
+                $("statTotal").textContent = s.total || 0;
+                $("statVerified").textContent = s.verified || 0;
+                $("statPending").textContent = s.pending || 0;
+                $("statExpired").textContent = s.expired || 0;
+                $("statFeatured").textContent = s.featured || 0;
+                $("statCoupons").textContent = s.coupons || 0;
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+
+        async function refreshDeals() {
+
+            const data = await api("/api/admin/deals");
+            const deals = Array.isArray(data.deals) ? data.deals : [];
+
+            if (!deals.length) {
                 $("deals").innerHTML = `
-                    <p>No deals found.</p>
+                    <div class="empty">
+                        No deals found.
+                    </div>
                 `;
-
                 return;
             }
 
+            const rows = deals.map((deal) => {
 
-            const rows = data.deals.map((deal) => {
+                const status = String(
+                    deal.verification_status || "PENDING"
+                ).toUpperCase();
 
-                let featuredButton = "";
+                let statusClass = "pending";
 
-
-                // Featured button
-                if (Number(deal.is_featured) === 1) {
-
-                    featuredButton = `
-                        <button
-                            onclick="act('/api/admin/deals/${deal.id}/unfeatured')"
-                        >
-                            Unfeature
-                        </button>
-                    `;
-
-                } else if (
-                    deal.verification_status === "VERIFIED"
-                ) {
-
-                    featuredButton = `
-                        <button
-                            onclick="act('/api/admin/deals/${deal.id}/featured')"
-                        >
-                            Set Featured
-                        </button>
-                    `;
-
+                if (status === "VERIFIED") {
+                    statusClass = "verified";
+                } else if (status === "EXPIRED") {
+                    statusClass = "expired";
                 }
 
+                let actions = "";
 
-                // Verify button
-                const verifyButton =
-                    deal.verification_status !== "VERIFIED"
-                        ? `
-                            <button
-                                onclick="act('/api/admin/deals/${deal.id}/verify')"
-                            >
-                                Verify
-                            </button>
-                        `
-                        : "";
+                if (status !== "VERIFIED") {
+                    actions += `
+                        <button
+                            class="action verify"
+                            onclick="act('/api/admin/deals/${deal.id}/verify')"
+                        >
+                            ✓ Verify
+                        </button>
+                    `;
+                }
 
+                if (Number(deal.is_featured) === 1) {
+                    actions += `
+                        <button
+                            class="action neutral"
+                            onclick="act('/api/admin/deals/${deal.id}/unfeatured')"
+                        >
+                            Remove Featured
+                        </button>
+                    `;
+                } else if (status === "VERIFIED") {
+                    actions += `
+                        <button
+                            class="action featured"
+                            onclick="act('/api/admin/deals/${deal.id}/featured')"
+                        >
+                            ⭐ Set Featured
+                        </button>
+                    `;
+                }
+
+                if (status !== "EXPIRED") {
+                    actions += `
+                        <button
+                            class="action expire"
+                            onclick="act('/api/admin/deals/${deal.id}/expire')"
+                        >
+                            Expire
+                        </button>
+                    `;
+                }
+
+                actions += `
+                    <button
+                        class="action delete"
+                        onclick="deleteDeal(${deal.id})"
+                    >
+                        Delete
+                    </button>
+                `;
 
                 return `
                     <tr>
+                        <td>${deal.id}</td>
 
                         <td>
-                            ${deal.id}
-                        </td>
-
-                        <td>
-                            ${esc(deal.title)}
-
+                            <strong>${esc(deal.title)}</strong>
                             ${
                                 Number(deal.is_featured) === 1
-                                    ? " ⭐"
-                                    : ""
+                                    ? '<div class="status featured">⭐ FEATURED</div>'
+                                    : ''
                             }
                         </td>
 
-                        <td>
-                            ${esc(deal.store)}
-                        </td>
+                        <td>${esc(deal.store)}</td>
 
                         <td>
-                            ${deal.currency || "USD"}
+                            ${esc(deal.currency || "USD")}
                             ${Number(deal.new_price).toFixed(2)}
+                            <br>
+                            <small>
+                                Old: ${esc(deal.currency || "USD")}
+                                ${Number(deal.old_price).toFixed(2)}
+                            </small>
                         </td>
 
                         <td>
-                            ${esc(deal.verification_status)}
+                            <span class="status ${statusClass}">
+                                ${esc(status)}
+                            </span>
                         </td>
 
                         <td>
-
                             <div class="actions">
-
-                                ${verifyButton}
-
-                                ${featuredButton}
-
-                                <button
-                                    onclick="act('/api/admin/deals/${deal.id}/expire')"
-                                >
-                                    Expire
-                                </button>
-
-                                <button
-                                    onclick="delDeal(${deal.id})"
-                                >
-                                    Delete
-                                </button>
-
+                                ${actions}
                             </div>
-
                         </td>
-
                     </tr>
                 `;
 
             }).join("");
 
-
             $("deals").innerHTML = `
-
-                <table>
-
-                    <tr>
-
-                        <th>ID</th>
-                        <th>Deal</th>
-                        <th>Store</th>
-                        <th>Price</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-
-                    </tr>
-
-                    ${rows}
-
-                </table>
-
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Deal</th>
+                                <th>Store</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rows}
+                        </tbody>
+                    </table>
+                </div>
             `;
         }
 
 
-        // Action
         async function act(path) {
 
             try {
 
-                await api(
-                    path,
-                    {
-                        method: "POST"
-                    }
-                );
+                await api(path, {
+                    method: "POST"
+                });
 
-                await refresh();
+                await refreshAll();
 
             } catch (error) {
 
@@ -530,10 +842,9 @@
         }
 
 
-        // Delete deal
-        async function delDeal(id) {
+        async function deleteDeal(id) {
 
-            if (!confirm("Delete this deal?")) {
+            if (!confirm("Delete this deal permanently?")) {
                 return;
             }
 
@@ -541,12 +852,10 @@
 
                 await api(
                     "/api/admin/deals/" + id,
-                    {
-                        method: "DELETE"
-                    }
+                    { method: "DELETE" }
                 );
 
-                await refresh();
+                await refreshAll();
 
             } catch (error) {
 
@@ -556,126 +865,101 @@
         }
 
 
-        // Escape HTML
         function esc(value) {
 
-            return String(value ?? "")
-                .replace(
-                    /[&<>"']/g,
-                    (char) => {
-
-                        return {
-                            "&": "&amp;",
-                            "<": "&lt;",
-                            ">": "&gt;",
-                            '"': "&quot;",
-                            "'": "&#39;"
-                        }[char];
-
-                    }
-                );
+            return String(value ?? "").replace(
+                /[&<>"']/g,
+                (char) => ({
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#39;"
+                }[char])
+            );
         }
 
 
-        // Login button
-        $("load").onclick = load;
+        $("loginButton").addEventListener("click", login);
+
+        $("key").addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                login();
+            }
+        });
+
+        $("logoutButton").addEventListener("click", logout);
 
 
         // Add Deal
-        $("dealForm").onsubmit = async (event) => {
+        $("dealForm").addEventListener("submit", async (event) => {
 
             event.preventDefault();
 
             try {
 
-                await api(
-                    "/api/admin/deals",
-                    {
-                        method: "POST",
-
-                        body: JSON.stringify({
-
-                            title: $("title").value,
-
-                            store: $("store").value,
-
-                            old_price: $("old").value,
-
-                            new_price: $("new").value,
-
-                            url: $("url").value,
-
-                            image_url: $("image").value,
-
-                            asin: $("asin").value,
-
-                            currency: $("currency").value
-
-                        })
-                    }
-                );
-
+                await api("/api/admin/deals", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        title: $("title").value,
+                        store: $("store").value,
+                        old_price: $("old").value,
+                        new_price: $("new").value,
+                        url: $("url").value,
+                        image_url: $("image").value,
+                        asin: $("asin").value,
+                        currency: $("currency").value
+                    })
+                });
 
                 event.target.reset();
-
                 $("currency").value = "USD";
 
-                await refresh();
+                await refreshAll();
 
-                msg("Deal added.");
+                alert("Deal added successfully. It is now PENDING for approval.");
 
             } catch (error) {
 
                 alert(error.message);
 
             }
-        };
+        });
 
 
         // Add Coupon
-        $("couponForm").onsubmit = async (event) => {
+        $("couponForm").addEventListener("submit", async (event) => {
 
             event.preventDefault();
 
             try {
 
-                await api(
-                    "/api/admin/coupons",
-                    {
-                        method: "POST",
-
-                        body: JSON.stringify({
-
-                            store: $("cstore").value,
-
-                            title: $("ctitle").value,
-
-                            code: $("ccode").value,
-
-                            discount_text: $("cdiscount").value,
-
-                            url: $("curl").value,
-
-                            expires_at: $("cexpire").value
-
-                        })
-                    }
-                );
-
+                await api("/api/admin/coupons", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        store: $("cstore").value,
+                        title: $("ctitle").value,
+                        code: $("ccode").value,
+                        discount_text: $("cdiscount").value,
+                        url: $("curl").value,
+                        expires_at: $("cexpire").value
+                    })
+                });
 
                 event.target.reset();
 
-                msg("Coupon added.");
+                await refreshAll();
+
+                alert("Coupon added successfully.");
 
             } catch (error) {
 
                 alert(error.message);
 
             }
-        };
+        });
 
     </script>
 
 </body>
-
 </html>
