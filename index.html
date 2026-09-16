@@ -1162,7 +1162,13 @@
                 align-items: flex-start;
             }
         }
-    </style>
+    
+/* =========================================================
+   CHECKERDISCOUNT V9 SHOPPER TOOLS
+========================================================= */
+.tools-section{margin-top:70px}.tools-intro{text-align:center;max-width:760px;margin:0 auto 28px}.tools-intro h2{font-size:30px;color:var(--navy);margin-bottom:8px}.tools-intro p{color:var(--muted);font-size:14px}.tool-nav{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:20px 0 28px}.tool-nav button{border:1px solid var(--border);background:#fff;color:var(--text);padding:10px 14px;border-radius:999px;font-weight:700;cursor:pointer}.tool-nav button.active,.tool-nav button:hover{background:var(--brand-soft);border-color:#b9cdfb;color:var(--brand)}.tool-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}.tool-box{background:#fff;border:1px solid var(--border);border-radius:18px;padding:22px;box-shadow:var(--shadow)}.tool-box h3{font-size:19px;color:var(--navy);margin-bottom:5px}.tool-box>p{font-size:13px;color:var(--muted);margin-bottom:16px}.tool-form{display:grid;gap:10px}.tool-form input,.tool-form select{width:100%;padding:12px;border:1px solid var(--border);border-radius:10px;background:#fff;box-sizing:border-box}.tool-form button,.tool-primary{border:0;border-radius:10px;background:var(--brand);color:#fff;padding:12px 15px;font-weight:800;cursor:pointer}.tool-result{margin-top:15px}.compare-table{width:100%;border-collapse:collapse;font-size:13px}.compare-table th,.compare-table td{padding:10px;border-bottom:1px solid var(--border);text-align:left}.compare-best{font-weight:800;color:var(--green-dark)}.history-list{display:grid;gap:8px}.history-row{display:flex;justify-content:space-between;gap:12px;border:1px solid var(--border);border-radius:10px;padding:10px;font-size:13px}.coupon-card,.watch-card{border:1px solid var(--border);border-radius:12px;padding:13px;margin-bottom:9px}.coupon-code{display:inline-block;padding:5px 8px;border-radius:7px;background:var(--orange-soft);font-weight:800;color:#8a4b00}.tool-note{font-size:11px;color:var(--muted);margin-top:10px}.watch-list{display:grid;gap:9px}.watch-item{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid var(--border);padding:11px;border-radius:11px}.watch-item button{border:0;background:#fff;color:#b42318;cursor:pointer}.tool-empty{padding:15px;border-radius:10px;background:var(--background);color:var(--muted);font-size:13px}@media(max-width:900px){.tool-grid{grid-template-columns:1fr}}@media(max-width:600px){.tools-section{margin-top:45px}.tools-intro h2{font-size:25px}.tool-box{padding:17px}.tool-nav{justify-content:flex-start;overflow:auto;flex-wrap:nowrap;padding-bottom:5px}.tool-nav button{white-space:nowrap}}
+
+</style>
 </head>
 
 <body>
@@ -1522,6 +1528,54 @@
         </div>
 
     </section>
+
+
+
+<!-- =========================================================
+     CHECKERDISCOUNT V9 SHOPPER TOOLS
+========================================================= -->
+<section class="tools-section" id="shopper-tools">
+  <div class="tools-intro">
+    <div class="section-kicker">SMART SHOPPING TOOLS</div>
+    <h2>Check Before You Buy</h2>
+    <p>Compare prices, review price history, find available coupons, calculate your real cost, and save products for later.</p>
+  </div>
+  <div class="tool-nav" role="tablist">
+    <button class="active" data-tool-tab="compare">🔎 Price Comparison</button>
+    <button data-tool-tab="history">📉 Price History</button>
+    <button data-tool-tab="coupons">🏷️ Deal & Coupon Checker</button>
+    <button data-tool-tab="calculator">💰 Final Price Calculator</button>
+    <button data-tool-tab="watchlist">❤️ Watchlist & Alerts</button>
+  </div>
+  <div class="tool-grid">
+    <div class="tool-box" data-tool-panel="compare">
+      <h3>🔎 Price Comparison</h3><p>Search verified products and compare the stores we currently have on record.</p>
+      <form class="tool-form" id="compareForm"><input id="compareQuery" placeholder="e.g. Hamilton Beach Mixer" required><button>Compare Prices</button></form>
+      <div class="tool-result" id="compareResult"><div class="tool-empty">Enter a product name to compare available offers.</div></div>
+    </div>
+    <div class="tool-box" data-tool-panel="history">
+      <h3>📉 Price History</h3><p>See recorded price checks for a verified deal. History grows as the deal is re-verified.</p>
+      <form class="tool-form" id="historyForm"><input id="historyQuery" placeholder="Product name or ASIN" required><button>Check Price History</button></form>
+      <div class="tool-result" id="historyResult"><div class="tool-empty">Search for a product first.</div></div>
+    </div>
+    <div class="tool-box" data-tool-panel="coupons">
+      <h3>🏷️ Deal & Coupon Checker</h3><p>Find verified coupons and promotional offers stored for participating stores.</p>
+      <form class="tool-form" id="couponForm"><input id="couponStore" placeholder="e.g. Amazon"><input id="couponQuery" placeholder="Optional keyword"><button>Check Coupons</button></form>
+      <div class="tool-result" id="couponResult"><div class="tool-empty">Enter a store to check available coupons.</div></div>
+    </div>
+    <div class="tool-box" data-tool-panel="calculator">
+      <h3>💰 Final Price Calculator</h3><p>Calculate the real purchase cost after coupon, shipping and tax.</p>
+      <form class="tool-form" id="finalPriceForm"><input id="fpPrice" type="number" step="0.01" min="0" placeholder="Product price" required><input id="fpCoupon" type="number" step="0.01" min="0" placeholder="Coupon amount (optional)"><input id="fpShipping" type="number" step="0.01" min="0" placeholder="Shipping (optional)"><input id="fpTax" type="number" step="0.01" min="0" placeholder="Tax amount (optional)"><button>Calculate Final Price</button></form>
+      <div class="tool-result" id="finalPriceResult"><div class="tool-empty">Your final price will appear here.</div></div>
+    </div>
+    <div class="tool-box" data-tool-panel="watchlist" style="grid-column:1/-1">
+      <h3>❤️ Watchlist & Price Alerts</h3><p>Save products in this browser and set a target price. When you return, CheckerDiscount checks the latest verified price against your target.</p>
+      <form class="tool-form" id="watchForm"><input id="watchProduct" placeholder="Product name" required><input id="watchTarget" type="number" step="0.01" min="0" placeholder="Alert me below this price" required><button>Add to Watchlist</button></form>
+      <div class="tool-result" id="watchResult"></div>
+      <div class="tool-note">Browser watchlist is stored locally on this device. Email/push delivery can be connected later without changing the shopping workflow.</div>
+    </div>
+  </div>
+</section>
 
 </main>
 
