@@ -141,7 +141,6 @@
       (deal) => Number(deal.is_featured) === 1
     );
 
-    // ہیرو سیکشن کے اندر فیچر ڈیل شو کرنا
     const heroPreview = document.querySelector(".deal-preview, .hero-deal-box, [data-hero-preview]");
     if (featured) {
       const oldP = Number(featured.old_price);
@@ -149,7 +148,6 @@
       const saveAmount = Math.max(0, oldP - newP);
       const disc = Number(featured.discount_percent || 0);
 
-      // اگر ویب سائٹ پر ہیرو پریویو کا کوئی کنٹینر موجود ہے تو وہاں ڈیٹا اپڈیٹ کر دیں
       const previewContainer = $("heroDealPreview") || heroPreview;
       if (previewContainer) {
         previewContainer.innerHTML = `
@@ -170,15 +168,13 @@
 
     if (!box) return;
 
-    // عام لسٹ میں صرف ریگولر ڈیلز شو ہوں گی (یا اگر چاہیں تو تمام ویریفائیڈ)
-    const regular = verifiedDeals.filter(
-      (deal) => Number(deal.is_featured) !== 1
-    );
+    // تمام ویریفائیڈ ڈیلز اب لسٹ میں شو ہوں گی تاکہ فیچرڈ ڈیل بھی غائب نہ ہو
+    const regular = verifiedDeals;
 
     let html = "";
     if (regular.length) {
       html += regular.map(dealCard).join("");
-    } else if (!featured) {
+    } else {
       html = `<div class="tool-empty">No verified deals are available right now.</div>`;
     }
 
@@ -232,7 +228,6 @@
       if (navigator.share) {
         await navigator.share(shareData);
       } else {
-        // لیپ ٹاپ یا ڈیسک ٹاپ کے لیے خوبصورت پاپ اپ/پرامپٹ جو لنک اور آپشن دے
         const userChoice = prompt("Copy this deal link to share:", deal.url);
         if (userChoice !== null && navigator.clipboard) {
           navigator.clipboard.writeText(deal.url);
@@ -366,7 +361,6 @@
     }
   }
 
-  // فائنل پرائس کیلکولیٹر ٹھیک کیا گیا
   function finalPrice() {
     const price = Number($("fpPrice")?.value) || 0;
     const coupon = Number($("fpCoupon")?.value) || 0;
@@ -389,7 +383,6 @@
     `;
   }
 
-  // ریفنڈ سیونگز کیلکولیٹر ٹھیک کیا گیا
   function calculateRefundSavings() {
     const retailer = $("retailer")?.value.trim() || "Store";
     const purchasePrice = Number($("purchasePrice")?.value) || 0;
