@@ -475,15 +475,12 @@ function featuredHTML(deal) {
 }
 
 function generateComparisonHTML(deal, currency, currentPrice) {
-    // Simulated multi-store comparison benchmarks for US/EU realism
     const storesList = ["Amazon", "Walmart", "eBay", "BestBuy"];
     let rows = "";
     
-    // Filter out current store to show competitive alternatives
     const otherStores = storesList.filter(s => s.toLowerCase() !== String(deal.store || "").toLowerCase());
     
     otherStores.slice(0, 2).forEach((st, idx) => {
-        // Generate a slightly higher competitive price to highlight current deal's value
         const markup = (idx + 1) * 7.5 + 5;
         const compPrice = currentPrice * (1 + markup / 100);
         rows += `
@@ -850,8 +847,8 @@ function setupCalculator() {
             return false;
         }
 
-        `, saving = oldPrice - newPrice;
-        const percent = saving / oldPrice * 100;
+        const saving = oldPrice - newPrice;
+        const percent = (saving / oldPrice) * 100;
 
         showSavings(store, oldPrice, newPrice, saving, percent);
         return false;
@@ -901,7 +898,7 @@ function showSavings(store, oldPrice, newPrice, saving, percent) {
 
 function closeSavings() {
     const x = document.getElementById("cdSavings");
-    if (x) x.read = x.remove();
+    if (x) x.remove();
 }
 
 function setupMobileMenu() {
