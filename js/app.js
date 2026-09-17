@@ -1,4 +1,4 @@
-// CheckerDiscount app.js - Final Fixed Version
+// CheckerDiscount app.js - Final Fixed & Menu Integrated Version
 
 const sampleDeals = [
     {
@@ -24,7 +24,7 @@ const sampleDeals = [
         originalPrice: 89.99,
         discount: "22% OFF",
         savings: "$20.02",
-        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAJE3HsR-KXitBPfTZtFmyylQwQ1Fgl-ht-Kqtv6SBmfJmo2xwjQIgK6cmJTvC3haAJOPl105ipDjtg6W8gr5Q95-gLrDxCSM9FwcMkYmA5lB6DV6_Obv9eg-qI7rDR3fdFVzHJ6Cf2cRv2AJqiyfglDaC2pp9YWE_bvMmzkuKG5qyvDkKzQrdNo002MBEd-Ac8_kyaAhVn6Qh8kuKGzt2DSaUKfz8aQiQ0S6RpdSnHxbvzHFje9SBI",
+        image: "https://images.unsplash.com/photo-1570222094114-d074f7e1e4e1?auto=format&fit=crop&q=80&w=400",
         date: "2026-09-15 12:25:29",
         url: "#",
         isFeatured: false
@@ -38,7 +38,7 @@ const sampleDeals = [
         originalPrice: 31.95,
         discount: "22% OFF",
         savings: "$6.98",
-        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAJE3HsR-KXitBPfTZtFmyylQwQ1Fgl-ht-Kqtv6SBmfJmo2xwjQIgK6cmJTvC3haAJOPl105ipDjtg6W8gr5Q95-gLrDxCSM9FwcMkYmA5lB6DV6_Obv9eg-qI7rDR3fdFVzHJ6Cf2cRv2AJqiyfglDaC2pp9YWE_bvMmzkuKG5qyvDkKzQrdNo002MBEd-Ac8_kyaAhVn6Qh8kuKGzt2DSaUKfz8aQiQ0S6RpdSnHxbvzHFje9SBI",
+        image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=400",
         date: "2026-09-15 11:00:00",
         url: "#",
         isFeatured: false
@@ -49,6 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDeals();
     loadSpotlight();
     setupFilters();
+    initBurgerMenu(); // برگر مینو کا فنکشن فعال کیا گیا ہے
 });
 
 function getStoredDeals() {
@@ -64,7 +65,6 @@ function getStoredDeals() {
 
 function loadSpotlight() {
     const deals = getStoredDeals();
-    // Flexible search for featured deal matching admin panel flags
     let featuredDeal = deals.find(d => d.isFeatured === true || d.featured === true || d.isFeatured === "true" || d.featured === "1" || String(d.isFeatured).toLowerCase() === "yes");
     if (!featuredDeal && deals.length > 0) {
         featuredDeal = deals[0];
@@ -196,6 +196,81 @@ function setupFilters() {
             loadDeals(category);
         });
     });
+}
+
+// اسٹائلش برگر مینو کا فنکشن جو کلک پر کھلے گا
+function initBurgerMenu() {
+    const btn = document.getElementById("burgerMenuBtn");
+    if (!btn) return;
+
+    // مینو کا ایلیمنٹ بنانا
+    const menuOverlay = document.createElement("div");
+    menuOverlay.id = "customBurgerMenu";
+    menuOverlay.className = "fixed inset-0 z-50 bg-navy-deep/60 backdrop-blur-sm hidden transition-opacity duration-300";
+    menuOverlay.innerHTML = `
+        <div class="absolute right-0 top-0 h-full w-[280px] bg-surface-container-lowest shadow-2xl p-5 flex flex-col justify-between transform translate-x-full transition-transform duration-300">
+            <div>
+                <div class="flex items-center justify-between pb-4 border-b border-surface-container">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary font-bold text-[14px]">CD</div>
+                        <span class="font-headline-sm text-[16px] font-bold text-on-surface">Navigation Menu</span>
+                    </div>
+                    <button id="closeBurgerMenu" class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface hover:bg-surface-container">
+                        <span class="material-symbols-outlined text-[18px]">close</span>
+                    </button>
+                </div>
+                <div class="flex flex-col gap-2 pt-4">
+                    <a href="index.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-low text-on-surface font-label-md text-[14px] transition-colors">
+                        <span class="material-symbols-outlined text-[20px] text-primary">home</span> Home
+                    </a>
+                    <a href="#market-deals" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-low text-on-surface font-label-md text-[14px] transition-colors">
+                        <span class="material-symbols-outlined text-[20px] text-primary">local_offer</span> Top Deals
+                    </a>
+                    <a href="#savings-tool" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-low text-on-surface font-label-md text-[14px] transition-colors">
+                        <span class="material-symbols-outlined text-[20px] text-primary">calculate</span> Savings Checker
+                    </a>
+                    <a href="#tool-comparison" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-low text-on-surface font-label-md text-[14px] transition-colors">
+                        <span class="material-symbols-outlined text-[20px] text-primary">compare_arrows</span> Price Comparison
+                    </a>
+                    <a href="#tool-history" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-low text-on-surface font-label-md text-[14px] transition-colors">
+                        <span class="material-symbols-outlined text-[20px] text-primary">trending_down</span> Price History
+                    </a>
+                    <a href="#tool-watchlist" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-low text-on-surface font-label-md text-[14px] transition-colors">
+                        <span class="material-symbols-outlined text-[20px] text-primary">bookmark</span> Watchlist
+                    </a>
+                </div>
+            </div>
+            <div class="pt-4 border-t border-surface-container text-center text-[12px] text-on-surface-variant">
+                CheckerDiscount v2.5
+            </div>
+        </div>
+    `;
+    document.body.appendChild(menuOverlay);
+
+    const drawer = menuOverlay.querySelector("div > div");
+
+    btn.addEventListener("click", () => {
+        menuOverlay.classList.remove("hidden");
+        setTimeout(() => {
+            drawer.classList.remove("translate-x-full");
+        }, 10);
+    });
+
+    const closeBtn = document.getElementById("closeBurgerMenu");
+    closeBtn.addEventListener("click", closeMenu);
+    menuOverlay.addEventListener("click", (e) => {
+        if (e.target === menuOverlay) closeMenu();
+    });
+}
+
+function closeMenu() {
+    const menuOverlay = document.getElementById("customBurgerMenu");
+    if (!menuOverlay) return;
+    const drawer = menuOverlay.querySelector("div > div");
+    drawer.classList.add("translate-x-full");
+    setTimeout(() => {
+        menuOverlay.classList.add("hidden");
+    }, 300);
 }
 
 function shareDeal(title, url) {
