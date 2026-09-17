@@ -1,4 +1,4 @@
-// CheckerDiscount app.js - Final Fixed & Menu Integrated Version
+// CheckerDiscount app.js - Complete Final Version with Admin Panel Image Debugging & Fixes
 
 const sampleDeals = [
     {
@@ -10,7 +10,7 @@ const sampleDeals = [
         originalPrice: 56.99,
         discount: "40% OFF",
         savings: "$23.01",
-        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAJE3HsR-KXitBPfTZtFmyylQwQ1Fgl-ht-Kqtv6SBmfJmo2xwjQIgK6cmJTvC3haAJOPl105ipDjtg6W8gr5Q95-gLrDxCSM9FwcMkYmA5lB6DV6_Obv9eg-qI7rDR3fdFVzHJ6Cf2cRv2AJqiyfglDaC2pp9YWE_bvMmzkuKG5qyvDkKzQrdNo002MBEd-Ac8_kyaAhVn6Qh8kuKGzt2DSaUKfz8aQiQ0S6RpdSnHxbvzHFje9SBI",
+        image: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&q=80&w=400",
         date: "2026-09-15 13:19:39",
         url: "#",
         isFeatured: true
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadDeals();
     loadSpotlight();
     setupFilters();
-    initBurgerMenu(); // برگر مینو کا فنکشن فعال کیا گیا ہے
+    initBurgerMenu();
 });
 
 function getStoredDeals() {
@@ -73,7 +73,7 @@ function loadSpotlight() {
     const spotlightContainer = document.querySelector(".relative.w-full.bg-gradient-to-b");
     if (!spotlightContainer || !featuredDeal) return;
 
-    const imgSrc = featuredDeal.image || featuredDeal.imageUrl || featuredDeal.img || "https://lh3.googleusercontent.com/aida-public/AB6AXuAJE3HsR-KXitBPfTZtFmyylQwQ1Fgl-ht-Kqtv6SBmfJmo2xwjQIgK6cmJTvC3haAJOPl105ipDjtg6W8gr5Q95-gLrDxCSM9FwcMkYmA5lB6DV6_Obv9eg-qI7rDR3fdFVzHJ6Cf2cRv2AJqiyfglDaC2pp9YWE_bvMmzkuKG5qyvDkKzQrdNo002MBEd-Ac8_kyaAhVn6Qh8kuKGzt2DSaUKfz8aQiQ0S6RpdSnHxbvzHFje9SBI";
+    const imgSrc = featuredDeal.image || featuredDeal.imageUrl || featuredDeal.img || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
 
     let showcaseBox = spotlightContainer.querySelector(".w-full.mt-2.bg-surface-container-lowest");
     if (showcaseBox) {
@@ -84,7 +84,7 @@ function loadSpotlight() {
             </div>
             <div class="flex gap-3 pt-3">
                 <div class="w-20 h-20 rounded-xl bg-surface-subtle overflow-hidden flex-shrink-0 relative border border-surface-container flex items-center justify-center">
-                    <img class="w-full h-full object-cover" src="${imgSrc}" alt="Spotlight Deal">
+                    <img class="w-full h-full object-cover" src="${imgSrc}" alt="Spotlight Deal" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400'">
                     <div class="absolute bottom-1 right-1 bg-navy-deep/80 text-on-primary text-[9px] px-1 py-0.2 rounded font-mono">${featuredDeal.store || 'Amazon'}</div>
                 </div>
                 <div class="flex flex-col min-w-0 justify-center flex-1">
@@ -135,7 +135,10 @@ function loadDeals(filter = "all") {
     }
 
     deals.forEach(deal => {
-        const imgSrc = deal.image || deal.imageUrl || deal.img || "https://lh3.googleusercontent.com/aida-public/AB6AXuAJE3HsR-KXitBPfTZtFmyylQwQ1Fgl-ht-Kqtv6SBmfJmo2xwjQIgK6cmJTvC3haAJOPl105ipDjtg6W8gr5Q95-gLrDxCSM9FwcMkYmA5lB6DV6_Obv9eg-qI7rDR3fdFVzHJ6Cf2cRv2AJqiyfglDaC2pp9YWE_bvMmzkuKG5qyvDkKzQrdNo002MBEd-Ac8_kyaAhVn6Qh8kuKGzt2DSaUKfz8aQiQ0S6RpdSnHxbvzHFje9SBI";
+        // یہاں ایڈمن پینل سے آنے والے امیج لنک کو کنسول میں چیک کرنے کے لیے پرنٹ کیا جا رہا ہے
+        console.log("Admin Panel Image Link:", deal.image || deal.imageUrl || deal.img);
+
+        const imgSrc = deal.image || deal.imageUrl || deal.img || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
         
         const card = document.createElement("div");
         card.className = "bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container/60 flex flex-col gap-3";
@@ -148,7 +151,7 @@ function loadDeals(filter = "all") {
             </div>
             <div class="flex gap-3">
                 <div class="w-20 h-20 rounded-xl bg-surface-subtle overflow-hidden flex-shrink-0 relative border border-surface-container flex items-center justify-center">
-                    <img src="${imgSrc}" class="w-full h-full object-cover" alt="Deal">
+                    <img src="${imgSrc}" class="w-full h-full object-cover" alt="Deal" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400'">
                 </div>
                 <div class="flex flex-col min-w-0 justify-center flex-1">
                     <h3 class="font-headline-sm text-[14px] text-on-surface font-semibold leading-snug line-clamp-2">${deal.title}</h3>
@@ -198,12 +201,10 @@ function setupFilters() {
     });
 }
 
-// اسٹائلش برگر مینو کا فنکشن جو کلک پر کھلے گا
 function initBurgerMenu() {
     const btn = document.getElementById("burgerMenuBtn");
     if (!btn) return;
 
-    // مینو کا ایلیمنٹ بنانا
     const menuOverlay = document.createElement("div");
     menuOverlay.id = "customBurgerMenu";
     menuOverlay.className = "fixed inset-0 z-50 bg-navy-deep/60 backdrop-blur-sm hidden transition-opacity duration-300";
