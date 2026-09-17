@@ -1,4 +1,4 @@
-// CheckerDiscount app.js - Complete Final Version with Admin Panel Image Debugging & Fixes
+// CheckerDiscount app.js - Complete Final Version with Fixed Images & Admin Debug
 
 const sampleDeals = [
     {
@@ -24,7 +24,7 @@ const sampleDeals = [
         originalPrice: 89.99,
         discount: "22% OFF",
         savings: "$20.02",
-        image: "https://images.unsplash.com/photo-1570222094114-d074f7e1e4e1?auto=format&fit=crop&q=80&w=400",
+        image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=400",
         date: "2026-09-15 12:25:29",
         url: "#",
         isFeatured: false
@@ -38,7 +38,7 @@ const sampleDeals = [
         originalPrice: 31.95,
         discount: "22% OFF",
         savings: "$6.98",
-        image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=400",
+        image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&q=80&w=400",
         date: "2026-09-15 11:00:00",
         url: "#",
         isFeatured: false
@@ -135,7 +135,6 @@ function loadDeals(filter = "all") {
     }
 
     deals.forEach(deal => {
-        // یہاں ایڈمن پینل سے آنے والے امیج لنک کو کنسول میں چیک کرنے کے لیے پرنٹ کیا جا رہا ہے
         console.log("Admin Panel Image Link:", deal.image || deal.imageUrl || deal.img);
 
         const imgSrc = deal.image || deal.imageUrl || deal.img || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
