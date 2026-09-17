@@ -1,4 +1,4 @@
-// CheckerDiscount app.js - Dynamic Deals, Admin Featured Sync, Filtering & Tools
+// CheckerDiscount app.js - Final Fixed Version
 
 const sampleDeals = [
     {
@@ -24,7 +24,7 @@ const sampleDeals = [
         originalPrice: 89.99,
         discount: "22% OFF",
         savings: "$20.02",
-        image: "",
+        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAJE3HsR-KXitBPfTZtFmyylQwQ1Fgl-ht-Kqtv6SBmfJmo2xwjQIgK6cmJTvC3haAJOPl105ipDjtg6W8gr5Q95-gLrDxCSM9FwcMkYmA5lB6DV6_Obv9eg-qI7rDR3fdFVzHJ6Cf2cRv2AJqiyfglDaC2pp9YWE_bvMmzkuKG5qyvDkKzQrdNo002MBEd-Ac8_kyaAhVn6Qh8kuKGzt2DSaUKfz8aQiQ0S6RpdSnHxbvzHFje9SBI",
         date: "2026-09-15 12:25:29",
         url: "#",
         isFeatured: false
@@ -38,7 +38,7 @@ const sampleDeals = [
         originalPrice: 31.95,
         discount: "22% OFF",
         savings: "$6.98",
-        image: "",
+        image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAJE3HsR-KXitBPfTZtFmyylQwQ1Fgl-ht-Kqtv6SBmfJmo2xwjQIgK6cmJTvC3haAJOPl105ipDjtg6W8gr5Q95-gLrDxCSM9FwcMkYmA5lB6DV6_Obv9eg-qI7rDR3fdFVzHJ6Cf2cRv2AJqiyfglDaC2pp9YWE_bvMmzkuKG5qyvDkKzQrdNo002MBEd-Ac8_kyaAhVn6Qh8kuKGzt2DSaUKfz8aQiQ0S6RpdSnHxbvzHFje9SBI",
         date: "2026-09-15 11:00:00",
         url: "#",
         isFeatured: false
@@ -54,15 +54,18 @@ document.addEventListener("DOMContentLoaded", () => {
 function getStoredDeals() {
     const local = localStorage.getItem("checker_deals");
     if (local) {
-        try { return JSON.parse(local); } catch(e) { return sampleDeals; }
+        try { 
+            const parsed = JSON.parse(local);
+            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        } catch(e) {}
     }
     return sampleDeals;
 }
 
 function loadSpotlight() {
     const deals = getStoredDeals();
-    // Find the deal marked as featured by admin panel, or fallback to the first one
-    let featuredDeal = deals.find(d => d.isFeatured === true || d.featured === true);
+    // Flexible search for featured deal matching admin panel flags
+    let featuredDeal = deals.find(d => d.isFeatured === true || d.featured === true || d.isFeatured === "true" || d.featured === "1" || String(d.isFeatured).toLowerCase() === "yes");
     if (!featuredDeal && deals.length > 0) {
         featuredDeal = deals[0];
     }
@@ -70,7 +73,8 @@ function loadSpotlight() {
     const spotlightContainer = document.querySelector(".relative.w-full.bg-gradient-to-b");
     if (!spotlightContainer || !featuredDeal) return;
 
-    // Find or target the spotlight showcase box inside hero
+    const imgSrc = featuredDeal.image || featuredDeal.imageUrl || featuredDeal.img || "https://lh3.googleusercontent.com/aida-public/AB6AXuAJE3HsR-KXitBPfTZtFmyylQwQ1Fgl-ht-Kqtv6SBmfJmo2xwjQIgK6cmJTvC3haAJOPl105ipDjtg6W8gr5Q95-gLrDxCSM9FwcMkYmA5lB6DV6_Obv9eg-qI7rDR3fdFVzHJ6Cf2cRv2AJqiyfglDaC2pp9YWE_bvMmzkuKG5qyvDkKzQrdNo002MBEd-Ac8_kyaAhVn6Qh8kuKGzt2DSaUKfz8aQiQ0S6RpdSnHxbvzHFje9SBI";
+
     let showcaseBox = spotlightContainer.querySelector(".w-full.mt-2.bg-surface-container-lowest");
     if (showcaseBox) {
         showcaseBox.innerHTML = `
@@ -80,7 +84,7 @@ function loadSpotlight() {
             </div>
             <div class="flex gap-3 pt-3">
                 <div class="w-20 h-20 rounded-xl bg-surface-subtle overflow-hidden flex-shrink-0 relative border border-surface-container flex items-center justify-center">
-                    ${featuredDeal.image ? `<img class="w-full h-full object-cover" src="${featuredDeal.image}" alt="Spotlight Deal">` : `<span class="material-symbols-outlined text-outline text-[32px]">local_offer</span>`}
+                    <img class="w-full h-full object-cover" src="${imgSrc}" alt="Spotlight Deal">
                     <div class="absolute bottom-1 right-1 bg-navy-deep/80 text-on-primary text-[9px] px-1 py-0.2 rounded font-mono">${featuredDeal.store || 'Amazon'}</div>
                 </div>
                 <div class="flex flex-col min-w-0 justify-center flex-1">
@@ -131,6 +135,8 @@ function loadDeals(filter = "all") {
     }
 
     deals.forEach(deal => {
+        const imgSrc = deal.image || deal.imageUrl || deal.img || "https://lh3.googleusercontent.com/aida-public/AB6AXuAJE3HsR-KXitBPfTZtFmyylQwQ1Fgl-ht-Kqtv6SBmfJmo2xwjQIgK6cmJTvC3haAJOPl105ipDjtg6W8gr5Q95-gLrDxCSM9FwcMkYmA5lB6DV6_Obv9eg-qI7rDR3fdFVzHJ6Cf2cRv2AJqiyfglDaC2pp9YWE_bvMmzkuKG5qyvDkKzQrdNo002MBEd-Ac8_kyaAhVn6Qh8kuKGzt2DSaUKfz8aQiQ0S6RpdSnHxbvzHFje9SBI";
+        
         const card = document.createElement("div");
         card.className = "bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container/60 flex flex-col gap-3";
         card.innerHTML = `
@@ -142,7 +148,7 @@ function loadDeals(filter = "all") {
             </div>
             <div class="flex gap-3">
                 <div class="w-20 h-20 rounded-xl bg-surface-subtle overflow-hidden flex-shrink-0 relative border border-surface-container flex items-center justify-center">
-                    ${deal.image ? `<img src="${deal.image}" class="w-full h-full object-cover" alt="Deal">` : `<span class="material-symbols-outlined text-outline text-[32px]">local_offer</span>`}
+                    <img src="${imgSrc}" class="w-full h-full object-cover" alt="Deal">
                 </div>
                 <div class="flex flex-col min-w-0 justify-center flex-1">
                     <h3 class="font-headline-sm text-[14px] text-on-surface font-semibold leading-snug line-clamp-2">${deal.title}</h3>
