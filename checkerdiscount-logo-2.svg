@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 420" role="img" aria-labelledby="title desc">
+  <title id="title">CheckerDiscount Logo</title>
+  <desc id="desc">Dark navy hexagon with mint checkmark and circuit accents, CheckerDiscount wordmark, and FIND. COMPARE. SAVE. tagline.</desc>
+
+  <!-- Icon -->
+  <g transform="translate(45 45)">
+    <!-- circuit accents -->
+    <g fill="none" stroke="#19C7A5" stroke-width="8" stroke-linecap="round">
+      <path d="M0 95 H105"/>
+      <path d="M0 155 H105"/>
+      <path d="M0 215 H105"/>
+      <path d="M375 95 H480"/>
+      <path d="M375 155 H480"/>
+      <path d="M375 215 H480"/>
+    </g>
+    <g fill="#FFFFFF" stroke="#19C7A5" stroke-width="8">
+      <circle cx="0" cy="95" r="14"/>
+      <circle cx="0" cy="155" r="14"/>
+      <circle cx="0" cy="215" r="14"/>
+      <circle cx="480" cy="95" r="14"/>
+      <circle cx="480" cy="155" r="14"/>
+      <circle cx="480" cy="215" r="14"/>
+    </g>
+
+    <!-- hexagon -->
+    <path d="M240 5 L405 100 L405 290 L240 385 L75 290 L75 100 Z"
+          fill="#102F63"/>
+    <path d="M240 58 L350 121 L350 269 L240 332 L130 269 L130 121 Z"
+          fill="#FFFFFF"/>
+
+    <!-- checkmark -->
+    <path d="M135 190 L205 260 L350 112"
+          fill="none" stroke="#19C7A5" stroke-width="48"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Wordmark -->
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="545" y="235" font-size="112" font-weight="700" fill="#102F63"
+          letter-spacing="-4">Checker</text>
+    <text x="1035" y="235" font-size="112" font-weight="300" fill="#245A9A"
+          letter-spacing="-4">Discount</text>
+
+    <!-- Tagline -->
+    <text x="900" y="310" text-anchor="middle" font-size="35" font-weight="600"
+          fill="#168DB5" letter-spacing="12">FIND. COMPARE. SAVE.</text>
+  </g>
+</svg>
