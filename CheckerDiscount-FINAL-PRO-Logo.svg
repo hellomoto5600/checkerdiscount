@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 420" role="img" aria-labelledby="title desc">
+  <title id="title">CheckerDiscount</title>
+  <desc id="desc">Professional vector logo with a navy hexagon, mint checkmark, circuit accents and connected CheckerDiscount wordmark.</desc>
+
+  <defs>
+    <linearGradient id="navy" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#123B78"/>
+      <stop offset="1" stop-color="#0B234A"/>
+    </linearGradient>
+    <linearGradient id="mint" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#24D7B2"/>
+      <stop offset="1" stop-color="#0BA88D"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ICON -->
+  <g transform="translate(38 24)">
+    <!-- circuit traces -->
+    <g fill="none" stroke="#19BFA3" stroke-width="7" stroke-linecap="round">
+      <path d="M0 104 H82"/>
+      <path d="M0 178 H82"/>
+      <path d="M0 252 H82"/>
+      <path d="M338 104 H420"/>
+      <path d="M338 178 H420"/>
+      <path d="M338 252 H420"/>
+    </g>
+    <g fill="#FFFFFF" stroke="#19BFA3" stroke-width="7">
+      <circle cx="0" cy="104" r="13"/>
+      <circle cx="0" cy="178" r="13"/>
+      <circle cx="0" cy="252" r="13"/>
+      <circle cx="420" cy="104" r="13"/>
+      <circle cx="420" cy="178" r="13"/>
+      <circle cx="420" cy="252" r="13"/>
+    </g>
+
+    <!-- hexagon -->
+    <path d="M210 4 L378 101 L378 295 L210 392 L42 295 L42 101 Z" fill="url(#navy)"/>
+    <path d="M210 58 L325 124 L325 272 L210 338 L95 272 L95 124 Z" fill="#FFFFFF"/>
+
+    <!-- refined checkmark -->
+    <path d="M123 192 L181 250 L303 124"
+          fill="none" stroke="url(#mint)" stroke-width="42"
+          stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- CONNECTED WORDMARK -->
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="486" y="235" font-size="104" letter-spacing="-5" font-weight="700">
+      <tspan fill="#102F63">Checker</tspan><tspan fill="#1596B8" font-weight="500">Discount</tspan>
+    </text>
+
+    <!-- subtle divider accents around tagline -->
+    <g stroke="#19BFA3" stroke-width="5" stroke-linecap="round">
+      <path d="M500 305 H620"/>
+      <path d="M1320 305 H1440"/>
+    </g>
+
+    <text x="970" y="315" text-anchor="middle"
+          font-size="29" font-weight="600" letter-spacing="9"
+          fill="#159A91">FIND. COMPARE. SAVE.</text>
+  </g>
+</svg>
