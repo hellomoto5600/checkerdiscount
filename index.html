@@ -4,9 +4,31 @@
 <header class="fixed top-0 inset-x-0 z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
   <div class="h-16 max-w-[1240px] mx-auto px-4 flex items-center justify-between">
     
-    <!-- یہاں لوگو میں شائننگ اور گلوئنگ ایفیکٹ (drop-shadow اور پریمیم لک) ایڈ کر دی گئی ہے -->
+    <!-- یہاں مکمل پرو لیول SVG لوگو لگا دیا گیا ہے -->
     <a class="flex items-center gap-2 group" data-path="home" href="#">
-      <img src="CheckerDiscount-FINAL-PRO-Logo.svg" alt="CheckerDiscount Logo" class="h-14 sm:h-16 w-auto object-contain scale-125 origin-left drop-shadow-[0_0_8px_rgba(21,94,239,0.35)] transition-all duration-300 group-hover:drop-shadow-[0_0_12px_rgba(21,94,239,0.6)]">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" class="h-10 sm:h-12 w-auto transition-transform duration-300 group-hover:scale-105">
+        <defs>
+          <linearGradient id="cdPrimaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#155EEF" />
+            <stop offset="100%" stop-color="#0047C1" />
+          </linearGradient>
+          <linearGradient id="cdGreenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#70FDA7" />
+            <stop offset="100%" stop-color="#12B76A" />
+          </linearGradient>
+          <filter id="cdShadow" x="-10%" y="-10%" width="120%" height="120%">
+            <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#0047C1" flood-opacity="0.25"/>
+          </filter>
+        </defs>
+        <g filter="url(#cdShadow)">
+          <path d="M26 4C14 4 6 8 6 8C6 24 10 42 26 56C42 42 46 24 46 8C46 8 38 4 26 4Z" fill="url(#cdPrimaryGrad)" />
+          <path d="M18 28L23 33L34 20" stroke="url(#cdGreenGrad)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="36" cy="14" r="4" fill="url(#cdGreenGrad)" />
+        </g>
+        <text x="60" y="39" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="24" font-weight="800" fill="#0B1C30" letter-spacing="-0.03em">
+          Checker<tspan font-weight="500" fill="#155EEF">Discount</tspan>
+        </text>
+      </svg>
     </a>
 
     <div class="flex items-center gap-1.5">
@@ -29,6 +51,5 @@
         <li><a class="text-tertiary-fixed-dim hover:text-on-tertiary" href="affiliate-disclosure.html">Affiliate Notice</a></li>
     </ul></div></div><div class="border-t border-navy-surface pt-3 space-y-2 text-[11px] text-tertiary-fixed-dim leading-relaxed"><p>Affiliate Disclosure: CheckerDiscount is an independent price validation service. We may earn a commission when you click merchant links.</p><div class="flex items-center justify-between text-[10px] text-tertiary-fixed-dim pt-1"><span>© 2025 CheckerDiscount Inc.</span><span>SSL Encrypted</span></div></div></div></footer><nav aria-label="Mobile Navigation" class="fixed bottom-0 inset-x-0 z-50 bg-surface-container-lowest/95 backdrop-blur-xl border-t border-surface-container px-3 py-2 flex items-center justify-around shadow-lg"><a class="flex flex-col items-center gap-0.5 text-primary-container font-label-md text-[11px] font-semibold py-1 px-2.5 rounded-xl" href="#"><span class="material-symbols-outlined text-[20px]">local_offer</span><span>Deals</span></a><a class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface font-label-md text-[11px] py-1 px-2.5 rounded-xl transition-colors" href="#savings-tool"><span class="material-symbols-outlined text-[20px]">calculate</span><span>Checker</span></a><a class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface font-label-md text-[11px] py-1 px-2.5 rounded-xl transition-colors" href="#tool-comparison"><span class="material-symbols-outlined text-[20px]">compare_arrows</span><span>Tools</span></a><a class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface font-label-md text-[11px] py-1 px-2.5 rounded-xl transition-colors" href="#tool-watchlist"><span class="material-symbols-outlined text-[20px]">bookmark_border</span><span>Watchlist</span></a></nav>
 
-<!-- Corrected script path for 'js/app.js' -->
 <script src="js/app.js"></script>
 </body></html>
