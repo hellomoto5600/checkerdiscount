@@ -1,86 +1,58 @@
-// CheckerDiscount app.js - Complete Final Version with Fixed Images & Admin Debug
+// CheckerDiscount app.js - Live Worker API Integrated Version
 
-const sampleDeals = [
-    {
-        id: 1,
-        category: "home",
-        store: "Amazon",
-        title: "Cervical Neck Pillow, Memory Foam Pillow with Dual Height, White",
-        price: 33.98,
-        originalPrice: 56.99,
-        discount: "40% OFF",
-        savings: "$23.01",
-        image: "https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&q=80&w=400",
-        date: "2026-09-15 13:19:39",
-        url: "#",
-        isFeatured: true
-    },
-    {
-        id: 2,
-        category: "kitchen",
-        store: "Amazon",
-        title: "Ninja Nutri-Plus Personal Blender, 900PW, (3) 20oz Cups, Silver, BN301",
-        price: 69.97,
-        originalPrice: 89.99,
-        discount: "22% OFF",
-        savings: "$20.02",
-        image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&q=80&w=400",
-        date: "2026-09-15 12:25:29",
-        url: "#",
-        isFeatured: false
-    },
-    {
-        id: 3,
-        category: "kitchen",
-        store: "Amazon",
-        title: "Hamilton Beach Power Deluxe 6-Speed Electric Hand Mixer",
-        price: 24.97,
-        originalPrice: 31.95,
-        discount: "22% OFF",
-        savings: "$6.98",
-        image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&q=80&w=400",
-        date: "2026-09-15 11:00:00",
-        url: "#",
-        isFeatured: false
-    }
-];
+const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
 
 document.addEventListener("DOMContentLoaded", () => {
-    loadDeals();
-    loadSpotlight();
+    fetchDealsAndInit();
     setupFilters();
     initBurgerMenu();
 });
 
-function getStoredDeals() {
-    const local = localStorage.getItem("checker_deals");
-    if (local) {
-        try { 
-            const parsed = JSON.parse(local);
-            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-        } catch(e) {}
+let globalDeals = [];
+
+async function fetchDealsAndInit() {
+    try {
+        const response = await fetch(`${API_BASE}/api/deals`);
+        const data = await response.json();
+        
+        if (data.success && Array.isArray(data.deals)) {
+            globalDeals = data.deals;
+        } else {
+            globalDeals = [];
+        }
+    } catch (error) {
+        console.error("Failed to fetch deals from Worker API:", error);
+        globalDeals = [];
     }
-    return sampleDeals;
+
+    loadSpotlight();
+    loadDeals("all");
 }
 
 function loadSpotlight() {
-    const deals = getStoredDeals();
-    let featuredDeal = deals.find(d => d.isFeatured === true || d.featured === true || d.isFeatured === "true" || d.featured === "1" || String(d.isFeatured).toLowerCase() === "yes");
-    if (!featuredDeal && deals.length > 0) {
+    const deals = globalDeals;
+    if (deals.length === 0) return;
+
+    // ورکر کے ڈیٹا بیس کے مطابق is_featured (1 یا 0) کو چیک کیا جا رہا ہے
+    let featuredDeal = deals.find(d => Number(d.is_featured) === 1 || d.isFeatured === true);
+    if (!featuredDeal) {
         featuredDeal = deals[0];
     }
 
     const spotlightContainer = document.querySelector(".relative.w-full.bg-gradient-to-b");
     if (!spotlightContainer || !featuredDeal) return;
 
-    const imgSrc = featuredDeal.image || featuredDeal.imageUrl || featuredDeal.img || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
+    // ڈیٹا بیس کا اصل کالم نام 'image_url' یہاں استعمال کیا گیا ہے
+    const imgSrc = featuredDeal.image_url || featuredDeal.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
+    const discountText = featuredDeal.discount_percent ? `${Math.round(featuredDeal.discount_percent)}% OFF` : 'Special Offer';
+    const savingsAmount = featuredDeal.old_price && featuredDeal.new_price ? (featuredDeal.old_price - featuredDeal.new_price).toFixed(2) : '0.00';
 
     let showcaseBox = spotlightContainer.querySelector(".w-full.mt-2.bg-surface-container-lowest");
     if (showcaseBox) {
         showcaseBox.innerHTML = `
             <div class="flex items-center justify-between gap-2 pb-3 border-b border-surface-container-low">
                 <div class="flex items-center gap-1 text-primary font-badge-caps text-[11px] font-bold uppercase tracking-wider"><span class="material-symbols-outlined text-[15px]">bolt</span> Deal Spotlight</div>
-                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-savings-green-subtle text-secondary font-badge-caps text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">verified</span> ${featuredDeal.discount || 'Special Offer'}</span>
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-savings-green-subtle text-secondary font-badge-caps text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">verified</span> ${discountText}</span>
             </div>
             <div class="flex gap-3 pt-3">
                 <div class="w-20 h-20 rounded-xl bg-surface-subtle overflow-hidden flex-shrink-0 relative border border-surface-container flex items-center justify-center">
@@ -95,14 +67,14 @@ function loadSpotlight() {
                     </div>
                     <h3 class="font-headline-sm text-[14px] text-on-surface font-semibold leading-snug line-clamp-2 mt-0.5">${featuredDeal.title}</h3>
                     <div class="flex items-baseline gap-2 mt-1.5">
-                        <span class="font-headline-sm text-[20px] font-extrabold text-primary-container">$${Number(featuredDeal.price).toFixed(2)}</span>
-                        ${featuredDeal.originalPrice ? `<span class="font-price-strikethrough text-[13px] text-outline line-through">$${Number(featuredDeal.originalPrice).toFixed(2)}</span>` : ''}
+                        <span class="font-headline-sm text-[20px] font-extrabold text-primary-container">$${Number(featuredDeal.new_price || featuredDeal.price || 0).toFixed(2)}</span>
+                        ${featuredDeal.old_price ? `<span class="font-price-strikethrough text-[13px] text-outline line-through">$${Number(featuredDeal.old_price).toFixed(2)}</span>` : ''}
                     </div>
                 </div>
             </div>
             <div class="mt-3 pt-2.5 border-t border-surface-container flex items-center justify-between">
                 <div class="px-2.5 py-1 rounded-lg bg-savings-green-subtle text-savings-green font-bold text-[12px] flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[14px]">savings</span> Save ${featuredDeal.savings || '$0.00'}
+                    <span class="material-symbols-outlined text-[14px]">savings</span> Save $${savingsAmount}
                 </div>
                 <div class="flex items-center gap-2">
                     <button onclick="shareDeal('${encodeURIComponent(featuredDeal.title)}', '${featuredDeal.url || window.location.href}')" class="w-9 h-9 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface flex items-center justify-center transition-colors shadow-sm" title="Share Deal">
@@ -122,7 +94,7 @@ function loadDeals(filter = "all") {
     const container = document.getElementById("discountsContainer");
     if (!container) return;
 
-    let deals = getStoredDeals();
+    let deals = globalDeals;
     if (filter !== "all") {
         deals = deals.filter(d => d.category && d.category.toLowerCase() === filter.toLowerCase());
     }
@@ -130,14 +102,15 @@ function loadDeals(filter = "all") {
     container.innerHTML = "";
 
     if (deals.length === 0) {
-        container.innerHTML = `<div class="p-6 text-center text-on-surface-variant bg-surface-container-lowest rounded-2xl border border-surface-container">No deals found in this category.</div>`;
+        container.innerHTML = `<div class="p-6 text-center text-on-surface-variant bg-surface-container-lowest rounded-2xl border border-surface-container">No deals found from database. Please verify deals from Admin Panel.</div>`;
         return;
     }
 
     deals.forEach(deal => {
-        console.log("Admin Panel Image Link:", deal.image || deal.imageUrl || deal.img);
-
-        const imgSrc = deal.image || deal.imageUrl || deal.img || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
+        const imgSrc = deal.image_url || deal.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
+        const discountText = deal.discount_percent ? `${Math.round(deal.discount_percent)}% OFF` : 'Special Deal';
+        const priceVal = Number(deal.new_price || deal.price || 0).toFixed(2);
+        const oldPriceVal = deal.old_price ? Number(deal.old_price).toFixed(2) : null;
         
         const card = document.createElement("div");
         card.className = "bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container/60 flex flex-col gap-3";
@@ -145,7 +118,7 @@ function loadDeals(filter = "all") {
             <div class="flex items-center justify-between gap-2">
                 <span class="font-badge-caps text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">${deal.store || 'Amazon'}</span>
                 <span class="px-2.5 py-0.5 rounded-full bg-savings-green-subtle text-secondary font-badge-caps text-[10px] font-bold flex items-center gap-1">
-                    <span class="material-symbols-outlined text-[12px]">verified</span> ${deal.discount || 'Special Deal'}
+                    <span class="material-symbols-outlined text-[12px]">verified</span> ${discountText}
                 </span>
             </div>
             <div class="flex gap-3">
@@ -155,15 +128,15 @@ function loadDeals(filter = "all") {
                 <div class="flex flex-col min-w-0 justify-center flex-1">
                     <h3 class="font-headline-sm text-[14px] text-on-surface font-semibold leading-snug line-clamp-2">${deal.title}</h3>
                     <div class="flex items-baseline gap-2 mt-1.5">
-                        <span class="font-headline-sm text-[18px] font-extrabold text-primary-container">$${Number(deal.price).toFixed(2)}</span>
-                        ${deal.originalPrice ? `<span class="font-price-strikethrough text-[13px] text-outline line-through">$${Number(deal.originalPrice).toFixed(2)}</span>` : ''}
+                        <span class="font-headline-sm text-[18px] font-extrabold text-primary-container">$${priceVal}</span>
+                        ${oldPriceVal ? `<span class="font-price-strikethrough text-[13px] text-outline line-through">$${oldPriceVal}</span>` : ''}
                     </div>
                 </div>
             </div>
             <div class="flex items-center justify-between pt-2 border-t border-surface-container-low text-[11px] text-on-surface-variant">
                 <div class="flex items-center gap-1">
                     <span class="material-symbols-outlined text-savings-green text-[14px]">check_circle</span>
-                    <span>${deal.date || 'Verified'}</span>
+                    <span>${deal.last_verified_at || deal.created_at || 'Verified'}</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <button onclick="shareDeal('${encodeURIComponent(deal.title)}', '${deal.url || window.location.href}')" class="w-9 h-9 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface flex items-center justify-center transition-colors shadow-sm" title="Share Deal">
@@ -241,7 +214,7 @@ function initBurgerMenu() {
                 </div>
             </div>
             <div class="pt-4 border-t border-surface-container text-center text-[12px] text-on-surface-variant">
-                CheckerDiscount v2.5
+                CheckerDiscount v10.0
             </div>
         </div>
     `;
