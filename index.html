@@ -1,2016 +1,1480 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CheckerDiscount Admin</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script src="https://cdn.tailwindcss.com"></script>
+    <title>CheckerDiscount - Real Deals, Better Prices</title>
 
-<style>
-    body {
-        background: #f5f7fb;
-        color: #172033;
-        font-family: Arial, sans-serif;
-    }
+    <meta
+        name="description"
+        content="CheckerDiscount helps you find real deals, compare prices and save money across stores and countries."
+    >
 
-    .card {
-        background: white;
-        border: 1px solid #e5e9f0;
-        border-radius: 16px;
-        box-shadow: 0 4px 18px rgba(20, 30, 50, 0.05);
-    }
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    input, select, textarea {
-        width: 100%;
-        border: 1px solid #d9dee8;
-        border-radius: 10px;
-        padding: 10px 12px;
-        background: white;
-        outline: none;
-    }
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    input:focus, select:focus, textarea:focus {
-        border-color: #2563eb;
-        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
-    }
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 
-    button {
-        cursor: pointer;
-    }
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0,0"
+        rel="stylesheet"
+    >
 
-    .table-wrap {
-        overflow-x: auto;
-    }
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        };
+    </script>
 
-    table {
-        min-width: 1250px;
-    }
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    th {
-        white-space: nowrap;
-    }
+        html {
+            scroll-behavior: smooth;
+        }
 
-    .modal {
-        background: rgba(10, 18, 35, 0.55);
-        backdrop-filter: blur(4px);
-    }
+        body {
+            margin: 0;
+            font-family: "Inter", sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+        }
 
-    .hidden {
-        display: none !important;
-    }
-</style>
+        .material-symbols-outlined {
+            font-variation-settings:
+                "FILL" 0,
+                "wght" 400,
+                "GRAD" 0,
+                "opsz" 24;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .country-flag-button {
+            min-width: 52px;
+            height: 48px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            background: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .country-flag-button:hover {
+            transform: translateY(-2px);
+            border-color: #93c5fd;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, .10);
+        }
+
+        .country-flag-button.active {
+            border: 2px solid #2563eb;
+            background: #eff6ff;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, .14);
+        }
+
+        .category-chip {
+            border: 1px solid #e2e8f0;
+            background: white;
+            color: #475569;
+            padding: 9px 15px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s ease;
+            white-space: nowrap;
+        }
+
+        .category-chip:hover {
+            border-color: #93c5fd;
+            color: #2563eb;
+        }
+
+        .category-chip.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .deal-card {
+            transition: .2s ease;
+        }
+
+        .deal-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 40px rgba(15, 23, 42, .09);
+        }
+
+        .modal-backdrop {
+            background: rgba(15, 23, 42, .58);
+            backdrop-filter: blur(5px);
+        }
+    </style>
 </head>
 
 <body>
 
-<!-- =====================================================
-     LOGIN
-===================================================== -->
+<!-- =========================================================
+     HEADER
+========================================================= -->
 
-<div id="loginScreen" class="min-h-screen flex items-center justify-center p-5">
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200">
 
-    <div class="card w-full max-w-md p-7">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div class="text-center mb-7">
+        <div class="h-16 flex items-center justify-between">
 
-            <div class="mx-auto w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-xl font-bold">
-                CD
-            </div>
+            <!-- LOGO -->
 
-            <h1 class="text-2xl font-bold mt-4">
-                CheckerDiscount
-            </h1>
+            <a href="/" class="flex items-center gap-2">
 
-            <p class="text-gray-500 mt-1">
-                Admin Panel
-            </p>
+                <svg
+                    width="40"
+                    height="40"
+                    viewBox="0 0 100 100"
+                    fill="none"
+                >
+                    <rect
+                        x="4"
+                        y="4"
+                        width="92"
+                        height="92"
+                        rx="24"
+                        fill="#2563EB"
+                    />
+
+                    <path
+                        d="M27 35C32 28 40 24 50 24C64 24 75 31 80 43"
+                        stroke="white"
+                        stroke-width="8"
+                        stroke-linecap="round"
+                    />
+
+                    <path
+                        d="M73 65C68 72 60 76 50 76C36 76 25 69 20 57"
+                        stroke="white"
+                        stroke-width="8"
+                        stroke-linecap="round"
+                    />
+
+                    <path
+                        d="M72 30L80 43L65 44"
+                        stroke="white"
+                        stroke-width="7"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                    <path
+                        d="M28 70L20 57L35 56"
+                        stroke="white"
+                        stroke-width="7"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+                </svg>
+
+                <div>
+
+                    <div class="text-xl font-extrabold tracking-tight text-slate-900">
+                        Checker<span class="text-blue-600">Discount</span>
+                    </div>
+
+                    <div class="text-[9px] font-bold tracking-widest text-slate-400 uppercase">
+                        Real Deals. Better Prices.
+                    </div>
+
+                </div>
+
+            </a>
+
+
+            <!-- DESKTOP NAV -->
+
+            <nav class="hidden md:flex items-center gap-7 text-sm font-semibold text-slate-600">
+
+                <a
+                    href="#market-deals"
+                    class="hover:text-blue-600"
+                >
+                    Deals
+                </a>
+
+                <a
+                    href="#shopping-tools"
+                    class="hover:text-blue-600"
+                >
+                    Compare
+                </a>
+
+                <a
+                    href="#savings-checker"
+                    class="hover:text-blue-600"
+                >
+                    Savings
+                </a>
+
+                <a
+                    href="#footer"
+                    class="hover:text-blue-600"
+                >
+                    About
+                </a>
+
+            </nav>
+
+
+            <!-- MENU -->
+
+            <button
+                id="menuButton"
+                onclick="toggleMenu()"
+                class="w-10 h-10 rounded-xl hover:bg-slate-100 flex items-center justify-center"
+                aria-label="Menu"
+            >
+
+                <span class="material-symbols-outlined">
+                    menu
+                </span>
+
+            </button>
 
         </div>
 
-        <label class="block text-sm font-semibold mb-2">
-            Admin Key
-        </label>
 
-        <input
-            id="adminKey"
-            type="password"
-            placeholder="Enter Admin Key"
-        >
-
-        <button
-            onclick="login()"
-            class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl"
-        >
-            Login
-        </button>
+        <!-- MOBILE MENU -->
 
         <div
-            id="loginStatus"
-            class="text-center text-sm mt-4 text-red-500"
-        ></div>
+            id="mobileMenu"
+            class="hidden border-t border-slate-100 pb-4"
+        >
+
+            <div class="pt-4 flex flex-col gap-4 text-sm font-semibold text-slate-600">
+
+                <a href="#market-deals" onclick="closeMenu()">
+                    Deals
+                </a>
+
+                <a href="#shopping-tools" onclick="closeMenu()">
+                    Compare
+                </a>
+
+                <a href="#savings-checker" onclick="closeMenu()">
+                    Savings Checker
+                </a>
+
+                <a href="#footer" onclick="closeMenu()">
+                    About
+                </a>
+
+            </div>
+
+        </div>
 
     </div>
 
-</div>
+</header>
 
 
-<!-- =====================================================
-     ADMIN APP
-===================================================== -->
+<!-- =========================================================
+     HERO
+========================================================= -->
 
-<div id="adminApp" class="hidden min-h-screen">
+<section class="bg-white">
 
-    <!-- HEADER -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
 
-    <header class="bg-white border-b border-gray-200 sticky top-0 z-30">
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
 
             <div>
-                <h1 class="text-xl sm:text-2xl font-bold">
-                    CheckerDiscount Admin
+
+                <div class="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-2 rounded-full text-xs font-bold mb-5">
+
+                    <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+
+                    Real deals checked regularly
+
+                </div>
+
+
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-slate-900">
+
+                    Find the
+                    <span class="text-blue-600">
+                        real deal
+                    </span>
+                    before you buy.
+
                 </h1>
 
-                <p class="text-xs sm:text-sm text-gray-500">
-                    Manage deals, countries, categories and comparisons
+
+                <p class="mt-5 text-lg text-slate-600 max-w-xl leading-8">
+
+                    Compare prices, discover genuine discounts and find better offers from stores around the world.
+
                 </p>
+
+
+                <div class="mt-7 flex flex-col sm:flex-row gap-3">
+
+                    <a
+                        href="#market-deals"
+                        class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3.5 rounded-xl"
+                    >
+
+                        Explore Deals
+
+                        <span class="material-symbols-outlined text-[20px]">
+                            arrow_downward
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        href="#shopping-tools"
+                        class="inline-flex items-center justify-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-6 py-3.5 rounded-xl"
+                    >
+
+                        Compare Prices
+
+                        <span class="material-symbols-outlined text-[20px]">
+                            compare_arrows
+                        </span>
+
+                    </a>
+
+                </div>
+
+
+                <div class="mt-7 flex flex-wrap gap-5 text-sm text-slate-500">
+
+                    <div class="flex items-center gap-2">
+
+                        <span class="material-symbols-outlined text-emerald-600">
+                            verified
+                        </span>
+
+                        Verified deals
+
+                    </div>
+
+
+                    <div class="flex items-center gap-2">
+
+                        <span class="material-symbols-outlined text-blue-600">
+                            public
+                        </span>
+
+                        Multiple countries
+
+                    </div>
+
+
+                    <div class="flex items-center gap-2">
+
+                        <span class="material-symbols-outlined text-amber-500">
+                            savings
+                        </span>
+
+                        Save more
+
+                    </div>
+
+                </div>
+
             </div>
 
-            <button
-                onclick="logout()"
-                class="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-sm font-semibold"
-            >
-                Logout
-            </button>
+
+            <!-- HERO CARD -->
+
+            <div class="relative">
+
+                <div class="absolute -top-8 -right-5 w-32 h-32 bg-blue-100 rounded-full blur-3xl opacity-70"></div>
+
+                <div class="absolute -bottom-8 -left-5 w-40 h-40 bg-emerald-100 rounded-full blur-3xl opacity-70"></div>
+
+
+                <div class="relative bg-slate-50 border border-slate-200 rounded-3xl p-5 shadow-xl">
+
+                    <div class="flex items-center justify-between mb-4">
+
+                        <div>
+
+                            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                                Deal example
+                            </div>
+
+                            <div class="font-extrabold text-lg mt-1">
+                                Real Deal Check
+                            </div>
+
+                        </div>
+
+
+                        <div class="bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-full text-xs font-extrabold">
+                            VERIFIED
+                        </div>
+
+                    </div>
+
+
+                    <div class="bg-white rounded-2xl border border-slate-200 p-4">
+
+                        <div class="flex gap-4">
+
+                            <div class="w-24 h-24 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
+
+                                <span class="material-symbols-outlined text-4xl text-slate-400">
+                                    headphones
+                                </span>
+
+                            </div>
+
+
+                            <div class="min-w-0">
+
+                                <div class="text-xs text-slate-500">
+                                    🇺🇸 USA · Headphones
+                                </div>
+
+                                <h3 class="font-bold mt-1 leading-5">
+                                    Wireless Noise Cancelling Headphones
+                                </h3>
+
+
+                                <div class="flex items-end gap-2 mt-3">
+
+                                    <span class="text-2xl font-extrabold">
+                                        $59.99
+                                    </span>
+
+                                    <span class="text-sm text-slate-400 line-through">
+                                        $99.99
+                                    </span>
+
+                                </div>
+
+
+                                <div class="text-sm font-extrabold text-emerald-600 mt-1">
+                                    40% OFF
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="mt-4 grid grid-cols-3 gap-2">
+
+                            <div class="bg-slate-50 rounded-xl p-3 text-center">
+
+                                <div class="text-xs text-slate-400">
+                                    Amazon
+                                </div>
+
+                                <div class="font-bold text-sm mt-1">
+                                    $59.99
+                                </div>
+
+                            </div>
+
+
+                            <div class="bg-slate-50 rounded-xl p-3 text-center">
+
+                                <div class="text-xs text-slate-400">
+                                    Walmart
+                                </div>
+
+                                <div class="font-bold text-sm mt-1">
+                                    $64.99
+                                </div>
+
+                            </div>
+
+
+                            <div class="bg-blue-50 rounded-xl p-3 text-center">
+
+                                <div class="text-xs text-blue-500">
+                                    Best
+                                </div>
+
+                                <div class="font-bold text-sm text-blue-700 mt-1">
+                                    $59.99
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
-    </header>
+    </div>
 
+</section>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
 
+<!-- =========================================================
+     MARKET DEALS
+     app.js will inject country + category selector here
+========================================================= -->
 
-        <!-- =================================================
-             STATS
-        ================================================= -->
-
-        <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
-
-            <div class="card p-4">
-                <p class="text-xs text-gray-500">Total Deals</p>
-                <p id="statTotal" class="text-2xl font-bold mt-1">0</p>
-            </div>
-
-            <div class="card p-4">
-                <p class="text-xs text-gray-500">Verified</p>
-                <p id="statVerified" class="text-2xl font-bold mt-1 text-green-600">0</p>
-            </div>
-
-            <div class="card p-4">
-                <p class="text-xs text-gray-500">Pending</p>
-                <p id="statPending" class="text-2xl font-bold mt-1 text-orange-500">0</p>
-            </div>
-
-            <div class="card p-4">
-                <p class="text-xs text-gray-500">Expired</p>
-                <p id="statExpired" class="text-2xl font-bold mt-1 text-red-500">0</p>
-            </div>
-
-            <div class="card p-4">
-                <p class="text-xs text-gray-500">Featured</p>
-                <p id="statFeatured" class="text-2xl font-bold mt-1 text-blue-600">0</p>
-            </div>
-
-            <div class="card p-4">
-                <p class="text-xs text-gray-500">Coupons</p>
-                <p id="statCoupons" class="text-2xl font-bold mt-1 text-purple-600">0</p>
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             ADD DEAL
-        ================================================= -->
-
-        <section class="card p-5 mb-6">
-
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-5">
-
-                <div>
-                    <h2 class="text-lg font-bold">
-                        Add New Deal
-                    </h2>
-
-                    <p class="text-sm text-gray-500">
-                        Add a country-specific product offer
-                    </p>
-                </div>
-
-            </div>
-
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
-                <!-- TITLE -->
-
-                <div class="lg:col-span-2">
-                    <label class="block text-sm font-semibold mb-1">
-                        Product Title *
-                    </label>
-
-                    <input
-                        id="title"
-                        type="text"
-                        placeholder="Sony Wireless Headphones"
-                    >
-                </div>
-
-
-                <!-- STORE -->
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Store *
-                    </label>
-
-                    <input
-                        id="store"
-                        type="text"
-                        placeholder="Amazon"
-                    >
-                </div>
-
-
-                <!-- COUNTRY -->
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Country *
-                    </label>
-
-                    <select id="country_code" onchange="updateCurrencyFromCountry()">
-                    </select>
-                </div>
-
-
-                <!-- CATEGORY -->
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Category *
-                    </label>
-
-                    <input
-                        id="category"
-                        type="text"
-                        list="categoryList"
-                        placeholder="Headphones"
-                    >
-
-                    <datalist id="categoryList">
-                        <option value="Mobiles">
-                        <option value="Laptops">
-                        <option value="Headphones">
-                        <option value="Earbuds">
-                        <option value="TV">
-                        <option value="Home">
-                        <option value="Kitchen">
-                        <option value="Fashion">
-                        <option value="Beauty">
-                        <option value="Watches">
-                        <option value="Gaming">
-                        <option value="Electronics">
-                        <option value="Accessories">
-                        <option value="Sports">
-                        <option value="Toys">
-                        <option value="Tools">
-                        <option value="Automotive">
-                        <option value="Books">
-                        <option value="Other">
-                    </datalist>
-                </div>
-
-
-                <!-- COMPARISON ID -->
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Comparison ID
-                    </label>
-
-                    <input
-                        id="comparison_id"
-                        type="text"
-                        placeholder="sony-wh1000xm5"
-                    >
-
-                    <p class="text-[11px] text-gray-500 mt-1">
-                        Same ID = same product across different stores.
-                    </p>
-                </div>
-
-
-                <!-- CURRENCY -->
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Currency *
-                    </label>
-
-                    <select id="currency">
-                        <option value="USD">USD — $</option>
-                        <option value="GBP">GBP — £</option>
-                        <option value="SAR">SAR — ر.س</option>
-                        <option value="AED">AED — د.إ</option>
-                        <option value="OMR">OMR — ر.ع</option>
-                        <option value="PKR">PKR — ₨</option>
-                        <option value="INR">INR — ₹</option>
-                        <option value="CAD">CAD — $</option>
-                        <option value="AUD">AUD — $</option>
-                        <option value="EUR">EUR — €</option>
-                        <option value="JPY">JPY — ¥</option>
-                        <option value="CNY">CNY — ¥</option>
-                        <option value="KRW">KRW — ₩</option>
-                        <option value="SGD">SGD — $</option>
-                        <option value="MYR">MYR — RM</option>
-                        <option value="QAR">QAR — ر.ق</option>
-                        <option value="KWD">KWD — د.ك</option>
-                        <option value="BHD">BHD — د.ب</option>
-                        <option value="CHF">CHF — Fr.</option>
-                        <option value="NOK">NOK — kr</option>
-                        <option value="SEK">SEK — kr</option>
-                        <option value="DKK">DKK — kr</option>
-                        <option value="NZD">NZD — $</option>
-                        <option value="ZAR">ZAR — R</option>
-                        <option value="BRL">BRL — R$</option>
-                        <option value="MXN">MXN — $</option>
-                        <option value="IDR">IDR — Rp</option>
-                        <option value="PHP">PHP — ₱</option>
-                        <option value="TRY">TRY — ₺</option>
-                    </select>
-                </div>
-
-
-                <!-- OLD PRICE -->
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Old Price *
-                    </label>
-
-                    <input
-                        id="old"
-                        type="number"
-                        step="0.01"
-                        placeholder="99.99"
-                    >
-                </div>
-
-
-                <!-- NEW PRICE -->
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Deal Price *
-                    </label>
-
-                    <input
-                        id="new"
-                        type="number"
-                        step="0.01"
-                        placeholder="59.99"
-                    >
-                </div>
-
-
-                <!-- ASIN -->
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        ASIN / Product ID
-                    </label>
-
-                    <input
-                        id="asin"
-                        type="text"
-                        placeholder="B0XXXXXXXX"
-                    >
-                </div>
-
-
-                <!-- DEAL URL -->
-
-                <div class="lg:col-span-2">
-                    <label class="block text-sm font-semibold mb-1">
-                        Deal URL *
-                    </label>
-
-                    <input
-                        id="url"
-                        type="url"
-                        placeholder="https://..."
-                    >
-                </div>
-
-
-                <!-- IMAGE -->
-
-                <div class="lg:col-span-3">
-                    <label class="block text-sm font-semibold mb-1">
-                        Image URL
-                    </label>
-
-                    <input
-                        id="image"
-                        type="url"
-                        placeholder="https://..."
-                    >
-                </div>
-
-            </div>
-
-
-            <div class="flex flex-wrap gap-3 mt-5">
-
-                <button
-                    onclick="addDeal()"
-                    class="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold"
-                >
-                    + Add Deal
-                </button>
-
-                <button
-                    onclick="clearDealForm()"
-                    class="px-5 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 font-semibold"
-                >
-                    Clear
-                </button>
-
-            </div>
-
-            <div id="dealFormStatus" class="text-sm mt-4"></div>
-
-        </section>
-
-
-        <!-- =================================================
-             DEALS TABLE
-        ================================================= -->
-
-        <section class="card p-5 mb-6">
-
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
-
-                <div>
-                    <h2 class="text-lg font-bold">
-                        Deal Management
-                    </h2>
-
-                    <p class="text-sm text-gray-500">
-                        Country, category and comparison settings
-                    </p>
-                </div>
-
-                <button
-                    onclick="refreshAll()"
-                    class="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-sm font-semibold"
-                >
-                    ↻ Refresh
-                </button>
-
-            </div>
-
-
-            <div class="table-wrap">
-
-                <table class="w-full text-sm">
-
-                    <thead>
-
-                        <tr class="border-b border-gray-200 text-left">
-
-                            <th class="py-3 px-2">ID</th>
-                            <th class="py-3 px-2">Product</th>
-                            <th class="py-3 px-2">Store</th>
-                            <th class="py-3 px-2">Country</th>
-                            <th class="py-3 px-2">Category</th>
-                            <th class="py-3 px-2">Comparison</th>
-                            <th class="py-3 px-2">Price</th>
-                            <th class="py-3 px-2">Status</th>
-                            <th class="py-3 px-2">Actions</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody id="dealsTableBody">
-
-                        <tr>
-                            <td colspan="9" class="text-center py-8 text-gray-500">
-                                Loading deals...
-                            </td>
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             COUPONS
-        ================================================= -->
-
-        <section class="card p-5 mb-6">
-
-            <h2 class="text-lg font-bold mb-1">
-                Add Coupon
-            </h2>
-
-            <p class="text-sm text-gray-500 mb-5">
-                Add verified store coupons
-            </p>
-
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Store
-                    </label>
-
-                    <input id="couponStore" placeholder="Amazon">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Coupon Code
-                    </label>
-
-                    <input id="couponCode" placeholder="SAVE20">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Title
-                    </label>
-
-                    <input id="couponTitle" placeholder="20% Off Selected Items">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Discount
-                    </label>
-
-                    <input id="couponDiscount" placeholder="20% OFF">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Expiry
-                    </label>
-
-                    <input id="couponExpiry" type="datetime-local">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        URL
-                    </label>
-
-                    <input id="couponUrl" type="url" placeholder="https://...">
-                </div>
-
-                <div class="lg:col-span-3">
-                    <label class="block text-sm font-semibold mb-1">
-                        Description
-                    </label>
-
-                    <textarea
-                        id="couponDescription"
-                        rows="3"
-                        placeholder="Coupon details..."
-                    ></textarea>
-                </div>
-
-            </div>
-
-
-            <button
-                onclick="addCoupon()"
-                class="mt-5 px-5 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold"
-            >
-                + Add Coupon
-            </button>
-
-            <div id="couponStatus" class="text-sm mt-4"></div>
-
-        </section>
-
-    </main>
-
-</div>
-
-
-<!-- =====================================================
-     EDIT MODAL
-===================================================== -->
-
-<div
-    id="editModal"
-    class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+<section
+    id="market-deals"
+    class="py-12 md:py-16 bg-slate-50"
 >
 
-    <div class="bg-white rounded-2xl w-full max-w-3xl max-h-[92vh] overflow-y-auto shadow-2xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div class="p-5 border-b border-gray-200 flex items-center justify-between">
 
-            <div>
-                <h2 class="text-xl font-bold">
-                    Edit Deal
-                </h2>
+        <!-- SPOTLIGHT -->
 
-                <p class="text-sm text-gray-500">
-                    Update country, category or product information
-                </p>
+        <div class="mb-10">
+
+            <div class="flex items-center justify-between gap-4 mb-4">
+
+                <div>
+
+                    <div class="text-xs font-bold uppercase tracking-wider text-blue-600">
+                        Deal Spotlight
+                    </div>
+
+                    <h2 class="text-2xl md:text-3xl font-extrabold mt-1">
+                        Today's highlighted deal
+                    </h2>
+
+                </div>
+
             </div>
 
+
+            <div class="relative w-full bg-gradient-to-b from-blue-50 to-white rounded-3xl border border-blue-100 p-4 md:p-6">
+
+                <div class="w-full mt-2 bg-surface-container-lowest bg-white rounded-2xl border border-slate-200 p-5">
+
+                    <div class="flex flex-col md:flex-row items-center justify-center gap-6 py-6 text-center">
+
+                        <div class="w-28 h-28 rounded-2xl bg-slate-100 flex items-center justify-center">
+
+                            <span class="material-symbols-outlined text-5xl text-slate-300">
+                                local_offer
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <div class="text-xs font-bold text-slate-400 uppercase">
+                                Loading spotlight...
+                            </div>
+
+                            <h3 class="text-xl font-extrabold mt-2">
+                                Finding today's best deal
+                            </h3>
+
+                            <p class="text-sm text-slate-500 mt-2">
+                                Deals are loaded from our verified database.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DEALS TITLE -->
+
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+
+            <div>
+
+                <div class="text-xs font-bold uppercase tracking-wider text-blue-600">
+                    Live Deal Feed
+                </div>
+
+                <h2 class="text-2xl md:text-3xl font-extrabold mt-1">
+                    Deals in Your Country
+                </h2>
+
+                <p class="text-sm text-slate-500 mt-2">
+                    Select your country and browse available deals and categories.
+                </p>
+
+            </div>
+
+
+            <div class="inline-flex items-center gap-2 bg-white border border-slate-200 rounded-full px-4 py-2 text-xs font-bold text-slate-500">
+
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+
+                Checked every 15 mins
+
+            </div>
+
+        </div>
+
+
+        <!-- IMPORTANT:
+             app.js automatically adds:
+             Country flags
+             Country title
+             Dynamic categories
+        -->
+
+
+        <!-- DEALS -->
+
+        <div
+            id="discountsContainer"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
+        >
+
+            <div class="col-span-full bg-white border border-slate-200 rounded-2xl p-8 text-center">
+
+                <div class="w-10 h-10 mx-auto border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin"></div>
+
+                <p class="mt-4 text-sm text-slate-500">
+                    Loading deals...
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     SAVINGS CHECKER
+========================================================= -->
+
+<section
+    id="savings-checker"
+    class="py-12 md:py-16 bg-white"
+>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="grid lg:grid-cols-2 gap-8 items-start">
+
+
+            <div>
+
+                <div class="text-xs font-bold uppercase tracking-wider text-emerald-600">
+                    Smart Savings
+                </div>
+
+                <h2 class="text-2xl md:text-3xl font-extrabold mt-1">
+                    Is this really a good deal?
+                </h2>
+
+                <p class="text-slate-500 mt-3 leading-7">
+                    Enter the old and current price to quickly see your savings.
+                </p>
+
+
+                <div class="mt-6 grid sm:grid-cols-2 gap-4">
+
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5">
+
+                        <div class="text-sm text-slate-500">
+                            Compare prices
+                        </div>
+
+                        <div class="text-2xl font-extrabold mt-2">
+                            Multiple stores
+                        </div>
+
+                    </div>
+
+
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5">
+
+                        <div class="text-sm text-slate-500">
+                            Check savings
+                        </div>
+
+                        <div class="text-2xl font-extrabold mt-2">
+                            Before buying
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SAVINGS FORM -->
+
+            <div class="bg-slate-50 border border-slate-200 rounded-3xl p-5 md:p-7">
+
+                <form
+                    id="savingsForm"
+                    onsubmit="calculateSavings(); return false;"
+                >
+
+                    <div class="grid gap-4">
+
+
+                        <div>
+
+                            <label class="block text-sm font-bold mb-2">
+                                Store
+                            </label>
+
+                            <input
+                                id="checkerStore"
+                                type="text"
+                                placeholder="Amazon"
+                                class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white"
+                            >
+
+                        </div>
+
+
+                        <div>
+
+                            <label class="block text-sm font-bold mb-2">
+                                Original Price
+                            </label>
+
+                            <input
+                                id="checkerPaid"
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                placeholder="100"
+                                class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white"
+                            >
+
+                        </div>
+
+
+                        <div>
+
+                            <label class="block text-sm font-bold mb-2">
+                                Current Price
+                            </label>
+
+                            <input
+                                id="checkerCurrent"
+                                type="number"
+                                step="0.01"
+                                min="0"
+                                placeholder="70"
+                                class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white"
+                            >
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl"
+                        >
+                            Check My Savings
+                        </button>
+
+                    </div>
+
+                </form>
+
+
+                <div
+                    id="savingsDelta"
+                    class="mt-5 text-center text-3xl font-extrabold"
+                >
+                    —
+                </div>
+
+
+                <div
+                    id="savingsAdvice"
+                    class="mt-2 text-center text-sm text-slate-500"
+                >
+                    Enter prices to calculate your savings.
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     SMART SHOPPING TOOLS
+========================================================= -->
+
+<section
+    id="shopping-tools"
+    class="py-12 md:py-16 bg-slate-50"
+>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="mb-8">
+
+            <div class="text-xs font-bold uppercase tracking-wider text-blue-600">
+                Smart Shopping Tools
+            </div>
+
+            <h2 class="text-2xl md:text-3xl font-extrabold mt-1">
+                Tools to help you buy smarter
+            </h2>
+
+            <p class="text-slate-500 mt-2">
+                Compare prices, check history, find coupons and calculate your final cost.
+            </p>
+
+        </div>
+
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+
+            <!-- PRICE COMPARISON -->
+
+            <div class="bg-white border border-slate-200 rounded-3xl p-5">
+
+                <div class="flex items-center gap-3">
+
+                    <div class="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+
+                        <span class="material-symbols-outlined">
+                            compare_arrows
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <h3 class="font-extrabold">
+                            Price Comparison
+                        </h3>
+
+                        <p class="text-xs text-slate-500">
+                            Compare the same product across stores.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="mt-5 flex gap-2">
+
+                    <input
+                        id="compareProductInput"
+                        type="text"
+                        placeholder="Product name or ASIN"
+                        class="flex-1 min-w-0 px-4 py-3 rounded-xl border border-slate-300"
+                    >
+
+                    <button
+                        onclick="runPriceComparison()"
+                        class="px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold"
+                    >
+                        Compare
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="comparisonResults"
+                    class="mt-4"
+                ></div>
+
+            </div>
+
+
+            <!-- PRICE HISTORY -->
+
+            <div class="bg-white border border-slate-200 rounded-3xl p-5">
+
+                <div class="flex items-center gap-3">
+
+                    <div class="w-11 h-11 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+
+                        <span class="material-symbols-outlined">
+                            history
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <h3 class="font-extrabold">
+                            Price History
+                        </h3>
+
+                        <p class="text-xs text-slate-500">
+                            Check previous recorded prices.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="mt-5 flex gap-2">
+
+                    <input
+                        id="historyProductInput"
+                        type="text"
+                        placeholder="Deal ID"
+                        class="flex-1 min-w-0 px-4 py-3 rounded-xl border border-slate-300"
+                    >
+
+                    <button
+                        onclick="runPriceHistoryCheck()"
+                        class="px-4 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold"
+                    >
+                        Check
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="historyResults"
+                    class="mt-4"
+                ></div>
+
+            </div>
+
+
+            <!-- COUPON CHECKER -->
+
+            <div class="bg-white border border-slate-200 rounded-3xl p-5">
+
+                <div class="flex items-center gap-3">
+
+                    <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+
+                        <span class="material-symbols-outlined">
+                            sell
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <h3 class="font-extrabold">
+                            Coupon Checker
+                        </h3>
+
+                        <p class="text-xs text-slate-500">
+                            Look for available store coupons.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="mt-5 grid sm:grid-cols-2 gap-2">
+
+                    <input
+                        id="couponStoreInput"
+                        type="text"
+                        placeholder="Store"
+                        class="px-4 py-3 rounded-xl border border-slate-300"
+                    >
+
+                    <input
+                        id="couponKeywordInput"
+                        type="text"
+                        placeholder="Product / keyword"
+                        class="px-4 py-3 rounded-xl border border-slate-300"
+                    >
+
+                </div>
+
+
+                <button
+                    onclick="runCouponChecker()"
+                    class="w-full mt-2 px-4 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold"
+                >
+                    Find Coupons
+                </button>
+
+
+                <div
+                    id="couponResults"
+                    class="mt-4"
+                ></div>
+
+            </div>
+
+
+            <!-- FINAL PRICE CALCULATOR -->
+
+            <div class="bg-white border border-slate-200 rounded-3xl p-5">
+
+                <div class="flex items-center gap-3">
+
+                    <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+
+                        <span class="material-symbols-outlined">
+                            calculate
+                        </span>
+
+                    </div>
+
+                    <div>
+
+                        <h3 class="font-extrabold">
+                            Final Price Calculator
+                        </h3>
+
+                        <p class="text-xs text-slate-500">
+                            Calculate coupon, shipping and tax.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="mt-5 grid grid-cols-2 gap-3">
+
+                    <input
+                        id="calcPrice"
+                        type="number"
+                        step="0.01"
+                        placeholder="Price"
+                        class="px-4 py-3 rounded-xl border border-slate-300"
+                    >
+
+                    <input
+                        id="calcCoupon"
+                        type="number"
+                        step="0.01"
+                        placeholder="Coupon"
+                        class="px-4 py-3 rounded-xl border border-slate-300"
+                    >
+
+                    <input
+                        id="calcShipping"
+                        type="number"
+                        step="0.01"
+                        placeholder="Shipping"
+                        class="px-4 py-3 rounded-xl border border-slate-300"
+                    >
+
+                    <input
+                        id="calcTax"
+                        type="number"
+                        step="0.01"
+                        placeholder="Tax"
+                        class="px-4 py-3 rounded-xl border border-slate-300"
+                    >
+
+                </div>
+
+
+                <button
+                    onclick="runFinalPriceCalc()"
+                    class="w-full mt-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl"
+                >
+                    Calculate Final Price
+                </button>
+
+
+                <div
+                    id="finalPriceResult"
+                    class="mt-4 text-center"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- WATCHLIST -->
+
+        <div class="mt-5 bg-white border border-slate-200 rounded-3xl p-5">
+
+            <div class="flex items-center gap-3">
+
+                <div class="w-11 h-11 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
+
+                    <span class="material-symbols-outlined">
+                        notifications
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <h3 class="font-extrabold">
+                        Price Watchlist
+                    </h3>
+
+                    <p class="text-xs text-slate-500">
+                        Add a product and target price for future alerts.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="mt-5 grid md:grid-cols-3 gap-3">
+
+                <input
+                    id="watchProductName"
+                    type="text"
+                    placeholder="Product name"
+                    class="px-4 py-3 rounded-xl border border-slate-300"
+                >
+
+                <input
+                    id="watchAlertPrice"
+                    type="number"
+                    step="0.01"
+                    placeholder="Target price"
+                    class="px-4 py-3 rounded-xl border border-slate-300"
+                >
+
+                <button
+                    onclick="addToWatchlist()"
+                    class="bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-xl"
+                >
+                    Add to Watchlist
+                </button>
+
+            </div>
+
+
+            <div
+                id="watchlistMessage"
+                class="mt-4 text-sm text-slate-500"
+            ></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     AD / SPONSOR AREA
+========================================================= -->
+
+<section class="py-8 bg-white">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="border border-dashed border-slate-300 rounded-2xl min-h-[110px] flex items-center justify-center text-center">
+
+            <div>
+
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                    Advertisement
+                </div>
+
+                <p class="text-xs text-slate-400 mt-1">
+                    Non-intrusive advertising space
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer
+    id="footer"
+    class="bg-slate-900 text-white pt-12 pb-8"
+>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+
+            <div class="lg:col-span-2">
+
+                <div class="flex items-center gap-3">
+
+                    <div class="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center font-extrabold">
+                        CD
+                    </div>
+
+                    <div>
+
+                        <div class="font-extrabold text-xl">
+                            Checker<span class="text-blue-400">Discount</span>
+                        </div>
+
+                        <div class="text-xs text-slate-400">
+                            Real Deals. Better Prices.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <p class="text-sm text-slate-400 leading-7 max-w-lg mt-5">
+
+                    CheckerDiscount helps shoppers discover deals, compare prices and make better buying decisions across different stores and countries.
+
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <h3 class="font-bold mb-4">
+                    Explore
+                </h3>
+
+                <div class="flex flex-col gap-3 text-sm text-slate-400">
+
+                    <a href="#market-deals" class="hover:text-white">
+                        Deals
+                    </a>
+
+                    <a href="#shopping-tools" class="hover:text-white">
+                        Price Comparison
+                    </a>
+
+                    <a href="#savings-checker" class="hover:text-white">
+                        Savings Checker
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <h3 class="font-bold mb-4">
+                    CheckerDiscount
+                </h3>
+
+                <div class="flex flex-col gap-3 text-sm text-slate-400">
+
+                    <span>
+                        Multiple countries
+                    </span>
+
+                    <span>
+                        Multiple stores
+                    </span>
+
+                    <span>
+                        Deal verification
+                    </span>
+
+                    <span>
+                        Price comparison
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="border-t border-slate-800 mt-10 pt-6 flex flex-col md:flex-row justify-between gap-3 text-xs text-slate-500">
+
+            <div>
+                © 2026 CheckerDiscount. All rights reserved.
+            </div>
+
+            <div>
+                Prices and availability may change at the retailer.
+            </div>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- =========================================================
+     COMPARISON MODAL
+========================================================= -->
+
+<div
+    id="comparisonModal"
+    class="hidden fixed inset-0 z-[100] modal-backdrop items-center justify-center p-4"
+>
+
+    <div
+        class="bg-white rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl"
+    >
+
+        <div class="flex items-center justify-between p-5 border-b border-slate-200">
+
+            <div>
+
+                <div class="text-xs font-bold uppercase tracking-wider text-blue-600">
+                    Price Comparison
+                </div>
+
+                <h2
+                    id="comparisonModalTitle"
+                    class="text-xl font-extrabold mt-1"
+                >
+                    Compare Prices
+                </h2>
+
+            </div>
+
+
             <button
-                onclick="closeEditModal()"
-                class="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200"
+                onclick="closeComparison()"
+                class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center"
             >
-                ✕
+
+                <span class="material-symbols-outlined">
+                    close
+                </span>
+
             </button>
 
         </div>
 
 
-        <div class="p-5">
+        <div
+            id="comparisonModalBody"
+            class="p-5 overflow-y-auto max-h-[70vh]"
+        >
 
-            <input id="editId" type="hidden">
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-semibold mb-1">
-                        Product Title
-                    </label>
-
-                    <input id="editTitle">
-                </div>
-
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Store
-                    </label>
-
-                    <input id="editStore">
-                </div>
-
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Country
-                    </label>
-
-                    <select id="editCountry" onchange="updateEditCurrency()">
-                    </select>
-                </div>
-
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Category
-                    </label>
-
-                    <input
-                        id="editCategory"
-                        list="categoryList"
-                    >
-                </div>
-
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Comparison ID
-                    </label>
-
-                    <input
-                        id="editComparisonId"
-                        placeholder="sony-wh1000xm5"
-                    >
-                </div>
-
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Currency
-                    </label>
-
-                    <select id="editCurrency">
-                        <option value="USD">USD — $</option>
-                        <option value="GBP">GBP — £</option>
-                        <option value="SAR">SAR — ر.س</option>
-                        <option value="AED">AED — د.إ</option>
-                        <option value="OMR">OMR — ر.ع</option>
-                        <option value="PKR">PKR — ₨</option>
-                        <option value="INR">INR — ₹</option>
-                        <option value="CAD">CAD — $</option>
-                        <option value="AUD">AUD — $</option>
-                        <option value="EUR">EUR — €</option>
-                        <option value="JPY">JPY — ¥</option>
-                        <option value="CNY">CNY — ¥</option>
-                        <option value="KRW">KRW — ₩</option>
-                        <option value="SGD">SGD — $</option>
-                        <option value="MYR">MYR — RM</option>
-                        <option value="QAR">QAR — ر.ق</option>
-                        <option value="KWD">KWD — د.ك</option>
-                        <option value="BHD">BHD — د.ب</option>
-                        <option value="CHF">CHF — Fr.</option>
-                        <option value="NOK">NOK — kr</option>
-                        <option value="SEK">SEK — kr</option>
-                        <option value="DKK">DKK — kr</option>
-                        <option value="NZD">NZD — $</option>
-                        <option value="ZAR">ZAR — R</option>
-                        <option value="BRL">BRL — R$</option>
-                        <option value="MXN">MXN — $</option>
-                        <option value="IDR">IDR — Rp</option>
-                        <option value="PHP">PHP — ₱</option>
-                        <option value="TRY">TRY — ₺</option>
-                    </select>
-                </div>
-
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Old Price
-                    </label>
-
-                    <input id="editOld" type="number" step="0.01">
-                </div>
-
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Deal Price
-                    </label>
-
-                    <input id="editNew" type="number" step="0.01">
-                </div>
-
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        ASIN / Product ID
-                    </label>
-
-                    <input id="editAsin">
-                </div>
-
-
-                <div>
-                    <label class="block text-sm font-semibold mb-1">
-                        Image URL
-                    </label>
-
-                    <input id="editImage">
-                </div>
-
-
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-semibold mb-1">
-                        Deal URL
-                    </label>
-
-                    <input id="editUrl">
-                </div>
-
+            <div class="text-center py-10 text-slate-500">
+                Loading comparison...
             </div>
-
-
-            <div class="flex gap-3 mt-6">
-
-                <button
-                    onclick="saveEdit()"
-                    class="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold"
-                >
-                    Save Changes
-                </button>
-
-                <button
-                    onclick="closeEditModal()"
-                    class="px-5 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 font-semibold"
-                >
-                    Cancel
-                </button>
-
-            </div>
-
-            <div id="editStatus" class="text-sm mt-4"></div>
 
         </div>
 
     </div>
 
 </div>
+
+
+<!-- =========================================================
+     APP JAVASCRIPT
+========================================================= -->
+
+<script src="app.js"></script>
 
 
 <script>
 
-const API_BASE =
-    "https://deal-api.hamraahirn32.workers.dev";
+function toggleMenu() {
 
-let ADMIN_KEY = "";
+    const menu = document.getElementById("mobileMenu");
 
-let allDeals = [];
+    if (!menu) return;
 
-const COUNTRY_DATA = [
+    menu.classList.toggle("hidden");
 
-    ["US", "🇺🇸", "United States", "USD"],
-    ["GB", "🇬🇧", "United Kingdom", "GBP"],
-    ["SA", "🇸🇦", "Saudi Arabia", "SAR"],
-    ["AE", "🇦🇪", "United Arab Emirates", "AED"],
-    ["OM", "🇴🇲", "Oman", "OMR"],
-    ["PK", "🇵🇰", "Pakistan", "PKR"],
-    ["IN", "🇮🇳", "India", "INR"],
-    ["CA", "🇨🇦", "Canada", "CAD"],
-    ["AU", "🇦🇺", "Australia", "AUD"],
-    ["DE", "🇩🇪", "Germany", "EUR"],
-    ["FR", "🇫🇷", "France", "EUR"],
-    ["IT", "🇮🇹", "Italy", "EUR"],
-    ["ES", "🇪🇸", "Spain", "EUR"],
-    ["NL", "🇳🇱", "Netherlands", "EUR"],
-    ["BE", "🇧🇪", "Belgium", "EUR"],
-    ["AT", "🇦🇹", "Austria", "EUR"],
-    ["CH", "🇨🇭", "Switzerland", "CHF"],
-    ["NO", "🇳🇴", "Norway", "NOK"],
-    ["SE", "🇸🇪", "Sweden", "SEK"],
-    ["DK", "🇩🇰", "Denmark", "DKK"],
-    ["NZ", "🇳🇿", "New Zealand", "NZD"],
-    ["JP", "🇯🇵", "Japan", "JPY"],
-    ["CN", "🇨🇳", "China", "CNY"],
-    ["KR", "🇰🇷", "South Korea", "KRW"],
-    ["SG", "🇸🇬", "Singapore", "SGD"],
-    ["MY", "🇲🇾", "Malaysia", "MYR"],
-    ["TH", "🇹🇭", "Thailand", "THB"],
-    ["ID", "🇮🇩", "Indonesia", "IDR"],
-    ["PH", "🇵🇭", "Philippines", "PHP"],
-    ["VN", "🇻🇳", "Vietnam", "VND"],
-    ["TR", "🇹🇷", "Turkey", "TRY"],
-    ["BR", "🇧🇷", "Brazil", "BRL"],
-    ["MX", "🇲🇽", "Mexico", "MXN"],
-    ["ZA", "🇿🇦", "South Africa", "ZAR"],
-    ["QA", "🇶🇦", "Qatar", "QAR"],
-    ["KW", "🇰🇼", "Kuwait", "KWD"],
-    ["BH", "🇧🇭", "Bahrain", "BHD"]
-];
-
-const CURRENCY_LIST = [
-    "USD","GBP","SAR","AED","OMR","PKR","INR",
-    "CAD","AUD","EUR","JPY","CNY","KRW","SGD",
-    "MYR","QAR","KWD","BHD","CHF","NOK","SEK",
-    "DKK","NZD","ZAR","BRL","MXN","IDR","PHP","TRY"
-];
-
-function $(id) {
-    return document.getElementById(id);
 }
 
 
-/* =====================================================
-   COUNTRY SELECTS
-===================================================== */
+function closeMenu() {
 
-function populateCountrySelects() {
+    const menu = document.getElementById("mobileMenu");
 
-    const selects = [
-        $("country_code"),
-        $("editCountry")
-    ];
+    if (!menu) return;
 
-    selects.forEach(select => {
+    menu.classList.add("hidden");
 
-        if (!select) return;
-
-        select.innerHTML = "";
-
-        COUNTRY_DATA.forEach(country => {
-
-            const option =
-                document.createElement("option");
-
-            option.value = country[0];
-
-            option.textContent =
-                `${country[1]} ${country[2]} (${country[3]})`;
-
-            select.appendChild(option);
-        });
-
-    });
-
-    $("country_code").value = "US";
-    $("editCountry").value = "US";
 }
 
 
-function getCurrencyForCountry(code) {
+function closeComparison() {
 
-    const country =
-        COUNTRY_DATA.find(
-            item => item[0] === code
-        );
+    const modal = document.getElementById("comparisonModal");
 
-    return country
-        ? country[3]
-        : "USD";
+    if (!modal) return;
+
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+
 }
 
 
-function updateCurrencyFromCountry() {
+window.addEventListener("click", function(event) {
 
-    const country =
-        $("country_code").value;
-
-    const currency =
-        getCurrencyForCountry(country);
-
-    $("currency").value = currency;
-}
-
-
-function updateEditCurrency() {
-
-    const country =
-        $("editCountry").value;
-
-    const currency =
-        getCurrencyForCountry(country);
-
-    $("editCurrency").value = currency;
-}
-
-
-/* =====================================================
-   LOGIN
-===================================================== */
-
-async function login() {
-
-    const key =
-        $("adminKey").value.trim();
-
-    if (!key) {
-
-        $("loginStatus").textContent =
-            "Please enter Admin Key.";
-
-        return;
-    }
-
-    ADMIN_KEY = key;
-
-    try {
-
-        const response =
-            await api("/api/admin/stats");
-
-        if (!response.success) {
-            throw new Error(
-                response.error || "Login failed"
-            );
-        }
-
-        sessionStorage.setItem(
-            "checkerAdminKey",
-            ADMIN_KEY
-        );
-
-        $("loginScreen").classList.add("hidden");
-
-        $("adminApp").classList.remove("hidden");
-
-        await refreshAll();
-
-    } catch (error) {
-
-        ADMIN_KEY = "";
-
-        $("loginStatus").textContent =
-            error.message || "Invalid Admin Key.";
-    }
-}
-
-
-function logout() {
-
-    ADMIN_KEY = "";
-
-    sessionStorage.removeItem(
-        "checkerAdminKey"
-    );
-
-    location.reload();
-}
-
-
-/* =====================================================
-   API
-===================================================== */
-
-async function api(
-    path,
-    options = {}
-) {
-
-    const headers = {
-        ...(options.headers || {}),
-        "X-Admin-Key": ADMIN_KEY,
-        "Content-Type": "application/json"
-    };
-
-    const response =
-        await fetch(
-            API_BASE + path,
-            {
-                ...options,
-                headers
-            }
-        );
-
-    let data;
-
-    try {
-        data = await response.json();
-    } catch {
-        throw new Error(
-            "Invalid API response"
-        );
-    }
-
-    if (!response.ok || data.success === false) {
-
-        throw new Error(
-            data.error ||
-            `Request failed (${response.status})`
-        );
-    }
-
-    return data;
-}
-
-
-/* =====================================================
-   INITIALIZE
-===================================================== */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    async () => {
-
-        populateCountrySelects();
-
-        const savedKey =
-            sessionStorage.getItem(
-                "checkerAdminKey"
-            );
-
-        if (savedKey) {
-
-            ADMIN_KEY = savedKey;
-
-            try {
-
-                const result =
-                    await api(
-                        "/api/admin/stats"
-                    );
-
-                if (result.success) {
-
-                    $("loginScreen")
-                        .classList.add("hidden");
-
-                    $("adminApp")
-                        .classList.remove("hidden");
-
-                    await refreshAll();
-                }
-
-            } catch {
-
-                sessionStorage.removeItem(
-                    "checkerAdminKey"
-                );
-
-                ADMIN_KEY = "";
-            }
-        }
-    }
-);
-
-
-/* =====================================================
-   REFRESH ALL
-===================================================== */
-
-async function refreshAll() {
-
-    await Promise.all([
-        refreshStats(),
-        refreshDeals()
-    ]);
-}
-
-
-/* =====================================================
-   STATS
-===================================================== */
-
-async function refreshStats() {
-
-    const data =
-        await api(
-            "/api/admin/stats"
-        );
-
-    const stats =
-        data.stats || {};
-
-    $("statTotal").textContent =
-        stats.total || 0;
-
-    $("statVerified").textContent =
-        stats.verified || 0;
-
-    $("statPending").textContent =
-        stats.pending || 0;
-
-    $("statExpired").textContent =
-        stats.expired || 0;
-
-    $("statFeatured").textContent =
-        stats.featured || 0;
-
-    $("statCoupons").textContent =
-        stats.coupons || 0;
-}
-
-
-/* =====================================================
-   DEALS
-===================================================== */
-
-async function refreshDeals() {
-
-    const data =
-        await api(
-            "/api/admin/deals"
-        );
-
-    allDeals =
-        Array.isArray(data.deals)
-            ? data.deals
-            : [];
-
-    renderDeals();
-}
-
-
-function getCountryInfo(code) {
-
-    return COUNTRY_DATA.find(
-        item =>
-            item[0] === String(code || "")
-                .toUpperCase()
-    );
-}
-
-
-function countryDisplay(code) {
-
-    const info =
-        getCountryInfo(code);
-
-    if (!info) {
-        return "🌐 Not Set";
-    }
-
-    return `${info[1]} ${info[2]}`;
-}
-
-
-function money(
-    value,
-    currency
-) {
-
-    const amount =
-        Number(value);
-
-    if (!Number.isFinite(amount)) {
-        return "-";
-    }
-
-    try {
-
-        return new Intl.NumberFormat(
-            undefined,
-            {
-                style: "currency",
-                currency: currency || "USD"
-            }
-        ).format(amount);
-
-    } catch {
-
-        return `${currency || "USD"} ${amount.toFixed(2)}`;
-    }
-}
-
-
-function statusBadge(status) {
-
-    const value =
-        String(status || "")
-            .toUpperCase();
-
-    if (value === "VERIFIED") {
-
-        return `
-            <span class="inline-flex px-2 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
-                VERIFIED
-            </span>
-        `;
-    }
-
-    if (value === "EXPIRED") {
-
-        return `
-            <span class="inline-flex px-2 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold">
-                EXPIRED
-            </span>
-        `;
-    }
-
-    return `
-        <span class="inline-flex px-2 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-semibold">
-            PENDING
-        </span>
-    `;
-}
-
-
-function esc(value) {
-
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-
-function renderDeals() {
-
-    const tbody =
-        $("dealsTableBody");
-
-    if (!allDeals.length) {
-
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="9"
-                    class="text-center py-10 text-gray-500">
-                    No deals found.
-                </td>
-            </tr>
-        `;
-
-        return;
-    }
-
-
-    tbody.innerHTML =
-        allDeals.map(deal => {
-
-            const country =
-                getCountryInfo(
-                    deal.country_code
-                );
-
-            const countryText =
-                country
-                    ? `${country[1]} ${country[0]}`
-                    : "🌐";
-
-            const comparison =
-                deal.comparison_id
-                    ? esc(deal.comparison_id)
-                    : `<span class="text-gray-400">Not set</span>`;
-
-            const featured =
-                Number(deal.is_featured) === 1;
-
-            return `
-                <tr class="border-b border-gray-100 hover:bg-gray-50">
-
-                    <td class="py-3 px-2 font-semibold">
-                        #${deal.id}
-                    </td>
-
-                    <td class="py-3 px-2 max-w-[280px]">
-                        <div class="font-semibold truncate">
-                            ${esc(deal.title)}
-                        </div>
-
-                        ${
-                            deal.asin
-                                ? `
-                                    <div class="text-[11px] text-gray-400 mt-1">
-                                        ${esc(deal.asin)}
-                                    </div>
-                                  `
-                                : ""
-                        }
-                    </td>
-
-                    <td class="py-3 px-2">
-                        ${esc(deal.store || "-")}
-                    </td>
-
-                    <td class="py-3 px-2 font-semibold">
-                        ${countryText}
-                    </td>
-
-                    <td class="py-3 px-2">
-                        ${
-                            deal.category
-                                ? esc(deal.category)
-                                : `<span class="text-gray-400">Not set</span>`
-                        }
-                    </td>
-
-                    <td class="py-3 px-2">
-                        <span class="text-xs font-mono">
-                            ${comparison}
-                        </span>
-                    </td>
-
-                    <td class="py-3 px-2 whitespace-nowrap">
-
-                        <div class="font-bold">
-                            ${money(
-                                deal.new_price,
-                                deal.currency
-                            )}
-                        </div>
-
-                        ${
-                            deal.old_price
-                                ? `
-                                    <div class="text-xs text-gray-400 line-through">
-                                        ${money(
-                                            deal.old_price,
-                                            deal.currency
-                                        )}
-                                    </div>
-                                  `
-                                : ""
-                        }
-
-                    </td>
-
-                    <td class="py-3 px-2">
-
-                        ${statusBadge(
-                            deal.verification_status
-                        )}
-
-                        ${
-                            featured
-                                ? `
-                                    <div class="text-[10px] text-blue-600 font-bold mt-1">
-                                        ★ FEATURED
-                                    </div>
-                                  `
-                                : ""
-                        }
-
-                    </td>
-
-                    <td class="py-3 px-2">
-
-                        <div class="flex flex-wrap gap-1">
-
-                            <button
-                                onclick="editDeal(${deal.id})"
-                                class="px-2.5 py-1.5 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 text-xs font-semibold"
-                            >
-                                Edit
-                            </button>
-
-                            ${
-                                deal.verification_status !== "VERIFIED"
-                                    ? `
-                                        <button
-                                            onclick="verifyDeal(${deal.id})"
-                                            class="px-2.5 py-1.5 rounded-lg bg-green-50 text-green-700 hover:bg-green-100 text-xs font-semibold"
-                                        >
-                                            Verify
-                                        </button>
-                                      `
-                                    : ""
-                            }
-
-                            ${
-                                featured
-                                    ? `
-                                        <button
-                                            onclick="toggleFeatured(${deal.id}, false)"
-                                            class="px-2.5 py-1.5 rounded-lg bg-yellow-50 text-yellow-700 hover:bg-yellow-100 text-xs font-semibold"
-                                        >
-                                            Unfeature
-                                        </button>
-                                      `
-                                    : `
-                                        <button
-                                            onclick="toggleFeatured(${deal.id}, true)"
-                                            class="px-2.5 py-1.5 rounded-lg bg-purple-50 text-purple-700 hover:bg-purple-100 text-xs font-semibold"
-                                        >
-                                            Feature
-                                        </button>
-                                      `
-                            }
-
-                            ${
-                                deal.verification_status !== "EXPIRED"
-                                    ? `
-                                        <button
-                                            onclick="expireDeal(${deal.id})"
-                                            class="px-2.5 py-1.5 rounded-lg bg-orange-50 text-orange-700 hover:bg-orange-100 text-xs font-semibold"
-                                        >
-                                            Expire
-                                        </button>
-                                      `
-                                    : ""
-                            }
-
-                            <button
-                                onclick="deleteDeal(${deal.id})"
-                                class="px-2.5 py-1.5 rounded-lg bg-red-50 text-red-700 hover:bg-red-100 text-xs font-semibold"
-                            >
-                                Delete
-                            </button>
-
-                        </div>
-
-                    </td>
-
-                </tr>
-            `;
-
-        }).join("");
-}
-
-
-/* =====================================================
-   ADD DEAL
-===================================================== */
-
-async function addDeal() {
-
-    const status =
-        $("dealFormStatus");
-
-    status.className =
-        "text-sm mt-4 text-gray-500";
-
-    status.textContent =
-        "Adding deal...";
-
-    try {
-
-        const body = {
-
-            title: $("title").value.trim(),
-
-            store: $("store").value.trim(),
-
-            old_price: $("old").value,
-
-            new_price: $("new").value,
-
-            url: $("url").value.trim(),
-
-            image_url:
-                $("image").value.trim(),
-
-            asin:
-                $("asin").value.trim(),
-
-            currency:
-                $("currency").value,
-
-            country_code:
-                $("country_code").value,
-
-            category:
-                $("category").value.trim(),
-
-            comparison_id:
-                $("comparison_id").value.trim(),
-
-            source_type:
-                "manual",
-
-            verification_status:
-                "PENDING"
-        };
-
-
-        if (
-            !body.title ||
-            !body.store ||
-            !body.old_price ||
-            !body.new_price ||
-            !body.url ||
-            !body.country_code ||
-            !body.category
-        ) {
-
-            throw new Error(
-                "Please fill all required fields."
-            );
-        }
-
-
-        const result =
-            await api(
-                "/api/admin/deals",
-                {
-                    method: "POST",
-                    body: JSON.stringify(body)
-                }
-            );
-
-
-        status.className =
-            "text-sm mt-4 text-green-600 font-semibold";
-
-        status.textContent =
-            `Deal added successfully. ID: ${result.id}`;
-
-
-        clearDealForm();
-
-        await refreshAll();
-
-    } catch (error) {
-
-        status.className =
-            "text-sm mt-4 text-red-600 font-semibold";
-
-        status.textContent =
-            error.message;
-    }
-}
-
-
-function clearDealForm() {
-
-    [
-        "title",
-        "store",
-        "old",
-        "new",
-        "url",
-        "image",
-        "asin",
-        "category",
-        "comparison_id"
-    ].forEach(id => {
-
-        if ($(id)) {
-            $(id).value = "";
-        }
-
-    });
-
-    $("country_code").value = "US";
-
-    $("currency").value = "USD";
-}
-
-
-/* =====================================================
-   EDIT DEAL
-===================================================== */
-
-function editDeal(id) {
-
-    const deal =
-        allDeals.find(
-            item => Number(item.id) === Number(id)
-        );
-
-    if (!deal) {
-        alert("Deal not found.");
-        return;
-    }
-
-
-    $("editId").value =
-        deal.id;
-
-    $("editTitle").value =
-        deal.title || "";
-
-    $("editStore").value =
-        deal.store || "";
-
-    $("editCountry").value =
-        deal.country_code || "US";
-
-    $("editCategory").value =
-        deal.category || "";
-
-    $("editComparisonId").value =
-        deal.comparison_id || "";
-
-    $("editCurrency").value =
-        deal.currency || "USD";
-
-    $("editOld").value =
-        deal.old_price ?? "";
-
-    $("editNew").value =
-        deal.new_price ?? "";
-
-    $("editAsin").value =
-        deal.asin || "";
-
-    $("editImage").value =
-        deal.image_url || "";
-
-    $("editUrl").value =
-        deal.url || "";
-
-    $("editStatus").textContent =
-        "";
-
-    $("editModal")
-        .classList.remove("hidden");
-}
-
-
-function closeEditModal() {
-
-    $("editModal")
-        .classList.add("hidden");
-}
-
-
-async function saveEdit() {
-
-    const id =
-        $("editId").value;
-
-    const status =
-        $("editStatus");
-
-    status.className =
-        "text-sm mt-4 text-gray-500";
-
-    status.textContent =
-        "Saving...";
-
-
-    try {
-
-        const body = {
-
-            title:
-                $("editTitle").value.trim(),
-
-            store:
-                $("editStore").value.trim(),
-
-            country_code:
-                $("editCountry").value,
-
-            category:
-                $("editCategory").value.trim(),
-
-            comparison_id:
-                $("editComparisonId").value.trim(),
-
-            currency:
-                $("editCurrency").value,
-
-            old_price:
-                $("editOld").value,
-
-            new_price:
-                $("editNew").value,
-
-            asin:
-                $("editAsin").value.trim(),
-
-            image_url:
-                $("editImage").value.trim(),
-
-            url:
-                $("editUrl").value.trim()
-        };
-
-
-        const result =
-            await api(
-                `/api/admin/deals/${id}/update`,
-                {
-                    method: "POST",
-                    body: JSON.stringify(body)
-                }
-            );
-
-
-        if (!result.success) {
-            throw new Error(
-                result.error || "Update failed"
-            );
-        }
-
-
-        status.className =
-            "text-sm mt-4 text-green-600 font-semibold";
-
-        status.textContent =
-            "Deal updated successfully.";
-
-
-        await refreshAll();
-
-        setTimeout(
-            closeEditModal,
-            700
-        );
-
-    } catch (error) {
-
-        status.className =
-            "text-sm mt-4 text-red-600 font-semibold";
-
-        status.textContent =
-            error.message;
-    }
-}
-
-
-/* =====================================================
-   VERIFY
-===================================================== */
-
-async function verifyDeal(id) {
+    const modal = document.getElementById("comparisonModal");
 
     if (
-        !confirm(
-            "Verify this deal?"
-        )
+        modal &&
+        event.target === modal
     ) {
-        return;
+        closeComparison();
     }
 
-    try {
-
-        await api(
-            `/api/admin/deals/${id}/verify`,
-            {
-                method: "POST"
-            }
-        );
-
-        await refreshAll();
-
-    } catch (error) {
-
-        alert(error.message);
-    }
-}
+});
 
 
-/* =====================================================
-   FEATURED
-===================================================== */
+document.addEventListener("keydown", function(event) {
 
-async function toggleFeatured(
-    id,
-    makeFeatured
-) {
-
-    const action =
-        makeFeatured
-            ? "featured"
-            : "unfeatured";
-
-    try {
-
-        await api(
-            `/api/admin/deals/${id}/${action}`,
-            {
-                method: "POST"
-            }
-        );
-
-        await refreshAll();
-
-    } catch (error) {
-
-        alert(error.message);
-    }
-}
-
-
-/* =====================================================
-   EXPIRE
-===================================================== */
-
-async function expireDeal(id) {
-
-    if (
-        !confirm(
-            "Mark this deal as expired?"
-        )
-    ) {
-        return;
+    if (event.key === "Escape") {
+        closeComparison();
     }
 
-    try {
-
-        await api(
-            `/api/admin/deals/${id}/expire`,
-            {
-                method: "POST"
-            }
-        );
-
-        await refreshAll();
-
-    } catch (error) {
-
-        alert(error.message);
-    }
-}
-
-
-/* =====================================================
-   DELETE
-===================================================== */
-
-async function deleteDeal(id) {
-
-    if (
-        !confirm(
-            "Delete this deal permanently?"
-        )
-    ) {
-        return;
-    }
-
-    try {
-
-        await api(
-            `/api/admin/deals/${id}`,
-            {
-                method: "DELETE"
-            }
-        );
-
-        await refreshAll();
-
-    } catch (error) {
-
-        alert(error.message);
-    }
-}
-
-
-/* =====================================================
-   ADD COUPON
-===================================================== */
-
-async function addCoupon() {
-
-    const status =
-        $("couponStatus");
-
-    status.className =
-        "text-sm mt-4 text-gray-500";
-
-    status.textContent =
-        "Adding coupon...";
-
-
-    try {
-
-        const body = {
-
-            store:
-                $("couponStore").value.trim(),
-
-            code:
-                $("couponCode").value.trim(),
-
-            title:
-                $("couponTitle").value.trim(),
-
-            discount_text:
-                $("couponDiscount").value.trim(),
-
-            description:
-                $("couponDescription").value.trim(),
-
-            expires_at:
-                $("couponExpiry").value,
-
-            url:
-                $("couponUrl").value.trim()
-        };
-
-
-        if (
-            !body.store ||
-            !body.title
-        ) {
-
-            throw new Error(
-                "Store and title are required."
-            );
-        }
-
-
-        const result =
-            await api(
-                "/api/admin/coupons",
-                {
-                    method: "POST",
-                    body: JSON.stringify(body)
-                }
-            );
-
-
-        status.className =
-            "text-sm mt-4 text-green-600 font-semibold";
-
-        status.textContent =
-            `Coupon added successfully. ID: ${result.id}`;
-
-
-        $("couponStore").value = "";
-        $("couponCode").value = "";
-        $("couponTitle").value = "";
-        $("couponDiscount").value = "";
-        $("couponExpiry").value = "";
-        $("couponUrl").value = "";
-        $("couponDescription").value = "";
-
-
-        await refreshStats();
-
-    } catch (error) {
-
-        status.className =
-            "text-sm mt-4 text-red-600 font-semibold";
-
-        status.textContent =
-            error.message;
-    }
-}
-
-
-/* =====================================================
-   ESCAPE / MODAL
-===================================================== */
-
-document.addEventListener(
-    "keydown",
-    event => {
-
-        if (event.key === "Escape") {
-            closeEditModal();
-        }
-
-    }
-);
+});
 
 </script>
 
