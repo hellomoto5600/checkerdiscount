@@ -1,141 +1,2018 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-tertiary":"#ffffff","surface-subtle":"#F6F8FC","on-primary-fixed-variant":"#003da9","on-secondary-container":"#007440","secondary-container":"#70fda7","surface-variant":"#d3e4fe","on-primary":"#ffffff","on-tertiary-container":"#e5ebff","on-tertiary-fixed-variant":"#404757","surface-container-low":"#eff4ff","tertiary-fixed":"#dce2f6","warning-amber":"#F79009","savings-green":"#12B76A","surface-container-high":"#dce9ff","inverse-on-surface":"#eaf1ff","on-primary-container":"#e7eaff","savings-green-border":"#A6F4C5","on-secondary":"#ffffff","on-error-container":"#93000a","secondary-fixed-dim":"#51df8e","on-surface-variant":"#434655","on-tertiary-fixed":"#151b2a","on-surface":"#0b1c30","savings-green-subtle":"#ECFDF3","surface-dim":"#cbdbf5","inverse-primary":"#b4c5ff","inverse-surface":"#213145","surface-container-highest":"#d3e4fe","primary-fixed":"#dbe1ff","surface-container":"#e5eeff","tertiary-container":"#636a7b","navy-surface":"#0F172A","primary":"#0047c1","outline":"#737687","error":"#ba1a1a","background":"#f8f9ff","on-secondary-fixed-variant":"#00522c","navy-deep":"#0B1220","on-secondary-fixed":"#00210e","warning-amber-subtle":"#FEF0C7","primary-container":"#155eef","tertiary-fixed-dim":"#c0c6da","surface-tint":"#0052dc","surface-bright":"#f8f9ff","outline-variant":"#c3c6d8","on-error":"#ffffff","tertiary":"#4b5262","surface-container-lowest":"#ffffff","on-background":"#0b1c30","secondary-fixed":"#70fda7","error-container":"#ffdad6","on-primary-fixed":"#00174b","surface":"#f8f9ff","primary-fixed-dim":"#b4c5ff","surface-border":"#E2E8F0","secondary":"#006d3c"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"margin-mobile":"1rem",margin:"2rem",gutter:"1.5rem","space-lg":"1.5rem","space-xs":"0.25rem","space-md":"1rem","space-xl":"2.5rem","space-sm":"0.5rem","gutter-mobile":"1rem"},fontFamily:{"price-strikethrough":["Inter"],"body-sm":["Inter"],"display-hero":["Inter"],"display-hero-mobile":["Inter"],"caption-timestamp":["Inter"],"headline-sm":["Inter"],"label-md":["Inter"],"body-lg":["Inter"],"headline-lg-mobile":["Inter"],"headline-md":["Inter"],"price-featured":["Inter"],"badge-caps":["Inter"],"headline-lg":["Inter"],"body-md":["Inter"]},fontSize:{"price-strikethrough":["15px",{lineHeight:"20px",letterSpacing:"0em",fontWeight:"400"}],"body-sm":["13px",{lineHeight:"18px",letterSpacing:"0em",fontWeight:"400"}],"display-hero":["52px",{lineHeight:"60px",letterSpacing:"-0.03em",fontWeight:"800"}],"display-hero-mobile":["34px",{lineHeight:"40px",letterSpacing:"-0.025em",fontWeight:"800"}],"caption-timestamp":["11px",{lineHeight:"14px",letterSpacing:"0.01em",fontWeight:"500"}],"headline-sm":["18px",{lineHeight:"24px",letterSpacing:"-0.01em",fontWeight:"600"}],"label-md":["14px",{lineHeight:"18px",letterSpacing:"-0.005em",fontWeight:"600"}],"body-lg":["17px",{lineHeight:"26px",letterSpacing:"-0.005em",fontWeight:"400"}],"headline-lg-mobile":["26px",{lineHeight:"32px",letterSpacing:"-0.015em",fontWeight:"700"}],"headline-md":["22px",{lineHeight:"28px",letterSpacing:"-0.015em",fontWeight:"700"}],"price-featured":["26px",{lineHeight:"30px",letterSpacing:"-0.02em",fontWeight:"700"}],"badge-caps":["11px",{lineHeight:"14px",letterSpacing:"0.06em",fontWeight:"700"}],"headline-lg":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"body-md":["15px",{lineHeight:"22px",letterSpacing:"0em",fontWeight:"400"}]}}}}</script></head><body class="bg-background font-body-md text-body-md text-on-surface antialiased">
-<header class="fixed top-0 inset-x-0 z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
-  <div class="h-16 max-w-[1240px] mx-auto px-4 flex items-center justify-between">
-    
-    <a class="flex items-center gap-2.5 group py-1" data-path="home" href="#">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" class="h-14 sm:h-16 w-auto transition-transform duration-300 group-hover:scale-105">
-        <defs>
-          <linearGradient id="cdPrimaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#155EEF" />
-            <stop offset="100%" stop-color="#0047C1" />
-          </linearGradient>
-          <linearGradient id="cdGreenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#70FDA7" />
-            <stop offset="100%" stop-color="#12B76A" />
-          </linearGradient>
-          <filter id="cdShadow" x="-10%" y="-10%" width="120%" height="120%">
-            <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#0047C1" flood-opacity="0.25"/>
-          </filter>
-        </defs>
-        <g filter="url(#cdShadow)">
-          <path d="M26 4C14 4 6 8 6 8C6 24 10 42 26 56C42 42 46 24 46 8C46 8 38 4 26 4Z" fill="url(#cdPrimaryGrad)" />
-          <path d="M18 28L23 33L34 20" stroke="url(#cdGreenGrad)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="36" cy="14" r="4" fill="url(#cdGreenGrad)" />
-        </g>
-        <text x="60" y="39" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="24" font-weight="800" fill="#0B1C30" letter-spacing="-0.03em">
-          Checker<tspan font-weight="500" fill="#155EEF">Discount</tspan>
-        </text>
-      </svg>
-    </a>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CheckerDiscount Admin</title>
 
-    <div class="flex items-center gap-1.5">
-      <a aria-label="Home" class="w-9 h-9 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors" href="index.html">
-        <span class="material-symbols-outlined text-[20px]">home</span>
-      </a>
-      <button aria-label="Open Navigation Menu" class="w-9 h-9 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors" id="burgerMenuBtn" type="button">
-        <span class="material-symbols-outlined text-[20px]">menu</span>
-      </button>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+    body {
+        background: #f5f7fb;
+        color: #172033;
+        font-family: Arial, sans-serif;
+    }
+
+    .card {
+        background: white;
+        border: 1px solid #e5e9f0;
+        border-radius: 16px;
+        box-shadow: 0 4px 18px rgba(20, 30, 50, 0.05);
+    }
+
+    input, select, textarea {
+        width: 100%;
+        border: 1px solid #d9dee8;
+        border-radius: 10px;
+        padding: 10px 12px;
+        background: white;
+        outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+    }
+
+    button {
+        cursor: pointer;
+    }
+
+    .table-wrap {
+        overflow-x: auto;
+    }
+
+    table {
+        min-width: 1250px;
+    }
+
+    th {
+        white-space: nowrap;
+    }
+
+    .modal {
+        background: rgba(10, 18, 35, 0.55);
+        backdrop-filter: blur(4px);
+    }
+
+    .hidden {
+        display: none !important;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     LOGIN
+===================================================== -->
+
+<div id="loginScreen" class="min-h-screen flex items-center justify-center p-5">
+
+    <div class="card w-full max-w-md p-7">
+
+        <div class="text-center mb-7">
+
+            <div class="mx-auto w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-xl font-bold">
+                CD
+            </div>
+
+            <h1 class="text-2xl font-bold mt-4">
+                CheckerDiscount
+            </h1>
+
+            <p class="text-gray-500 mt-1">
+                Admin Panel
+            </p>
+
+        </div>
+
+        <label class="block text-sm font-semibold mb-2">
+            Admin Key
+        </label>
+
+        <input
+            id="adminKey"
+            type="password"
+            placeholder="Enter Admin Key"
+        >
+
+        <button
+            onclick="login()"
+            class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl"
+        >
+            Login
+        </button>
+
+        <div
+            id="loginStatus"
+            class="text-center text-sm mt-4 text-red-500"
+        ></div>
+
     </div>
-  </div>
-</header>
 
-<main class="w-full pt-16 pb-24 bg-background"><div class="flex flex-col w-full"><!-- Hero Section --><section class="relative w-full bg-gradient-to-b from-surface via-surface-container-low/40 to-background overflow-hidden pb-6 pt-4 px-4"><div class="absolute top-6 left-6 w-56 h-56 bg-primary/5 rounded-full blur-3xl pointer-events-none -z-10"></div><div class="flex flex-col items-start gap-3"><div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-savings-green-subtle shadow-sm"><span class="w-2 h-2 rounded-full bg-savings-green animate-ping"></span><span class="font-badge-caps text-[11px] text-secondary tracking-wider font-bold uppercase">Smarter Shopping • Real Savings</span></div><h1 class="font-headline-lg text-[28px] leading-[34px] font-extrabold text-on-surface tracking-tight">Find Better Deals. <span class="bg-gradient-to-r from-primary-container via-primary to-savings-green bg-clip-text text-transparent block">Keep More Money.</span></h1><p class="font-body-sm text-[14px] text-on-surface-variant leading-relaxed">Discover verified deals, understand real discounts, and validate merchant offers before you purchase.</p><div class="flex flex-col w-full gap-2.5 pt-1"><a class="w-full py-3 px-4 rounded-xl bg-primary-container text-on-primary font-label-md text-[14px] shadow-md shadow-primary-container/25 flex items-center justify-center gap-2 font-semibold active:scale-[0.99] transition-transform" href="#market-deals"><span>Explore Verified Deals</span><span class="material-symbols-outlined text-[18px]">arrow_forward</span></a><a class="w-full py-3 px-4 rounded-xl bg-surface-container-lowest text-on-surface font-label-md text-[14px] border border-surface-container-high flex items-center justify-center gap-2 font-semibold shadow-sm active:bg-surface-container-low transition-colors" href="#savings-tool"><span class="material-symbols-outlined text-[18px] text-primary">calculate</span><span>Check Your Savings</span></a></div><div class="flex items-center justify-between w-full pt-2 text-on-surface-variant border-t border-surface-container-high/60"><div class="inline-flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-savings-green font-bold">check_circle</span><span class="text-[12px] font-medium text-on-surface">Verified</span></div><div class="inline-flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-savings-green font-bold">check_circle</span><span class="text-[12px] font-medium text-on-surface">Real Savings</span></div><div class="inline-flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-savings-green font-bold">check_circle</span><span class="text-[12px] font-medium text-on-surface">Trusted Stores</span></div></div><!-- Mobile Featured Deal Card Showcase --><div class="w-full mt-2 bg-surface-container-lowest rounded-2xl p-4 shadow-md border border-surface-container/60 relative"><div class="flex items-center justify-between gap-2 pb-3 border-b border-surface-container-low"><div class="flex items-center gap-1 text-primary font-badge-caps text-[11px] font-bold uppercase tracking-wider"><span class="material-symbols-outlined text-[15px]">bolt</span> Deal Spotlight</div><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-savings-green-subtle text-secondary font-badge-caps text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">verified</span> 40% OFF</span></div><div class="flex gap-3 pt-3"><div class="w-20 h-20 rounded-xl bg-surface-subtle overflow-hidden flex-shrink-0 relative border border-surface-container"><img class="w-full h-full object-cover" data-alt="Ergonomic memory foam cervical neck pillow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJE3HsR-KXitBPfTZtFmyylQwQ1Fgl-ht-Kqtv6SBmfJmo2xwjQIgK6cmJTvC3haAJOPl105ipDjtg6W8gr5Q95-gLrDxCSM9FwcMkYmA5lB6DV6_Obv9eg-qI7rDR3fdFVzHJ6Cf2cRv2AJqiyfglDaC2pp9YWE_bvMmzkuKG5qyvDkKzQrdNo002MBEd-Ac8_kyaAhVn6Qh8kuKGzt2DSaUKfz8aQiQ0S6RpdSnHxbvzHFje9SBI"/><div class="absolute bottom-1 right-1 bg-navy-deep/80 text-on-primary text-[9px] px-1 py-0.2 rounded font-mono">Prime</div></div><div class="flex flex-col min-w-0 justify-center"><div class="flex items-center gap-1 text-caption-timestamp text-[11px] text-on-surface-variant"><span>Amazon</span><span class="inline-flex text-warning-amber text-[12px] material-symbols-outlined fill-1">star</span><span class="font-bold text-on-surface">4.8</span></div><h3 class="font-headline-sm text-[14px] text-on-surface font-semibold leading-snug line-clamp-2 mt-0.5">Cervical Neck Pillow, Memory Foam Dual Height</h3><div class="flex items-baseline gap-2 mt-1.5"><span class="font-headline-sm text-[20px] font-extrabold text-primary-container">$33.98</span><span class="font-price-strikethrough text-[13px] text-outline line-through">$56.99</span></div></div></div><div class="mt-3 pt-2.5 border-t border-surface-container flex items-center justify-between"><div class="px-2.5 py-1 rounded-lg bg-savings-green-subtle text-savings-green font-bold text-[12px] flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">savings</span> Save $23.01</div><a class="py-2 px-3 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-md text-[13px] font-semibold flex items-center gap-1 shadow-sm transition-colors" href="#"><span>Check Deal</span><span class="material-symbols-outlined text-[16px]">arrow_forward</span></a></div></div></div></section><!-- Live Deals & Savings Checker --><section class="w-full px-4 py-5 space-y-4" id="market-deals"><div class="flex flex-col gap-1"><div class="inline-flex items-center gap-1 text-primary font-badge-caps text-[11px] font-bold tracking-wider uppercase"><span class="material-symbols-outlined text-[15px]">radar</span> Deal Discovery</div><div class="flex items-center justify-between"><h2 class="font-headline-md text-[20px] font-bold text-on-surface tracking-tight">Deals Worth Checking</h2><span class="flex items-center gap-1 text-[11px] text-on-surface-variant"><span class="w-2 h-2 rounded-full bg-savings-green animate-pulse"></span> Audited</span></div></div><!-- Horizontal scrolling filter chips --><div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none -mx-4 px-4"><button class="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-primary-container text-on-primary font-label-md text-[13px] font-semibold shadow-sm">All (4)</button><button class="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-md text-[13px]">Home</button><button class="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-md text-[13px]">Kitchen</button><button class="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-md text-[13px]">Trending</button></div><!-- Mobile Deal Cards Feed --><div class="flex flex-col gap-3" id="discountsContainer"><!-- Dynamic deals will be injected here by app.js --></div><!-- Live network badge --><div class="p-3 bg-surface-container-low/60 rounded-xl flex items-center justify-between text-[12px] text-on-surface-variant"><div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-primary text-[18px]">sync</span><span>Checked every 15 mins</span></div><span class="font-badge-caps text-[10px] text-primary font-bold uppercase tracking-wider">24/7 Monitored</span></div></section><!-- Mobile Price Drop Savings Checker Widget --><section class="w-full px-4 py-3" id="savings-tool"><div class="bg-surface-container-lowest rounded-2xl p-4 shadow-md border border-surface-container/60"><div class="flex items-center gap-2.5 mb-3"><div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-[22px]">payments</span></div><div><h3 class="font-headline-sm text-[17px] font-bold text-on-surface leading-tight">Price Drop Savings Checker</h3><p class="font-body-sm text-[12px] text-on-surface-variant">Calculate potential refund under store guarantees.</p></div></div><form class="space-y-3 pt-1" id="savingsForm" onsubmit="event.preventDefault(); calculateSavings();"><div><label class="block font-label-md text-[13px] font-semibold text-on-surface mb-1">Store / Retailer</label><div class="relative"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[16px]">storefront</span><input class="w-full pl-9 pr-3 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline font-body-sm text-[14px] focus:outline-none focus:bg-surface-container-lowest border border-surface-container" id="checkerStore" placeholder="e.g. Amazon, Walmart, Target" type="text"/></div></div><div class="grid grid-cols-2 gap-2"><div><label class="block font-label-md text-[13px] font-semibold text-on-surface mb-1">Paid ($)</label><div class="relative"><span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold text-[14px]">$</span><input class="w-full pl-7 pr-2 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline font-body-sm text-[14px] focus:outline-none focus:bg-surface-container-lowest border border-surface-container" id="checkerPaid" placeholder="39.99" step="0.01" type="number"/></div></div><div><label class="block font-label-md text-[13px] font-semibold text-on-surface mb-1">Current ($)</label><div class="relative"><span class="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold text-[14px]">$</span><input class="w-full pl-7 pr-2 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline font-body-sm text-[14px] focus:outline-none focus:bg-surface-container-lowest border border-surface-container" id="checkerCurrent" placeholder="29.99" step="0.01" type="number"/></div></div></div><button class="w-full py-3 px-4 rounded-xl bg-navy-deep hover:bg-navy-surface text-on-primary font-label-md text-[14px] font-bold shadow-md transition-all flex items-center justify-center gap-2 active:scale-[0.99]" type="submit"><span class="material-symbols-outlined text-[18px]">calculate</span><span>Calculate Potential Savings</span></button></form><div class="mt-3 p-3 rounded-xl bg-savings-green-subtle flex flex-col gap-1" id="savingsResultCard"><div class="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-secondary"><span>Savings Output</span><span class="flex items-center gap-1 text-savings-green"><span class="material-symbols-outlined text-[13px]">bolt</span> Live</span></div><div class="flex items-baseline justify-between"><span class="font-body-sm text-[13px] text-on-surface-variant">Refund / Price Drop:</span><span class="font-headline-md text-[22px] font-extrabold text-secondary" id="savingsDelta">$10.00</span></div><div class="text-[11px] text-secondary leading-tight" id="savingsAdvice">Sample: $39.99 vs $29.99 yields 25.0% price drop. Eligible for store price adjustments.</div></div></div></section><!-- Smart Shopping Tools Suite Section (Mobile Vertical Stack) --><section class="w-full px-4 py-5 bg-surface mt-2 space-y-4"><div class="flex flex-col gap-1"><div class="inline-flex items-center gap-1 text-primary font-badge-caps text-[11px] font-bold uppercase tracking-wider"><span class="material-symbols-outlined text-[15px]">construction</span> Smart Tools</div><h2 class="font-headline-lg text-[20px] font-bold text-on-surface tracking-tight">Check Before You Buy</h2><p class="font-body-sm text-[13px] text-on-surface-variant">Compare prices, review price history, search coupons, and track target drops.</p></div>
-
-<!-- Tool 1: Price Comparison -->
-<div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container/60 space-y-3" id="tool-comparison">
-    <div class="flex items-center gap-2"><span class="text-[20px]">🔎</span><h3 class="font-headline-sm text-[16px] font-bold text-on-surface">Price Comparison</h3></div>
-    <div class="space-y-2">
-        <input id="compareProductInput" class="w-full px-3.5 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline font-body-sm text-[14px] focus:outline-none border border-surface-container" placeholder="e.g. Hamilton Beach Mixer, Sony XM5" type="text"/>
-        <button onclick="runPriceComparison()" class="w-full py-2.5 px-4 rounded-xl bg-primary-container text-on-primary font-label-md text-[13px] font-semibold shadow-sm">Compare Across Stores</button>
-    </div>
 </div>
 
-<!-- Tool 2: Price History -->
-<div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container/60 space-y-3" id="tool-history">
-    <div class="flex items-center gap-2"><span class="text-[20px]">📉</span><h3 class="font-headline-sm text-[16px] font-bold text-on-surface">Price History &amp; Floor</h3></div>
-    <div class="space-y-2">
-        <input id="historyProductInput" class="w-full px-3.5 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline font-body-sm text-[14px] focus:outline-none border border-surface-container" placeholder="Product name or ASIN" type="text"/>
-        <button onclick="runPriceHistoryCheck()" class="w-full py-2.5 px-4 rounded-xl bg-primary-container text-on-primary font-label-md text-[13px] font-semibold shadow-sm">Check Price History</button>
-    </div>
-    <div class="p-2.5 bg-surface-subtle rounded-xl flex items-center justify-between text-[12px] text-on-surface-variant">
-        <div class="flex items-center gap-2"><svg class="w-12 h-5 text-primary" fill="none" viewbox="0 0 64 24"><path d="M2 18L18 10L32 14L46 4L62 8" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg><span>30-Day Floor: <strong id="priceFloorDisplay" class="text-on-surface">$24.97</strong></span></div>
-        <span id="priceTrendDisplay" class="text-savings-green font-bold text-[11px]">Stable Trend</span>
-    </div>
+
+<!-- =====================================================
+     ADMIN APP
+===================================================== -->
+
+<div id="adminApp" class="hidden min-h-screen">
+
+    <!-- HEADER -->
+
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-30">
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+
+            <div>
+                <h1 class="text-xl sm:text-2xl font-bold">
+                    CheckerDiscount Admin
+                </h1>
+
+                <p class="text-xs sm:text-sm text-gray-500">
+                    Manage deals, countries, categories and comparisons
+                </p>
+            </div>
+
+            <button
+                onclick="logout()"
+                class="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-sm font-semibold"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+
+
+        <!-- =================================================
+             STATS
+        ================================================= -->
+
+        <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+
+            <div class="card p-4">
+                <p class="text-xs text-gray-500">Total Deals</p>
+                <p id="statTotal" class="text-2xl font-bold mt-1">0</p>
+            </div>
+
+            <div class="card p-4">
+                <p class="text-xs text-gray-500">Verified</p>
+                <p id="statVerified" class="text-2xl font-bold mt-1 text-green-600">0</p>
+            </div>
+
+            <div class="card p-4">
+                <p class="text-xs text-gray-500">Pending</p>
+                <p id="statPending" class="text-2xl font-bold mt-1 text-orange-500">0</p>
+            </div>
+
+            <div class="card p-4">
+                <p class="text-xs text-gray-500">Expired</p>
+                <p id="statExpired" class="text-2xl font-bold mt-1 text-red-500">0</p>
+            </div>
+
+            <div class="card p-4">
+                <p class="text-xs text-gray-500">Featured</p>
+                <p id="statFeatured" class="text-2xl font-bold mt-1 text-blue-600">0</p>
+            </div>
+
+            <div class="card p-4">
+                <p class="text-xs text-gray-500">Coupons</p>
+                <p id="statCoupons" class="text-2xl font-bold mt-1 text-purple-600">0</p>
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ADD DEAL
+        ================================================= -->
+
+        <section class="card p-5 mb-6">
+
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-5">
+
+                <div>
+                    <h2 class="text-lg font-bold">
+                        Add New Deal
+                    </h2>
+
+                    <p class="text-sm text-gray-500">
+                        Add a country-specific product offer
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                <!-- TITLE -->
+
+                <div class="lg:col-span-2">
+                    <label class="block text-sm font-semibold mb-1">
+                        Product Title *
+                    </label>
+
+                    <input
+                        id="title"
+                        type="text"
+                        placeholder="Sony Wireless Headphones"
+                    >
+                </div>
+
+
+                <!-- STORE -->
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Store *
+                    </label>
+
+                    <input
+                        id="store"
+                        type="text"
+                        placeholder="Amazon"
+                    >
+                </div>
+
+
+                <!-- COUNTRY -->
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Country *
+                    </label>
+
+                    <select id="country_code" onchange="updateCurrencyFromCountry()">
+                    </select>
+                </div>
+
+
+                <!-- CATEGORY -->
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Category *
+                    </label>
+
+                    <input
+                        id="category"
+                        type="text"
+                        list="categoryList"
+                        placeholder="Headphones"
+                    >
+
+                    <datalist id="categoryList">
+                        <option value="Mobiles">
+                        <option value="Laptops">
+                        <option value="Headphones">
+                        <option value="Earbuds">
+                        <option value="TV">
+                        <option value="Home">
+                        <option value="Kitchen">
+                        <option value="Fashion">
+                        <option value="Beauty">
+                        <option value="Watches">
+                        <option value="Gaming">
+                        <option value="Electronics">
+                        <option value="Accessories">
+                        <option value="Sports">
+                        <option value="Toys">
+                        <option value="Tools">
+                        <option value="Automotive">
+                        <option value="Books">
+                        <option value="Other">
+                    </datalist>
+                </div>
+
+
+                <!-- COMPARISON ID -->
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Comparison ID
+                    </label>
+
+                    <input
+                        id="comparison_id"
+                        type="text"
+                        placeholder="sony-wh1000xm5"
+                    >
+
+                    <p class="text-[11px] text-gray-500 mt-1">
+                        Same ID = same product across different stores.
+                    </p>
+                </div>
+
+
+                <!-- CURRENCY -->
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Currency *
+                    </label>
+
+                    <select id="currency">
+                        <option value="USD">USD — $</option>
+                        <option value="GBP">GBP — £</option>
+                        <option value="SAR">SAR — ر.س</option>
+                        <option value="AED">AED — د.إ</option>
+                        <option value="OMR">OMR — ر.ع</option>
+                        <option value="PKR">PKR — ₨</option>
+                        <option value="INR">INR — ₹</option>
+                        <option value="CAD">CAD — $</option>
+                        <option value="AUD">AUD — $</option>
+                        <option value="EUR">EUR — €</option>
+                        <option value="JPY">JPY — ¥</option>
+                        <option value="CNY">CNY — ¥</option>
+                        <option value="KRW">KRW — ₩</option>
+                        <option value="SGD">SGD — $</option>
+                        <option value="MYR">MYR — RM</option>
+                        <option value="QAR">QAR — ر.ق</option>
+                        <option value="KWD">KWD — د.ك</option>
+                        <option value="BHD">BHD — د.ب</option>
+                        <option value="CHF">CHF — Fr.</option>
+                        <option value="NOK">NOK — kr</option>
+                        <option value="SEK">SEK — kr</option>
+                        <option value="DKK">DKK — kr</option>
+                        <option value="NZD">NZD — $</option>
+                        <option value="ZAR">ZAR — R</option>
+                        <option value="BRL">BRL — R$</option>
+                        <option value="MXN">MXN — $</option>
+                        <option value="IDR">IDR — Rp</option>
+                        <option value="PHP">PHP — ₱</option>
+                        <option value="TRY">TRY — ₺</option>
+                    </select>
+                </div>
+
+
+                <!-- OLD PRICE -->
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Old Price *
+                    </label>
+
+                    <input
+                        id="old"
+                        type="number"
+                        step="0.01"
+                        placeholder="99.99"
+                    >
+                </div>
+
+
+                <!-- NEW PRICE -->
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Deal Price *
+                    </label>
+
+                    <input
+                        id="new"
+                        type="number"
+                        step="0.01"
+                        placeholder="59.99"
+                    >
+                </div>
+
+
+                <!-- ASIN -->
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        ASIN / Product ID
+                    </label>
+
+                    <input
+                        id="asin"
+                        type="text"
+                        placeholder="B0XXXXXXXX"
+                    >
+                </div>
+
+
+                <!-- DEAL URL -->
+
+                <div class="lg:col-span-2">
+                    <label class="block text-sm font-semibold mb-1">
+                        Deal URL *
+                    </label>
+
+                    <input
+                        id="url"
+                        type="url"
+                        placeholder="https://..."
+                    >
+                </div>
+
+
+                <!-- IMAGE -->
+
+                <div class="lg:col-span-3">
+                    <label class="block text-sm font-semibold mb-1">
+                        Image URL
+                    </label>
+
+                    <input
+                        id="image"
+                        type="url"
+                        placeholder="https://..."
+                    >
+                </div>
+
+            </div>
+
+
+            <div class="flex flex-wrap gap-3 mt-5">
+
+                <button
+                    onclick="addDeal()"
+                    class="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+                >
+                    + Add Deal
+                </button>
+
+                <button
+                    onclick="clearDealForm()"
+                    class="px-5 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 font-semibold"
+                >
+                    Clear
+                </button>
+
+            </div>
+
+            <div id="dealFormStatus" class="text-sm mt-4"></div>
+
+        </section>
+
+
+        <!-- =================================================
+             DEALS TABLE
+        ================================================= -->
+
+        <section class="card p-5 mb-6">
+
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
+
+                <div>
+                    <h2 class="text-lg font-bold">
+                        Deal Management
+                    </h2>
+
+                    <p class="text-sm text-gray-500">
+                        Country, category and comparison settings
+                    </p>
+                </div>
+
+                <button
+                    onclick="refreshAll()"
+                    class="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-sm font-semibold"
+                >
+                    ↻ Refresh
+                </button>
+
+            </div>
+
+
+            <div class="table-wrap">
+
+                <table class="w-full text-sm">
+
+                    <thead>
+
+                        <tr class="border-b border-gray-200 text-left">
+
+                            <th class="py-3 px-2">ID</th>
+                            <th class="py-3 px-2">Product</th>
+                            <th class="py-3 px-2">Store</th>
+                            <th class="py-3 px-2">Country</th>
+                            <th class="py-3 px-2">Category</th>
+                            <th class="py-3 px-2">Comparison</th>
+                            <th class="py-3 px-2">Price</th>
+                            <th class="py-3 px-2">Status</th>
+                            <th class="py-3 px-2">Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="dealsTableBody">
+
+                        <tr>
+                            <td colspan="9" class="text-center py-8 text-gray-500">
+                                Loading deals...
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             COUPONS
+        ================================================= -->
+
+        <section class="card p-5 mb-6">
+
+            <h2 class="text-lg font-bold mb-1">
+                Add Coupon
+            </h2>
+
+            <p class="text-sm text-gray-500 mb-5">
+                Add verified store coupons
+            </p>
+
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Store
+                    </label>
+
+                    <input id="couponStore" placeholder="Amazon">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Coupon Code
+                    </label>
+
+                    <input id="couponCode" placeholder="SAVE20">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Title
+                    </label>
+
+                    <input id="couponTitle" placeholder="20% Off Selected Items">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Discount
+                    </label>
+
+                    <input id="couponDiscount" placeholder="20% OFF">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Expiry
+                    </label>
+
+                    <input id="couponExpiry" type="datetime-local">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        URL
+                    </label>
+
+                    <input id="couponUrl" type="url" placeholder="https://...">
+                </div>
+
+                <div class="lg:col-span-3">
+                    <label class="block text-sm font-semibold mb-1">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="couponDescription"
+                        rows="3"
+                        placeholder="Coupon details..."
+                    ></textarea>
+                </div>
+
+            </div>
+
+
+            <button
+                onclick="addCoupon()"
+                class="mt-5 px-5 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold"
+            >
+                + Add Coupon
+            </button>
+
+            <div id="couponStatus" class="text-sm mt-4"></div>
+
+        </section>
+
+    </main>
+
 </div>
 
-<!-- Tool 3: Deal & Coupon Checker -->
-<div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container/60 space-y-3" id="tool-coupons">
-    <div class="flex items-center gap-2"><span class="text-[20px]">🏷️</span><h3 class="font-headline-sm text-[16px] font-bold text-on-surface">Coupon &amp; Voucher Checker</h3></div>
-    <div class="space-y-2">
-        <input id="couponStoreInput" class="w-full px-3.5 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline font-body-sm text-[14px] focus:outline-none border border-surface-container" placeholder="Store (e.g. Amazon, Nike)" type="text"/>
-        <input id="couponKeywordInput" class="w-full px-3.5 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline font-body-sm text-[14px] focus:outline-none border border-surface-container" placeholder="Optional keyword (clearance)" type="text"/>
-        <button onclick="runCouponChecker()" class="w-full py-2.5 px-4 rounded-xl bg-primary-container text-on-primary font-label-md text-[13px] font-semibold shadow-sm">Check Verified Coupons</button>
+
+<!-- =====================================================
+     EDIT MODAL
+===================================================== -->
+
+<div
+    id="editModal"
+    class="modal hidden fixed inset-0 z-50 flex items-center justify-center p-4"
+>
+
+    <div class="bg-white rounded-2xl w-full max-w-3xl max-h-[92vh] overflow-y-auto shadow-2xl">
+
+        <div class="p-5 border-b border-gray-200 flex items-center justify-between">
+
+            <div>
+                <h2 class="text-xl font-bold">
+                    Edit Deal
+                </h2>
+
+                <p class="text-sm text-gray-500">
+                    Update country, category or product information
+                </p>
+            </div>
+
+            <button
+                onclick="closeEditModal()"
+                class="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="p-5">
+
+            <input id="editId" type="hidden">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-semibold mb-1">
+                        Product Title
+                    </label>
+
+                    <input id="editTitle">
+                </div>
+
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Store
+                    </label>
+
+                    <input id="editStore">
+                </div>
+
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Country
+                    </label>
+
+                    <select id="editCountry" onchange="updateEditCurrency()">
+                    </select>
+                </div>
+
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Category
+                    </label>
+
+                    <input
+                        id="editCategory"
+                        list="categoryList"
+                    >
+                </div>
+
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Comparison ID
+                    </label>
+
+                    <input
+                        id="editComparisonId"
+                        placeholder="sony-wh1000xm5"
+                    >
+                </div>
+
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Currency
+                    </label>
+
+                    <select id="editCurrency">
+                        <option value="USD">USD — $</option>
+                        <option value="GBP">GBP — £</option>
+                        <option value="SAR">SAR — ر.س</option>
+                        <option value="AED">AED — د.إ</option>
+                        <option value="OMR">OMR — ر.ع</option>
+                        <option value="PKR">PKR — ₨</option>
+                        <option value="INR">INR — ₹</option>
+                        <option value="CAD">CAD — $</option>
+                        <option value="AUD">AUD — $</option>
+                        <option value="EUR">EUR — €</option>
+                        <option value="JPY">JPY — ¥</option>
+                        <option value="CNY">CNY — ¥</option>
+                        <option value="KRW">KRW — ₩</option>
+                        <option value="SGD">SGD — $</option>
+                        <option value="MYR">MYR — RM</option>
+                        <option value="QAR">QAR — ر.ق</option>
+                        <option value="KWD">KWD — د.ك</option>
+                        <option value="BHD">BHD — د.ب</option>
+                        <option value="CHF">CHF — Fr.</option>
+                        <option value="NOK">NOK — kr</option>
+                        <option value="SEK">SEK — kr</option>
+                        <option value="DKK">DKK — kr</option>
+                        <option value="NZD">NZD — $</option>
+                        <option value="ZAR">ZAR — R</option>
+                        <option value="BRL">BRL — R$</option>
+                        <option value="MXN">MXN — $</option>
+                        <option value="IDR">IDR — Rp</option>
+                        <option value="PHP">PHP — ₱</option>
+                        <option value="TRY">TRY — ₺</option>
+                    </select>
+                </div>
+
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Old Price
+                    </label>
+
+                    <input id="editOld" type="number" step="0.01">
+                </div>
+
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Deal Price
+                    </label>
+
+                    <input id="editNew" type="number" step="0.01">
+                </div>
+
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        ASIN / Product ID
+                    </label>
+
+                    <input id="editAsin">
+                </div>
+
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">
+                        Image URL
+                    </label>
+
+                    <input id="editImage">
+                </div>
+
+
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-semibold mb-1">
+                        Deal URL
+                    </label>
+
+                    <input id="editUrl">
+                </div>
+
+            </div>
+
+
+            <div class="flex gap-3 mt-6">
+
+                <button
+                    onclick="saveEdit()"
+                    class="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+                >
+                    Save Changes
+                </button>
+
+                <button
+                    onclick="closeEditModal()"
+                    class="px-5 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 font-semibold"
+                >
+                    Cancel
+                </button>
+
+            </div>
+
+            <div id="editStatus" class="text-sm mt-4"></div>
+
+        </div>
+
     </div>
+
 </div>
 
-<!-- Tool 4: Final Price Calculator -->
-<div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container/60 space-y-3" id="tool-calculator">
-    <div class="flex items-center gap-2"><span class="text-[20px]">💰</span><h3 class="font-headline-sm text-[16px] font-bold text-on-surface">Final Price Calculator</h3></div>
-    <div class="grid grid-cols-2 gap-2">
-        <input class="px-3 py-2 rounded-xl bg-surface text-on-surface placeholder:text-outline font-body-sm text-[13px] border border-surface-container" id="calcPrice" placeholder="Price ($)" step="0.01" type="number"/>
-        <input class="px-3 py-2 rounded-xl bg-surface text-on-surface placeholder:text-outline font-body-sm text-[13px] border border-surface-container" id="calcCoupon" placeholder="Coupon ($ off)" step="0.01" type="number"/>
-        <input class="px-3 py-2 rounded-xl bg-surface text-on-surface placeholder:text-outline font-body-sm text-[13px] border border-surface-container" id="calcShipping" placeholder="Shipping ($)" step="0.01" type="number"/>
-        <input class="px-3 py-2 rounded-xl bg-surface text-on-surface placeholder:text-outline font-body-sm text-[13px] border border-surface-container" id="calcTax" placeholder="Tax ($)" step="0.01" type="number"/>
-    </div>
-    <button class="w-full py-2.5 px-4 rounded-xl bg-primary-container text-on-primary font-label-md text-[13px] font-semibold shadow-sm" onclick="runFinalPriceCalc()">Calculate Final Total</button>
-    <div class="p-2.5 bg-surface-subtle rounded-xl text-[13px] flex items-center justify-between" id="finalPriceDisplay"><span class="text-on-surface-variant">Total Out-of-Pocket:</span><span class="font-bold text-on-surface text-[16px]">$0.00</span></div>
-</div>
 
-<!-- Tool 5: Watchlist & Alerts -->
-<div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container/60 space-y-3" id="tool-watchlist">
-    <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2"><span class="text-[20px]">❤️</span><h3 class="font-headline-sm text-[16px] font-bold text-on-surface">Price Drop Watchlist</h3></div>
-        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-warning-amber-subtle text-warning-amber font-badge-caps text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">bolt</span> ACTIVE</span>
-    </div>
-    <div class="space-y-2">
-        <input class="w-full px-3.5 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline font-body-sm text-[14px] border border-surface-container" id="watchProductName" placeholder="Product name (e.g. Sony XM5)" type="text"/>
-        <input class="w-full px-3.5 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline font-body-sm text-[14px] border border-surface-container" id="watchAlertPrice" placeholder="Alert me below price ($)" step="0.01" type="number"/>
-        <button class="w-full py-2.5 px-4 rounded-xl bg-primary-container text-on-primary font-label-md text-[13px] font-semibold flex items-center justify-center gap-1.5 shadow-sm" onclick="addToWatchlist()"><span class="material-symbols-outlined text-[16px]">add_alert</span><span>Add to Watchlist</span></button>
-    </div>
-    <div class="p-2.5 bg-surface-subtle rounded-xl text-[11px] text-on-surface-variant flex items-center gap-2" id="watchlistStatusBox">
-        <span class="material-symbols-outlined text-[16px] text-outline">bookmark_border</span>
-        <span id="watchStatusText">Watchlist empty. Add item above to track.</span>
-    </div>
-</div>
+<script>
 
-</section></div></main><footer class="w-full bg-navy-deep text-on-tertiary pt-space-xl pb-space-lg"><div class="w-full px-4 pt-6 pb-28 flex flex-col gap-6"><div class="flex flex-col gap-3">
-  
-  <a class="flex items-center gap-2.5 group py-1 w-fit" href="#">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" class="h-12 sm:h-14 w-auto transition-transform duration-300 group-hover:scale-105">
-      <defs>
-        <linearGradient id="cdPrimaryGradFooter" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#155EEF" />
-          <stop offset="100%" stop-color="#0047C1" />
-        </linearGradient>
-        <linearGradient id="cdGreenGradFooter" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#70FDA7" />
-          <stop offset="100%" stop-color="#12B76A" />
-        </linearGradient>
-      </defs>
-      <g>
-        <path d="M26 4C14 4 6 8 6 8C6 24 10 42 26 56C42 42 46 24 46 8C46 8 38 4 26 4Z" fill="url(#cdPrimaryGradFooter)" />
-        <path d="M18 28L23 33L34 20" stroke="url(#cdGreenGradFooter)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="36" cy="14" r="4" fill="url(#cdGreenGradFooter)" />
-      </g>
-      <text x="60" y="39" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="24" font-weight="800" fill="#ffffff" letter-spacing="-0.03em">
-        Checker<tspan font-weight="500" fill="#70FDA7">Discount</tspan>
-      </text>
-    </svg>
-  </a>
+const API_BASE =
+    "https://deal-api.hamraahirn32.workers.dev";
 
-<p class="font-body-sm text-[12px] text-tertiary-fixed-dim leading-relaxed">Algorithmic deal verification and real-time price monitoring across major retailers.</p><div class="flex flex-wrap gap-2 pt-1"><div class="inline-flex items-center gap-1 px-2.5 py-1 bg-navy-surface rounded-lg text-[11px] text-tertiary-fixed"><span class="material-symbols-outlined text-savings-green text-[14px]">verified_user</span> Verified Deals</div><div class="inline-flex items-center gap-1 px-2.5 py-1 bg-navy-surface rounded-lg text-[11px] text-tertiary-fixed"><span class="material-symbols-outlined text-primary-fixed-dim text-[14px]">security</span> Anti-Markup</div></div></div><div class="grid grid-cols-2 gap-4 border-t border-navy-surface pt-4"><div><h4 class="font-label-md text-[12px] font-bold text-on-tertiary uppercase tracking-wider mb-2">Explore</h4><ul class="space-y-2 text-[12px]"><li><a class="text-tertiary-fixed-dim hover:text-on-tertiary" data-path="deals" href="#">Top Deals</a></li><li><a class="text-tertiary-fixed-dim hover:text-on-tertiary" data-path="savings-checker" href="#savings-tool">Savings Tool</a></li><li><a class="text-tertiary-fixed-dim hover:text-on-tertiary" data-path="price-history" href="#tool-history">Price History</a></li><li><a class="text-tertiary-fixed-dim hover:text-on-tertiary" data-path="store-coupons" href="#tool-coupons">Store Coupons</a></li></ul></div><div><h4 class="font-label-md text-[12px] font-bold text-on-tertiary uppercase tracking-wider mb-2">Company &amp; Legal</h4><ul class="space-y-2 text-[12px]">
-        <li><a class="text-tertiary-fixed-dim hover:text-on-tertiary" href="about.html">About Us</a></li>
-        <li><a class="text-tertiary-fixed-dim hover:text-on-tertiary" href="privacy.html">Privacy Policy</a></li>
-        <li><a class="text-tertiary-fixed-dim hover:text-on-tertiary" href="terms.html">Terms of Service</a></li>
-        <li><a class="text-tertiary-fixed-dim hover:text-on-tertiary" href="affiliate-disclosure.html">Affiliate Notice</a></li>
-    </ul></div></div><div class="border-t border-navy-surface pt-3 space-y-2 text-[11px] text-tertiary-fixed-dim leading-relaxed"><p>Affiliate Disclosure: CheckerDiscount is an independent price validation service. We may earn a commission when you click merchant links.</p><div class="flex items-center justify-between text-[10px] text-tertiary-fixed-dim pt-1"><span>© 2025 CheckerDiscount Inc.</span><span>SSL Encrypted</span></div></div></div></footer><nav aria-label="Mobile Navigation" class="fixed bottom-0 inset-x-0 z-50 bg-surface-container-lowest/95 backdrop-blur-xl border-t border-surface-container px-3 py-2 flex items-center justify-around shadow-lg"><a class="flex flex-col items-center gap-0.5 text-primary-container font-label-md text-[11px] font-semibold py-1 px-2.5 rounded-xl" href="#"><span class="material-symbols-outlined text-[20px]">local_offer</span><span>Deals</span></a><a class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface font-label-md text-[11px] py-1 px-2.5 rounded-xl transition-colors" href="#savings-tool"><span class="material-symbols-outlined text-[20px]">calculate</span><span>Checker</span></a><a class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface font-label-md text-[11px] py-1 px-2.5 rounded-xl transition-colors" href="#tool-comparison"><span class="material-symbols-outlined text-[20px]">compare_arrows</span><span>Tools</span></a><a class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface font-label-md text-[11px] py-1 px-2.5 rounded-xl transition-colors" href="#tool-watchlist"><span class="material-symbols-outlined text-[20px]">bookmark_border</span><span>Watchlist</span></a></nav>
+let ADMIN_KEY = "";
 
-<script src="js/app.js"></script>
-</body></html>
+let allDeals = [];
+
+const COUNTRY_DATA = [
+
+    ["US", "🇺🇸", "United States", "USD"],
+    ["GB", "🇬🇧", "United Kingdom", "GBP"],
+    ["SA", "🇸🇦", "Saudi Arabia", "SAR"],
+    ["AE", "🇦🇪", "United Arab Emirates", "AED"],
+    ["OM", "🇴🇲", "Oman", "OMR"],
+    ["PK", "🇵🇰", "Pakistan", "PKR"],
+    ["IN", "🇮🇳", "India", "INR"],
+    ["CA", "🇨🇦", "Canada", "CAD"],
+    ["AU", "🇦🇺", "Australia", "AUD"],
+    ["DE", "🇩🇪", "Germany", "EUR"],
+    ["FR", "🇫🇷", "France", "EUR"],
+    ["IT", "🇮🇹", "Italy", "EUR"],
+    ["ES", "🇪🇸", "Spain", "EUR"],
+    ["NL", "🇳🇱", "Netherlands", "EUR"],
+    ["BE", "🇧🇪", "Belgium", "EUR"],
+    ["AT", "🇦🇹", "Austria", "EUR"],
+    ["CH", "🇨🇭", "Switzerland", "CHF"],
+    ["NO", "🇳🇴", "Norway", "NOK"],
+    ["SE", "🇸🇪", "Sweden", "SEK"],
+    ["DK", "🇩🇰", "Denmark", "DKK"],
+    ["NZ", "🇳🇿", "New Zealand", "NZD"],
+    ["JP", "🇯🇵", "Japan", "JPY"],
+    ["CN", "🇨🇳", "China", "CNY"],
+    ["KR", "🇰🇷", "South Korea", "KRW"],
+    ["SG", "🇸🇬", "Singapore", "SGD"],
+    ["MY", "🇲🇾", "Malaysia", "MYR"],
+    ["TH", "🇹🇭", "Thailand", "THB"],
+    ["ID", "🇮🇩", "Indonesia", "IDR"],
+    ["PH", "🇵🇭", "Philippines", "PHP"],
+    ["VN", "🇻🇳", "Vietnam", "VND"],
+    ["TR", "🇹🇷", "Turkey", "TRY"],
+    ["BR", "🇧🇷", "Brazil", "BRL"],
+    ["MX", "🇲🇽", "Mexico", "MXN"],
+    ["ZA", "🇿🇦", "South Africa", "ZAR"],
+    ["QA", "🇶🇦", "Qatar", "QAR"],
+    ["KW", "🇰🇼", "Kuwait", "KWD"],
+    ["BH", "🇧🇭", "Bahrain", "BHD"]
+];
+
+const CURRENCY_LIST = [
+    "USD","GBP","SAR","AED","OMR","PKR","INR",
+    "CAD","AUD","EUR","JPY","CNY","KRW","SGD",
+    "MYR","QAR","KWD","BHD","CHF","NOK","SEK",
+    "DKK","NZD","ZAR","BRL","MXN","IDR","PHP","TRY"
+];
+
+function $(id) {
+    return document.getElementById(id);
+}
+
+
+/* =====================================================
+   COUNTRY SELECTS
+===================================================== */
+
+function populateCountrySelects() {
+
+    const selects = [
+        $("country_code"),
+        $("editCountry")
+    ];
+
+    selects.forEach(select => {
+
+        if (!select) return;
+
+        select.innerHTML = "";
+
+        COUNTRY_DATA.forEach(country => {
+
+            const option =
+                document.createElement("option");
+
+            option.value = country[0];
+
+            option.textContent =
+                `${country[1]} ${country[2]} (${country[3]})`;
+
+            select.appendChild(option);
+        });
+
+    });
+
+    $("country_code").value = "US";
+    $("editCountry").value = "US";
+}
+
+
+function getCurrencyForCountry(code) {
+
+    const country =
+        COUNTRY_DATA.find(
+            item => item[0] === code
+        );
+
+    return country
+        ? country[3]
+        : "USD";
+}
+
+
+function updateCurrencyFromCountry() {
+
+    const country =
+        $("country_code").value;
+
+    const currency =
+        getCurrencyForCountry(country);
+
+    $("currency").value = currency;
+}
+
+
+function updateEditCurrency() {
+
+    const country =
+        $("editCountry").value;
+
+    const currency =
+        getCurrencyForCountry(country);
+
+    $("editCurrency").value = currency;
+}
+
+
+/* =====================================================
+   LOGIN
+===================================================== */
+
+async function login() {
+
+    const key =
+        $("adminKey").value.trim();
+
+    if (!key) {
+
+        $("loginStatus").textContent =
+            "Please enter Admin Key.";
+
+        return;
+    }
+
+    ADMIN_KEY = key;
+
+    try {
+
+        const response =
+            await api("/api/admin/stats");
+
+        if (!response.success) {
+            throw new Error(
+                response.error || "Login failed"
+            );
+        }
+
+        sessionStorage.setItem(
+            "checkerAdminKey",
+            ADMIN_KEY
+        );
+
+        $("loginScreen").classList.add("hidden");
+
+        $("adminApp").classList.remove("hidden");
+
+        await refreshAll();
+
+    } catch (error) {
+
+        ADMIN_KEY = "";
+
+        $("loginStatus").textContent =
+            error.message || "Invalid Admin Key.";
+    }
+}
+
+
+function logout() {
+
+    ADMIN_KEY = "";
+
+    sessionStorage.removeItem(
+        "checkerAdminKey"
+    );
+
+    location.reload();
+}
+
+
+/* =====================================================
+   API
+===================================================== */
+
+async function api(
+    path,
+    options = {}
+) {
+
+    const headers = {
+        ...(options.headers || {}),
+        "X-Admin-Key": ADMIN_KEY,
+        "Content-Type": "application/json"
+    };
+
+    const response =
+        await fetch(
+            API_BASE + path,
+            {
+                ...options,
+                headers
+            }
+        );
+
+    let data;
+
+    try {
+        data = await response.json();
+    } catch {
+        throw new Error(
+            "Invalid API response"
+        );
+    }
+
+    if (!response.ok || data.success === false) {
+
+        throw new Error(
+            data.error ||
+            `Request failed (${response.status})`
+        );
+    }
+
+    return data;
+}
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+
+        populateCountrySelects();
+
+        const savedKey =
+            sessionStorage.getItem(
+                "checkerAdminKey"
+            );
+
+        if (savedKey) {
+
+            ADMIN_KEY = savedKey;
+
+            try {
+
+                const result =
+                    await api(
+                        "/api/admin/stats"
+                    );
+
+                if (result.success) {
+
+                    $("loginScreen")
+                        .classList.add("hidden");
+
+                    $("adminApp")
+                        .classList.remove("hidden");
+
+                    await refreshAll();
+                }
+
+            } catch {
+
+                sessionStorage.removeItem(
+                    "checkerAdminKey"
+                );
+
+                ADMIN_KEY = "";
+            }
+        }
+    }
+);
+
+
+/* =====================================================
+   REFRESH ALL
+===================================================== */
+
+async function refreshAll() {
+
+    await Promise.all([
+        refreshStats(),
+        refreshDeals()
+    ]);
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+async function refreshStats() {
+
+    const data =
+        await api(
+            "/api/admin/stats"
+        );
+
+    const stats =
+        data.stats || {};
+
+    $("statTotal").textContent =
+        stats.total || 0;
+
+    $("statVerified").textContent =
+        stats.verified || 0;
+
+    $("statPending").textContent =
+        stats.pending || 0;
+
+    $("statExpired").textContent =
+        stats.expired || 0;
+
+    $("statFeatured").textContent =
+        stats.featured || 0;
+
+    $("statCoupons").textContent =
+        stats.coupons || 0;
+}
+
+
+/* =====================================================
+   DEALS
+===================================================== */
+
+async function refreshDeals() {
+
+    const data =
+        await api(
+            "/api/admin/deals"
+        );
+
+    allDeals =
+        Array.isArray(data.deals)
+            ? data.deals
+            : [];
+
+    renderDeals();
+}
+
+
+function getCountryInfo(code) {
+
+    return COUNTRY_DATA.find(
+        item =>
+            item[0] === String(code || "")
+                .toUpperCase()
+    );
+}
+
+
+function countryDisplay(code) {
+
+    const info =
+        getCountryInfo(code);
+
+    if (!info) {
+        return "🌐 Not Set";
+    }
+
+    return `${info[1]} ${info[2]}`;
+}
+
+
+function money(
+    value,
+    currency
+) {
+
+    const amount =
+        Number(value);
+
+    if (!Number.isFinite(amount)) {
+        return "-";
+    }
+
+    try {
+
+        return new Intl.NumberFormat(
+            undefined,
+            {
+                style: "currency",
+                currency: currency || "USD"
+            }
+        ).format(amount);
+
+    } catch {
+
+        return `${currency || "USD"} ${amount.toFixed(2)}`;
+    }
+}
+
+
+function statusBadge(status) {
+
+    const value =
+        String(status || "")
+            .toUpperCase();
+
+    if (value === "VERIFIED") {
+
+        return `
+            <span class="inline-flex px-2 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
+                VERIFIED
+            </span>
+        `;
+    }
+
+    if (value === "EXPIRED") {
+
+        return `
+            <span class="inline-flex px-2 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold">
+                EXPIRED
+            </span>
+        `;
+    }
+
+    return `
+        <span class="inline-flex px-2 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-semibold">
+            PENDING
+        </span>
+    `;
+}
+
+
+function esc(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+function renderDeals() {
+
+    const tbody =
+        $("dealsTableBody");
+
+    if (!allDeals.length) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="9"
+                    class="text-center py-10 text-gray-500">
+                    No deals found.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    tbody.innerHTML =
+        allDeals.map(deal => {
+
+            const country =
+                getCountryInfo(
+                    deal.country_code
+                );
+
+            const countryText =
+                country
+                    ? `${country[1]} ${country[0]}`
+                    : "🌐";
+
+            const comparison =
+                deal.comparison_id
+                    ? esc(deal.comparison_id)
+                    : `<span class="text-gray-400">Not set</span>`;
+
+            const featured =
+                Number(deal.is_featured) === 1;
+
+            return `
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+
+                    <td class="py-3 px-2 font-semibold">
+                        #${deal.id}
+                    </td>
+
+                    <td class="py-3 px-2 max-w-[280px]">
+                        <div class="font-semibold truncate">
+                            ${esc(deal.title)}
+                        </div>
+
+                        ${
+                            deal.asin
+                                ? `
+                                    <div class="text-[11px] text-gray-400 mt-1">
+                                        ${esc(deal.asin)}
+                                    </div>
+                                  `
+                                : ""
+                        }
+                    </td>
+
+                    <td class="py-3 px-2">
+                        ${esc(deal.store || "-")}
+                    </td>
+
+                    <td class="py-3 px-2 font-semibold">
+                        ${countryText}
+                    </td>
+
+                    <td class="py-3 px-2">
+                        ${
+                            deal.category
+                                ? esc(deal.category)
+                                : `<span class="text-gray-400">Not set</span>`
+                        }
+                    </td>
+
+                    <td class="py-3 px-2">
+                        <span class="text-xs font-mono">
+                            ${comparison}
+                        </span>
+                    </td>
+
+                    <td class="py-3 px-2 whitespace-nowrap">
+
+                        <div class="font-bold">
+                            ${money(
+                                deal.new_price,
+                                deal.currency
+                            )}
+                        </div>
+
+                        ${
+                            deal.old_price
+                                ? `
+                                    <div class="text-xs text-gray-400 line-through">
+                                        ${money(
+                                            deal.old_price,
+                                            deal.currency
+                                        )}
+                                    </div>
+                                  `
+                                : ""
+                        }
+
+                    </td>
+
+                    <td class="py-3 px-2">
+
+                        ${statusBadge(
+                            deal.verification_status
+                        )}
+
+                        ${
+                            featured
+                                ? `
+                                    <div class="text-[10px] text-blue-600 font-bold mt-1">
+                                        ★ FEATURED
+                                    </div>
+                                  `
+                                : ""
+                        }
+
+                    </td>
+
+                    <td class="py-3 px-2">
+
+                        <div class="flex flex-wrap gap-1">
+
+                            <button
+                                onclick="editDeal(${deal.id})"
+                                class="px-2.5 py-1.5 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 text-xs font-semibold"
+                            >
+                                Edit
+                            </button>
+
+                            ${
+                                deal.verification_status !== "VERIFIED"
+                                    ? `
+                                        <button
+                                            onclick="verifyDeal(${deal.id})"
+                                            class="px-2.5 py-1.5 rounded-lg bg-green-50 text-green-700 hover:bg-green-100 text-xs font-semibold"
+                                        >
+                                            Verify
+                                        </button>
+                                      `
+                                    : ""
+                            }
+
+                            ${
+                                featured
+                                    ? `
+                                        <button
+                                            onclick="toggleFeatured(${deal.id}, false)"
+                                            class="px-2.5 py-1.5 rounded-lg bg-yellow-50 text-yellow-700 hover:bg-yellow-100 text-xs font-semibold"
+                                        >
+                                            Unfeature
+                                        </button>
+                                      `
+                                    : `
+                                        <button
+                                            onclick="toggleFeatured(${deal.id}, true)"
+                                            class="px-2.5 py-1.5 rounded-lg bg-purple-50 text-purple-700 hover:bg-purple-100 text-xs font-semibold"
+                                        >
+                                            Feature
+                                        </button>
+                                      `
+                            }
+
+                            ${
+                                deal.verification_status !== "EXPIRED"
+                                    ? `
+                                        <button
+                                            onclick="expireDeal(${deal.id})"
+                                            class="px-2.5 py-1.5 rounded-lg bg-orange-50 text-orange-700 hover:bg-orange-100 text-xs font-semibold"
+                                        >
+                                            Expire
+                                        </button>
+                                      `
+                                    : ""
+                            }
+
+                            <button
+                                onclick="deleteDeal(${deal.id})"
+                                class="px-2.5 py-1.5 rounded-lg bg-red-50 text-red-700 hover:bg-red-100 text-xs font-semibold"
+                            >
+                                Delete
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+            `;
+
+        }).join("");
+}
+
+
+/* =====================================================
+   ADD DEAL
+===================================================== */
+
+async function addDeal() {
+
+    const status =
+        $("dealFormStatus");
+
+    status.className =
+        "text-sm mt-4 text-gray-500";
+
+    status.textContent =
+        "Adding deal...";
+
+    try {
+
+        const body = {
+
+            title: $("title").value.trim(),
+
+            store: $("store").value.trim(),
+
+            old_price: $("old").value,
+
+            new_price: $("new").value,
+
+            url: $("url").value.trim(),
+
+            image_url:
+                $("image").value.trim(),
+
+            asin:
+                $("asin").value.trim(),
+
+            currency:
+                $("currency").value,
+
+            country_code:
+                $("country_code").value,
+
+            category:
+                $("category").value.trim(),
+
+            comparison_id:
+                $("comparison_id").value.trim(),
+
+            source_type:
+                "manual",
+
+            verification_status:
+                "PENDING"
+        };
+
+
+        if (
+            !body.title ||
+            !body.store ||
+            !body.old_price ||
+            !body.new_price ||
+            !body.url ||
+            !body.country_code ||
+            !body.category
+        ) {
+
+            throw new Error(
+                "Please fill all required fields."
+            );
+        }
+
+
+        const result =
+            await api(
+                "/api/admin/deals",
+                {
+                    method: "POST",
+                    body: JSON.stringify(body)
+                }
+            );
+
+
+        status.className =
+            "text-sm mt-4 text-green-600 font-semibold";
+
+        status.textContent =
+            `Deal added successfully. ID: ${result.id}`;
+
+
+        clearDealForm();
+
+        await refreshAll();
+
+    } catch (error) {
+
+        status.className =
+            "text-sm mt-4 text-red-600 font-semibold";
+
+        status.textContent =
+            error.message;
+    }
+}
+
+
+function clearDealForm() {
+
+    [
+        "title",
+        "store",
+        "old",
+        "new",
+        "url",
+        "image",
+        "asin",
+        "category",
+        "comparison_id"
+    ].forEach(id => {
+
+        if ($(id)) {
+            $(id).value = "";
+        }
+
+    });
+
+    $("country_code").value = "US";
+
+    $("currency").value = "USD";
+}
+
+
+/* =====================================================
+   EDIT DEAL
+===================================================== */
+
+function editDeal(id) {
+
+    const deal =
+        allDeals.find(
+            item => Number(item.id) === Number(id)
+        );
+
+    if (!deal) {
+        alert("Deal not found.");
+        return;
+    }
+
+
+    $("editId").value =
+        deal.id;
+
+    $("editTitle").value =
+        deal.title || "";
+
+    $("editStore").value =
+        deal.store || "";
+
+    $("editCountry").value =
+        deal.country_code || "US";
+
+    $("editCategory").value =
+        deal.category || "";
+
+    $("editComparisonId").value =
+        deal.comparison_id || "";
+
+    $("editCurrency").value =
+        deal.currency || "USD";
+
+    $("editOld").value =
+        deal.old_price ?? "";
+
+    $("editNew").value =
+        deal.new_price ?? "";
+
+    $("editAsin").value =
+        deal.asin || "";
+
+    $("editImage").value =
+        deal.image_url || "";
+
+    $("editUrl").value =
+        deal.url || "";
+
+    $("editStatus").textContent =
+        "";
+
+    $("editModal")
+        .classList.remove("hidden");
+}
+
+
+function closeEditModal() {
+
+    $("editModal")
+        .classList.add("hidden");
+}
+
+
+async function saveEdit() {
+
+    const id =
+        $("editId").value;
+
+    const status =
+        $("editStatus");
+
+    status.className =
+        "text-sm mt-4 text-gray-500";
+
+    status.textContent =
+        "Saving...";
+
+
+    try {
+
+        const body = {
+
+            title:
+                $("editTitle").value.trim(),
+
+            store:
+                $("editStore").value.trim(),
+
+            country_code:
+                $("editCountry").value,
+
+            category:
+                $("editCategory").value.trim(),
+
+            comparison_id:
+                $("editComparisonId").value.trim(),
+
+            currency:
+                $("editCurrency").value,
+
+            old_price:
+                $("editOld").value,
+
+            new_price:
+                $("editNew").value,
+
+            asin:
+                $("editAsin").value.trim(),
+
+            image_url:
+                $("editImage").value.trim(),
+
+            url:
+                $("editUrl").value.trim()
+        };
+
+
+        const result =
+            await api(
+                `/api/admin/deals/${id}/update`,
+                {
+                    method: "POST",
+                    body: JSON.stringify(body)
+                }
+            );
+
+
+        if (!result.success) {
+            throw new Error(
+                result.error || "Update failed"
+            );
+        }
+
+
+        status.className =
+            "text-sm mt-4 text-green-600 font-semibold";
+
+        status.textContent =
+            "Deal updated successfully.";
+
+
+        await refreshAll();
+
+        setTimeout(
+            closeEditModal,
+            700
+        );
+
+    } catch (error) {
+
+        status.className =
+            "text-sm mt-4 text-red-600 font-semibold";
+
+        status.textContent =
+            error.message;
+    }
+}
+
+
+/* =====================================================
+   VERIFY
+===================================================== */
+
+async function verifyDeal(id) {
+
+    if (
+        !confirm(
+            "Verify this deal?"
+        )
+    ) {
+        return;
+    }
+
+    try {
+
+        await api(
+            `/api/admin/deals/${id}/verify`,
+            {
+                method: "POST"
+            }
+        );
+
+        await refreshAll();
+
+    } catch (error) {
+
+        alert(error.message);
+    }
+}
+
+
+/* =====================================================
+   FEATURED
+===================================================== */
+
+async function toggleFeatured(
+    id,
+    makeFeatured
+) {
+
+    const action =
+        makeFeatured
+            ? "featured"
+            : "unfeatured";
+
+    try {
+
+        await api(
+            `/api/admin/deals/${id}/${action}`,
+            {
+                method: "POST"
+            }
+        );
+
+        await refreshAll();
+
+    } catch (error) {
+
+        alert(error.message);
+    }
+}
+
+
+/* =====================================================
+   EXPIRE
+===================================================== */
+
+async function expireDeal(id) {
+
+    if (
+        !confirm(
+            "Mark this deal as expired?"
+        )
+    ) {
+        return;
+    }
+
+    try {
+
+        await api(
+            `/api/admin/deals/${id}/expire`,
+            {
+                method: "POST"
+            }
+        );
+
+        await refreshAll();
+
+    } catch (error) {
+
+        alert(error.message);
+    }
+}
+
+
+/* =====================================================
+   DELETE
+===================================================== */
+
+async function deleteDeal(id) {
+
+    if (
+        !confirm(
+            "Delete this deal permanently?"
+        )
+    ) {
+        return;
+    }
+
+    try {
+
+        await api(
+            `/api/admin/deals/${id}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        await refreshAll();
+
+    } catch (error) {
+
+        alert(error.message);
+    }
+}
+
+
+/* =====================================================
+   ADD COUPON
+===================================================== */
+
+async function addCoupon() {
+
+    const status =
+        $("couponStatus");
+
+    status.className =
+        "text-sm mt-4 text-gray-500";
+
+    status.textContent =
+        "Adding coupon...";
+
+
+    try {
+
+        const body = {
+
+            store:
+                $("couponStore").value.trim(),
+
+            code:
+                $("couponCode").value.trim(),
+
+            title:
+                $("couponTitle").value.trim(),
+
+            discount_text:
+                $("couponDiscount").value.trim(),
+
+            description:
+                $("couponDescription").value.trim(),
+
+            expires_at:
+                $("couponExpiry").value,
+
+            url:
+                $("couponUrl").value.trim()
+        };
+
+
+        if (
+            !body.store ||
+            !body.title
+        ) {
+
+            throw new Error(
+                "Store and title are required."
+            );
+        }
+
+
+        const result =
+            await api(
+                "/api/admin/coupons",
+                {
+                    method: "POST",
+                    body: JSON.stringify(body)
+                }
+            );
+
+
+        status.className =
+            "text-sm mt-4 text-green-600 font-semibold";
+
+        status.textContent =
+            `Coupon added successfully. ID: ${result.id}`;
+
+
+        $("couponStore").value = "";
+        $("couponCode").value = "";
+        $("couponTitle").value = "";
+        $("couponDiscount").value = "";
+        $("couponExpiry").value = "";
+        $("couponUrl").value = "";
+        $("couponDescription").value = "";
+
+
+        await refreshStats();
+
+    } catch (error) {
+
+        status.className =
+            "text-sm mt-4 text-red-600 font-semibold";
+
+        status.textContent =
+            error.message;
+    }
+}
+
+
+/* =====================================================
+   ESCAPE / MODAL
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (event.key === "Escape") {
+            closeEditModal();
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
