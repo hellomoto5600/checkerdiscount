@@ -1,852 +1,623 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CheckerDiscount Admin</title>
 
-    <title>CheckerDiscount Admin Panel</title>
+<style>
+:root{
+    --primary:#155eef;
+    --primary-dark:#0047c1;
+    --green:#12b76a;
+    --red:#d92d20;
+    --orange:#f79009;
+    --bg:#f5f7fb;
+    --card:#ffffff;
+    --text:#101828;
+    --muted:#667085;
+    --border:#e4e7ec;
+    --shadow:0 4px 18px rgba(16,24,40,.07);
+}
 
-    <script src="https://cdn.tailwindcss.com"></script>
+*{
+    box-sizing:border-box;
+}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+header{
+    background:#fff;
+    border-bottom:1px solid var(--border);
+    padding:18px 24px;
+    position:sticky;
+    top:0;
+    z-index:20;
+}
 
-        body {
-            margin: 0;
-            font-family: Inter, Arial, sans-serif;
-            background: #f8fafc;
-            color: #0f172a;
-        }
+.header-inner{
+    max-width:1400px;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+}
 
-        .hidden {
-            display: none !important;
-        }
+.logo{
+    font-size:23px;
+    font-weight:800;
+    color:#0b1220;
+}
 
-        input,
-        select,
-        textarea {
-            outline: none;
-        }
+.logo span{
+    color:var(--primary);
+}
 
-        input:focus,
-        select:focus,
-        textarea:focus {
-            border-color: #2563eb !important;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, .10);
-        }
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
 
-        .flag {
-            font-size: 21px;
-        }
-    </style>
+.container{
+    max-width:1400px;
+    margin:25px auto;
+    padding:0 18px 50px;
+}
+
+h1{
+    margin:0 0 6px;
+    font-size:28px;
+}
+
+.subtitle{
+    color:var(--muted);
+    margin-bottom:25px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.stat{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:20px;
+    box-shadow:var(--shadow);
+}
+
+.stat-label{
+    color:var(--muted);
+    font-size:13px;
+}
+
+.stat-value{
+    font-size:28px;
+    font-weight:800;
+    margin-top:7px;
+}
+
+.card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:22px;
+    box-shadow:var(--shadow);
+    margin-bottom:22px;
+}
+
+.card h2{
+    margin:0 0 18px;
+    font-size:20px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.field.full{
+    grid-column:1/-1;
+}
+
+label{
+    font-size:13px;
+    font-weight:700;
+    color:#344054;
+}
+
+input,
+select{
+    width:100%;
+    min-height:43px;
+    border:1px solid #d0d5dd;
+    border-radius:9px;
+    padding:10px 12px;
+    background:#fff;
+    color:#101828;
+    font-size:14px;
+    outline:none;
+}
+
+input:focus,
+select:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(21,94,239,.10);
+}
+
+.actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:18px;
+}
+
+button{
+    border:0;
+    border-radius:9px;
+    padding:10px 15px;
+    cursor:pointer;
+    font-weight:700;
+    font-size:13px;
+}
+
+.btn-primary{
+    background:var(--primary);
+    color:#fff;
+}
+
+.btn-primary:hover{
+    background:var(--primary-dark);
+}
+
+.btn-secondary{
+    background:#eef2f6;
+    color:#344054;
+}
+
+.btn-green{
+    background:#e8f8f0;
+    color:#087443;
+}
+
+.btn-orange{
+    background:#fff4e5;
+    color:#b54708;
+}
+
+.btn-red{
+    background:#feeceb;
+    color:#b42318;
+}
+
+.btn-dark{
+    background:#101828;
+    color:#fff;
+}
+
+.edit-mode{
+    border:2px solid var(--primary);
+    background:#f8faff;
+}
+
+.edit-banner{
+    display:none;
+    background:#eef4ff;
+    border:1px solid #b2ccff;
+    color:#1849a9;
+    border-radius:10px;
+    padding:12px 14px;
+    margin-bottom:18px;
+    font-weight:700;
+}
+
+.edit-banner.show{
+    display:block;
+}
+
+.table-wrap{
+    width:100%;
+    overflow-x:auto;
+}
+
+.toolbar{
+    display:flex;
+    gap:12px;
+    margin-bottom:15px;
+    flex-wrap:wrap;
+}
+
+.toolbar input{
+    max-width:420px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:1050px;
+}
+
+th,
+td{
+    text-align:left;
+    padding:12px 10px;
+    border-bottom:1px solid var(--border);
+    vertical-align:middle;
+}
+
+th{
+    background:#f8fafc;
+    font-size:12px;
+    color:#475467;
+    text-transform:uppercase;
+}
+
+td{
+    font-size:13px;
+}
+
+.deal-title{
+    font-weight:700;
+    max-width:280px;
+}
+
+.small{
+    font-size:12px;
+    color:var(--muted);
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    border-radius:999px;
+    padding:5px 9px;
+    font-size:11px;
+    font-weight:800;
+}
+
+.badge-green{
+    background:#ecfdf3;
+    color:#027a48;
+}
+
+.badge-orange{
+    background:#fffaeb;
+    color:#b54708;
+}
+
+.badge-red{
+    background:#fef3f2;
+    color:#b42318;
+}
+
+.badge-blue{
+    background:#eff8ff;
+    color:#175cd3;
+}
+
+.row-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+}
+
+.row-actions button{
+    padding:7px 9px;
+    font-size:11px;
+}
+
+.message{
+    display:none;
+    margin-bottom:18px;
+    padding:12px 14px;
+    border-radius:9px;
+    font-size:14px;
+    font-weight:700;
+}
+
+.message.show{
+    display:block;
+}
+
+.message.success{
+    background:#ecfdf3;
+    color:#027a48;
+    border:1px solid #abefc6;
+}
+
+.message.error{
+    background:#fef3f2;
+    color:#b42318;
+    border:1px solid #fecdca;
+}
+
+.loading{
+    padding:30px;
+    text-align:center;
+    color:var(--muted);
+}
+
+.empty{
+    padding:30px;
+    text-align:center;
+    color:var(--muted);
+}
+
+.hidden{
+    display:none!important;
+}
+
+@media(max-width:1000px){
+    .grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .form-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:650px){
+    header{
+        padding:15px;
+    }
+
+    .header-inner{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+
+    .container{
+        margin:18px auto;
+        padding:0 12px 40px;
+    }
+
+    .grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+
+    .card{
+        padding:15px;
+    }
+}
+</style>
 </head>
 
 <body>
 
-<!-- =========================================================
-     LOGIN
-========================================================= -->
+<header>
+    <div class="header-inner">
+        <div class="logo">
+            Checker<span>Discount</span> Admin
+        </div>
 
-<div id="loginScreen" class="min-h-screen flex items-center justify-center px-4">
+        <div class="header-right">
+            <button class="btn-secondary" onclick="refreshAll()">Refresh</button>
+            <button class="btn-dark" onclick="logout()">Logout</button>
+        </div>
+    </div>
+</header>
 
-    <div class="w-full max-w-md">
+<div class="container">
 
-        <div class="bg-white rounded-3xl border border-slate-200 shadow-xl p-7">
+    <h1>Admin Dashboard</h1>
+    <div class="subtitle">
+        Manage deals, countries, categories, verification and featured offers.
+    </div>
 
-            <div class="text-center mb-7">
+    <div id="message" class="message"></div>
 
-                <div class="mx-auto w-16 h-16 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-3xl font-extrabold">
-                    CD
+    <!-- STATS -->
+    <div class="grid">
+        <div class="stat">
+            <div class="stat-label">Total Deals</div>
+            <div class="stat-value" id="statTotal">0</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">Verified</div>
+            <div class="stat-value" id="statVerified">0</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">Featured</div>
+            <div class="stat-value" id="statFeatured">0</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">Pending</div>
+            <div class="stat-value" id="statPending">0</div>
+        </div>
+    </div>
+
+    <!-- ADD / EDIT DEAL -->
+    <div class="card" id="dealFormCard">
+
+        <div id="editBanner" class="edit-banner">
+            Editing Deal. Make your changes and click "Update Deal".
+        </div>
+
+        <h2 id="formTitle">Add New Deal</h2>
+
+        <form id="dealForm" onsubmit="saveDeal(event)">
+
+            <div class="form-grid">
+
+                <div class="field">
+                    <label>Deal Title *</label>
+                    <input id="title" required>
                 </div>
 
-                <h1 class="mt-4 text-2xl font-extrabold">
-                    CheckerDiscount
-                </h1>
+                <div class="field">
+                    <label>Store *</label>
+                    <input id="store" required>
+                </div>
 
-                <p class="text-sm text-slate-500 mt-1">
-                    Admin Panel
-                </p>
+                <div class="field">
+                    <label>Country *</label>
+                    <select id="country" required onchange="syncCurrencyFromCountry()">
+                        <option value="">Select Country</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Category *</label>
+                    <select id="category" required>
+                        <option value="">Select Category</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Comparison ID</label>
+                    <input id="comparison_id" placeholder="Example: B0ABC12345">
+                </div>
+
+                <div class="field">
+                    <label>ASIN</label>
+                    <input id="asin">
+                </div>
+
+                <div class="field">
+                    <label>Currency *</label>
+                    <select id="currency" required>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Old Price</label>
+                    <input id="old" type="number" step="0.01" min="0">
+                </div>
+
+                <div class="field">
+                    <label>New Price *</label>
+                    <input id="new" type="number" step="0.01" min="0" required>
+                </div>
+
+                <div class="field">
+                    <label>Deal URL *</label>
+                    <input id="url" type="url" required>
+                </div>
+
+                <div class="field">
+                    <label>Image URL</label>
+                    <input id="image" type="url">
+                </div>
+
+                <div class="field">
+                    <label>Source Type</label>
+                    <select id="source_type">
+                        <option value="manual">Manual</option>
+                        <option value="amazon">Amazon</option>
+                        <option value="ebay">eBay</option>
+                        <option value="walmart">Walmart</option>
+                        <option value="temu">Temu</option>
+                        <option value="affiliate">Affiliate</option>
+                        <option value="api">API</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Verification Status</label>
+                    <select id="verification_status">
+                        <option value="PENDING">PENDING</option>
+                        <option value="VERIFIED">VERIFIED</option>
+                        <option value="EXPIRED">EXPIRED</option>
+                    </select>
+                </div>
 
             </div>
 
-            <label class="block text-sm font-semibold text-slate-700 mb-2">
-                Admin Key
-            </label>
+            <div class="actions">
+                <button type="submit" class="btn-primary" id="saveButton">
+                    Add Deal
+                </button>
 
+                <button type="button" class="btn-secondary" onclick="resetDealForm()">
+                    Clear
+                </button>
+
+                <button type="button"
+                        class="btn-orange hidden"
+                        id="cancelEditButton"
+                        onclick="cancelEdit()">
+                    Cancel Edit
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+
+    <!-- DEAL MANAGEMENT -->
+    <div class="card">
+
+        <h2>Deal Management</h2>
+
+        <div class="toolbar">
             <input
-                id="adminKey"
-                type="password"
-                placeholder="Enter admin key"
-                class="w-full px-4 py-3 rounded-xl border border-slate-300"
+                id="dealSearch"
+                placeholder="Search deals by title, store, country, category..."
+                oninput="renderDeals()"
             >
 
-            <button
-                onclick="login()"
-                class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl"
-            >
-                Login
+            <button class="btn-secondary" onclick="refreshDeals()">
+                Refresh Deals
             </button>
+        </div>
 
-            <div
-                id="loginError"
-                class="hidden mt-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-xl p-3"
-            ></div>
+        <div class="table-wrap">
+            <table>
 
+                <thead>
+                    <tr>
+                        <th>Deal</th>
+                        <th>Country</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Comparison</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="dealsTable">
+                    <tr>
+                        <td colspan="7" class="loading">
+                            Loading deals...
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
         </div>
 
     </div>
-
-</div>
-
-
-<!-- =========================================================
-     ADMIN APP
-========================================================= -->
-
-<div id="adminApp" class="hidden min-h-screen">
-
-    <!-- HEADER -->
-
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-40">
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="h-16 flex items-center justify-between">
-
-                <div>
-                    <h1 class="font-extrabold text-lg">
-                        CheckerDiscount Admin
-                    </h1>
-
-                    <p class="text-xs text-slate-500">
-                        Deals & price comparison management
-                    </p>
-                </div>
-
-                <button
-                    onclick="logout()"
-                    class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-sm font-semibold"
-                >
-                    Logout
-                </button>
-
-            </div>
-
-        </div>
-
-    </header>
-
-
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
-
-        <!-- =====================================================
-             STATS
-        ====================================================== -->
-
-        <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-
-            <div class="bg-white border border-slate-200 rounded-2xl p-4">
-                <div class="text-xs text-slate-500">Total Deals</div>
-                <div id="statTotal" class="text-2xl font-extrabold mt-1">0</div>
-            </div>
-
-            <div class="bg-white border border-slate-200 rounded-2xl p-4">
-                <div class="text-xs text-slate-500">Verified</div>
-                <div id="statVerified" class="text-2xl font-extrabold text-emerald-600 mt-1">0</div>
-            </div>
-
-            <div class="bg-white border border-slate-200 rounded-2xl p-4">
-                <div class="text-xs text-slate-500">Pending</div>
-                <div id="statPending" class="text-2xl font-extrabold text-amber-600 mt-1">0</div>
-            </div>
-
-            <div class="bg-white border border-slate-200 rounded-2xl p-4">
-                <div class="text-xs text-slate-500">Expired</div>
-                <div id="statExpired" class="text-2xl font-extrabold text-red-600 mt-1">0</div>
-            </div>
-
-            <div class="bg-white border border-slate-200 rounded-2xl p-4">
-                <div class="text-xs text-slate-500">Featured</div>
-                <div id="statFeatured" class="text-2xl font-extrabold text-blue-600 mt-1">0</div>
-            </div>
-
-            <div class="bg-white border border-slate-200 rounded-2xl p-4">
-                <div class="text-xs text-slate-500">Coupons</div>
-                <div id="statCoupons" class="text-2xl font-extrabold text-purple-600 mt-1">0</div>
-            </div>
-
-        </section>
-
-
-        <!-- =====================================================
-             ADD DEAL
-        ====================================================== -->
-
-        <section class="bg-white border border-slate-200 rounded-3xl p-5 md:p-7 mb-8">
-
-            <div class="flex items-center justify-between gap-4 mb-6">
-
-                <div>
-                    <h2 class="text-xl font-extrabold">
-                        Add New Deal
-                    </h2>
-
-                    <p class="text-sm text-slate-500 mt-1">
-                        Add a deal and assign its country, category and comparison group.
-                    </p>
-                </div>
-
-            </div>
-
-
-            <form id="dealForm" onsubmit="addDeal(event)">
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-
-
-                    <!-- TITLE -->
-
-                    <div class="lg:col-span-2">
-
-                        <label class="block text-sm font-semibold mb-2">
-                            Product / Deal Title *
-                        </label>
-
-                        <input
-                            id="title"
-                            required
-                            type="text"
-                            placeholder="Sony Wireless Headphones"
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300"
-                        >
-
-                    </div>
-
-
-                    <!-- STORE -->
-
-                    <div>
-
-                        <label class="block text-sm font-semibold mb-2">
-                            Store *
-                        </label>
-
-                        <input
-                            id="store"
-                            required
-                            type="text"
-                            placeholder="Amazon"
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300"
-                        >
-
-                    </div>
-
-
-                    <!-- COUNTRY -->
-
-                    <div>
-
-                        <label class="block text-sm font-semibold mb-2">
-                            Country *
-                        </label>
-
-                        <select
-                            id="country"
-                            required
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white"
-                        >
-                            <option value="">Select Country</option>
-
-                            <option value="US">🇺🇸 USA</option>
-                            <option value="GB">🇬🇧 United Kingdom</option>
-                            <option value="SA">🇸🇦 Saudi Arabia</option>
-                            <option value="AE">🇦🇪 UAE</option>
-                            <option value="OM">🇴🇲 Oman</option>
-                            <option value="PK">🇵🇰 Pakistan</option>
-                            <option value="IN">🇮🇳 India</option>
-                            <option value="CA">🇨🇦 Canada</option>
-                            <option value="AU">🇦🇺 Australia</option>
-                            <option value="DE">🇩🇪 Germany</option>
-                            <option value="FR">🇫🇷 France</option>
-                            <option value="IT">🇮🇹 Italy</option>
-                            <option value="ES">🇪🇸 Spain</option>
-                            <option value="NL">🇳🇱 Netherlands</option>
-                            <option value="BE">🇧🇪 Belgium</option>
-                            <option value="AT">🇦🇹 Austria</option>
-                            <option value="CH">🇨🇭 Switzerland</option>
-                            <option value="NO">🇳🇴 Norway</option>
-                            <option value="SE">🇸🇪 Sweden</option>
-                            <option value="DK">🇩🇰 Denmark</option>
-                            <option value="NZ">🇳🇿 New Zealand</option>
-                            <option value="JP">🇯🇵 Japan</option>
-                            <option value="CN">🇨🇳 China</option>
-                            <option value="KR">🇰🇷 South Korea</option>
-                            <option value="SG">🇸🇬 Singapore</option>
-                            <option value="MY">🇲🇾 Malaysia</option>
-                            <option value="TH">🇹🇭 Thailand</option>
-                            <option value="ID">🇮🇩 Indonesia</option>
-                            <option value="PH">🇵🇭 Philippines</option>
-                            <option value="VN">🇻🇳 Vietnam</option>
-                            <option value="TR">🇹🇷 Turkey</option>
-                            <option value="BR">🇧🇷 Brazil</option>
-                            <option value="MX">🇲🇽 Mexico</option>
-                            <option value="ZA">🇿🇦 South Africa</option>
-                            <option value="QA">🇶🇦 Qatar</option>
-                            <option value="KW">🇰🇼 Kuwait</option>
-                            <option value="BH">🇧🇭 Bahrain</option>
-
-                        </select>
-
-                    </div>
-
-
-                    <!-- CATEGORY -->
-
-                    <div>
-
-                        <label class="block text-sm font-semibold mb-2">
-                            Category *
-                        </label>
-
-                        <select
-                            id="category"
-                            required
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white"
-                        >
-
-                            <option value="">Select Category</option>
-
-                            <option value="Mobiles">Mobiles</option>
-                            <option value="Laptops">Laptops</option>
-                            <option value="Headphones">Headphones</option>
-                            <option value="Audio">Audio</option>
-                            <option value="TV">TV</option>
-                            <option value="Electronics">Electronics</option>
-                            <option value="Home">Home</option>
-                            <option value="Kitchen">Kitchen</option>
-                            <option value="Appliances">Appliances</option>
-                            <option value="Fashion">Fashion</option>
-                            <option value="Beauty">Beauty</option>
-                            <option value="Sports">Sports</option>
-                            <option value="Toys">Toys</option>
-                            <option value="Gaming">Gaming</option>
-                            <option value="Automotive">Automotive</option>
-                            <option value="Tools">Tools</option>
-                            <option value="Health">Health</option>
-                            <option value="Office">Office</option>
-                            <option value="Garden">Garden</option>
-                            <option value="Other">Other</option>
-
-                        </select>
-
-                    </div>
-
-
-                    <!-- COMPARISON ID -->
-
-                    <div>
-
-                        <label class="block text-sm font-semibold mb-2">
-                            Comparison ID
-                        </label>
-
-                        <input
-                            id="comparison_id"
-                            type="text"
-                            placeholder="e.g. SONY-WH1000XM5"
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300"
-                        >
-
-                        <p class="text-xs text-slate-400 mt-1">
-                            Same ID = same product across different stores.
-                        </p>
-
-                    </div>
-
-
-                    <!-- ASIN -->
-
-                    <div>
-
-                        <label class="block text-sm font-semibold mb-2">
-                            ASIN
-                        </label>
-
-                        <input
-                            id="asin"
-                            type="text"
-                            placeholder="B0XXXXXXXX"
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300"
-                        >
-
-                    </div>
-
-
-                    <!-- CURRENCY -->
-
-                    <div>
-
-                        <label class="block text-sm font-semibold mb-2">
-                            Currency *
-                        </label>
-
-                        <select
-                            id="currency"
-                            required
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white"
-                        >
-
-                            <option value="USD">USD - US Dollar</option>
-                            <option value="GBP">GBP - British Pound</option>
-                            <option value="SAR">SAR - Saudi Riyal</option>
-                            <option value="AED">AED - UAE Dirham</option>
-                            <option value="OMR">OMR - Omani Rial</option>
-                            <option value="PKR">PKR - Pakistani Rupee</option>
-                            <option value="INR">INR - Indian Rupee</option>
-                            <option value="CAD">CAD - Canadian Dollar</option>
-                            <option value="AUD">AUD - Australian Dollar</option>
-                            <option value="EUR">EUR - Euro</option>
-                            <option value="CHF">CHF - Swiss Franc</option>
-                            <option value="NOK">NOK - Norwegian Krone</option>
-                            <option value="SEK">SEK - Swedish Krona</option>
-                            <option value="DKK">DKK - Danish Krone</option>
-                            <option value="NZD">NZD - New Zealand Dollar</option>
-                            <option value="JPY">JPY - Japanese Yen</option>
-                            <option value="CNY">CNY - Chinese Yuan</option>
-                            <option value="KRW">KRW - South Korean Won</option>
-                            <option value="SGD">SGD - Singapore Dollar</option>
-                            <option value="MYR">MYR - Malaysian Ringgit</option>
-                            <option value="THB">THB - Thai Baht</option>
-                            <option value="IDR">IDR - Indonesian Rupiah</option>
-                            <option value="PHP">PHP - Philippine Peso</option>
-                            <option value="VND">VND - Vietnamese Dong</option>
-                            <option value="TRY">TRY - Turkish Lira</option>
-                            <option value="BRL">BRL - Brazilian Real</option>
-                            <option value="MXN">MXN - Mexican Peso</option>
-                            <option value="ZAR">ZAR - South African Rand</option>
-                            <option value="QAR">QAR - Qatari Riyal</option>
-                            <option value="KWD">KWD - Kuwaiti Dinar</option>
-                            <option value="BHD">BHD - Bahraini Dinar</option>
-
-                        </select>
-
-                    </div>
-
-
-                    <!-- OLD PRICE -->
-
-                    <div>
-
-                        <label class="block text-sm font-semibold mb-2">
-                            Old Price *
-                        </label>
-
-                        <input
-                            id="old"
-                            required
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            placeholder="129.99"
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300"
-                        >
-
-                    </div>
-
-
-                    <!-- NEW PRICE -->
-
-                    <div>
-
-                        <label class="block text-sm font-semibold mb-2">
-                            Deal Price *
-                        </label>
-
-                        <input
-                            id="new"
-                            required
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            placeholder="79.99"
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300"
-                        >
-
-                    </div>
-
-
-                    <!-- URL -->
-
-                    <div class="lg:col-span-2">
-
-                        <label class="block text-sm font-semibold mb-2">
-                            Product / Affiliate URL *
-                        </label>
-
-                        <input
-                            id="url"
-                            required
-                            type="url"
-                            placeholder="https://..."
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300"
-                        >
-
-                    </div>
-
-
-                    <!-- IMAGE -->
-
-                    <div>
-
-                        <label class="block text-sm font-semibold mb-2">
-                            Image URL
-                        </label>
-
-                        <input
-                            id="image"
-                            type="url"
-                            placeholder="https://..."
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300"
-                        >
-
-                    </div>
-
-
-                    <!-- SOURCE -->
-
-                    <div>
-
-                        <label class="block text-sm font-semibold mb-2">
-                            Source Type
-                        </label>
-
-                        <select
-                            id="source_type"
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white"
-                        >
-                            <option value="manual">Manual</option>
-                            <option value="api">API</option>
-                            <option value="affiliate">Affiliate</option>
-                            <option value="import">Import</option>
-                        </select>
-
-                    </div>
-
-
-                    <!-- STATUS -->
-
-                    <div>
-
-                        <label class="block text-sm font-semibold mb-2">
-                            Initial Status
-                        </label>
-
-                        <select
-                            id="verification_status"
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white"
-                        >
-                            <option value="PENDING">Pending</option>
-                            <option value="VERIFIED">Verified</option>
-                        </select>
-
-                    </div>
-
-                </div>
-
-
-                <!-- ADD BUTTON -->
-
-                <div class="mt-6 flex flex-col sm:flex-row gap-3">
-
-                    <button
-                        type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl"
-                    >
-                        Add Deal
-                    </button>
-
-                    <button
-                        type="button"
-                        onclick="resetDealForm()"
-                        class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-6 py-3 rounded-xl"
-                    >
-                        Clear
-                    </button>
-
-                </div>
-
-
-                <div
-                    id="dealMessage"
-                    class="hidden mt-4 p-3 rounded-xl text-sm"
-                ></div>
-
-            </form>
-
-        </section>
-
-
-        <!-- =====================================================
-             DEAL MANAGEMENT
-        ====================================================== -->
-
-        <section class="bg-white border border-slate-200 rounded-3xl overflow-hidden mb-8">
-
-            <div class="p-5 md:p-7 border-b border-slate-200">
-
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-
-                    <div>
-                        <h2 class="text-xl font-extrabold">
-                            Deal Management
-                        </h2>
-
-                        <p class="text-sm text-slate-500 mt-1">
-                            Verify, feature, expire or delete deals.
-                        </p>
-                    </div>
-
-                    <button
-                        onclick="refreshAll()"
-                        class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 font-semibold text-sm"
-                    >
-                        Refresh
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <!-- SEARCH -->
-
-            <div class="p-5 border-b border-slate-200 bg-slate-50">
-
-                <input
-                    id="dealSearch"
-                    oninput="renderDeals()"
-                    type="text"
-                    placeholder="Search title, store, country, category, ASIN..."
-                    class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white"
-                >
-
-            </div>
-
-
-            <div class="overflow-x-auto">
-
-                <table class="w-full text-sm">
-
-                    <thead class="bg-slate-50 border-b border-slate-200">
-
-                        <tr>
-
-                            <th class="text-left p-4 font-bold">Deal</th>
-                            <th class="text-left p-4 font-bold">Country</th>
-                            <th class="text-left p-4 font-bold">Category</th>
-                            <th class="text-left p-4 font-bold">Price</th>
-                            <th class="text-left p-4 font-bold">Status</th>
-                            <th class="text-left p-4 font-bold">Comparison</th>
-                            <th class="text-left p-4 font-bold">Actions</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody id="dealsTable"></tbody>
-
-                </table>
-
-            </div>
-
-        </section>
-
-
-        <!-- =====================================================
-             COUPON
-        ====================================================== -->
-
-        <section class="bg-white border border-slate-200 rounded-3xl p-5 md:p-7 mb-8">
-
-            <h2 class="text-xl font-extrabold">
-                Add Coupon
-            </h2>
-
-            <p class="text-sm text-slate-500 mt-1 mb-6">
-                Add a verified store coupon.
-            </p>
-
-
-            <form onsubmit="addCoupon(event)">
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-
-                    <div>
-                        <label class="block text-sm font-semibold mb-2">
-                            Store *
-                        </label>
-
-                        <input
-                            id="couponStore"
-                            required
-                            type="text"
-                            placeholder="Amazon"
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300"
-                        >
-                    </div>
-
-
-                    <div>
-                        <label class="block text-sm font-semibold mb-2">
-                            Coupon Code
-                        </label>
-
-                        <input
-                            id="couponCode"
-                            type="text"
-                            placeholder="SAVE20"
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300"
-                        >
-                    </div>
-
-
-                    <div>
-                        <label class="block text-sm font-semibold mb-2">
-                            Discount
-                        </label>
-
-                        <input
-                            id="couponDiscount"
-                            type="text"
-                            placeholder="20% OFF"
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300"
-                        >
-                    </div>
-
-
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-semibold mb-2">
-                            Coupon Title *
-                        </label>
-
-                        <input
-                            id="couponTitle"
-                            required
-                            type="text"
-                            placeholder="20% off selected products"
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300"
-                        >
-                    </div>
-
-
-                    <div>
-                        <label class="block text-sm font-semibold mb-2">
-                            Expires At
-                        </label>
-
-                        <input
-                            id="couponExpires"
-                            type="text"
-                            placeholder="2026-12-31"
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300"
-                        >
-                    </div>
-
-
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-semibold mb-2">
-                            Coupon URL
-                        </label>
-
-                        <input
-                            id="couponUrl"
-                            type="url"
-                            placeholder="https://..."
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300"
-                        >
-                    </div>
-
-
-                    <div>
-                        <label class="block text-sm font-semibold mb-2">
-                            Description
-                        </label>
-
-                        <input
-                            id="couponDescription"
-                            type="text"
-                            placeholder="Terms and conditions"
-                            class="w-full px-4 py-3 rounded-xl border border-slate-300"
-                        >
-                    </div>
-
-                </div>
-
-
-                <button
-                    type="submit"
-                    class="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl"
-                >
-                    Add Coupon
-                </button>
-
-
-                <div
-                    id="couponMessage"
-                    class="hidden mt-4 p-3 rounded-xl text-sm"
-                ></div>
-
-            </form>
-
-        </section>
-
-
-        <!-- =====================================================
-             COUPONS LIST
-        ====================================================== -->
-
-        <section class="bg-white border border-slate-200 rounded-3xl overflow-hidden">
-
-            <div class="p-5 md:p-7 border-b border-slate-200">
-
-                <h2 class="text-xl font-extrabold">
-                    Existing Coupons
-                </h2>
-
-            </div>
-
-            <div class="overflow-x-auto">
-
-                <table class="w-full text-sm">
-
-                    <thead class="bg-slate-50">
-
-                        <tr>
-                            <th class="text-left p-4">Store</th>
-                            <th class="text-left p-4">Code</th>
-                            <th class="text-left p-4">Title</th>
-                            <th class="text-left p-4">Discount</th>
-                            <th class="text-left p-4">Action</th>
-                        </tr>
-
-                    </thead>
-
-                    <tbody id="couponsTable"></tbody>
-
-                </table>
-
-            </div>
-
-        </section>
-
-    </main>
 
 </div>
 
@@ -858,205 +629,192 @@ const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
 let ADMIN_KEY = "";
 let allDeals = [];
 let allCoupons = [];
+let editingDealId = null;
 
 
 /* =========================================================
-   COUNTRY DATA
+   COUNTRIES
 ========================================================= */
 
 const COUNTRIES = {
 
-    US: { flag: "🇺🇸", name: "USA", currency: "USD" },
-    GB: { flag: "🇬🇧", name: "United Kingdom", currency: "GBP" },
-    SA: { flag: "🇸🇦", name: "Saudi Arabia", currency: "SAR" },
-    AE: { flag: "🇦🇪", name: "UAE", currency: "AED" },
-    OM: { flag: "🇴🇲", name: "Oman", currency: "OMR" },
-    PK: { flag: "🇵🇰", name: "Pakistan", currency: "PKR" },
-    IN: { flag: "🇮🇳", name: "India", currency: "INR" },
-    CA: { flag: "🇨🇦", name: "Canada", currency: "CAD" },
-    AU: { flag: "🇦🇺", name: "Australia", currency: "AUD" },
-    DE: { flag: "🇩🇪", name: "Germany", currency: "EUR" },
-    FR: { flag: "🇫🇷", name: "France", currency: "EUR" },
-    IT: { flag: "🇮🇹", name: "Italy", currency: "EUR" },
-    ES: { flag: "🇪🇸", name: "Spain", currency: "EUR" },
-    NL: { flag: "🇳🇱", name: "Netherlands", currency: "EUR" },
-    BE: { flag: "🇧🇪", name: "Belgium", currency: "EUR" },
-    AT: { flag: "🇦🇹", name: "Austria", currency: "EUR" },
-    CH: { flag: "🇨🇭", name: "Switzerland", currency: "CHF" },
-    NO: { flag: "🇳🇴", name: "Norway", currency: "NOK" },
-    SE: { flag: "🇸🇪", name: "Sweden", currency: "SEK" },
-    DK: { flag: "🇩🇰", name: "Denmark", currency: "DKK" },
-    NZ: { flag: "🇳🇿", name: "New Zealand", currency: "NZD" },
-    JP: { flag: "🇯🇵", name: "Japan", currency: "JPY" },
-    CN: { flag: "🇨🇳", name: "China", currency: "CNY" },
-    KR: { flag: "🇰🇷", name: "South Korea", currency: "KRW" },
-    SG: { flag: "🇸🇬", name: "Singapore", currency: "SGD" },
-    MY: { flag: "🇲🇾", name: "Malaysia", currency: "MYR" },
-    TH: { flag: "🇹🇭", name: "Thailand", currency: "THB" },
-    ID: { flag: "🇮🇩", name: "Indonesia", currency: "IDR" },
-    PH: { flag: "🇵🇭", name: "Philippines", currency: "PHP" },
-    VN: { flag: "🇻🇳", name: "Vietnam", currency: "VND" },
-    TR: { flag: "🇹🇷", name: "Turkey", currency: "TRY" },
-    BR: { flag: "🇧🇷", name: "Brazil", currency: "BRL" },
-    MX: { flag: "🇲🇽", name: "Mexico", currency: "MXN" },
-    ZA: { flag: "🇿🇦", name: "South Africa", currency: "ZAR" },
-    QA: { flag: "🇶🇦", name: "Qatar", currency: "QAR" },
-    KW: { flag: "🇰🇼", name: "Kuwait", currency: "KWD" },
-    BH: { flag: "🇧🇭", name: "Bahrain", currency: "BHD" }
+    US:{flag:"🇺🇸",name:"USA",currency:"USD"},
+    GB:{flag:"🇬🇧",name:"United Kingdom",currency:"GBP"},
+    SA:{flag:"🇸🇦",name:"Saudi Arabia",currency:"SAR"},
+    AE:{flag:"🇦🇪",name:"UAE",currency:"AED"},
+    OM:{flag:"🇴🇲",name:"Oman",currency:"OMR"},
+    PK:{flag:"🇵🇰",name:"Pakistan",currency:"PKR"},
+    IN:{flag:"🇮🇳",name:"India",currency:"INR"},
+    CA:{flag:"🇨🇦",name:"Canada",currency:"CAD"},
+    AU:{flag:"🇦🇺",name:"Australia",currency:"AUD"},
+    DE:{flag:"🇩🇪",name:"Germany",currency:"EUR"},
+    FR:{flag:"🇫🇷",name:"France",currency:"EUR"},
+    IT:{flag:"🇮🇹",name:"Italy",currency:"EUR"},
+    ES:{flag:"🇪🇸",name:"Spain",currency:"EUR"},
+    NL:{flag:"🇳🇱",name:"Netherlands",currency:"EUR"},
+    BE:{flag:"🇧🇪",name:"Belgium",currency:"EUR"},
+    AT:{flag:"🇦🇹",name:"Austria",currency:"EUR"},
+    CH:{flag:"🇨🇭",name:"Switzerland",currency:"CHF"},
+    NO:{flag:"🇳🇴",name:"Norway",currency:"NOK"},
+    SE:{flag:"🇸🇪",name:"Sweden",currency:"SEK"},
+    DK:{flag:"🇩🇰",name:"Denmark",currency:"DKK"},
+    NZ:{flag:"🇳🇿",name:"New Zealand",currency:"NZD"},
+    JP:{flag:"🇯🇵",name:"Japan",currency:"JPY"},
+    CN:{flag:"🇨🇳",name:"China",currency:"CNY"},
+    KR:{flag:"🇰🇷",name:"South Korea",currency:"KRW"},
+    SG:{flag:"🇸🇬",name:"Singapore",currency:"SGD"},
+    MY:{flag:"🇲🇾",name:"Malaysia",currency:"MYR"},
+    TH:{flag:"🇹🇭",name:"Thailand",currency:"THB"},
+    ID:{flag:"🇮🇩",name:"Indonesia",currency:"IDR"},
+    PH:{flag:"🇵🇭",name:"Philippines",currency:"PHP"},
+    VN:{flag:"🇻🇳",name:"Vietnam",currency:"VND"},
+    TR:{flag:"🇹🇷",name:"Turkey",currency:"TRY"},
+    BR:{flag:"🇧🇷",name:"Brazil",currency:"BRL"},
+    MX:{flag:"🇲🇽",name:"Mexico",currency:"MXN"},
+    ZA:{flag:"🇿🇦",name:"South Africa",currency:"ZAR"},
+    QA:{flag:"🇶🇦",name:"Qatar",currency:"QAR"},
+    KW:{flag:"🇰🇼",name:"Kuwait",currency:"KWD"},
+    BH:{flag:"🇧🇭",name:"Bahrain",currency:"BHD"}
 
 };
+
+
+/* =========================================================
+   CATEGORIES
+========================================================= */
+
+const CATEGORIES = [
+    "Mobiles",
+    "Laptops",
+    "Headphones",
+    "Audio",
+    "TV",
+    "Electronics",
+    "Home",
+    "Kitchen",
+    "Appliances",
+    "Fashion",
+    "Beauty",
+    "Sports",
+    "Toys",
+    "Gaming",
+    "Automotive",
+    "Tools",
+    "Health",
+    "Office",
+    "Garden",
+    "Other"
+];
+
+
+/* =========================================================
+   CURRENCIES
+========================================================= */
+
+const CURRENCIES = [
+    "USD",
+    "GBP",
+    "SAR",
+    "AED",
+    "OMR",
+    "PKR",
+    "INR",
+    "CAD",
+    "AUD",
+    "EUR",
+    "CHF",
+    "NOK",
+    "SEK",
+    "DKK",
+    "NZD",
+    "JPY",
+    "CNY",
+    "KRW",
+    "SGD",
+    "MYR",
+    "THB",
+    "IDR",
+    "PHP",
+    "VND",
+    "TRY",
+    "BRL",
+    "MXN",
+    "ZAR",
+    "QAR",
+    "KWD",
+    "BHD"
+];
 
 
 /* =========================================================
    HELPERS
 ========================================================= */
 
-function $(id) {
+function $(id){
     return document.getElementById(id);
 }
 
 
-function esc(value) {
+function escapeHtml(value){
 
     return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 
 }
 
 
-function showMessage(element, message, type = "success") {
+function showMessage(text,type="success"){
 
-    element.className =
-        "mt-4 p-3 rounded-xl text-sm " +
-        (type === "error"
-            ? "bg-red-50 text-red-700 border border-red-200"
-            : "bg-emerald-50 text-emerald-700 border border-emerald-200");
+    const box = $("message");
 
-    element.textContent = message;
+    box.textContent = text;
+    box.className = "message show " + type;
 
-}
+    clearTimeout(window.messageTimer);
 
-
-function hideMessage(element) {
-    element.className = "hidden";
-    element.textContent = "";
-}
-
-
-/* =========================================================
-   LOGIN
-========================================================= */
-
-async function login() {
-
-    const key = $("adminKey").value.trim();
-
-    if (!key) {
-        $("loginError").textContent = "Please enter admin key.";
-        $("loginError").classList.remove("hidden");
-        return;
-    }
-
-    ADMIN_KEY = key;
-
-    try {
-
-        const response = await fetch(`${API_BASE}/api/admin/stats`, {
-            headers: {
-                "X-Admin-Key": ADMIN_KEY
-            }
-        });
-
-        const data = await response.json();
-
-        if (!response.ok || !data.success) {
-
-            ADMIN_KEY = "";
-
-            $("loginError").textContent =
-                data.error || "Invalid admin key.";
-
-            $("loginError").classList.remove("hidden");
-
-            return;
-        }
-
-        localStorage.setItem("cd_admin_key", key);
-
-        $("loginScreen").classList.add("hidden");
-        $("adminApp").classList.remove("hidden");
-
-        await refreshAll();
-
-    } catch (error) {
-
-        ADMIN_KEY = "";
-
-        $("loginError").textContent =
-            "Could not connect to CheckerDiscount API.";
-
-        $("loginError").classList.remove("hidden");
-
-    }
+    window.messageTimer = setTimeout(()=>{
+        box.className = "message";
+    },5000);
 
 }
 
 
-async function autoLogin() {
+function normalizeCountryCode(value){
 
-    const savedKey = localStorage.getItem("cd_admin_key");
+    if(!value) return "";
 
-    if (!savedKey) return;
+    const v = String(value).trim().toUpperCase();
 
-    $("adminKey").value = savedKey;
+    if(COUNTRIES[v]) return v;
 
-    ADMIN_KEY = savedKey;
+    const found = Object.entries(COUNTRIES).find(
+        ([code,data]) =>
+            data.name.toLowerCase() === String(value).trim().toLowerCase()
+    );
 
-    try {
-
-        const response = await fetch(`${API_BASE}/api/admin/stats`, {
-            headers: {
-                "X-Admin-Key": ADMIN_KEY
-            }
-        });
-
-        const data = await response.json();
-
-        if (response.ok && data.success) {
-
-            $("loginScreen").classList.add("hidden");
-            $("adminApp").classList.remove("hidden");
-
-            await refreshAll();
-
-        } else {
-
-            ADMIN_KEY = "";
-            localStorage.removeItem("cd_admin_key");
-
-        }
-
-    } catch (error) {
-
-        ADMIN_KEY = "";
-        localStorage.removeItem("cd_admin_key");
-
-    }
+    return found ? found[0] : "";
 
 }
 
 
-function logout() {
+function normalizeStatus(value){
 
-    ADMIN_KEY = "";
+    return String(value || "PENDING").toUpperCase();
 
-    localStorage.removeItem("cd_admin_key");
+}
 
-    location.reload();
+
+function formatPrice(value,currency){
+
+    const number = Number(value);
+
+    if(!Number.isFinite(number)) return "-";
+
+    return `${currency || "USD"} ${number.toFixed(2)}`;
 
 }
 
@@ -1065,35 +823,38 @@ function logout() {
    API
 ========================================================= */
 
-async function api(path, options = {}) {
+async function api(path,options={}){
 
     const headers = {
-        ...(options.headers || {}),
-        "X-Admin-Key": ADMIN_KEY
+        "Content-Type":"application/json",
+        ...(options.headers || {})
     };
 
-    if (options.body && !headers["Content-Type"]) {
-        headers["Content-Type"] = "application/json";
+    if(ADMIN_KEY){
+        headers["X-Admin-Key"] = ADMIN_KEY;
     }
 
-    const response = await fetch(API_BASE + path, {
+    const response = await fetch(API_BASE + path,{
         ...options,
         headers
     });
 
-    let data = {};
+    let data = null;
 
-    try {
+    try{
         data = await response.json();
-    } catch {
-        data = {
-            success: false,
-            error: "Invalid API response"
-        };
+    }catch(e){
+        data = {};
     }
 
-    if (!response.ok) {
-        throw new Error(data.error || `HTTP ${response.status}`);
+    if(!response.ok){
+
+        throw new Error(
+            data?.error ||
+            data?.message ||
+            `Request failed (${response.status})`
+        );
+
     }
 
     return data;
@@ -1102,159 +863,132 @@ async function api(path, options = {}) {
 
 
 /* =========================================================
-   REFRESH ALL
+   LOGIN
 ========================================================= */
 
-async function refreshAll() {
+function loadAdminKey(){
 
-    try {
+    ADMIN_KEY = localStorage.getItem("checkerdiscount_admin_key") || "";
 
-        await Promise.all([
-            refreshStats(),
-            refreshDeals(),
-            refreshCoupons()
-        ]);
+}
 
-    } catch (error) {
 
-        console.error(error);
+function askAdminKey(){
 
-        if (
-            error.message.toLowerCase().includes("unauthorized")
-        ) {
+    if(ADMIN_KEY) return true;
 
-            logout();
+    const key = prompt("Enter Admin Key:");
 
-        }
-
+    if(!key){
+        return false;
     }
+
+    ADMIN_KEY = key.trim();
+
+    localStorage.setItem(
+        "checkerdiscount_admin_key",
+        ADMIN_KEY
+    );
+
+    return true;
+
+}
+
+
+function logout(){
+
+    localStorage.removeItem("checkerdiscount_admin_key");
+
+    ADMIN_KEY = "";
+
+    location.reload();
 
 }
 
 
 /* =========================================================
-   STATS
+   FORM OPTIONS
 ========================================================= */
 
-async function refreshStats() {
+function populateCountries(){
 
-    const data = await api("/api/admin/stats");
+    const select = $("country");
 
-    if (!data.success) return;
+    select.innerHTML = `
+        <option value="">Select Country</option>
+    `;
 
-    const s = data.stats || {};
+    Object.entries(COUNTRIES).forEach(([code,data])=>{
 
-    $("statTotal").textContent = Number(s.total || 0);
-    $("statVerified").textContent = Number(s.verified || 0);
-    $("statPending").textContent = Number(s.pending || 0);
-    $("statExpired").textContent = Number(s.expired || 0);
-    $("statFeatured").textContent = Number(s.featured || 0);
-    $("statCoupons").textContent = Number(s.coupons || 0);
+        const option = document.createElement("option");
+
+        option.value = code;
+
+        option.textContent =
+            `${data.flag} ${data.name} (${code})`;
+
+        select.appendChild(option);
+
+    });
 
 }
 
 
-/* =========================================================
-   ADD DEAL
-========================================================= */
+function populateCategories(){
 
-async function addDeal(event) {
+    const select = $("category");
 
-    event.preventDefault();
+    select.innerHTML = `
+        <option value="">Select Category</option>
+    `;
 
-    const message = $("dealMessage");
+    CATEGORIES.forEach(category=>{
 
-    hideMessage(message);
+        const option = document.createElement("option");
 
+        option.value = category;
+        option.textContent = category;
 
-    const oldPrice = Number($("old").value);
-    const newPrice = Number($("new").value);
+        select.appendChild(option);
 
-    if (
-        !Number.isFinite(oldPrice) ||
-        !Number.isFinite(newPrice) ||
-        oldPrice <= 0 ||
-        newPrice <= 0 ||
-        newPrice > oldPrice
-    ) {
+    });
 
-        showMessage(
-            message,
-            "New price must be lower than or equal to old price.",
-            "error"
-        );
-
-        return;
-    }
+}
 
 
-    const body = {
+function populateCurrencies(){
 
-        title: $("title").value.trim(),
+    const select = $("currency");
 
-        store: $("store").value.trim(),
+    select.innerHTML = "";
 
-        country: $("country").value,
+    CURRENCIES.forEach(currency=>{
 
-        category: $("category").value,
+        const option = document.createElement("option");
 
-        comparison_id: $("comparison_id").value.trim(),
+        option.value = currency;
+        option.textContent = currency;
 
-        old_price: oldPrice,
+        select.appendChild(option);
 
-        new_price: newPrice,
+    });
 
-        url: $("url").value.trim(),
+    select.value = "USD";
 
-        image_url: $("image").value.trim(),
-
-        asin: $("asin").value.trim(),
-
-        currency: $("currency").value,
-
-        source_type: $("source_type").value,
-
-        verification_status: $("verification_status").value
-
-    };
+}
 
 
-    try {
+function syncCurrencyFromCountry(){
 
-        const data = await api("/api/admin/deals", {
+    const country = $("country").value;
 
-            method: "POST",
+    if(
+        country &&
+        COUNTRIES[country]
+    ){
 
-            body: JSON.stringify(body)
-
-        });
-
-
-        if (!data.success) {
-
-            throw new Error(data.error || "Could not add deal.");
-
-        }
-
-
-        showMessage(
-            message,
-            `Deal added successfully. ID: ${data.id}`
-        );
-
-
-        resetDealForm();
-
-        await refreshAll();
-
-
-    } catch (error) {
-
-        showMessage(
-            message,
-            error.message || "Could not add deal.",
-            "error"
-        );
+        $("currency").value =
+            COUNTRIES[country].currency;
 
     }
 
@@ -1265,80 +999,438 @@ async function addDeal(event) {
    RESET FORM
 ========================================================= */
 
-function resetDealForm() {
+function resetDealForm(){
+
+    editingDealId = null;
 
     $("dealForm").reset();
 
     $("currency").value = "USD";
+
     $("verification_status").value = "PENDING";
+
     $("source_type").value = "manual";
+
+    $("formTitle").textContent = "Add New Deal";
+
+    $("saveButton").textContent = "Add Deal";
+
+    $("cancelEditButton").classList.add("hidden");
+
+    $("editBanner").classList.remove("show");
+
+    $("dealFormCard").classList.remove("edit-mode");
 
 }
 
 
 /* =========================================================
-   DEALS
+   EDIT DEAL
 ========================================================= */
 
-async function refreshDeals() {
+function editDeal(id){
 
-    const data = await api("/api/admin/deals");
+    const deal = allDeals.find(
+        item => String(item.id) === String(id)
+    );
 
-    allDeals = Array.isArray(data.deals)
-        ? data.deals
-        : [];
+    if(!deal){
 
-    renderDeals();
+        showMessage(
+            "Deal not found.",
+            "error"
+        );
+
+        return;
+
+    }
+
+    editingDealId = deal.id;
+
+    $("title").value =
+        deal.title || "";
+
+    $("store").value =
+        deal.store || "";
+
+    $("country").value =
+        normalizeCountryCode(
+            deal.country_code ??
+            deal.country ??
+            ""
+        );
+
+    $("category").value =
+        deal.category || "";
+
+    $("comparison_id").value =
+        deal.comparison_id || "";
+
+    $("asin").value =
+        deal.asin || "";
+
+    $("currency").value =
+        deal.currency || "USD";
+
+    $("old").value =
+        deal.old_price ?? "";
+
+    $("new").value =
+        deal.new_price ?? "";
+
+    $("url").value =
+        deal.url || "";
+
+    $("image").value =
+        deal.image_url || "";
+
+    $("source_type").value =
+        deal.source_type || "manual";
+
+    $("verification_status").value =
+        normalizeStatus(
+            deal.verification_status
+        );
+
+    $("formTitle").textContent =
+        "Edit Deal #" + deal.id;
+
+    $("saveButton").textContent =
+        "Update Deal";
+
+    $("cancelEditButton")
+        .classList
+        .remove("hidden");
+
+    $("editBanner")
+        .classList
+        .add("show");
+
+    $("dealFormCard")
+        .classList
+        .add("edit-mode");
+
+    $("dealFormCard").scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+    });
 
 }
 
 
-function renderDeals() {
+/* =========================================================
+   CANCEL EDIT
+========================================================= */
 
-    const table = $("dealsTable");
+function cancelEdit(){
 
-    const search = $("dealSearch").value
-        .trim()
-        .toLowerCase();
+    resetDealForm();
 
-
-    let deals = allDeals;
+}
 
 
-    if (search) {
+/* =========================================================
+   ADD / UPDATE DEAL
+========================================================= */
 
-        deals = deals.filter(deal => {
+async function saveDeal(event){
 
-            const country =
-                COUNTRIES[String(deal.country || "").toUpperCase()] || {};
+    event.preventDefault();
 
-            const text = [
+    if(!askAdminKey()) return;
+
+    const oldPrice =
+        $("old").value === ""
+            ? null
+            : Number($("old").value);
+
+    const newPrice =
+        $("new").value === ""
+            ? null
+            : Number($("new").value);
+
+    const body = {
+
+        title:$("title").value.trim(),
+
+        store:$("store").value.trim(),
+
+        country_code:$("country").value,
+
+        country:$("country").value,
+
+        category:$("category").value,
+
+        comparison_id:
+            $("comparison_id").value.trim(),
+
+        old_price:oldPrice,
+
+        new_price:newPrice,
+
+        url:$("url").value.trim(),
+
+        image_url:
+            $("image").value.trim(),
+
+        asin:$("asin").value.trim(),
+
+        currency:$("currency").value,
+
+        source_type:
+            $("source_type").value,
+
+        verification_status:
+            $("verification_status").value
+
+    };
+
+
+    try{
+
+        $("saveButton").disabled = true;
+
+        $("saveButton").textContent =
+            editingDealId
+                ? "Updating..."
+                : "Adding...";
+
+
+        if(editingDealId){
+
+            await api(
+                `/api/admin/deals/${editingDealId}/update`,
+                {
+                    method:"POST",
+                    body:JSON.stringify(body)
+                }
+            );
+
+            showMessage(
+                "Deal updated successfully.",
+                "success"
+            );
+
+        }else{
+
+            await api(
+                "/api/admin/deals",
+                {
+                    method:"POST",
+                    body:JSON.stringify(body)
+                }
+            );
+
+            showMessage(
+                "Deal added successfully.",
+                "success"
+            );
+
+        }
+
+
+        resetDealForm();
+
+        await refreshAll();
+
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            error.message ||
+            "Something went wrong.",
+            "error"
+        );
+
+    }finally{
+
+        $("saveButton").disabled = false;
+
+        if(!editingDealId){
+            $("saveButton").textContent = "Add Deal";
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD STATS
+========================================================= */
+
+async function refreshStats(){
+
+    try{
+
+        const data =
+            await api("/api/admin/stats");
+
+        const stats =
+            data?.stats ||
+            data ||
+            {};
+
+        $("statTotal").textContent =
+            stats.total ??
+            stats.total_deals ??
+            0;
+
+        $("statVerified").textContent =
+            stats.verified ??
+            stats.verified_deals ??
+            0;
+
+        $("statFeatured").textContent =
+            stats.featured ??
+            stats.featured_deals ??
+            0;
+
+        $("statPending").textContent =
+            stats.pending ??
+            stats.pending_deals ??
+            0;
+
+    }catch(error){
+
+        console.error(
+            "Stats error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD DEALS
+========================================================= */
+
+async function refreshDeals(){
+
+    if(!askAdminKey()) return;
+
+    try{
+
+        $("dealsTable").innerHTML = `
+            <tr>
+                <td colspan="7" class="loading">
+                    Loading deals...
+                </td>
+            </tr>
+        `;
+
+        const data =
+            await api("/api/admin/deals");
+
+        allDeals =
+            Array.isArray(data)
+                ? data
+                : (
+                    data?.deals ||
+                    data?.data ||
+                    []
+                );
+
+        renderDeals();
+
+    }catch(error){
+
+        console.error(error);
+
+        $("dealsTable").innerHTML = `
+            <tr>
+                <td colspan="7" class="empty">
+                    ${escapeHtml(error.message)}
+                </td>
+            </tr>
+        `;
+
+        showMessage(
+            error.message ||
+            "Unable to load deals.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER DEALS
+========================================================= */
+
+function renderDeals(){
+
+    const tbody = $("dealsTable");
+
+    const search =
+        $("dealSearch")
+            .value
+            .trim()
+            .toLowerCase();
+
+
+    let deals = [...allDeals];
+
+
+    if(search){
+
+        deals = deals.filter(deal=>{
+
+            const countryCode =
+                normalizeCountryCode(
+                    deal.country_code ??
+                    deal.country ??
+                    ""
+                );
+
+            const countryName =
+                COUNTRIES[countryCode]?.name ||
+                "";
+
+            const searchable = [
+
+                deal.id,
 
                 deal.title,
+
                 deal.store,
-                deal.country,
-                country.name,
+
+                countryCode,
+
+                countryName,
+
                 deal.category,
-                deal.asin,
+
+                deal.currency,
+
                 deal.comparison_id,
-                deal.currency
+
+                deal.asin,
+
+                deal.verification_status
 
             ]
-                .join(" ")
-                .toLowerCase();
+            .join(" ")
+            .toLowerCase();
 
-            return text.includes(search);
+            return searchable.includes(search);
 
         });
 
     }
 
 
-    if (deals.length === 0) {
+    if(!deals.length){
 
-        table.innerHTML = `
+        tbody.innerHTML = `
             <tr>
-                <td colspan="7" class="p-8 text-center text-slate-500">
+                <td colspan="7" class="empty">
                     No deals found.
                 </td>
             </tr>
@@ -1349,51 +1441,45 @@ function renderDeals() {
     }
 
 
-    table.innerHTML = deals.map(deal => {
+    tbody.innerHTML = deals.map(deal=>{
+
+        const countryCode =
+            normalizeCountryCode(
+                deal.country_code ??
+                deal.country ??
+                ""
+            );
 
         const country =
-            COUNTRIES[String(deal.country || "").toUpperCase()] || null;
+            COUNTRIES[countryCode];
+
+        const countryHtml =
+            country
+                ? `${country.flag} ${escapeHtml(country.name)}`
+                : `<span class="small">Not assigned</span>`;
+
+
+        const category =
+            deal.category
+                ? escapeHtml(deal.category)
+                : `<span class="small">Not assigned</span>`;
 
 
         const status =
-            String(deal.verification_status || "").toUpperCase();
+            normalizeStatus(
+                deal.verification_status
+            );
 
 
-        let statusHtml = `
-            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600">
-                ${esc(status || "UNKNOWN")}
-            </span>
-        `;
+        let statusClass =
+            "badge-orange";
 
-
-        if (status === "VERIFIED") {
-
-            statusHtml = `
-                <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700">
-                    VERIFIED
-                </span>
-            `;
-
+        if(status === "VERIFIED"){
+            statusClass = "badge-green";
         }
 
-        if (status === "PENDING") {
-
-            statusHtml = `
-                <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700">
-                    PENDING
-                </span>
-            `;
-
-        }
-
-        if (status === "EXPIRED") {
-
-            statusHtml = `
-                <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-red-50 text-red-700">
-                    EXPIRED
-                </span>
-            `;
-
+        if(status === "EXPIRED"){
+            statusClass = "badge-red";
         }
 
 
@@ -1401,104 +1487,97 @@ function renderDeals() {
             Number(deal.is_featured) === 1;
 
 
-        const discount =
-            Number(deal.discount_percent || 0);
+        const comparison =
+            deal.comparison_id ||
+            deal.asin ||
+            "-";
 
 
         return `
 
-            <tr class="border-b border-slate-100 hover:bg-slate-50">
+            <tr>
 
-                <td class="p-4 min-w-[240px]">
+                <td>
 
-                    <div class="font-bold text-slate-900">
-                        ${esc(deal.title)}
+                    <div class="deal-title">
+                        ${escapeHtml(
+                            deal.title ||
+                            "Untitled Deal"
+                        )}
                     </div>
 
-                    <div class="text-xs text-slate-500 mt-1">
-                        ${esc(deal.store)}
+                    <div class="small">
+                        #${escapeHtml(deal.id)}
+                        ·
+                        ${escapeHtml(
+                            deal.store ||
+                            "Unknown Store"
+                        )}
                     </div>
+
+                </td>
+
+
+                <td>
+                    ${countryHtml}
+                </td>
+
+
+                <td>
+                    ${category}
+                </td>
+
+
+                <td>
+
+                    <strong>
+                        ${formatPrice(
+                            deal.new_price,
+                            deal.currency
+                        )}
+                    </strong>
 
                     ${
-                        deal.asin
-                            ? `<div class="text-[11px] text-slate-400 mt-1">
-                                ASIN: ${esc(deal.asin)}
-                               </div>`
+                        deal.old_price
+                            ? `
+                                <div class="small">
+                                    Old:
+                                    ${formatPrice(
+                                        deal.old_price,
+                                        deal.currency
+                                    )}
+                                </div>
+                              `
+                            : ""
+                    }
+
+                    ${
+                        deal.discount_percent
+                            ? `
+                                <div class="small">
+                                    ${Number(
+                                        deal.discount_percent
+                                    ).toFixed(0)}% OFF
+                                </div>
+                              `
                             : ""
                     }
 
                 </td>
 
 
-                <td class="p-4 whitespace-nowrap">
+                <td>
 
-                    ${
-                        country
-                            ? `
-                                <div class="flex items-center gap-2">
-                                    <span class="flag">${country.flag}</span>
-                                    <span class="text-xs font-semibold">
-                                        ${esc(country.name)}
-                                    </span>
-                                </div>
-                              `
-                            : `
-                                <span class="text-xs text-red-500">
-                                    Not assigned
-                                </span>
-                              `
-                    }
-
-                </td>
-
-
-                <td class="p-4 whitespace-nowrap">
-
-                    ${
-                        deal.category
-                            ? `
-                                <span class="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold">
-                                    ${esc(deal.category)}
-                                </span>
-                              `
-                            : `
-                                <span class="text-xs text-red-500">
-                                    Not assigned
-                                </span>
-                              `
-                    }
-
-                </td>
-
-
-                <td class="p-4 whitespace-nowrap">
-
-                    <div class="font-bold">
-                        ${esc(deal.currency || "USD")}
-                        ${Number(deal.new_price || 0).toFixed(2)}
-                    </div>
-
-                    <div class="text-xs text-slate-400 line-through">
-                        ${Number(deal.old_price || 0).toFixed(2)}
-                    </div>
-
-                    <div class="text-xs font-bold text-emerald-600 mt-1">
-                        ${Math.round(discount)}% OFF
-                    </div>
-
-                </td>
-
-
-                <td class="p-4 whitespace-nowrap">
-
-                    ${statusHtml}
+                    <span class="badge ${statusClass}">
+                        ${escapeHtml(status)}
+                    </span>
 
                     ${
                         featured
                             ? `
-                                <div class="mt-2">
-                                    <span class="px-2 py-1 rounded-full bg-blue-50 text-blue-700 text-[11px] font-bold">
-                                        ⭐ FEATURED
+                                <div style="margin-top:5px">
+                                    <span class="badge badge-blue">
+                                        ★ Featured
                                     </span>
                                 </div>
                               `
@@ -1508,82 +1587,70 @@ function renderDeals() {
                 </td>
 
 
-                <td class="p-4 min-w-[150px]">
-
-                    ${
-                        deal.comparison_id
-                            ? `
-                                <div class="font-mono text-xs font-bold text-blue-600 break-all">
-                                    ${esc(deal.comparison_id)}
-                                </div>
-                              `
-                            : `
-                                <span class="text-xs text-slate-400">
-                                    No comparison ID
-                                </span>
-                              `
-                    }
-
+                <td>
+                    <span class="small">
+                        ${escapeHtml(
+                            comparison
+                        )}
+                    </span>
                 </td>
 
 
-                <td class="p-4 min-w-[190px]">
+                <td>
 
-                    <div class="flex flex-wrap gap-2">
+                    <div class="row-actions">
+
+                        <button
+                            class="btn-primary"
+                            onclick="editDeal(${Number(deal.id)})">
+                            Edit
+                        </button>
 
                         ${
                             status !== "VERIFIED"
-                                ? `
-                                    <button
-                                        onclick="verifyDeal(${Number(deal.id)})"
-                                        class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold"
-                                    >
-                                        Verify
-                                    </button>
-                                  `
-                                : ""
+                            ? `
+                                <button
+                                    class="btn-green"
+                                    onclick="verifyDeal(${Number(deal.id)})">
+                                    Verify
+                                </button>
+                              `
+                            : ""
                         }
-
 
                         ${
                             featured
-                                ? `
-                                    <button
-                                        onclick="setFeatured(${Number(deal.id)}, false)"
-                                        class="px-3 py-1.5 rounded-lg bg-blue-100 hover:bg-blue-200 text-blue-700 text-xs font-bold"
-                                    >
-                                        Unfeature
-                                    </button>
-                                  `
-                                : `
-                                    <button
-                                        onclick="setFeatured(${Number(deal.id)}, true)"
-                                        class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold"
-                                    >
-                                        Feature
-                                    </button>
-                                  `
+                            ? `
+                                <button
+                                    class="btn-orange"
+                                    onclick="unfeatureDeal(${Number(deal.id)})">
+                                    Unfeature
+                                </button>
+                              `
+                            : `
+                                <button
+                                    class="btn-green"
+                                    onclick="featureDeal(${Number(deal.id)})">
+                                    Feature
+                                </button>
+                              `
                         }
-
 
                         ${
                             status !== "EXPIRED"
-                                ? `
-                                    <button
-                                        onclick="expireDeal(${Number(deal.id)})"
-                                        class="px-3 py-1.5 rounded-lg bg-amber-100 hover:bg-amber-200 text-amber-700 text-xs font-bold"
-                                    >
-                                        Expire
-                                    </button>
-                                  `
-                                : ""
+                            ? `
+                                <button
+                                    class="btn-orange"
+                                    onclick="expireDeal(${Number(deal.id)})">
+                                    Expire
+                                </button>
+                              `
+                            : ""
                         }
 
-
                         <button
-                            onclick="deleteDeal(${Number(deal.id)})"
-                            class="px-3 py-1.5 rounded-lg bg-red-100 hover:bg-red-200 text-red-700 text-xs font-bold"
-                        >
+                            class="btn-red"
+                            onclick="deleteDeal(${Number(deal.id)})">
                             Delete
                         </button>
 
@@ -1604,21 +1671,37 @@ function renderDeals() {
    VERIFY
 ========================================================= */
 
-async function verifyDeal(id) {
+async function verifyDeal(id){
 
-    if (!confirm("Verify this deal?")) return;
+    if(!askAdminKey()) return;
 
-    try {
+    if(!confirm(
+        "Verify this deal?"
+    )) return;
 
-        await api(`/api/admin/deals/${id}/verify`, {
-            method: "POST"
-        });
+
+    try{
+
+        await api(
+            `/api/admin/deals/${id}/verify`,
+            {
+                method:"POST"
+            }
+        );
+
+        showMessage(
+            "Deal verified.",
+            "success"
+        );
 
         await refreshAll();
 
-    } catch (error) {
+    }catch(error){
 
-        alert(error.message);
+        showMessage(
+            error.message,
+            "error"
+        );
 
     }
 
@@ -1629,22 +1712,68 @@ async function verifyDeal(id) {
    FEATURE
 ========================================================= */
 
-async function setFeatured(id, featured) {
+async function featureDeal(id){
 
-    try {
+    if(!askAdminKey()) return;
+
+    try{
 
         await api(
-            `/api/admin/deals/${id}/${featured ? "featured" : "unfeatured"}`,
+            `/api/admin/deals/${id}/featured`,
             {
-                method: "POST"
+                method:"POST"
             }
+        );
+
+        showMessage(
+            "Deal featured.",
+            "success"
         );
 
         await refreshAll();
 
-    } catch (error) {
+    }catch(error){
 
-        alert(error.message);
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   UNFEATURE
+========================================================= */
+
+async function unfeatureDeal(id){
+
+    if(!askAdminKey()) return;
+
+    try{
+
+        await api(
+            `/api/admin/deals/${id}/unfeatured`,
+            {
+                method:"POST"
+            }
+        );
+
+        showMessage(
+            "Deal removed from featured.",
+            "success"
+        );
+
+        await refreshAll();
+
+    }catch(error){
+
+        showMessage(
+            error.message,
+            "error"
+        );
 
     }
 
@@ -1655,201 +1784,35 @@ async function setFeatured(id, featured) {
    EXPIRE
 ========================================================= */
 
-async function expireDeal(id) {
+async function expireDeal(id){
 
-    if (!confirm("Expire this deal?")) return;
+    if(!askAdminKey()) return;
 
-    try {
+    if(!confirm(
+        "Expire this deal?"
+    )) return;
 
-        await api(`/api/admin/deals/${id}/expire`, {
-            method: "POST"
-        });
 
-        await refreshAll();
+    try{
 
-    } catch (error) {
-
-        alert(error.message);
-
-    }
-
-}
-
-
-/* =========================================================
-   DELETE DEAL
-========================================================= */
-
-async function deleteDeal(id) {
-
-    if (
-        !confirm(
-            "Delete this deal permanently?\n\nThis cannot be undone."
-        )
-    ) {
-        return;
-    }
-
-
-    try {
-
-        await api(`/api/admin/deals/${id}`, {
-            method: "DELETE"
-        });
-
-        await refreshAll();
-
-    } catch (error) {
-
-        alert(error.message);
-
-    }
-
-}
-
-
-/* =========================================================
-   COUPONS
-========================================================= */
-
-async function refreshCoupons() {
-
-    const data = await api("/api/admin/coupons");
-
-    allCoupons = Array.isArray(data.coupons)
-        ? data.coupons
-        : [];
-
-    renderCoupons();
-
-}
-
-
-function renderCoupons() {
-
-    const table = $("couponsTable");
-
-    if (allCoupons.length === 0) {
-
-        table.innerHTML = `
-            <tr>
-                <td colspan="5" class="p-8 text-center text-slate-500">
-                    No coupons found.
-                </td>
-            </tr>
-        `;
-
-        return;
-
-    }
-
-
-    table.innerHTML = allCoupons.map(coupon => {
-
-        return `
-
-            <tr class="border-b border-slate-100">
-
-                <td class="p-4 font-semibold">
-                    ${esc(coupon.store)}
-                </td>
-
-                <td class="p-4 font-mono font-bold text-blue-600">
-                    ${esc(coupon.code || "-")}
-                </td>
-
-                <td class="p-4">
-                    ${esc(coupon.title)}
-                </td>
-
-                <td class="p-4 font-bold text-emerald-600">
-                    ${esc(coupon.discount_text || "-")}
-                </td>
-
-                <td class="p-4">
-
-                    <button
-                        onclick="deleteCoupon(${Number(coupon.id)})"
-                        class="px-3 py-1.5 rounded-lg bg-red-100 hover:bg-red-200 text-red-700 text-xs font-bold"
-                    >
-                        Delete
-                    </button>
-
-                </td>
-
-            </tr>
-
-        `;
-
-    }).join("");
-
-}
-
-
-/* =========================================================
-   ADD COUPON
-========================================================= */
-
-async function addCoupon(event) {
-
-    event.preventDefault();
-
-    const message = $("couponMessage");
-
-    hideMessage(message);
-
-
-    const body = {
-
-        store: $("couponStore").value.trim(),
-
-        code: $("couponCode").value.trim(),
-
-        title: $("couponTitle").value.trim(),
-
-        description: $("couponDescription").value.trim(),
-
-        discount_text: $("couponDiscount").value.trim(),
-
-        url: $("couponUrl").value.trim(),
-
-        expires_at: $("couponExpires").value.trim()
-
-    };
-
-
-    try {
-
-        const data = await api("/api/admin/coupons", {
-
-            method: "POST",
-
-            body: JSON.stringify(body)
-
-        });
-
-
-        if (!data.success) {
-            throw new Error(data.error || "Could not add coupon.");
-        }
-
-
-        showMessage(
-            message,
-            `Coupon added successfully. ID: ${data.id}`
+        await api(
+            `/api/admin/deals/${id}/expire`,
+            {
+                method:"POST"
+            }
         );
 
-
-        event.target.reset();
+        showMessage(
+            "Deal expired.",
+            "success"
+        );
 
         await refreshAll();
 
-
-    } catch (error) {
+    }catch(error){
 
         showMessage(
-            message,
-            error.message || "Could not add coupon.",
+            error.message,
             "error"
         );
 
@@ -1859,25 +1822,47 @@ async function addCoupon(event) {
 
 
 /* =========================================================
-   DELETE COUPON
+   DELETE
 ========================================================= */
 
-async function deleteCoupon(id) {
+async function deleteDeal(id){
 
-    if (!confirm("Delete this coupon?")) return;
+    if(!askAdminKey()) return;
+
+    if(!confirm(
+        "Are you sure you want to permanently delete this deal?"
+    )) return;
 
 
-    try {
+    try{
 
-        await api(`/api/admin/coupons/${id}`, {
-            method: "DELETE"
-        });
+        await api(
+            `/api/admin/deals/${id}`,
+            {
+                method:"DELETE"
+            }
+        );
+
+        showMessage(
+            "Deal deleted.",
+            "success"
+        );
+
+        if(
+            String(editingDealId) ===
+            String(id)
+        ){
+            resetDealForm();
+        }
 
         await refreshAll();
 
-    } catch (error) {
+    }catch(error){
 
-        alert(error.message);
+        showMessage(
+            error.message,
+            "error"
+        );
 
     }
 
@@ -1885,23 +1870,66 @@ async function deleteCoupon(id) {
 
 
 /* =========================================================
-   ENTER KEY LOGIN
+   REFRESH ALL
 ========================================================= */
 
-$("adminKey").addEventListener("keydown", function(event) {
+async function refreshAll(){
 
-    if (event.key === "Enter") {
-        login();
-    }
+    if(!askAdminKey()) return;
 
-});
+    await Promise.all([
+        refreshStats(),
+        refreshDeals()
+    ]);
+
+}
 
 
 /* =========================================================
-   START
+   INITIALIZE
 ========================================================= */
 
-autoLogin();
+function init(){
+
+    loadAdminKey();
+
+    populateCountries();
+
+    populateCategories();
+
+    populateCurrencies();
+
+    $("currency").value = "USD";
+
+    if(!ADMIN_KEY){
+
+        const accepted = askAdminKey();
+
+        if(!accepted){
+
+            $("dealsTable").innerHTML = `
+                <tr>
+                    <td colspan="7" class="empty">
+                        Admin key required.
+                    </td>
+                </tr>
+            `;
+
+            return;
+
+        }
+
+    }
+
+    refreshAll();
+
+}
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    init
+);
 
 </script>
 
