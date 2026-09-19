@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Account – CheckerDiscount</title>
+<style>
+:root{
+  --primary:#155eef;--primary-dark:#0047c1;--green:#12b76a;--red:#d92d20;
+  --bg:#f5f7fb;--card:#fff;--text:#101828;--muted:#667085;
+  --border:#e4e7ec;--shadow:0 4px 18px rgba(16,24,40,.07);
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text);}
+header{background:#fff;border-bottom:1px solid var(--border);padding:16px 20px;position:sticky;top:0;z-index:10;}
+.header-inner{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;}
+.logo{font-size:20px;font-weight:800;color:#0b1220;}
+.logo span{color:var(--primary);}
+.container{max-width:1100px;margin:24px auto;padding:0 16px 60px;}
+h1{margin:0 0 6px;font-size:26px;}
+.subtitle{color:var(--muted);margin-bottom:22px;font-size:14px;}
+.card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:var(--shadow);margin-bottom:18px;}
+.card h2{margin:0 0 14px;font-size:18px;}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;}
+label{font-size:13px;font-weight:600;color:#344054;}
+input{width:100%;min-height:42px;border:1px solid #d0d5dd;border-radius:9px;padding:10px 12px;font-size:14px;outline:none;}
+input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(21,94,239,.1);}
+button{border:0;border-radius:9px;padding:10px 15px;cursor:pointer;font-weight:700;font-size:13px;}
+.btn-primary{background:var(--primary);color:#fff;}
+.btn-primary:hover{background:var(--primary-dark);}
+.btn-secondary{background:#eef2f6;color:#344054;}
+.btn-red{background:#feeceb;color:#b42318;}
+.tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.tab{padding:9px 14px;border-radius:9px;background:#eef2f6;color:#344054;font-weight:700;font-size:13px;cursor:pointer;border:0;}
+.tab.active{background:var(--primary);color:#fff;}
+.message{display:none;margin-bottom:16px;padding:11px 14px;border-radius:9px;font-size:13px;font-weight:700;}
+.message.show{display:block;}
+.message.success{background:#ecfdf3;color:#027a48;border:1px solid #abefc6;}
+.message.error{background:#fef3f2;color:#b42318;border:1px solid #fecdca;}
+.watch-item{display:flex;gap:12px;align-items:center;padding:12px;border:1px solid var(--border);border-radius:12px;margin-bottom:10px;}
+.watch-item img{width:60px;height:60px;object-fit:cover;border-radius:9px;background:#eef2f6;}
+.watch-item .info{flex:1;min-width:0;}
+.watch-item .title{font-weight:700;font-size:14px;margin-bottom:2px;}
+.watch-item .meta{font-size:12px;color:var(--muted);}
+.watch-item .price{font-weight:800;color:var(--primary);}
+.empty{padding:24px;text-align:center;color:var(--muted);font-size:14px;}
+.hidden{display:none!important;}
+@media(max-width:640px){.watch-item{flex-wrap:wrap;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">Checker<span>Discount</span></div>
+    <div>
+      <button class="btn-secondary" onclick="location.href='index.html'">← Back to Deals</button>
+      <button class="btn-red" id="logoutBtn" onclick="logout()" style="display:none;">Logout</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div id="message" class="message"></div>
+
+  <div id="authView">
+    <h1 id="authTitle">Welcome Back</h1>
+    <div class="subtitle">Login or create a free account to save deals and get price alerts.</div>
+
+    <div class="card">
+      <div class="tabs">
+        <button class="tab active" id="loginTab" onclick="switchAuth('login')">Login</button>
+        <button class="tab" id="registerTab" onclick="switchAuth('register')">Register</button>
+      </div>
+
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <div class="field"><label>Email</label><input id="loginEmail" type="email" required></div>
+        <div class="field"><label>Password</label><input id="loginPassword" type="password" required></div>
+        <button type="submit" class="btn-primary">Login</button>
+      </form>
+
+      <form id="registerForm" class="hidden" onsubmit="handleRegister(event)">
+        <div class="field"><label>Name</label><input id="regName" required></div>
+        <div class="field"><label>Email</label><input id="regEmail" type="email" required></div>
+        <div class="field"><label>Password (min 6 chars)</label><input id="regPassword" type="password" minlength="6" required></div>
+        <button type="submit" class="btn-primary">Create Account</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="dashboardView" class="hidden">
+    <h1>My Dashboard</h1>
+    <div class="subtitle" id="welcomeLine">Welcome!</div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('watchlist')">❤️ Watchlist</button>
+      <button class="tab" onclick="showTab('account')">👤 Account</button>
+    </div>
+
+    <div id="watchlistTab">
+      <div class="card">
+        <h2>Saved Deals & Price Alerts</h2>
+        <div id="watchlistContainer"><div class="empty">Loading...</div></div>
+      </div>
+    </div>
+
+    <div id="accountTab" class="hidden">
+      <div class="card">
+        <h2>Account Information</h2>
+        <div class="field"><label>Name</label><input id="acctName" readonly></div>
+        <div class="field"><label>Email</label><input id="acctEmail" readonly></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
+
+function $(id){ return document.getElementById(id); }
+
+function showMessage(text, type="success"){
+  const box = $("message");
+  box.textContent = text;
+  box.className = "message show " + type;
+  clearTimeout(window.__mt);
+  window.__mt = setTimeout(()=>{ box.className = "message"; }, 4500);
+}
+
+function getToken(){ return localStorage.getItem("cd_customer_token") || ""; }
+function setToken(t){ localStorage.setItem("cd_customer_token", t); }
+function clearToken(){ localStorage.removeItem("cd_customer_token"); }
+
+async function api(path, opts={}){
+  const headers = { "Content-Type":"application/json", ...(opts.headers||{}) };
+  const token = getToken();
+  if (token) headers["Authorization"] = "Bearer " + token;
+  const res = await fetch(API_BASE + path, { ...opts, headers });
+  let data = {};
+  try { data = await res.json(); } catch(e){}
+  if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
+  return data;
+}
+
+function switchAuth(mode){
+  if (mode === "login"){
+    $("loginForm").classList.remove("hidden");
+    $("registerForm").classList.add("hidden");
+    $("loginTab").classList.add("active");
+    $("registerTab").classList.remove("active");
+    $("authTitle").textContent = "Welcome Back";
+  } else {
+    $("loginForm").classList.add("hidden");
+    $("registerForm").classList.remove("hidden");
+    $("loginTab").classList.remove("active");
+    $("registerTab").classList.add("active");
+    $("authTitle").textContent = "Create Account";
+  }
+}
+
+async function handleLogin(e){
+  e.preventDefault();
+  try {
+    const data = await api("/api/customer/login", {
+      method:"POST",
+      body: JSON.stringify({
+        email: $("loginEmail").value.trim(),
+        password: $("loginPassword").value
+      })
+    });
+    setToken(data.token);
+    showMessage("Logged in successfully.", "success");
+    await loadDashboard();
+  } catch(err){ showMessage(err.message, "error"); }
+}
+
+async function handleRegister(e){
+  e.preventDefault();
+  try {
+    const data = await api("/api/customer/register", {
+      method:"POST",
+      body: JSON.stringify({
+        name: $("regName").value.trim(),
+        email: $("regEmail").value.trim(),
+        password: $("regPassword").value
+      })
+    });
+    setToken(data.token);
+    showMessage("Account created!", "success");
+    await loadDashboard();
+  } catch(err){ showMessage(err.message, "error"); }
+}
+
+async function logout(){
+  try { await api("/api/customer/logout", { method:"POST" }); } catch(e){}
+  clearToken();
+  location.reload();
+}
+
+async function loadDashboard(){
+  const token = getToken();
+  if (!token){ showAuth(); return; }
+
+  try {
+    const me = await api("/api/customer/me");
+    showDashboard(me.customer);
+    await loadWatchlist();
+  } catch(e){
+    clearToken();
+    showAuth();
+  }
+}
+
+function showAuth(){
+  $("authView").classList.remove("hidden");
+  $("dashboardView").classList.add("hidden");
+  $("logoutBtn").style.display = "none";
+}
+
+function showDashboard(customer){
+  $("authView").classList.add("hidden");
+  $("dashboardView").classList.remove("hidden");
+  $("logoutBtn").style.display = "inline-block";
+  $("welcomeLine").textContent = `Welcome, ${customer.name}!`;
+  $("acctName").value = customer.name;
+  $("acctEmail").value = customer.email;
+}
+
+function showTab(name){
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  event.target.classList.add("active");
+  $("watchlistTab").classList.toggle("hidden", name !== "watchlist");
+  $("accountTab").classList.toggle("hidden", name !== "account");
+}
+
+async function loadWatchlist(){
+  const box = $("watchlistContainer");
+  box.innerHTML = `<div class="empty">Loading...</div>`;
+
+  try {
+    const data = await api("/api/customer/watchlist");
+    if (!data.watchlist.length){
+      box.innerHTML = `<div class="empty">Your watchlist is empty. Add deals from the homepage to track prices.</div>`;
+      return;
+    }
+
+    box.innerHTML = data.watchlist.map(item => `
+      <div class="watch-item">
+        <img src="${item.image_url || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200'}" alt="">
+        <div class="info">
+          <div class="title">${item.title || "Deal"}</div>
+          <div class="meta">${item.store || ""} · ${item.country_code || ""}</div>
+          <div class="price">${item.currency || "USD"} ${Number(item.new_price || 0).toFixed(2)}
+            ${item.alert_price ? ` · Alert below ${Number(item.alert_price).toFixed(2)}` : ""}
+          </div>
+        </div>
+        <button class="btn-red" onclick="removeWatch(${item.id})">Remove</button>
+      </div>
+    `).join("");
+  } catch(e){
+    box.innerHTML = `<div class="empty">${e.message}</div>`;
+  }
+}
+
+async function removeWatch(id){
+  try {
+    await api(`/api/customer/watchlist/${id}`, { method:"DELETE" });
+    showMessage("Removed.", "success");
+    await loadWatchlist();
+  } catch(e){ showMessage(e.message, "error"); }
+}
+
+loadDashboard();
+</script>
+</body>
+</html>
