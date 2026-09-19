@@ -915,9 +915,9 @@ function loadSpotlight() {
                         star
                     </span>
 
-                    <span class="font-bold text-on-surface">
-                        4.8
-                    </span>
+                    <span class="font-bold text-on-su">
+    ${deal.rating || '5.0'}
+</span>
 
                 </div>
 
