@@ -551,6 +551,11 @@ td{
                     </select>
                 </div>
 
+                <div class="field">
+                    <label>Rating (0–5)</label>
+                    <input id="rating" type="number" step="0.1" min="0" max="5" placeholder="e.g. 4.5">
+                </div>
+
             </div>
 
             <div class="actions">
@@ -1011,6 +1016,8 @@ function resetDealForm(){
 
     $("source_type").value = "manual";
 
+    $("rating").value = "";
+
     $("formTitle").textContent = "Add New Deal";
 
     $("saveButton").textContent = "Add Deal";
@@ -1092,6 +1099,9 @@ function editDeal(id){
             deal.verification_status
         );
 
+    $("rating").value =
+        deal.rating ?? "";
+
     $("formTitle").textContent =
         "Edit Deal #" + deal.id;
 
@@ -1149,6 +1159,11 @@ async function saveDeal(event){
             ? null
             : Number($("new").value);
 
+    const ratingValue =
+        $("rating").value === ""
+            ? null
+            : Number($("rating").value);
+
     const body = {
 
         title:$("title").value.trim(),
@@ -1181,7 +1196,9 @@ async function saveDeal(event){
             $("source_type").value,
 
         verification_status:
-            $("verification_status").value
+            $("verification_status").value,
+
+        rating:ratingValue
 
     };
 
@@ -1413,7 +1430,9 @@ function renderDeals(){
 
                 deal.asin,
 
-                deal.verification_status
+                deal.verification_status,
+
+                deal.rating
 
             ]
             .join(" ")
@@ -1485,6 +1504,10 @@ function renderDeals(){
 
         const featured =
             Number(deal.is_featured) === 1;
+
+
+        const rating =
+            Number(deal.rating || 0);
 
 
         const comparison =
@@ -1583,6 +1606,10 @@ function renderDeals(){
                               `
                             : ""
                     }
+
+                    <div style="margin-top:5px" class="small">
+                        ⭐ ${rating > 0 ? rating.toFixed(1) : "—"}
+                    </div>
 
                 </td>
 
