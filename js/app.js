@@ -1,950 +1,1256 @@
-// CheckerDiscount - Country Aware Deal System
-// Keeps original CheckerDiscount functions and design
-// Country filtering is based on EACH DEAL'S actual country.
-// Do not replace index.html for this version.
+/* =========================================================
+   CheckerDiscount - js/app.js
+   Complete updated frontend application
+========================================================= */
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
 
 const COUNTRIES = {
-    US: { code: "US", flag: "🇺🇸", name: "United States", currency: "USD", symbol: "$" },
-    GB: { code: "GB", flag: "🇬🇧", name: "United Kingdom", currency: "GBP", symbol: "£" },
-    SA: { code: "SA", flag: "🇸🇦", name: "Saudi Arabia", currency: "SAR", symbol: "﷼" },
-    AE: { code: "AE", flag: "🇦🇪", name: "United Arab Emirates", currency: "AED", symbol: "د.إ" },
-    OM: { code: "OM", flag: "🇴🇲", name: "Oman", currency: "OMR", symbol: "ر.ع." },
-    PK: { code: "PK", flag: "🇵🇰", name: "Pakistan", currency: "PKR", symbol: "₨" },
-    IN: { code: "IN", flag: "🇮🇳", name: "India", currency: "INR", symbol: "₹" },
-    CA: { code: "CA", flag: "🇨🇦", name: "Canada", currency: "CAD", symbol: "C$" },
-    AU: { code: "AU", flag: "🇦🇺", name: "Australia", currency: "AUD", symbol: "A$" },
-    DE: { code: "DE", flag: "🇩🇪", name: "Germany", currency: "EUR", symbol: "€" },
-    FR: { code: "FR", flag: "🇫🇷", name: "France", currency: "EUR", symbol: "€" },
-    IT: { code: "IT", flag: "🇮🇹", name: "Italy", currency: "EUR", symbol: "€" },
-    ES: { code: "ES", flag: "🇪🇸", name: "Spain", currency: "EUR", symbol: "€" },
-    NL: { code: "NL", flag: "🇳🇱", name: "Netherlands", currency: "EUR", symbol: "€" },
-    BE: { code: "BE", flag: "🇧🇪", name: "Belgium", currency: "EUR", symbol: "€" },
-    AT: { code: "AT", flag: "🇦🇹", name: "Austria", currency: "EUR", symbol: "€" },
-    CH: { code: "CH", flag: "🇨🇭", name: "Switzerland", currency: "CHF", symbol: "CHF" },
-    NO: { code: "NO", flag: "🇳🇴", name: "Norway", currency: "NOK", symbol: "kr" },
-    SE: { code: "SE", flag: "🇸🇪", name: "Sweden", currency: "SEK", symbol: "kr" },
-    DK: { code: "DK", flag: "🇩🇰", name: "Denmark", currency: "DKK", symbol: "kr" },
-    NZ: { code: "NZ", flag: "🇳🇿", name: "New Zealand", currency: "NZD", symbol: "NZ$" },
-    JP: { code: "JP", flag: "🇯🇵", name: "Japan", currency: "JPY", symbol: "¥" },
-    CN: { code: "CN", flag: "🇨🇳", name: "China", currency: "CNY", symbol: "¥" },
-    KR: { code: "KR", flag: "🇰🇷", name: "South Korea", currency: "KRW", symbol: "₩" },
-    SG: { code: "SG", flag: "🇸🇬", name: "Singapore", currency: "SGD", symbol: "S$" },
-    MY: { code: "MY", flag: "🇲🇾", name: "Malaysia", currency: "MYR", symbol: "RM" },
-    TH: { code: "TH", flag: "🇹🇭", name: "Thailand", currency: "THB", symbol: "฿" },
-    ID: { code: "ID", flag: "🇮🇩", name: "Indonesia", currency: "IDR", symbol: "Rp" },
-    PH: { code: "PH", flag: "🇵🇭", name: "Philippines", currency: "PHP", symbol: "₱" },
-    VN: { code: "VN", flag: "🇻🇳", name: "Vietnam", currency: "VND", symbol: "₫" },
-    TR: { code: "TR", flag: "🇹🇷", name: "Turkey", currency: "TRY", symbol: "₺" },
-    BR: { code: "BR", flag: "🇧🇷", name: "Brazil", currency: "BRL", symbol: "R$" },
-    MX: { code: "MX", flag: "🇲🇽", name: "Mexico", currency: "MXN", symbol: "MX$" },
-    ZA: { code: "ZA", flag: "🇿🇦", name: "South Africa", currency: "ZAR", symbol: "R" },
-    QA: { code: "QA", flag: "🇶🇦", name: "Qatar", currency: "QAR", symbol: "﷼" },
-    KW: { code: "KW", flag: "🇰🇼", name: "Kuwait", currency: "KWD", symbol: "د.ك" },
-    BH: { code: "BH", flag: "🇧🇭", name: "Bahrain", currency: "BHD", symbol: "د.ب" }
+    US:{name:"United States",flag:"🇺🇸",currency:"USD"},
+    GB:{name:"United Kingdom",flag:"🇬🇧",currency:"GBP"},
+    SA:{name:"Saudi Arabia",flag:"🇸🇦",currency:"SAR"},
+    AE:{name:"United Arab Emirates",flag:"🇦🇪",currency:"AED"},
+    OM:{name:"Oman",flag:"🇴🇲",currency:"OMR"},
+    PK:{name:"Pakistan",flag:"🇵🇰",currency:"PKR"},
+    IN:{name:"India",flag:"🇮🇳",currency:"INR"},
+    CA:{name:"Canada",flag:"🇨🇦",currency:"CAD"},
+    AU:{name:"Australia",flag:"🇦🇺",currency:"AUD"},
+    DE:{name:"Germany",flag:"🇩🇪",currency:"EUR"},
+    FR:{name:"France",flag:"🇫🇷",currency:"EUR"},
+    IT:{name:"Italy",flag:"🇮🇹",currency:"EUR"},
+    ES:{name:"Spain",flag:"🇪🇸",currency:"EUR"},
+    NL:{name:"Netherlands",flag:"🇳🇱",currency:"EUR"},
+    BE:{name:"Belgium",flag:"🇧🇪",currency:"EUR"},
+    AT:{name:"Austria",flag:"🇦🇹",currency:"EUR"},
+    CH:{name:"Switzerland",flag:"🇨🇭",currency:"CHF"},
+    NO:{name:"Norway",flag:"🇳🇴",currency:"NOK"},
+    SE:{name:"Sweden",flag:"🇸🇪",currency:"SEK"},
+    DK:{name:"Denmark",flag:"🇩🇰",currency:"DKK"},
+    NZ:{name:"New Zealand",flag:"🇳🇿",currency:"NZD"},
+    JP:{name:"Japan",flag:"🇯🇵",currency:"JPY"},
+    CN:{name:"China",flag:"🇨🇳",currency:"CNY"},
+    KR:{name:"South Korea",flag:"🇰🇷",currency:"KRW"},
+    SG:{name:"Singapore",flag:"🇸🇬",currency:"SGD"},
+    MY:{name:"Malaysia",flag:"🇲🇾",currency:"MYR"},
+    TH:{name:"Thailand",flag:"🇹🇭",currency:"THB"},
+    ID:{name:"Indonesia",flag:"🇮🇩",currency:"IDR"},
+    PH:{name:"Philippines",flag:"🇵🇭",currency:"PHP"},
+    VN:{name:"Vietnam",flag:"🇻🇳",currency:"VND"},
+    TR:{name:"Turkey",flag:"🇹🇷",currency:"TRY"},
+    BR:{name:"Brazil",flag:"🇧🇷",currency:"BRL"},
+    MX:{name:"Mexico",flag:"🇲🇽",currency:"MXN"},
+    ZA:{name:"South Africa",flag:"🇿🇦",currency:"ZAR"},
+    QA:{name:"Qatar",flag:"🇶🇦",currency:"QAR"},
+    KW:{name:"Kuwait",flag:"🇰🇼",currency:"KWD"},
+    BH:{name:"Bahrain",flag:"🇧🇭",currency:"BHD"}
 };
 
 const POPULAR_COUNTRIES = [
-    "US", "GB", "SA", "AE", "OM", "PK", "IN", "CA", "AU", "DE"
+    "US","GB","SA","AE","OM","PK","IN","CA","AU","DE"
+];
+
+const CATEGORIES = [
+    "all",
+    "electronics",
+    "home",
+    "fashion",
+    "beauty",
+    "health",
+    "gaming",
+    "computers",
+    "mobile",
+    "appliances",
+    "tools",
+    "sports",
+    "automotive",
+    "kids",
+    "office",
+    "grocery",
+    "travel",
+    "pet",
+    "other"
 ];
 
 let globalDeals = [];
-let currentCountry = "US";
+let currentCountry = "";
 let currentCategory = "all";
-
-document.addEventListener("DOMContentLoaded", () => {
-    currentCountry = detectCountry();
-    setupCountrySystem();
-    fetchDealsAndInit();
-    initBurgerMenu();
-});
+let customer = null;
+let authToken = localStorage.getItem("cd_session_token") || "";
 
 
 /* =========================================================
-   COUNTRY DETECTION
+   BASIC HELPERS
 ========================================================= */
 
-function detectCountry() {
-    const saved = localStorage.getItem("cd_country");
-
-    if (saved && COUNTRIES[saved]) {
-        return saved;
-    }
-
-    try {
-        const locale = navigator.language || "";
-        const match = locale.match(/[-_](\w{2})$/);
-
-        if (match) {
-            const code = match[1].toUpperCase();
-
-            if (COUNTRIES[code]) {
-                localStorage.setItem("cd_country", code);
-                return code;
-            }
-        }
-    } catch (e) {}
-
-    try {
-        const timezone =
-            Intl.DateTimeFormat().resolvedOptions().timeZone || "";
-
-        if (timezone.includes("Muscat")) return "OM";
-        if (timezone.includes("Dubai")) return "AE";
-        if (timezone.includes("Riyadh")) return "SA";
-        if (timezone.includes("Karachi")) return "PK";
-        if (timezone.includes("Kolkata")) return "IN";
-        if (timezone.includes("London")) return "GB";
-        if (timezone.includes("Toronto")) return "CA";
-        if (timezone.includes("Sydney")) return "AU";
-    } catch (e) {}
-
-    return "US";
+function $(selector) {
+    return document.querySelector(selector);
 }
 
-
-/* =========================================================
-   COUNTRY UI
-========================================================= */
-
-function setupCountrySystem() {
-    const marketSection =
-        document.getElementById("market-deals");
-
-    if (!marketSection) return;
-
-    if (document.getElementById("cdCountrySelector")) {
-        return;
-    }
-
-    const filterRow =
-        marketSection.querySelector(".overflow-x-auto");
-
-    if (!filterRow) {
-        console.warn(
-            "CheckerDiscount: original category filter row not found."
-        );
-        return;
-    }
-
-    const wrapper =
-        document.createElement("div");
-
-    wrapper.id = "cdCountrySelector";
-    wrapper.className = "mb-4";
-
-    wrapper.innerHTML = `
-        <div class="bg-surface-container-lowest rounded-2xl border border-surface-container p-4 shadow-sm">
-
-            <div class="flex items-center justify-between gap-3 mb-3">
-                <div>
-                    <div class="text-[11px] font-bold uppercase tracking-wider text-primary">
-                        Deals in Your Country
-                    </div>
-
-                    <div id="cdSelectedCountryName"
-                         class="text-[15px] font-bold text-on-surface mt-0.5">
-                    </div>
-                </div>
-
-                <span class="material-symbols-outlined text-primary">
-                    public
-                </span>
-            </div>
-
-            <div id="cdPopularCountries"
-                 class="flex gap-2 overflow-x-auto pb-1">
-            </div>
-
-            <div id="cdMoreCountries"
-                 class="hidden mt-3 pt-3 border-t border-surface-container">
-
-                <div class="text-[11px] font-semibold text-on-surface-variant mb-2">
-                    More Countries
-                </div>
-
-                <div id="cdMoreCountryList"
-                     class="flex flex-wrap gap-2">
-                </div>
-            </div>
-
-            <button id="cdMoreCountriesBtn"
-                    type="button"
-                    class="mt-3 text-[12px] font-semibold text-primary hover:underline">
-                More Countries
-            </button>
-
-        </div>
-
-        <div id="cdCategorySelector" class="mt-3"></div>
-    `;
-
-    filterRow.parentNode.insertBefore(wrapper, filterRow);
-
-    filterRow.style.display = "none";
-
-    renderCountryButtons();
-    renderCountryName();
-    renderCountryCategories();
-
-    const moreBtn =
-        document.getElementById("cdMoreCountriesBtn");
-
-    if (moreBtn) {
-        moreBtn.addEventListener("click", () => {
-            const more =
-                document.getElementById("cdMoreCountries");
-
-            if (!more) return;
-
-            more.classList.toggle("hidden");
-
-            moreBtn.textContent =
-                more.classList.contains("hidden")
-                    ? "More Countries"
-                    : "Hide Countries";
-        });
-    }
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
-
-function renderCountryButtons() {
-    const popular =
-        document.getElementById("cdPopularCountries");
-
-    const more =
-        document.getElementById("cdMoreCountryList");
-
-    if (!popular || !more) return;
-
-    popular.innerHTML = "";
-    more.innerHTML = "";
-
-    POPULAR_COUNTRIES.forEach(code => {
-        const country = COUNTRIES[code];
-
-        if (!country) return;
-
-        popular.appendChild(
-            createCountryButton(country)
-        );
-    });
-
-    Object.keys(COUNTRIES)
-        .filter(
-            code =>
-                !POPULAR_COUNTRIES.includes(code)
-        )
-        .forEach(code => {
-            const country = COUNTRIES[code];
-
-            if (!country) return;
-
-            more.appendChild(
-                createCountryButton(country)
-            );
-        });
+function number(value) {
+    const n = Number(value);
+    return Number.isFinite(n) ? n : 0;
 }
 
-
-function createCountryButton(country) {
-    const button =
-        document.createElement("button");
-
-    button.type = "button";
-    button.dataset.country = country.code;
-
-    button.className =
-        "flex-shrink-0 min-w-[48px] h-10 px-2 rounded-xl " +
-        "bg-surface-container-low hover:bg-surface-container " +
-        "border border-transparent flex items-center justify-center " +
-        "text-[22px] transition-all";
-
-    button.title = country.name;
-    button.innerHTML = country.flag;
-
-    if (country.code === currentCountry) {
-        button.className =
-            "flex-shrink-0 min-w-[48px] h-10 px-2 rounded-xl " +
-            "bg-primary-container text-white border-2 border-primary " +
-            "flex items-center justify-center text-[22px] shadow-sm";
-    }
-
-    button.addEventListener("click", () => {
-        selectCountry(country.code);
-    });
-
-    return button;
+function savings(oldPrice, newPrice) {
+    return Math.max(0, number(oldPrice) - number(newPrice));
 }
 
+function discountPercent(oldPrice, newPrice) {
+    const oldValue = number(oldPrice);
+    const newValue = number(newPrice);
 
-function renderCountryName() {
-    const el =
-        document.getElementById(
-            "cdSelectedCountryName"
-        );
+    if (oldValue <= 0) return 0;
 
-    const country =
-        COUNTRIES[currentCountry];
-
-    if (!el || !country) return;
-
-    el.textContent =
-        `${country.flag} ${country.name} Deals`;
-}
-
-
-function selectCountry(code) {
-    if (!COUNTRIES[code]) return;
-
-    currentCountry = code;
-    currentCategory = "all";
-
-    localStorage.setItem(
-        "cd_country",
-        code
+    return Math.max(
+        0,
+        ((oldValue - newValue) / oldValue) * 100
     );
-
-    renderCountryButtons();
-    renderCountryName();
-
-    fetchCountryDeals();
 }
-
-
-/* =========================================================
-   API / DEAL LOADING
-========================================================= */
-
-async function fetchDealsAndInit() {
-    try {
-        const response =
-            await fetch(
-                `${API_BASE}/api/deals`
-            );
-
-        if (!response.ok) {
-            throw new Error(
-                `API returned ${response.status}`
-            );
-        }
-
-        const data =
-            await response.json();
-
-        if (
-            data.success &&
-            Array.isArray(data.deals)
-        ) {
-            globalDeals = data.deals;
-        } else if (
-            Array.isArray(data.deals)
-        ) {
-            globalDeals = data.deals;
-        } else {
-            globalDeals = [];
-        }
-
-    } catch (error) {
-        console.error(
-            "Failed to fetch deals:",
-            error
-        );
-
-        globalDeals = [];
-    }
-
-    await fetchCountryDeals();
-}
-
-
-async function fetchCountryDeals() {
-    const countryCode =
-        currentCountry;
-
-    let apiReturnedSuccessfully =
-        false;
-
-    try {
-        const response =
-            await fetch(
-                `${API_BASE}/api/deals?country=${encodeURIComponent(countryCode)}`
-            );
-
-        if (response.ok) {
-            const data =
-                await response.json();
-
-            if (
-                data.success &&
-                Array.isArray(data.deals)
-            ) {
-                const apiDeals =
-                    data.deals.map(deal =>
-                        normalizeDeal(deal)
-                    );
-
-                const filtered =
-                    apiDeals.filter(
-                        deal =>
-                            getDealCountry(deal) ===
-                            countryCode
-                    );
-
-                /*
-                 IMPORTANT:
-                 Only replace globalDeals when the country API
-                 actually returned valid results.
-                */
-                if (filtered.length > 0) {
-                    globalDeals = filtered;
-                } else {
-                    /*
-                     Keep original all-deals data so that
-                     legacy/fallback filtering can still work.
-                    */
-                    apiReturnedSuccessfully = true;
-                }
-            }
-        }
-    } catch (error) {
-        console.warn(
-            "Country API failed. Using local filtering:",
-            error
-        );
-    }
-
-    if (!Array.isArray(globalDeals)) {
-        globalDeals = [];
-    }
-
-    globalDeals =
-        globalDeals
-            .map(deal => normalizeDeal(deal))
-            .filter(
-                deal =>
-                    getDealCountry(deal) ===
-                    countryCode
-            );
-
-    renderCountryCategories();
-    loadSpotlight();
-    loadDeals(currentCategory);
-}
-
-
-/* =========================================================
-   DEAL COUNTRY NORMALIZATION
-========================================================= */
-
-function normalizeDeal(deal) {
-    if (!deal || typeof deal !== "object") {
-        return {};
-    }
-
-    const copy = { ...deal };
-
-    copy.country =
-        copy.country ||
-        copy.country_code ||
-        copy.countryCode ||
-        copy.market ||
-        copy.market_code ||
-        "";
-
-    copy.category =
-        copy.category ||
-        copy.category_name ||
-        copy.categoryName ||
-        "";
-
-    copy.currency =
-        copy.currency ||
-        copy.currency_code ||
-        copy.currencyCode ||
-        "";
-
-    /*
-     Preserve Store Name from the database/API.
-     Supports common aliases without changing the original value.
-    */
-    copy.store =
-        copy.store ||
-        copy.store_name ||
-        copy.storeName ||
-        copy.retailer ||
-        copy.retailer_name ||
-        "";
-
-    return copy;
-}
-
 
 function getDealCountry(deal) {
-    if (!deal) return "";
+    const code = String(
+        deal?.country_code ||
+        deal?.countryCode ||
+        ""
+    ).toUpperCase();
 
-    let country =
-        deal.country ||
-        deal.country_code ||
-        deal.countryCode ||
-        deal.market ||
-        deal.market_code ||
-        "";
+    if (COUNTRIES[code]) return code;
 
-    country =
-        String(country)
-            .trim()
-            .toUpperCase();
+    const currency = String(
+        deal?.currency || ""
+    ).toUpperCase();
 
-    const nameMap = {
-        "UNITED STATES": "US",
-        "USA": "US",
-        "AMERICA": "US",
-
-        "UNITED KINGDOM": "GB",
-        "UK": "GB",
-
-        "OMAN": "OM",
-
-        "UNITED ARAB EMIRATES": "AE",
-        "UAE": "AE",
-
-        "SAUDI ARABIA": "SA",
-
-        "PAKISTAN": "PK",
-        "INDIA": "IN",
-        "CANADA": "CA",
-        "AUSTRALIA": "AU",
-
-        "GERMANY": "DE",
-        "FRANCE": "FR",
-        "ITALY": "IT",
-        "SPAIN": "ES"
-    };
-
-    if (nameMap[country]) {
-        return nameMap[country];
-    }
-
-    if (COUNTRIES[country]) {
-        return country;
-    }
-
-    /*
-     Backward compatibility for old USD deals.
-    */
-
-    if (
-        !country &&
-        String(deal.currency || "")
-            .toUpperCase() === "USD"
-    ) {
-        return "US";
-    }
-
-    /*
-     Backward compatibility for old Oman deals.
-    */
-
-    if (
-        !country &&
-        String(deal.currency || "")
-            .toUpperCase() === "OMR"
-    ) {
-        return "OM";
-    }
+    if (currency === "USD") return "US";
+    if (currency === "GBP") return "GB";
+    if (currency === "SAR") return "SA";
+    if (currency === "AED") return "AE";
+    if (currency === "OMR") return "OM";
 
     return "";
 }
 
+function getDealCurrency(deal) {
+    const country = getDealCountry(deal);
+
+    if (
+        deal?.currency &&
+        String(deal.currency).trim()
+    ) {
+        return String(deal.currency).toUpperCase();
+    }
+
+    return COUNTRIES[country]?.currency || "USD";
+}
+
+function formatPrice(value, currency = "USD") {
+    const amount = number(value);
+
+    try {
+        let output = new Intl.NumberFormat(
+            "en-US",
+            {
+                style: "currency",
+                currency,
+                currencyDisplay: "code",
+                minimumFractionDigits:
+                    ["OMR","KWD","BHD"].includes(currency)
+                        ? 3
+                        : undefined,
+                maximumFractionDigits:
+                    ["OMR","KWD","BHD"].includes(currency)
+                        ? 3
+                        : 2
+            }
+        ).format(amount);
+
+        return output.replace(/\u00a0/g, " ");
+    } catch {
+        return `${currency} ${amount.toFixed(2)}`;
+    }
+}
+
+function ratingValue(deal) {
+    const value = Number(
+        deal?.rating ??
+        deal?.Rating ??
+        deal?.review_rating ??
+        deal?.reviewRating ??
+        0
+    );
+
+    if (!Number.isFinite(value)) return 0;
+
+    return Math.max(0, Math.min(5, value));
+}
+
+function ratingHtml(deal) {
+    const rating = ratingValue(deal);
+
+    if (!rating) {
+        return `
+            <span class="cd-rating">
+                ☆ No rating
+            </span>
+        `;
+    }
+
+    return `
+        <span class="cd-rating">
+            ★ ${rating.toFixed(1)}
+        </span>
+    `;
+}
+
+function getDealImage(deal) {
+    return (
+        deal?.image_url ||
+        deal?.imageUrl ||
+        deal?.image ||
+        ""
+    );
+}
+
+function getDealUrl(deal) {
+    return (
+        deal?.url ||
+        deal?.affiliate_url ||
+        deal?.affiliateUrl ||
+        "#"
+    );
+}
+
+function normalizeDeal(deal) {
+    const country = getDealCountry(deal);
+    const currency = getDealCurrency(deal);
+
+    const oldPrice = number(
+        deal?.old_price ??
+        deal?.oldPrice
+    );
+
+    const newPrice = number(
+        deal?.new_price ??
+        deal?.newPrice
+    );
+
+    return {
+        ...deal,
+
+        id: deal?.id,
+
+        title: deal?.title || "Untitled Deal",
+
+        store: deal?.store || "Retailer",
+
+        old_price: oldPrice,
+
+        new_price: newPrice,
+
+        currency,
+
+        country_code: country,
+
+        category: String(
+            deal?.category || "other"
+        ).toLowerCase(),
+
+        discount_percent:
+            number(deal?.discount_percent) ||
+            discountPercent(oldPrice, newPrice),
+
+        rating: ratingValue(deal),
+
+        is_featured:
+            Number(deal?.is_featured) === 1 ||
+            deal?.is_featured === true ||
+            deal?.isFeatured === true,
+
+        image_url: getDealImage(deal),
+
+        url: getDealUrl(deal)
+    };
+}
+
 
 /* =========================================================
-   COUNTRY CATEGORIES
+   API
 ========================================================= */
 
-function renderCountryCategories() {
-    const container =
-        document.getElementById(
-            "cdCategorySelector"
+async function apiFetch(path, options = {}) {
+    const headers = {
+        "Content-Type": "application/json",
+        ...(options.headers || {})
+    };
+
+    if (authToken) {
+        headers.Authorization = `Bearer ${authToken}`;
+    }
+
+    const response = await fetch(
+        `${API_BASE}${path}`,
+        {
+            ...options,
+            headers
+        }
+    );
+
+    let data = null;
+
+    try {
+        data = await response.json();
+    } catch {
+        data = {};
+    }
+
+    if (!response.ok) {
+        throw new Error(
+            data?.error ||
+            data?.message ||
+            `Request failed (${response.status})`
         );
+    }
+
+    return data;
+}
+
+
+/* =========================================================
+   STARTUP
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+    setupBurgerMenu();
+
+    setupSavingsChecker();
+
+    setupCountrySystem();
+
+    setupCustomerSystem();
+
+    await restoreCustomerSession();
+
+    await fetchDealsAndInit();
+
+});
+
+
+/* =========================================================
+   BURGER MENU
+========================================================= */
+
+function setupBurgerMenu() {
+
+    const button = $("#menuButton");
+    const nav = $("#mainNav");
+
+    if (!button || !nav) return;
+
+    button.addEventListener("click", () => {
+        nav.classList.toggle("open");
+    });
+
+    nav.querySelectorAll("a").forEach(link => {
+
+        link.addEventListener("click", () => {
+            nav.classList.remove("open");
+        });
+
+    });
+}
+
+
+/* =========================================================
+   COUNTRY SYSTEM
+========================================================= */
+
+function setupCountrySystem() {
+
+    const dealsSection = $("#deals");
+
+    if (!dealsSection) return;
+
+    let system = $("#cd-country-system");
+
+    if (!system) {
+
+        system = document.createElement("div");
+
+        system.id = "cd-country-system";
+
+        const heading =
+            dealsSection.querySelector(".section-heading");
+
+        if (heading) {
+            heading.insertAdjacentElement(
+                "afterend",
+                system
+            );
+        } else {
+            dealsSection.prepend(system);
+        }
+    }
+
+    renderCountrySystem();
+}
+
+function renderCountrySystem() {
+
+    const system = $("#cd-country-system");
+
+    if (!system) return;
+
+    system.innerHTML = `
+        <div class="cd-country-title">
+            🌍 Browse Deals by Country
+        </div>
+
+        <div class="cd-country-grid">
+
+            <button
+                type="button"
+                class="cd-country-button ${currentCountry === "" ? "active" : ""}"
+                data-country="">
+                <span class="cd-country-flag">🌎</span>
+                <span class="cd-country-name">All Countries</span>
+            </button>
+
+            ${POPULAR_COUNTRIES.map(code => {
+
+                const country = COUNTRIES[code];
+
+                return `
+                    <button
+                        type="button"
+                        class="cd-country-button ${
+                            currentCountry === code
+                                ? "active"
+                                : ""
+                        }"
+                        data-country="${code}">
+
+                        <span class="cd-country-flag">
+                            ${country.flag}
+                        </span>
+
+                        <span class="cd-country-name">
+                            ${escapeHtml(country.name)}
+                        </span>
+
+                    </button>
+                `;
+
+            }).join("")}
+
+        </div>
+
+        <div style="
+            display:flex;
+            justify-content:flex-end;
+            margin-top:9px;
+        ">
+            <button
+                type="button"
+                id="cdMoreCountries"
+                style="
+                    border:0;
+                    background:transparent;
+                    color:#155EEF;
+                    font-size:11px;
+                    font-weight:700;
+                    cursor:pointer;
+                ">
+                More Countries ▾
+            </button>
+        </div>
+
+        <div
+            id="cdMoreCountryGrid"
+            style="
+                display:none;
+                margin-top:9px;
+            ">
+        </div>
+    `;
+
+    system
+        .querySelectorAll("[data-country]")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+                    selectCountry(
+                        button.dataset.country || ""
+                    );
+                }
+            );
+
+        });
+
+    const moreButton =
+        $("#cdMoreCountries");
+
+    const moreGrid =
+        $("#cdMoreCountryGrid");
+
+    if (moreButton && moreGrid) {
+
+        moreButton.addEventListener("click", () => {
+
+            if (
+                moreGrid.style.display === "block"
+            ) {
+
+                moreGrid.style.display = "none";
+
+                moreButton.textContent =
+                    "More Countries ▾";
+
+                return;
+            }
+
+            moreGrid.style.display = "block";
+
+            moreButton.textContent =
+                "Hide Countries ▴";
+
+            moreGrid.innerHTML = `
+                <div class="cd-country-grid">
+
+                    ${Object.keys(COUNTRIES)
+                        .filter(
+                            code =>
+                                !POPULAR_COUNTRIES.includes(code)
+                        )
+                        .map(code => {
+
+                            const country =
+                                COUNTRIES[code];
+
+                            return `
+                                <button
+                                    type="button"
+                                    class="cd-country-button ${
+                                        currentCountry === code
+                                            ? "active"
+                                            : ""
+                                    }"
+                                    data-country="${code}">
+
+                                    <span class="cd-country-flag">
+                                        ${country.flag}
+                                    </span>
+
+                                    <span class="cd-country-name">
+                                        ${escapeHtml(country.name)}
+                                    </span>
+
+                                </button>
+                            `;
+
+                        }).join("")}
+
+                </div>
+            `;
+
+            moreGrid
+                .querySelectorAll("[data-country]")
+                .forEach(button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            selectCountry(
+                                button.dataset.country
+                            );
+
+                            moreGrid.style.display =
+                                "none";
+
+                            moreButton.textContent =
+                                "More Countries ▾";
+                        }
+                    );
+
+                });
+
+        });
+    }
+}
+
+async function selectCountry(code) {
+
+    currentCountry =
+        String(code || "").toUpperCase();
+
+    currentCategory = "all";
+
+    renderCountrySystem();
+
+    renderDeals();
+
+    updateUrlCountry();
+
+    window.scrollTo({
+        top:
+            ($("#deals")?.offsetTop || 0) - 80,
+        behavior: "smooth"
+    });
+}
+
+function updateUrlCountry() {
+
+    try {
+
+        const url =
+            new URL(window.location.href);
+
+        if (currentCountry) {
+            url.searchParams.set(
+                "country",
+                currentCountry
+            );
+        } else {
+            url.searchParams.delete("country");
+        }
+
+        window.history.replaceState(
+            {},
+            "",
+            url.toString()
+        );
+
+    } catch {}
+}
+
+
+/* =========================================================
+   DEAL FETCHING
+========================================================= */
+
+async function fetchDealsAndInit() {
+
+    const container =
+        $("#discountsContainer");
+
+    if (container) {
+        container.innerHTML = `
+            <p style="
+                color:#667085;
+                font-size:13px;
+                padding:20px 0;
+            ">
+                Loading verified deals...
+            </p>
+        `;
+    }
+
+    try {
+
+        const data =
+            await apiFetch("/api/deals");
+
+        const deals =
+            Array.isArray(data)
+                ? data
+                : (
+                    data?.deals ||
+                    data?.results ||
+                    []
+                );
+
+        globalDeals =
+            deals.map(normalizeDeal);
+
+        renderCountrySystem();
+
+        renderSpotlight();
+
+        renderDeals();
+
+        renderCategories();
+
+    } catch (error) {
+
+        console.error(
+            "CheckerDiscount deal loading error:",
+            error
+        );
+
+        if (container) {
+
+            container.innerHTML = `
+                <div style="
+                    padding:25px 5px;
+                    text-align:center;
+                    color:#667085;
+                    font-size:13px;
+                ">
+                    Unable to load deals right now.
+                    Please try again later.
+                </div>
+            `;
+        }
+    }
+}
+
+
+/* =========================================================
+   FILTERING
+========================================================= */
+
+function getVisibleDeals() {
+
+    let deals = [...globalDeals];
+
+    if (currentCountry) {
+
+        deals = deals.filter(
+            deal =>
+                getDealCountry(deal) ===
+                currentCountry
+        );
+
+    }
+
+    if (
+        currentCategory &&
+        currentCategory !== "all"
+    ) {
+
+        deals = deals.filter(
+            deal =>
+                String(
+                    deal.category || ""
+                ).toLowerCase() ===
+                currentCategory.toLowerCase()
+        );
+
+    }
+
+    return deals;
+}
+
+
+/* =========================================================
+   CATEGORIES
+========================================================= */
+
+function renderCategories() {
+
+    const container =
+        $("#discountsContainer");
 
     if (!container) return;
 
+    const existing =
+        $("#cd-category-system");
+
+    if (existing) existing.remove();
+
     const categories = [
         ...new Set(
-            globalDeals
+            getVisibleDeals()
                 .map(deal =>
                     String(
                         deal.category || ""
-                    ).trim()
+                    ).toLowerCase()
                 )
                 .filter(Boolean)
         )
     ];
 
-    let html = `
-        <div class="flex items-center gap-2 overflow-x-auto pb-1">
+    if (!categories.length) return;
 
-            <button
-                type="button"
-                data-category="all"
-                class="cd-category-btn flex-shrink-0 px-3.5 py-1.5 rounded-xl font-label-md text-[13px]">
-                All (${globalDeals.length})
-            </button>
+    const wrapper =
+        document.createElement("div");
+
+    wrapper.id = "cd-category-system";
+
+    wrapper.style.cssText = `
+        display:flex;
+        gap:7px;
+        flex-wrap:wrap;
+        margin-bottom:15px;
     `;
 
-    categories.forEach(category => {
-        const count =
-            globalDeals.filter(
-                deal =>
-                    String(
-                        deal.category || ""
-                    ).toLowerCase() ===
-                    category.toLowerCase()
-            ).length;
-
-        html += `
-            <button
-                type="button"
-                data-category="${escapeAttribute(category)}"
-                class="cd-category-btn flex-shrink-0 px-3.5 py-1.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-md text-[13px]">
-                ${escapeHtml(category)} (${count})
-            </button>
-        `;
-    });
-
-    html += `</div>`;
-
-    if (categories.length === 0) {
-        html = `
-            <div class="text-[12px] text-on-surface-variant">
-                No categories available for this country yet.
-            </div>
-        `;
-    }
-
-    container.innerHTML = html;
-
-    const buttons =
-        container.querySelectorAll(
-            ".cd-category-btn"
-        );
-
-    buttons.forEach(button => {
-        button.addEventListener(
-            "click",
-            () => {
-                currentCategory =
-                    button.dataset.category ||
-                    "all";
-
-                buttons.forEach(btn => {
-                    btn.className =
-                        "cd-category-btn flex-shrink-0 px-3.5 py-1.5 rounded-xl " +
-                        "bg-surface-container hover:bg-surface-container-high " +
-                        "text-on-surface-variant font-label-md text-[13px]";
-                });
-
-                button.className =
-                    "cd-category-btn flex-shrink-0 px-3.5 py-1.5 rounded-xl " +
-                    "bg-primary-container text-on-primary font-label-md text-[13px] " +
-                    "font-semibold shadow-sm";
-
-                loadDeals(currentCategory);
-            }
-        );
-    });
-
     const allButton =
-        container.querySelector(
-            '[data-category="all"]'
+        createCategoryButton(
+            "all",
+            "All",
+            currentCategory === "all"
         );
 
-    if (allButton) {
-        allButton.className =
-            "cd-category-btn flex-shrink-0 px-3.5 py-1.5 rounded-xl " +
-            "bg-primary-container text-on-primary font-label-md text-[13px] " +
-            "font-semibold shadow-sm";
-    }
-}
+    wrapper.appendChild(allButton);
 
+    categories
+        .sort()
+        .forEach(category => {
 
-/* =========================================================
-   CURRENCY
-========================================================= */
-
-function getDealCurrency(deal) {
-    const dealCountry =
-        getDealCountry(deal);
-
-    if (
-        dealCountry &&
-        COUNTRIES[dealCountry]
-    ) {
-        return COUNTRIES[dealCountry].currency;
-    }
-
-    if (deal.currency) {
-        return String(
-            deal.currency
-        ).toUpperCase();
-    }
-
-    return "USD";
-}
-
-
-function formatPrice(value, currency) {
-    const number = Number(value);
-
-    if (!Number.isFinite(number)) {
-        return "—";
-    }
-
-    const curr =
-        currency || "USD";
-
-    try {
-        return new Intl.NumberFormat(
-            undefined,
-            {
-                style: "currency",
-                currency: curr,
-                minimumFractionDigits:
-                    curr === "JPY" ||
-                    curr === "KRW"
-                        ? 0
-                        : 2,
-                maximumFractionDigits:
-                    curr === "JPY" ||
-                    curr === "KRW"
-                        ? 0
-                        : 2
-            }
-        ).format(number);
-
-    } catch (e) {
-        const country =
-            Object.values(COUNTRIES)
-                .find(
-                    c =>
-                        c.currency ===
-                        curr
+            const button =
+                createCategoryButton(
+                    category,
+                    capitalize(category),
+                    currentCategory === category
                 );
 
-        return `${
-            country
-                ? country.symbol
-                : curr
-        } ${number.toFixed(2)}`;
-    }
-}
+            wrapper.appendChild(button);
 
+        });
 
-function getDealFlag(deal) {
-    const code =
-        getDealCountry(deal);
-
-    return (
-        COUNTRIES[code]?.flag ||
-        "🌐"
+    container.parentElement.insertBefore(
+        wrapper,
+        container
     );
 }
 
+function createCategoryButton(
+    value,
+    label,
+    active
+) {
 
-function getDealCountryName(deal) {
-    const code =
-        getDealCountry(deal);
+    const button =
+        document.createElement("button");
 
-    return (
-        COUNTRIES[code]?.name ||
-        "International"
-    );
+    button.type = "button";
+
+    button.textContent = label;
+
+    button.style.cssText = `
+        border:1px solid ${
+            active ? "#155EEF" : "#E4EAF2"
+        };
+        background:${
+            active ? "#EEF4FF" : "#FFFFFF"
+        };
+        color:${
+            active ? "#155EEF" : "#475467"
+        };
+        border-radius:999px;
+        padding:7px 11px;
+        font-size:11px;
+        font-weight:700;
+        cursor:pointer;
+    `;
+
+    button.addEventListener("click", () => {
+
+        currentCategory = value;
+
+        renderCategories();
+
+        renderDeals();
+
+    });
+
+    return button;
+}
+
+function capitalize(value) {
+
+    return String(value)
+        .replace(/[-_]/g, " ")
+        .replace(/\b\w/g, c =>
+            c.toUpperCase()
+        );
 }
 
 
 /* =========================================================
-   SPOTLIGHT
+   SPOTLIGHT / FEATURED
 ========================================================= */
 
-function loadSpotlight() {
-    const deals =
-        globalDeals;
+function renderSpotlight() {
 
-    if (!deals.length) return;
+    const dealsSection =
+        $("#deals");
 
-    let featuredDeal =
-        deals.find(
-            d =>
-                Number(d.is_featured) === 1 ||
-                d.isFeatured === true
+    if (!dealsSection) return;
+
+    let spotlight =
+        $("#cdSpotlight");
+
+    if (!spotlight) {
+
+        spotlight =
+            document.createElement("div");
+
+        spotlight.id = "cdSpotlight";
+
+        const countrySystem =
+            $("#cd-country-system");
+
+        if (countrySystem) {
+
+            countrySystem.insertAdjacentElement(
+                "afterend",
+                spotlight
+            );
+
+        } else {
+
+            const heading =
+                dealsSection.querySelector(
+                    ".section-heading"
+                );
+
+            if (heading) {
+                heading.insertAdjacentElement(
+                    "afterend",
+                    spotlight
+                );
+            } else {
+                dealsSection.prepend(spotlight);
+            }
+        }
+    }
+
+    /*
+       IMPORTANT:
+       Only a deal explicitly marked as Featured
+       can appear here.
+
+       There is intentionally NO fallback to deals[0].
+    */
+
+    const featuredDeal =
+        globalDeals.find(
+            deal =>
+                Number(deal.is_featured) === 1 ||
+                deal.is_featured === true
         );
 
     if (!featuredDeal) {
-        featuredDeal =
-            deals[0];
+
+        spotlight.innerHTML = "";
+
+        spotlight.style.display = "none";
+
+        return;
     }
 
-    const spotlightContainer =
-        document.querySelector(
-            ".relative.w-full.bg-gradient-to-b"
-        );
+    spotlight.style.display = "block";
 
-    if (
-        !spotlightContainer ||
-        !featuredDeal
-    ) return;
+    const country =
+        getDealCountry(featuredDeal);
 
-    const imgSrc =
-        featuredDeal.image_url ||
-        featuredDeal.image ||
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
-
-    const discountText =
-        featuredDeal.discount_percent
-            ? `${Math.round(
-                featuredDeal.discount_percent
-            )}% OFF`
-            : "Special Offer";
-
-    const oldPrice =
-        Number(
-            featuredDeal.old_price ||
-            0
-        );
-
-    const newPrice =
-        Number(
-            featuredDeal.new_price ||
-            featuredDeal.price ||
-            0
-        );
-
-    const savingsAmount =
-        oldPrice > newPrice
-            ? oldPrice - newPrice
-            : 0;
+    const countryInfo =
+        COUNTRIES[country];
 
     const currency =
-        getDealCurrency(
-            featuredDeal
+        getDealCurrency(featuredDeal);
+
+    const save =
+        savings(
+            featuredDeal.old_price,
+            featuredDeal.new_price
         );
 
-    const showcaseBox =
-        spotlightContainer.querySelector(
-            ".w-full.mt-2.bg-surface-container-lowest"
-        );
+    const image =
+        getDealImage(featuredDeal);
 
-    if (!showcaseBox) return;
-
-    showcaseBox.innerHTML = `
-        <div class="flex items-center justify-between gap-2 pb-3 border-b border-surface-container-low">
-
-            <div class="flex items-center gap-1 text-primary font-badge-caps text-[11px] font-bold uppercase tracking-wider">
-                <span class="material-symbols-outlined text-[15px]">
-                    bolt
-                </span>
-
-                Deal Spotlight
-            </div>
-
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-savings-green-subtle text-secondary font-badge-caps text-[10px] font-bold">
-
-                <span class="material-symbols-outlined text-[12px]">
-                    verified
-                </span>
-
-                ${escapeHtml(
-                    discountText
-                )}
-
-            </span>
-        </div>
-
-        <div class="flex gap-3 pt-3">
-
-            <div class="w-20 h-20 rounded-xl bg-surface-subtle overflow-hidden flex-shrink-0 relative border border-surface-container flex items-center justify-center">
-
+    const imageHtml =
+        image
+            ? `
                 <img
-                    class="w-full h-full object-cover"
-                    src="${escapeAttribute(imgSrc)}"
-                    alt="Spotlight Deal"
-                    onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400'"
+                    src="${escapeHtml(image)}"
+                    alt="${escapeHtml(
+                        featuredDeal.title
+                    )}"
+                    loading="lazy"
+                    onerror="this.style.display='none';"
                 >
+              `
+            : `
+                <span style="
+                    color:#98A2B3;
+                    font-size:12px;
+                ">
+                    No image
+                </span>
+              `;
 
-                <div class="absolute bottom-1 right-1 bg-navy-deep/80 text-on-primary text-[9px] px-1 py-0.5 rounded font-mono">
-                    ${escapeHtml(
-                        featuredDeal.store ||
-                        "Store"
-                    )}
+    spotlight.innerHTML = `
+        <div class="cd-spotlight-card">
+
+            <span class="cd-spotlight-label">
+                ⭐ Featured Deal
+            </span>
+
+            <div class="cd-spotlight-content">
+
+                <div class="cd-spotlight-image">
+                    ${imageHtml}
                 </div>
 
-            </div>
+                <div>
 
-            <div class="flex flex-col min-w-0 justify-center flex-1">
-
-                <div class="flex items-center gap-1 text-caption-timestamp text-[11px] text-on-surface-variant">
-
-                    <span>
-                        ${getDealFlag(
-                            featuredDeal
-                        )}
-                    </span>
-
-                    <span>
+                    <div class="cd-spotlight-store">
+                        ${
+                            countryInfo
+                                ? countryInfo.flag
+                                : "🌎"
+                        }
+                        ${
+                            countryInfo
+                                ? escapeHtml(
+                                    countryInfo.name
+                                )
+                                : ""
+                        }
+                        •
                         ${escapeHtml(
-                            getDealCountryName(
-                                featuredDeal
-                            )
+                            featuredDeal.store
                         )}
-                    </span>
+                    </div>
 
-                    <span class="text-on-surface-variant">
-                        ·
-                    </span>
-
-                    <span class="font-semibold text-on-surface truncate">
+                    <h3 class="cd-spotlight-title">
                         ${escapeHtml(
-                            featuredDeal.store ||
-                            "Store"
+                            featuredDeal.title
                         )}
-                    </span>
+                    </h3>
 
-                    <span class="inline-flex text-warning-amber text-[12px] material-symbols-outlined fill-1">
-                        star
-                    </span>
+                    <div style="
+                        display:flex;
+                        align-items:center;
+                        gap:8px;
+                        flex-wrap:wrap;
+                    ">
+                        ${ratingHtml(featuredDeal)}
 
-                    <span class="font-bold text-on-surface">
-                        4.8
-                    </span>
+                        ${
+                            featuredDeal.discount_percent > 0
+                                ? `
+                                    <span style="
+                                        color:#B54708;
+                                        background:#FFF7E8;
+                                        padding:5px 8px;
+                                        border-radius:7px;
+                                        font-size:11px;
+                                        font-weight:800;
+                                    ">
+                                        ${Number(
+                                            featuredDeal.discount_percent
+                                        ).toFixed(0)}% OFF
+                                    </span>
+                                `
+                                : ""
+                        }
+                    </div>
 
-                </div>
+                    <div class="cd-spotlight-prices">
 
-                <h3 class="font-headline-sm text-[14px] text-on-surface font-semibold leading-snug line-clamp-2 mt-0.5">
-                    ${escapeHtml(
-                        featuredDeal.title ||
-                        "Special Deal"
-                    )}
-                </h3>
+                        <span class="cd-old-price">
+                            ${formatPrice(
+                                featuredDeal.old_price,
+                                currency
+                            )}
+                        </span>
 
-                <div class="flex items-baseline gap-2 mt-1.5">
+                        <span class="cd-new-price">
+                            ${formatPrice(
+                                featuredDeal.new_price,
+                                currency
+                            )}
+                        </span>
 
-                    <span class="font-headline-sm text-[20px] font-extrabold text-primary-container">
-                        ${formatPrice(
-                            newPrice,
+                    </div>
+
+                    <div class="cd-save">
+                        You Save ${formatPrice(
+                            save,
                             currency
                         )}
-                    </span>
+                    </div>
+
+                    <div style="margin-top:14px;">
+
+                        <a
+                            href="${escapeHtml(
+                                getDealUrl(featuredDeal)
+                            )}"
+                            target="_blank"
+                            rel="nofollow sponsored noopener"
+                            class="deal-button">
+                            Check This Deal →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   NORMAL DEAL CARDS
+========================================================= */
+
+function renderDeals() {
+
+    const container =
+        $("#discountsContainer");
+
+    if (!container) return;
+
+    const deals =
+        getVisibleDeals();
+
+    if (!deals.length) {
+
+        container.innerHTML = `
+            <div style="
+                text-align:center;
+                padding:40px 15px;
+                color:#667085;
+            ">
+
+                <div style="
+                    font-size:32px;
+                    margin-bottom:8px;
+                ">
+                    🔎
+                </div>
+
+                <div style="
+                    font-size:14px;
+                    font-weight:700;
+                    color:#344054;
+                    margin-bottom:5px;
+                ">
+                    No verified deals found
+                </div>
+
+                <div style="
+                    font-size:12px;
+                ">
+                    Try another country or category.
+                </div>
+
+            </div>
+        `;
+
+        return;
+    }
+
+    container.innerHTML =
+        deals.map(
+            deal => renderDealCard(deal)
+        ).join("");
+
+    attachDealEvents();
+}
+
+function renderDealCard(deal) {
+
+    const country =
+        getDealCountry(deal);
+
+    const countryInfo =
+        COUNTRIES[country];
+
+    const currency =
+        getDealCurrency(deal);
+
+    const save =
+        savings(
+            deal.old_price,
+            deal.new_price
+        );
+
+    const image =
+        getDealImage(deal);
+
+    const imageHtml =
+        image
+            ? `
+                <img
+                    src="${escapeHtml(image)}"
+                    alt="${escapeHtml(
+                        deal.title
+                    )}"
+                    loading="lazy"
+                    onerror="
+                        this.style.display='none';
+                        this.parentElement.innerHTML='<span style=&quot;color:#98A2B3;font-size:12px;&quot;>No image</span>';
+                    "
+                >
+              `
+            : `
+                <span style="
+                    color:#98A2B3;
+                    font-size:12px;
+                ">
+                    No image
+                </span>
+              `;
+
+    return `
+        <article
+            class="discount-card"
+            data-deal-id="${escapeHtml(
+                deal.id
+            )}">
+
+            <div class="deal-image">
+                ${imageHtml}
+            </div>
+
+            <div class="deal-card-content">
+
+                <div class="deal-top-line">
+
+                    <div class="deal-store">
+
+                        ${
+                            countryInfo
+                                ? countryInfo.flag
+                                : "🌎"
+                        }
+
+                        ${
+                            countryInfo
+                                ? escapeHtml(
+                                    countryInfo.name
+                                )
+                                : ""
+                        }
+
+                        •
+
+                        <span class="deal-store-check">
+                            ✓
+                        </span>
+
+                        ${escapeHtml(
+                            deal.store
+                        )}
+
+                    </div>
 
                     ${
-                        oldPrice
+                        deal.discount_percent > 0
                             ? `
-                                <span class="font-price-strikethrough text-[13px] text-outline line-through">
-                                    ${formatPrice(
-                                        oldPrice,
-                                        currency
-                                    )}
+                                <span class="deal-discount">
+                                    ${Number(
+                                        deal.discount_percent
+                                    ).toFixed(0)}% OFF
                                 </span>
                             `
                             : ""
@@ -952,931 +1258,1102 @@ function loadSpotlight() {
 
                 </div>
 
-            </div>
-        </div>
 
-        <div class="mt-3 pt-2.5 border-t border-surface-container flex items-center justify-between">
+                <h3 class="deal-title">
+                    ${escapeHtml(
+                        deal.title
+                    )}
+                </h3>
 
-            <div class="px-2.5 py-1 rounded-lg bg-savings-green-subtle text-savings-green font-bold text-[12px] flex items-center gap-1">
 
-                <span class="material-symbols-outlined text-[14px]">
-                    savings
-                </span>
+                <div style="
+                    display:flex;
+                    align-items:center;
+                    gap:7px;
+                    flex-wrap:wrap;
+                    margin-bottom:7px;
+                ">
 
-                Save ${formatPrice(
-                    savingsAmount,
-                    currency
-                )}
+                    ${ratingHtml(deal)}
 
-            </div>
+                </div>
 
-            <div class="flex items-center gap-2">
 
-                <button
-                    onclick="shareDeal('${encodeURIComponent(featuredDeal.title || "")}', '${escapeAttribute(featuredDeal.url || window.location.href)}')"
-                    class="w-9 h-9 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface flex items-center justify-center transition-colors shadow-sm"
-                    title="Share Deal">
+                <div class="deal-prices">
 
-                    <span class="material-symbols-outlined text-[18px]">
-                        share
+                    <span class="deal-old-price">
+                        ${formatPrice(
+                            deal.old_price,
+                            currency
+                        )}
                     </span>
 
-                </button>
-
-                <a
-                    href="${escapeAttribute(
-                        featuredDeal.url ||
-                        "#"
-                    )}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="py-2 px-3 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-md text-[13px] font-semibold flex items-center gap-1 shadow-sm transition-colors">
-
-                    <span>
-                        Check Deal
+                    <span class="deal-new-price">
+                        ${formatPrice(
+                            deal.new_price,
+                            currency
+                        )}
                     </span>
 
-                    <span class="material-symbols-outlined text-[16px]">
-                        arrow_forward
-                    </span>
+                </div>
 
-                </a>
+
+                <div class="deal-saving">
+                    You Save ${formatPrice(
+                        save,
+                        currency
+                    )}
+                </div>
+
+
+                <div class="deal-message">
+                    Verified deal • ${
+                        countryInfo
+                            ? escapeHtml(
+                                countryInfo.name
+                            )
+                            : "International"
+                    }
+                </div>
+
+
+                <div style="
+                    display:flex;
+                    gap:7px;
+                    flex-wrap:wrap;
+                ">
+
+                    <a
+                        class="deal-button"
+                        href="${escapeHtml(
+                            getDealUrl(deal)
+                        )}"
+                        target="_blank"
+                        rel="nofollow sponsored noopener">
+
+                        Check Deal →
+
+                    </a>
+
+                    <button
+                        type="button"
+                        class="cd-save-deal"
+                        data-save-id="${escapeHtml(
+                            deal.id
+                        )}"
+                        style="
+                            min-height:39px;
+                            padding:0 12px;
+                            border:1px solid #E4EAF2;
+                            border-radius:8px;
+                            background:#fff;
+                            color:#344054;
+                            font-size:12px;
+                            font-weight:700;
+                            cursor:pointer;
+                        ">
+
+                        ♡ Save
+
+                    </button>
+
+                    <button
+                        type="button"
+                        class="cd-share-deal"
+                        data-share-id="${escapeHtml(
+                            deal.id
+                        )}"
+                        style="
+                            min-height:39px;
+                            padding:0 12px;
+                            border:1px solid #E4EAF2;
+                            border-radius:8px;
+                            background:#fff;
+                            color:#344054;
+                            font-size:12px;
+                            font-weight:700;
+                            cursor:pointer;
+                        ">
+
+                        Share
+
+                    </button>
+
+                </div>
 
             </div>
-        </div>
+
+        </article>
     `;
 }
 
 
 /* =========================================================
-   DEAL CARDS
+   DEAL EVENTS
 ========================================================= */
 
-function loadDeals(filter = "all") {
-    const container =
-        document.getElementById(
-            "discountsContainer"
+function attachDealEvents() {
+
+    document
+        .querySelectorAll(".cd-save-deal")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                async () => {
+
+                    const id =
+                        button.dataset.saveId;
+
+                    await saveDealForCustomer(id);
+
+                }
+            );
+
+        });
+
+    document
+        .querySelectorAll(".cd-share-deal")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                async () => {
+
+                    const id =
+                        button.dataset.shareId;
+
+                    await shareDeal(id);
+
+                }
+            );
+
+        });
+}
+
+
+/* =========================================================
+   CUSTOMER UI
+========================================================= */
+
+function setupCustomerSystem() {
+
+    if (!document.getElementById("cdAuthOverlay")) {
+
+        const overlay =
+            document.createElement("div");
+
+        overlay.id = "cdAuthOverlay";
+
+        overlay.className =
+            "cd-auth-overlay";
+
+        overlay.innerHTML = `
+
+            <div class="cd-auth-box">
+
+                <div class="cd-auth-header">
+
+                    <h2 id="cdAuthTitle">
+                        My Account
+                    </h2>
+
+                    <button
+                        type="button"
+                        class="cd-close"
+                        id="cdCloseAuth">
+                        ×
+                    </button>
+
+                </div>
+
+
+                <div id="cdAuthContent">
+
+                    <div class="cd-auth-tabs">
+
+                        <button
+                            type="button"
+                            class="cd-auth-tab active"
+                            id="cdLoginTab">
+                            Login
+                        </button>
+
+                        <button
+                            type="button"
+                            class="cd-auth-tab"
+                            id="cdRegisterTab">
+                            Register
+                        </button>
+
+                    </div>
+
+
+                    <form
+                        id="cdLoginForm"
+                        class="cd-auth-form">
+
+                        <label>
+                            Email
+
+                            <input
+                                type="email"
+                                id="cdLoginEmail"
+                                required
+                                autocomplete="email">
+                        </label>
+
+
+                        <label>
+                            Password
+
+                            <input
+                                type="password"
+                                id="cdLoginPassword"
+                                required
+                                autocomplete="current-password">
+                        </label>
+
+
+                        <div
+                            class="cd-auth-message"
+                            id="cdLoginMessage">
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="cd-auth-submit">
+                            Login
+                        </button>
+
+                    </form>
+
+
+                    <form
+                        id="cdRegisterForm"
+                        class="cd-auth-form"
+                        style="display:none;">
+
+                        <label>
+                            Full Name
+
+                            <input
+                                type="text"
+                                id="cdRegisterName"
+                                required
+                                minlength="2"
+                                maxlength="80"
+                                autocomplete="name">
+                        </label>
+
+
+                        <label>
+                            Email
+
+                            <input
+                                type="email"
+                                id="cdRegisterEmail"
+                                required
+                                autocomplete="email">
+                        </label>
+
+
+                        <label>
+                            Password
+
+                            <input
+                                type="password"
+                                id="cdRegisterPassword"
+                                required
+                                minlength="8"
+                                autocomplete="new-password">
+                        </label>
+
+
+                        <div
+                            class="cd-auth-message"
+                            id="cdRegisterMessage">
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="cd-auth-submit">
+                            Create Account
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                <div
+                    id="cdDashboard"
+                    class="cd-dashboard">
+
+                    <div
+                        class="cd-dashboard-card"
+                        id="cdAccountInfo">
+                    </div>
+
+                    <div
+                        class="cd-dashboard-card">
+
+                        <h3>
+                            ❤️ Saved Deals
+                        </h3>
+
+                        <div id="cdSavedDeals">
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="cd-dashboard-card">
+
+                        <h3>
+                            🔔 Price Alerts
+                        </h3>
+
+                        <div id="cdAlerts">
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="cd-logout"
+                        id="cdLogout">
+                        Logout
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+    }
+
+
+    const accountButton =
+        $("#cdAccountButton");
+
+    const overlay =
+        $("#cdAuthOverlay");
+
+    const close =
+        $("#cdCloseAuth");
+
+    if (accountButton) {
+
+        accountButton.addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                openCustomerPanel();
+
+            }
         );
+
+    }
+
+    if (close) {
+
+        close.addEventListener(
+            "click",
+            closeCustomerPanel
+        );
+
+    }
+
+    if (overlay) {
+
+        overlay.addEventListener(
+            "click",
+            event => {
+
+                if (event.target === overlay) {
+                    closeCustomerPanel();
+                }
+
+            }
+        );
+
+    }
+
+    const loginTab =
+        $("#cdLoginTab");
+
+    const registerTab =
+        $("#cdRegisterTab");
+
+    if (loginTab) {
+
+        loginTab.addEventListener(
+            "click",
+            showLoginForm
+        );
+
+    }
+
+    if (registerTab) {
+
+        registerTab.addEventListener(
+            "click",
+            showRegisterForm
+        );
+
+    }
+
+    const loginForm =
+        $("#cdLoginForm");
+
+    if (loginForm) {
+
+        loginForm.addEventListener(
+            "submit",
+            handleLogin
+        );
+
+    }
+
+    const registerForm =
+        $("#cdRegisterForm");
+
+    if (registerForm) {
+
+        registerForm.addEventListener(
+            "submit",
+            handleRegister
+        );
+
+    }
+
+    const logout =
+        $("#cdLogout");
+
+    if (logout) {
+
+        logout.addEventListener(
+            "click",
+            logoutCustomer
+        );
+
+    }
+}
+
+function openCustomerPanel() {
+
+    const overlay =
+        $("#cdAuthOverlay");
+
+    if (!overlay) return;
+
+    overlay.classList.add("open");
+
+    if (customer) {
+        showDashboard();
+    } else {
+        showLoginForm();
+    }
+}
+
+function closeCustomerPanel() {
+
+    const overlay =
+        $("#cdAuthOverlay");
+
+    if (overlay) {
+        overlay.classList.remove("open");
+    }
+}
+
+function showLoginForm() {
+
+    $("#cdLoginForm").style.display =
+        "grid";
+
+    $("#cdRegisterForm").style.display =
+        "none";
+
+    $("#cdDashboard").classList.remove(
+        "open"
+    );
+
+    $("#cdLoginTab").classList.add("active");
+
+    $("#cdRegisterTab").classList.remove(
+        "active"
+    );
+
+    $("#cdAuthTitle").textContent =
+        "My Account";
+}
+
+function showRegisterForm() {
+
+    $("#cdLoginForm").style.display =
+        "none";
+
+    $("#cdRegisterForm").style.display =
+        "grid";
+
+    $("#cdDashboard").classList.remove(
+        "open"
+    );
+
+    $("#cdLoginTab").classList.remove(
+        "active"
+    );
+
+    $("#cdRegisterTab").classList.add(
+        "active"
+    );
+
+    $("#cdAuthTitle").textContent =
+        "Create Account";
+}
+
+async function handleLogin(event) {
+
+    event.preventDefault();
+
+    const message =
+        $("#cdLoginMessage");
+
+    message.textContent =
+        "Signing in...";
+
+    try {
+
+        const email =
+            $("#cdLoginEmail").value
+                .trim()
+                .toLowerCase();
+
+        const password =
+            $("#cdLoginPassword").value;
+
+        const data =
+            await apiFetch(
+                "/api/auth/login",
+                {
+                    method: "POST",
+                    body: JSON.stringify({
+                        email,
+                        password
+                    })
+                }
+            );
+
+        authToken =
+            data.token ||
+            data.session_token ||
+            "";
+
+        if (!authToken) {
+            throw new Error(
+                "Login succeeded but no session was returned."
+            );
+        }
+
+        localStorage.setItem(
+            "cd_session_token",
+            authToken
+        );
+
+        customer =
+            data.customer ||
+            data.user ||
+            null;
+
+        message.textContent =
+            "Login successful.";
+
+        updateAccountButton();
+
+        await loadCustomerDashboard();
+
+    } catch (error) {
+
+        message.textContent =
+            error.message ||
+            "Login failed.";
+
+    }
+}
+
+async function handleRegister(event) {
+
+    event.preventDefault();
+
+    const message =
+        $("#cdRegisterMessage");
+
+    message.textContent =
+        "Creating account...";
+
+    try {
+
+        const name =
+            $("#cdRegisterName").value
+                .trim();
+
+        const email =
+            $("#cdRegisterEmail").value
+                .trim()
+                .toLowerCase();
+
+        const password =
+            $("#cdRegisterPassword").value;
+
+        const data =
+            await apiFetch(
+                "/api/auth/register",
+                {
+                    method: "POST",
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        password
+                    })
+                }
+            );
+
+        authToken =
+            data.token ||
+            data.session_token ||
+            "";
+
+        if (authToken) {
+
+            localStorage.setItem(
+                "cd_session_token",
+                authToken
+            );
+
+        }
+
+        customer =
+            data.customer ||
+            data.user ||
+            null;
+
+        if (customer) {
+
+            message.textContent =
+                "Account created successfully.";
+
+            updateAccountButton();
+
+            await loadCustomerDashboard();
+
+        } else {
+
+            message.textContent =
+                "Account created. Please login.";
+
+            showLoginForm();
+
+        }
+
+    } catch (error) {
+
+        message.textContent =
+            error.message ||
+            "Registration failed.";
+
+    }
+}
+
+
+/* =========================================================
+   CUSTOMER SESSION
+========================================================= */
+
+async function restoreCustomerSession() {
+
+    if (!authToken) {
+
+        updateAccountButton();
+
+        return;
+    }
+
+    try {
+
+        const data =
+            await apiFetch(
+                "/api/auth/me"
+            );
+
+        customer =
+            data.customer ||
+            data.user ||
+            data ||
+            null;
+
+    } catch {
+
+        authToken = "";
+
+        customer = null;
+
+        localStorage.removeItem(
+            "cd_session_token"
+        );
+    }
+
+    updateAccountButton();
+}
+
+function updateAccountButton() {
+
+    const button =
+        $("#cdAccountButton");
+
+    if (!button) return;
+
+    button.textContent =
+        customer
+            ? "My Account"
+            : "Account";
+}
+
+async function logoutCustomer() {
+
+    try {
+
+        if (authToken) {
+
+            await apiFetch(
+                "/api/auth/logout",
+                {
+                    method: "POST"
+                }
+            );
+
+        }
+
+    } catch {}
+
+    authToken = "";
+
+    customer = null;
+
+    localStorage.removeItem(
+        "cd_session_token"
+    );
+
+    updateAccountButton();
+
+    showLoginForm();
+
+    $("#cdLoginMessage").textContent =
+        "You have been logged out.";
+
+}
+
+
+/* =========================================================
+   CUSTOMER DASHBOARD
+========================================================= */
+
+async function showDashboard() {
+
+    if (!customer) {
+
+        showLoginForm();
+
+        return;
+    }
+
+    await loadCustomerDashboard();
+}
+
+async function loadCustomerDashboard() {
+
+    if (!customer) return;
+
+    $("#cdLoginForm").style.display =
+        "none";
+
+    $("#cdRegisterForm").style.display =
+        "none";
+
+    $("#cdDashboard").classList.add(
+        "open"
+    );
+
+    $("#cdAuthTitle").textContent =
+        "My Dashboard";
+
+    const info =
+        $("#cdAccountInfo");
+
+    info.innerHTML = `
+        <h3>
+            Welcome, ${escapeHtml(
+                customer.name ||
+                customer.full_name ||
+                "Customer"
+            )}
+        </h3>
+
+        <div style="
+            color:#667085;
+            font-size:12px;
+        ">
+            ${escapeHtml(
+                customer.email || ""
+            )}
+        </div>
+    `;
+
+    const saved =
+        $("#cdSavedDeals");
+
+    const alerts =
+        $("#cdAlerts");
+
+    saved.innerHTML =
+        `<div class="cd-dashboard-empty">
+            Loading saved deals...
+        </div>`;
+
+    alerts.innerHTML =
+        `<div class="cd-dashboard-empty">
+            Loading alerts...
+        </div>`;
+
+    try {
+
+        const data =
+            await apiFetch(
+                "/api/customer/dashboard"
+            );
+
+        const watchlist =
+            data.watchlist ||
+            data.saved_deals ||
+            [];
+
+        const customerAlerts =
+            data.alerts ||
+            [];
+
+        renderDashboardWatchlist(
+            watchlist
+        );
+
+        renderDashboardAlerts(
+            customerAlerts
+        );
+
+    } catch (error) {
+
+        saved.innerHTML = `
+            <div class="cd-dashboard-empty">
+                Unable to load saved deals.
+            </div>
+        `;
+
+        alerts.innerHTML = `
+            <div class="cd-dashboard-empty">
+                Unable to load alerts.
+            </div>
+        `;
+    }
+}
+
+function renderDashboardWatchlist(items) {
+
+    const container =
+        $("#cdSavedDeals");
 
     if (!container) return;
 
-    let deals =
-        globalDeals.filter(
-            deal =>
-                getDealCountry(deal) ===
-                currentCountry
-        );
-
-    if (filter !== "all") {
-        deals =
-            deals.filter(
-                deal =>
-                    String(
-                        deal.category || ""
-                    ).toLowerCase() ===
-                    String(
-                        filter
-                    ).toLowerCase()
-            );
-    }
-
-    container.innerHTML = "";
-
-    if (deals.length === 0) {
-        const country =
-            COUNTRIES[currentCountry];
+    if (!items.length) {
 
         container.innerHTML = `
-            <div class="p-6 text-center text-on-surface-variant bg-surface-container-lowest rounded-2xl border border-surface-container">
-
-                <div class="text-3xl mb-2">
-                    ${
-                        country
-                            ? country.flag
-                            : "🌐"
-                    }
-                </div>
-
-                <div class="font-semibold text-on-surface mb-1">
-                    No verified deals available
-                </div>
-
-                <div class="text-[12px]">
-                    There are currently no deals listed for
-                    ${
-                        country
-                            ? escapeHtml(
-                                country.name
-                            )
-                            : "this country"
-                    }.
-                </div>
-
+            <div class="cd-dashboard-empty">
+                You have no saved deals yet.
             </div>
         `;
 
         return;
     }
 
-    deals.forEach(deal => {
+    container.innerHTML =
+        items.map(item => {
 
-        const imgSrc =
-            deal.image_url ||
-            deal.image ||
-            "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
+            const deal =
+                item.deal ||
+                item;
 
-        const discountText =
-            deal.discount_percent
-                ? `${Math.round(
-                    deal.discount_percent
-                )}% OFF`
-                : "Special Deal";
+            const currency =
+                getDealCurrency(deal);
 
-        const currency =
-            getDealCurrency(deal);
+            return `
+                <div class="cd-dashboard-deal">
 
-        const newPrice =
-            Number(
-                deal.new_price ||
-                deal.price ||
-                0
-            );
+                    <div>
+                        <div class="cd-dashboard-deal-title">
+                            ${escapeHtml(
+                                deal.title ||
+                                "Saved Deal"
+                            )}
+                        </div>
 
-        const oldPrice =
-            deal.old_price
-                ? Number(
-                    deal.old_price
-                )
-                : null;
-
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container/60 flex flex-col gap-3";
-
-        const dealId =
-            deal.id || "";
-
-        /*
-         IMPORTANT CHANGE:
-         Store Name is now displayed beside the country.
-         Example:
-         🇴🇲 Oman · Sharaf DG
-         🇺🇸 United States · Amazon
-        */
-
-        const storeName =
-            String(
-                deal.store ||
-                deal.store_name ||
-                deal.storeName ||
-                deal.retailer ||
-                deal.retailer_name ||
-                "Store"
-            ).trim();
-
-        card.innerHTML = `
-
-            <div class="flex items-center justify-between gap-2">
-
-                <div class="flex items-center gap-1.5 min-w-0">
-
-                    <span class="text-[20px] flex-shrink-0">
-                        ${getDealFlag(deal)}
-                    </span>
-
-                    <span class="font-badge-caps text-[11px] font-bold uppercase tracking-wider text-on-surface-variant truncate">
-                        ${escapeHtml(
-                            getDealCountryName(
-                                deal
-                            )
-                        )}
-                    </span>
-
-                    <span class="text-on-surface-variant text-[11px] flex-shrink-0">
-                        ·
-                    </span>
-
-                    <span
-                        class="font-semibold text-[12px] text-on-surface truncate"
-                        title="${escapeAttribute(
-                            storeName
-                        )}">
-                        ${escapeHtml(
-                            storeName
-                        )}
-                    </span>
-
-                </div>
-
-                <span class="px-2.5 py-0.5 rounded-full bg-savings-green-subtle text-secondary font-badge-caps text-[10px] font-bold flex items-center gap-1 flex-shrink-0">
-
-                    <span class="material-symbols-outlined text-[12px]">
-                        verified
-                    </span>
-
-                    ${escapeHtml(
-                        discountText
-                    )}
-
-                </span>
-
-            </div>
-
-
-            <div class="flex gap-3">
-
-                <div class="w-20 h-20 rounded-xl bg-surface-subtle overflow-hidden flex-shrink-0 relative border border-surface-container flex items-center justify-center">
-
-                    <img
-                        src="${escapeAttribute(
-                            imgSrc
-                        )}"
-                        class="w-full h-full object-cover"
-                        alt="Deal"
-                        onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400'"
-                    >
-
-                </div>
-
-
-                <div class="flex flex-col min-w-0 justify-center flex-1">
-
-                    <div class="flex items-center gap-1 mb-1">
-
-                        ${
-                            deal.category
-                                ? `
-                                    <span class="text-[10px] font-semibold text-primary">
-                                        ${escapeHtml(
-                                            deal.category
-                                        )}
-                                    </span>
-                                `
-                                : ""
-                        }
-
-                    </div>
-
-                    <h3 class="font-headline-sm text-[14px] text-on-surface font-semibold leading-snug line-clamp-2">
-                        ${escapeHtml(
-                            deal.title ||
-                            "Deal"
-                        )}
-                    </h3>
-
-                    <div class="flex items-baseline gap-2 mt-1.5">
-
-                        <span class="font-headline-sm text-[18px] font-extrabold text-primary-container">
+                        <div class="cd-dashboard-deal-price">
                             ${formatPrice(
-                                newPrice,
+                                deal.new_price,
                                 currency
                             )}
-                        </span>
-
-                        ${
-                            oldPrice
-                                ? `
-                                    <span class="font-price-strikethrough text-[13px] text-outline line-through">
-                                        ${formatPrice(
-                                            oldPrice,
-                                            currency
-                                        )}
-                                    </span>
-                                `
-                                : ""
-                        }
-
+                        </div>
                     </div>
 
-                </div>
-
-            </div>
-
-
-            <div class="flex items-center justify-between pt-2 border-t border-surface-container-low text-[11px] text-on-surface-variant">
-
-                <div class="flex items-center gap-1 min-w-0">
-
-                    <span class="material-symbols-outlined text-savings-green text-[14px]">
-                        check_circle
-                    </span>
-
-                    <span class="truncate">
-                        ${escapeHtml(
-                            deal.last_verified_at ||
-                            deal.created_at ||
-                            "Verified"
-                        )}
-                    </span>
-
-                </div>
-
-
-                <div class="flex items-center gap-2 flex-shrink-0">
-
                     ${
-                        dealId
+                        deal.url
                             ? `
-                                <button
-                                    onclick="openDealComparison('${escapeAttribute(
-                                        String(
-                                            dealId
-                                        )
-                                    )}')"
-                                    class="py-2 px-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface font-semibold flex items-center gap-1"
-                                    title="Compare Prices">
-
-                                    <span class="material-symbols-outlined text-[17px]">
-                                        compare_arrows
-                                    </span>
-
-                                </button>
-                            `
+                                <a
+                                    href="${escapeHtml(
+                                        deal.url
+                                    )}"
+                                    target="_blank"
+                                    rel="nofollow sponsored noopener"
+                                    style="
+                                        color:#155EEF;
+                                        font-size:11px;
+                                        font-weight:700;
+                                    ">
+                                    View
+                                </a>
+                              `
                             : ""
                     }
 
-
-                    <button
-                        onclick="shareDeal('${encodeURIComponent(
-                            deal.title || ""
-                        )}', '${escapeAttribute(
-                            deal.url ||
-                            window.location.href
-                        )}')"
-                        class="w-9 h-9 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface flex items-center justify-center transition-colors shadow-sm"
-                        title="Share Deal">
-
-                        <span class="material-symbols-outlined text-[18px]">
-                            share
-                        </span>
-
-                    </button>
-
-
-                    <a
-                        href="${escapeAttribute(
-                            deal.url || "#"
-                        )}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="py-2 px-3.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary font-label-md text-[13px] font-semibold flex items-center gap-1 shadow-sm">
-
-                        <span>
-                            Get Deal
-                        </span>
-
-                        <span class="material-symbols-outlined text-[16px]">
-                            arrow_forward
-                        </span>
-
-                    </a>
-
                 </div>
+            `;
 
+        }).join("");
+}
+
+function renderDashboardAlerts(items) {
+
+    const container =
+        $("#cdAlerts");
+
+    if (!container) return;
+
+    if (!items.length) {
+
+        container.innerHTML = `
+            <div class="cd-dashboard-empty">
+                No price alerts yet.
             </div>
         `;
 
-        container.appendChild(card);
-    });
-}
-
-
-/* =========================================================
-   OLD FILTER COMPATIBILITY
-========================================================= */
-
-function setupFilters() {
-    // Old static filters are intentionally hidden by the country system.
-}
-
-
-/* =========================================================
-   PRICE COMPARISON
-========================================================= */
-
-async function openDealComparison(dealId) {
-
-    let modal =
-        document.getElementById(
-            "cdComparisonModal"
-        );
-
-    if (!modal) {
-
-        modal =
-            document.createElement("div");
-
-        modal.id =
-            "cdComparisonModal";
-
-        modal.className =
-            "fixed inset-0 z-[100] hidden bg-navy-deep/60 backdrop-blur-sm p-4 items-center justify-center";
-
-        modal.innerHTML = `
-            <div class="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-surface-container-lowest rounded-2xl shadow-2xl">
-
-                <div class="sticky top-0 bg-surface-container-lowest border-b border-surface-container p-4 flex items-center justify-between">
-
-                    <div>
-                        <div class="text-[11px] font-bold uppercase tracking-wider text-primary">
-                            Price Comparison
-                        </div>
-
-                        <h3 class="text-[17px] font-bold text-on-surface">
-                            Compare Stores
-                        </h3>
-                    </div>
-
-                    <button
-                        onclick="closeComparisonModal()"
-                        class="w-9 h-9 rounded-full bg-surface-container-low flex items-center justify-center">
-
-                        <span class="material-symbols-outlined">
-                            close
-                        </span>
-
-                    </button>
-
-                </div>
-
-                <div id="cdComparisonContent" class="p-4">
-                    <div class="text-center py-8 text-on-surface-variant">
-                        Loading comparison...
-                    </div>
-                </div>
-
-            </div>
-        `;
-
-        document.body.appendChild(modal);
+        return;
     }
 
-    modal.classList.remove("hidden");
-    modal.classList.add("flex");
+    container.innerHTML =
+        items.map(item => {
 
-    const content =
-        document.getElementById(
-            "cdComparisonContent"
-        );
+            const deal =
+                item.deal ||
+                {};
 
-    if (!content) return;
+            return `
+                <div class="cd-dashboard-deal">
 
-    content.innerHTML = `
-        <div class="text-center py-8 text-on-surface-variant">
+                    <div>
 
-            <span class="material-symbols-outlined animate-spin">
-                progress_activity
-            </span>
+                        <div class="cd-dashboard-deal-title">
+                            ${escapeHtml(
+                                deal.title ||
+                                item.title ||
+                                "Price Alert"
+                            )}
+                        </div>
 
-            <div class="mt-2">
-                Checking other stores...
-            </div>
+                        <div class="cd-dashboard-deal-price">
+                            Target:
+                            ${escapeHtml(
+                                String(
+                                    item.target_price ??
+                                    item.targetPrice ??
+                                    ""
+                                )
+                            )}
+                        </div>
 
-        </div>
-    `;
-
-    try {
-
-        const response =
-            await fetch(
-                `${API_BASE}/api/deals/${encodeURIComponent(
-                    dealId
-                )}/compare`
-            );
-
-        if (!response.ok) {
-            throw new Error(
-                "Comparison API failed"
-            );
-        }
-
-        const data =
-            await response.json();
-
-        const comparisons =
-            Array.isArray(data)
-                ? data
-                : (
-                    Array.isArray(
-                        data.deals
-                    )
-                        ? data.deals
-                        : (
-                            Array.isArray(
-                                data.comparisons
-                            )
-                                ? data.comparisons
-                                : []
-                        )
-                );
-
-        if (!comparisons.length) {
-
-            content.innerHTML = `
-                <div class="text-center py-8">
-
-                    <div class="text-3xl mb-2">
-                        🔎
-                    </div>
-
-                    <div class="font-semibold text-on-surface">
-                        No other store prices found
-                    </div>
-
-                    <div class="text-[12px] text-on-surface-variant mt-1">
-                        We will show more comparisons as they become available.
                     </div>
 
                 </div>
             `;
 
-            return;
-        }
-
-        content.innerHTML =
-            comparisons
-                .map(item => {
-
-                    const normalized =
-                        normalizeDeal(item);
-
-                    const countryCode =
-                        getDealCountry(
-                            normalized
-                        );
-
-                    const currency =
-                        getDealCurrency(
-                            normalized
-                        );
-
-                    const price =
-                        Number(
-                            normalized.new_price ||
-                            normalized.price ||
-                            0
-                        );
-
-                    return `
-                        <div class="border border-surface-container rounded-xl p-3 mb-3">
-
-                            <div class="flex items-center justify-between gap-3">
-
-                                <div class="min-w-0">
-
-                                    <div class="flex items-center gap-1.5">
-
-                                        <span>
-                                            ${
-                                                COUNTRIES[
-                                                    countryCode
-                                                ]?.flag ||
-                                                "🌐"
-                                            }
-                                        </span>
-
-                                        <span class="font-semibold text-on-surface">
-                                            ${escapeHtml(
-                                                normalized.store ||
-                                                "Store"
-                                            )}
-                                        </span>
-
-                                    </div>
-
-                                    <div class="text-[12px] text-on-surface-variant mt-1 line-clamp-2">
-                                        ${escapeHtml(
-                                            normalized.title ||
-                                            "Product"
-                                        )}
-                                    </div>
-
-                                </div>
-
-                                <div class="text-right flex-shrink-0">
-
-                                    <div class="font-bold text-primary text-[18px]">
-                                        ${formatPrice(
-                                            price,
-                                            currency
-                                        )}
-                                    </div>
-
-                                    ${
-                                        normalized.old_price
-                                            ? `
-                                                <div class="text-[11px] text-on-surface-variant line-through">
-                                                    ${formatPrice(
-                                                        normalized.old_price,
-                                                        currency
-                                                    )}
-                                                </div>
-                                            `
-                                            : ""
-                                    }
-
-                                </div>
-
-                            </div>
-
-                            ${
-                                normalized.url
-                                    ? `
-                                        <a
-                                            href="${escapeAttribute(
-                                                normalized.url
-                                            )}"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            class="mt-3 inline-flex items-center gap-1 px-3 py-2 rounded-lg bg-primary-container text-on-primary text-[12px] font-semibold">
-
-                                            View Deal
-
-                                            <span class="material-symbols-outlined text-[15px]">
-                                                arrow_forward
-                                            </span>
-
-                                        </a>
-                                    `
-                                    : ""
-                            }
-
-                        </div>
-                    `;
-                })
-                .join("");
-
-    } catch (error) {
-
-        console.error(
-            "Comparison error:",
-            error
-        );
-
-        content.innerHTML = `
-            <div class="text-center py-8 text-on-surface-variant">
-
-                <div class="text-2xl mb-2">
-                    ⚠️
-                </div>
-
-                <div class="font-semibold text-on-surface">
-                    Comparison is not available yet
-                </div>
-
-                <div class="text-[12px] mt-1">
-                    Please try again later.
-                </div>
-
-            </div>
-        `;
-    }
-}
-
-
-function closeComparisonModal() {
-    const modal =
-        document.getElementById(
-            "cdComparisonModal"
-        );
-
-    if (!modal) return;
-
-    modal.classList.add("hidden");
-    modal.classList.remove("flex");
+        }).join("");
 }
 
 
 /* =========================================================
-   BURGER MENU
+   SAVE DEAL
 ========================================================= */
 
-function initBurgerMenu() {
+async function saveDealForCustomer(id) {
 
-    const btn =
-        document.getElementById(
-            "burgerMenuBtn"
+    const deal =
+        globalDeals.find(
+            item =>
+                String(item.id) === String(id)
         );
 
-    if (!btn) return;
+    if (!deal) return;
 
-    if (
-        document.getElementById(
-            "customBurgerMenu"
-        )
-    ) {
+    if (!customer || !authToken) {
+
+        openCustomerPanel();
+
+        showLoginForm();
+
+        $("#cdLoginMessage").textContent =
+            "Please login to save deals.";
+
         return;
     }
 
-    const menuOverlay =
-        document.createElement("div");
+    try {
 
-    menuOverlay.id =
-        "customBurgerMenu";
-
-    menuOverlay.className =
-        "fixed inset-0 z-50 bg-navy-deep/60 backdrop-blur-sm hidden transition-opacity duration-300";
-
-    menuOverlay.innerHTML = `
-        <div class="absolute right-0 top-0 h-full w-[280px] bg-surface-container-lowest shadow-2xl p-5 flex flex-col justify-between transform translate-x-full transition-transform duration-300">
-
-            <div>
-
-                <div class="flex items-center justify-between pb-4 border-b border-surface-container">
-
-                    <div class="flex items-center gap-2">
-
-                        <div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary font-bold text-[14px]">
-                            CD
-                        </div>
-
-                        <span class="font-headline-sm text-[16px] font-bold text-on-surface">
-                            Navigation Menu
-                        </span>
-
-                    </div>
-
-                    <button
-                        id="closeBurgerMenu"
-                        class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface hover:bg-surface-container">
-
-                        <span class="material-symbols-outlined text-[18px]">
-                            close
-                        </span>
-
-                    </button>
-
-                </div>
-
-
-                <div class="flex flex-col gap-2 pt-4">
-
-                    <a
-                        href="index.html"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-low text-on-surface font-label-md text-[14px]">
-
-                        <span class="material-symbols-outlined text-[20px] text-primary">
-                            home
-                        </span>
-
-                        Home
-                    </a>
-
-
-                    <a
-                        href="#market-deals"
-                        onclick="closeMenu()"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-low text-on-surface font-label-md text-[14px]">
-
-                        <span class="material-symbols-outlined text-[20px] text-primary">
-                            local_offer
-                        </span>
-
-                        Top Deals
-                    </a>
-
-
-                    <a
-                        href="#savings-tool"
-                        onclick="closeMenu()"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-low text-on-surface font-label-md text-[14px]">
-
-                        <span class="material-symbols-outlined text-[20px] text-primary">
-                            calculate
-                        </span>
-
-                        Savings Checker
-                    </a>
-
-
-                    <a
-                        href="#tool-comparison"
-                        onclick="closeMenu()"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-low text-on-surface font-label-md text-[14px]">
-
-                        <span class="material-symbols-outlined text-[20px] text-primary">
-                            compare_arrows
-                        </span>
-
-                        Price Comparison
-                    </a>
-
-
-                    <a
-                        href="#tool-history"
-                        onclick="closeMenu()"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-low text-on-surface font-label-md text-[14px]">
-
-                        <span class="material-symbols-outlined text-[20px] text-primary">
-                            trending_down
-                        </span>
-
-                        Price History
-                    </a>
-
-
-                    <a
-                        href="#tool-watchlist"
-                        onclick="closeMenu()"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-low text-on-surface font-label-md text-[14px]">
-
-                        <span class="material-symbols-outlined text-[20px] text-primary">
-                            bookmark
-                        </span>
-
-                        Watchlist
-                    </a>
-
-                </div>
-
-            </div>
-
-
-            <div class="pt-4 border-t border-surface-container text-center text-[12px] text-on-surface-variant">
-                CheckerDiscount
-            </div>
-
-        </div>
-    `;
-
-    document.body.appendChild(
-        menuOverlay
-    );
-
-    const drawer =
-        menuOverlay.querySelector(
-            "div > div"
+        await apiFetch(
+            "/api/customer/watchlist",
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    deal_id: id
+                })
+            }
         );
 
-    btn.addEventListener(
-        "click",
-        () => {
-
-            menuOverlay.classList.remove(
-                "hidden"
-            );
-
-            setTimeout(() => {
-                drawer.classList.remove(
-                    "translate-x-full"
-                );
-            }, 10);
-        }
-    );
-
-    const closeBtn =
-        document.getElementById(
-            "closeBurgerMenu"
+        alert(
+            "Deal saved to your account."
         );
 
-    if (closeBtn) {
-        closeBtn.addEventListener(
-            "click",
-            closeMenu
+        await loadCustomerDashboard();
+
+    } catch (error) {
+
+        alert(
+            error.message ||
+            "Unable to save this deal."
         );
     }
-
-    menuOverlay.addEventListener(
-        "click",
-        e => {
-
-            if (
-                e.target ===
-                menuOverlay
-            ) {
-                closeMenu();
-            }
-
-        }
-    );
-}
-
-
-function closeMenu() {
-
-    const menuOverlay =
-        document.getElementById(
-            "customBurgerMenu"
-        );
-
-    if (!menuOverlay) return;
-
-    const drawer =
-        menuOverlay.querySelector(
-            "div > div"
-        );
-
-    drawer.classList.add(
-        "translate-x-full"
-    );
-
-    setTimeout(() => {
-        menuOverlay.classList.add(
-            "hidden"
-        );
-    }, 300);
 }
 
 
@@ -1884,42 +2361,72 @@ function closeMenu() {
    SHARE
 ========================================================= */
 
-function shareDeal(title, url) {
+async function shareDeal(id) {
 
-    const decodedTitle =
-        decodeURIComponent(title);
+    const deal =
+        globalDeals.find(
+            item =>
+                String(item.id) === String(id)
+        );
 
-    if (navigator.share) {
+    if (!deal) return;
 
-        navigator.share({
-            title: decodedTitle,
-            url: url
-        }).catch(() => {});
+    const url =
+        getDealUrl(deal);
 
-    } else if (
-        navigator.clipboard
-    ) {
+    const shareData = {
+        title: deal.title,
+        text:
+            `${deal.title} - ` +
+            `You Save ${formatPrice(
+                savings(
+                    deal.old_price,
+                    deal.new_price
+                ),
+                getDealCurrency(deal)
+            )}`,
+        url
+    };
 
-        navigator.clipboard
-            .writeText(url)
-            .then(() => {
-                alert(
-                    "Deal link copied to clipboard!"
-                );
-            })
-            .catch(() => {
-                alert(
-                    "Deal link: " +
-                    url
-                );
-            });
+    try {
 
-    } else {
+        if (
+            navigator.share
+        ) {
 
-        alert(
-            "Deal link: " +
+            await navigator.share(
+                shareData
+            );
+
+            return;
+        }
+
+        await navigator.clipboard.writeText(
             url
         );
+
+        alert(
+            "Deal link copied."
+        );
+
+    } catch {
+
+        try {
+
+            await navigator.clipboard.writeText(
+                url
+            );
+
+            alert(
+                "Deal link copied."
+            );
+
+        } catch {
+
+            alert(
+                url
+            );
+        }
     }
 }
 
@@ -1928,336 +2435,199 @@ function shareDeal(title, url) {
    SAVINGS CHECKER
 ========================================================= */
 
-function calculateSavings() {
+function setupSavingsChecker() {
 
-    const paid =
-        parseFloat(
-            document.getElementById(
-                "checkerPaid"
-            )?.value
-        ) || 0;
+    const form =
+        $("#refundForm");
 
-    const current =
-        parseFloat(
-            document.getElementById(
-                "checkerCurrent"
-            )?.value
-        ) || 0;
+    if (!form) return;
 
-    const store =
-        document.getElementById(
-            "checkerStore"
-        )?.value ||
-        "Store";
+    form.addEventListener(
+        "submit",
+        event => {
 
-    const delta =
-        paid - current;
+            event.preventDefault();
 
-    const pct =
-        paid > 0
-            ? (
-                (delta / paid) *
-                100
-            ).toFixed(1)
-            : 0;
+            const purchase =
+                number(
+                    $("#purchasePrice")?.value
+                );
 
-    const deltaEl =
-        document.getElementById(
-            "savingsDelta"
-        );
+            const current =
+                number(
+                    $("#currentPrice")?.value
+                );
 
-    const adviceEl =
-        document.getElementById(
-            "savingsAdvice"
-        );
+            const retailer =
+                $("#retailer")?.value.trim() ||
+                "This retailer";
 
-    if (deltaEl) {
-        deltaEl.textContent =
-            `$${Math.max(
-                0,
-                delta
-            ).toFixed(2)}`;
-    }
+            const result =
+                $("#refundResult");
 
-    if (adviceEl) {
-        adviceEl.textContent =
-            `${store}: $${paid.toFixed(
-                2
-            )} vs $${current.toFixed(
-                2
-            )} yields ${pct}% price drop. Eligible for store price adjustments.`;
-    }
-}
+            if (!result) return;
 
+            if (
+                purchase <= 0 ||
+                current < 0
+            ) {
 
-/* =========================================================
-   FINAL PRICE CALCULATOR
-========================================================= */
+                result.style.display =
+                    "block";
 
-function runFinalPriceCalc() {
+                result.innerHTML =
+                    "Please enter valid prices.";
 
-    const price =
-        parseFloat(
-            document.getElementById(
-                "calcPrice"
-            )?.value
-        ) || 0;
+                return;
+            }
 
-    const coupon =
-        parseFloat(
-            document.getElementById(
-                "calcCoupon"
-            )?.value
-        ) || 0;
+            const difference =
+                purchase - current;
 
-    const shipping =
-        parseFloat(
-            document.getElementById(
-                "calcShipping"
-            )?.value
-        ) || 0;
+            if (difference > 0) {
 
-    const tax =
-        parseFloat(
-            document.getElementById(
-                "calcTax"
-            )?.value
-        ) || 0;
+                const percentage =
+                    purchase > 0
+                        ? (
+                            difference /
+                            purchase
+                        ) * 100
+                        : 0;
 
-    const total =
-        Math.max(
-            0,
-            price -
-            coupon +
-            shipping +
-            tax
-        );
+                result.style.display =
+                    "block";
 
-    const display =
-        document.querySelector(
-            "#finalPriceDisplay strong"
-        ) ||
-        document.getElementById(
-            "finalPriceDisplay"
-        );
+                result.innerHTML = `
+                    You could save
+                    <strong>
+                        ${formatPrice(
+                            difference,
+                            "USD"
+                        )}
+                    </strong>
+                    at ${escapeHtml(
+                        retailer
+                    )}
+                    — approximately
+                    ${percentage.toFixed(1)}%
+                    lower than your purchase price.
+                `;
 
-    if (display) {
+            } else if (difference === 0) {
 
-        display.innerHTML = `
-            <span class="text-on-surface-variant">
-                Total Out-of-Pocket:
-            </span>
+                result.style.display =
+                    "block";
 
-            <span class="font-bold text-on-surface text-[16px]">
-                $${total.toFixed(2)}
-            </span>
-        `;
-    }
-}
+                result.innerHTML =
+                    "The current price is the same as your purchase price.";
 
+            } else {
 
-/* =========================================================
-   WATCHLIST
-========================================================= */
+                result.style.display =
+                    "block";
 
-function addToWatchlist() {
-
-    const name =
-        document.getElementById(
-            "watchProductName"
-        )?.value;
-
-    const price =
-        document.getElementById(
-            "watchAlertPrice"
-        )?.value;
-
-    const status =
-        document.getElementById(
-            "watchStatusText"
-        );
-
-    if (
-        name &&
-        status
-    ) {
-
-        status.textContent =
-            `Tracking "${name}" for drops below $${
-                price || "0.00"
-            }`;
-
-        alert(
-            "Added to price drop watchlist successfully!"
-        );
-    }
-}
-
-
-/* =========================================================
-   SMART TOOL PLACEHOLDERS
-========================================================= */
-
-function runPriceComparison() {
-
-    const input =
-        document.getElementById(
-            "compareProductInput"
-        );
-
-    const value =
-        input?.value?.trim();
-
-    if (!value) {
-        alert(
-            "Please enter a product name."
-        );
-        return;
-    }
-
-    alert(
-        `Price comparison search for "${value}" will use available verified store data.`
-    );
-}
-
-
-function runPriceHistoryCheck() {
-
-    const input =
-        document.getElementById(
-            "historyProductInput"
-        );
-
-    const value =
-        input?.value?.trim();
-
-    if (!value) {
-        alert(
-            "Please enter a product name."
-        );
-        return;
-    }
-
-    const floor =
-        document.getElementById(
-            "priceFloorDisplay"
-        );
-
-    const trend =
-        document.getElementById(
-            "priceTrendDisplay"
-        );
-
-    if (floor) {
-        floor.textContent =
-            "Checking price history...";
-    }
-
-    if (trend) {
-        trend.textContent =
-            `Price history for "${value}" will appear when historical data is available.`;
-    }
-}
-
-
-function runCouponChecker() {
-
-    const store =
-        document.getElementById(
-            "couponStoreInput"
-        )?.value?.trim();
-
-    const keyword =
-        document.getElementById(
-            "couponKeywordInput"
-        )?.value?.trim();
-
-    if (
-        !store &&
-        !keyword
-    ) {
-        alert(
-            "Please enter a store or product keyword."
-        );
-        return;
-    }
-
-    alert(
-        "Coupon checker is ready for future verified coupon data."
+                result.innerHTML = `
+                    The current price is
+                    ${formatPrice(
+                        Math.abs(difference),
+                        "USD"
+                    )}
+                    higher than your purchase price.
+                `;
+            }
+        }
     );
 }
 
 
 /* =========================================================
-   SECURITY HELPERS
+   OPTIONAL PRICE ALERT BUTTON
+   Can be called by future deal modal/buttons.
 ========================================================= */
 
-function escapeHtml(value) {
+async function createPriceAlert(
+    dealId,
+    targetPrice,
+    currency
+) {
 
-    return String(
-        value ?? ""
-    )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
+    if (!customer || !authToken) {
+
+        openCustomerPanel();
+
+        showLoginForm();
+
+        $("#cdLoginMessage").textContent =
+            "Please login to create a price alert.";
+
+        return false;
+    }
+
+    try {
+
+        await apiFetch(
+            "/api/customer/alerts",
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    deal_id: dealId,
+                    target_price: number(
+                        targetPrice
+                    ),
+                    currency:
+                        currency || "USD"
+                })
+            }
         );
-}
 
+        alert(
+            "Price alert created successfully."
+        );
 
-function escapeAttribute(value) {
-    return escapeHtml(value);
+        await loadCustomerDashboard();
+
+        return true;
+
+    } catch (error) {
+
+        alert(
+            error.message ||
+            "Unable to create price alert."
+        );
+
+        return false;
+    }
 }
 
 
 /* =========================================================
-   GLOBAL FUNCTIONS
+   EXPOSE USEFUL FUNCTIONS
 ========================================================= */
 
-window.selectCountry =
-    selectCountry;
+window.CheckerDiscount = {
 
-window.closeMenu =
-    closeMenu;
+    getDeals: () =>
+        [...globalDeals],
 
-window.shareDeal =
-    shareDeal;
+    selectCountry,
 
-window.calculateSavings =
-    calculateSavings;
+    selectCategory: category => {
 
-window.runFinalPriceCalc =
-    runFinalPriceCalc;
+        currentCategory =
+            category || "all";
 
-window.addToWatchlist =
-    addToWatchlist;
+        renderCategories();
+        renderDeals();
 
-window.runPriceComparison =
-    runPriceComparison;
+    },
 
-window.runPriceHistoryCheck =
-    runPriceHistoryCheck;
+    openAccount:
+        openCustomerPanel,
 
-window.runCouponChecker =
-    runCouponChecker;
+    createPriceAlert,
 
-window.openDealComparison =
-    openDealComparison;
+    formatPrice,
 
-window.closeComparisonModal =
-    closeComparisonModal;
+    calculateSavings:
+        savings
+};
