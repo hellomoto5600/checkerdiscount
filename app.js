@@ -1,5 +1,5 @@
 // CheckerDiscount - Complete App.js with all features
-// Country filtering, ratings, savings, all-countries default, Best Deal comparison (with Tie support), Comparison Images, Cheaper Compare Price button
+// Country filtering, ratings, savings, all-countries default, Best Deal comparison (with Tie support), Comparison Images, Mobile-Optimized Cards
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
 
@@ -107,6 +107,11 @@ function formatAED(value) {
         width: 100%;
         height: 100%;
         object-fit: cover;
+      }
+      /* Mobile optimization for deal cards */
+      @media (max-width: 640px) {
+        #discountsContainer > div { padding: 12px !important; }
+        .cd-store-badge { font-size: 10px !important; }
       }
     `;
     document.head.appendChild(style);
@@ -637,7 +642,6 @@ function loadDeals(filter = "all") {
             : 0;
 
         card.innerHTML = `
-          <!-- Discount Badge -->
           <div class="flex items-start justify-between gap-2">
             <div class="flex-1 min-w-0">
               ${deal.category ? `<span class="inline-block text-[10px] font-semibold text-primary mb-1">${escapeHtml(deal.category)}</span>` : ""}
@@ -648,7 +652,6 @@ function loadDeals(filter = "all") {
             </span>
           </div>
 
-          <!-- Product Info -->
           <div class="flex gap-3">
             <div class="w-20 h-20 rounded-xl bg-surface-subtle overflow-hidden flex-shrink-0 relative border border-surface-container flex items-center justify-center">
               <img src="${escapeAttribute(imgSrc)}" class="w-full h-full object-cover" alt="Deal"
@@ -674,44 +677,41 @@ function loadDeals(filter = "all") {
             </div>
           </div>
 
-          <!-- Savings -->
           ${savings > 0 ? `
           <div class="px-3 py-2 rounded-xl bg-savings-green-subtle text-savings-green font-bold text-[12px] flex items-center gap-1.5">
             <span class="material-symbols-outlined text-[15px]">savings</span>
             You Save ${formatPrice(savings, currency)}
           </div>` : ""}
 
-          <!-- Store Badge + Actions -->
-          <div class="flex items-center justify-between gap-2 pt-2 border-t border-surface-container-low">
-            
+          <!-- Store Badge + Actions (Mobile Optimized) -->
+          <div class="flex flex-col gap-2 pt-2 border-t border-surface-container-low">
+
             <!-- Store Badge -->
-            <div class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-surface-container-low border border-surface-container">
-              <span class="text-[16px] flex-shrink-0">${getDealFlag(deal)}</span>
-              <div class="flex flex-col min-w-0">
-                <span class="text-[11px] font-bold text-on-surface truncate leading-tight">${escapeHtml(storeName)}</span>
-                <span class="text-[9px] text-on-surface-variant truncate leading-tight">${escapeHtml(getDealCountryName(deal))}</span>
-              </div>
+            <div class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-container-low border border-surface-container w-fit">
+              <span class="text-[14px] flex-shrink-0">${getDealFlag(deal)}</span>
+              <span class="text-[11px] font-bold text-on-surface truncate">${escapeHtml(storeName)}</span>
+              <span class="text-[10px] text-on-surface-variant">· ${escapeHtml(getDealCountryName(deal))}</span>
             </div>
 
-            <!-- Actions -->
-            <div class="flex items-center gap-2 flex-shrink-0">
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-2">
               ${dealId ? `
                 <button onclick="openDealComparison('${escapeAttribute(String(dealId))}')" 
-                        class="py-2 px-3 rounded-xl bg-primary-container hover:bg-primary text-on-primary font-semibold flex items-center gap-1.5 shadow-sm transition-colors"
-                        title="Cheaper Compare Price">
-                  <span class="material-symbols-outlined text-[16px]">compare_arrows</span>
-                  <span class="text-[12px]">Cheaper Compare</span>
+                        class="flex-1 py-2 px-2 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-semibold flex items-center justify-center gap-1 shadow-sm transition-colors"
+                        title="Compare prices across stores">
+                  <span class="material-symbols-outlined text-[15px]">compare_arrows</span>
+                  <span class="text-[11px] truncate">Compare</span>
                 </button>
               ` : ""}
               <button onclick="shareDeal('${encodeURIComponent(deal.title || "")}', '${escapeAttribute(deal.url || window.location.href)}')" 
-                      class="w-9 h-9 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface flex items-center justify-center transition-colors shadow-sm" 
+                      class="w-9 h-9 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface flex items-center justify-center flex-shrink-0 transition-colors" 
                       title="Share Deal">
                 <span class="material-symbols-outlined text-[18px]">share</span>
               </button>
               <a href="${escapeAttribute(deal.url || "#")}" target="_blank" rel="noopener noreferrer"
-                 class="py-2 px-3.5 rounded-xl bg-primary-container hover:bg-primary text-on-primary font-label-md text-[13px] font-semibold flex items-center gap-1 shadow-sm transition-colors">
-                <span>Get Deal</span>
-                <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                 class="flex-1 py-2 px-2 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-semibold flex items-center justify-center gap-1 shadow-sm transition-colors">
+                <span class="text-[11px] truncate">Get Deal</span>
+                <span class="material-symbols-outlined text-[15px]">arrow_forward</span>
               </a>
             </div>
           </div>
@@ -782,7 +782,7 @@ async function openDealComparison(dealId) {
             return;
         }
 
-        // ========== BEST DEAL CALCULATION (with Tie handling) ==========
+        // ========== BEST DEAL CALCULATION ==========
         let cheapestAed = Infinity;
         let cheapestOffers = [];
 
@@ -802,7 +802,6 @@ async function openDealComparison(dealId) {
             }
         });
 
-        // Build Best Deal banner
         let bestDealHtml = "";
         if (cheapestOffers.length > 0 && comparisons.length > 1) {
             if (cheapestOffers.length === 1) {
@@ -820,7 +819,7 @@ async function openDealComparison(dealId) {
                                      onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200'">
                             </div>
                             <div class="flex-1 min-w-0">
-                                <div class="flex items-center gap-2 mb-1">
+                                <div class="flex items-center gap-2 mb-1 flex-wrap">
                                     <span class="text-[16px]">${cheapestCountry?.flag || "🌐"}</span>
                                     <span class="font-bold text-on-surface text-[15px]">${escapeHtml(cheapest.normalized.store || "Store")}</span>
                                     <span class="text-[11px] text-secondary font-bold bg-savings-green-subtle px-2 py-0.5 rounded-full">CHEAPEST</span>
@@ -884,7 +883,6 @@ async function openDealComparison(dealId) {
             }
         }
 
-        // Build comparison list WITH IMAGES
         content.innerHTML = bestDealHtml + comparisons.map(item => {
             const normalized = normalizeDeal(item);
             const countryCode = getDealCountry(normalized);
@@ -912,7 +910,7 @@ async function openDealComparison(dealId) {
                                 ${isCheapest ? `<span class="text-[10px] font-bold text-secondary bg-savings-green-subtle px-2 py-0.5 rounded-full">BEST PRICE</span>` : ""}
                             </div>
                             <div class="text-[12px] text-on-surface-variant mt-1 line-clamp-2">${escapeHtml(normalized.title || "Product")}</div>
-                            <div class="flex items-baseline gap-2 mt-1">
+                            <div class="flex items-baseline gap-2 mt-1 flex-wrap">
                                 <span class="font-bold text-primary text-[16px]">${formatPrice(price, currency)}</span>
                                 <span class="text-[10px] text-on-surface-variant">≈ ${formatAED(priceAed)}</span>
                                 ${normalized.old_price ? `<span class="text-[11px] text-on-surface-variant line-through">${formatPrice(normalized.old_price, currency)}</span>` : ""}
