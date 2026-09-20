@@ -1,9 +1,41 @@
 // CheckerDiscount - Complete App.js with all features
-// Country filtering, ratings, savings, all-countries default
+// Country filtering, ratings, savings, all-countries default, Best Deal comparison
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
 
-// Desktop layout CSS
+// ========== EXCHANGE RATES (Approximate - for comparison only) ==========
+// Base currency: AED (UAE Dirham)
+// These rates are approximate and should be updated periodically
+const EXCHANGE_RATES = {
+    AED: 1.00,      // Base
+    OMR: 9.54,      // 1 OMR ≈ 9.54 AED
+    SAR: 0.98,      // 1 SAR ≈ 0.98 AED
+    USD: 3.67,      // 1 USD ≈ 3.67 AED
+    GBP: 4.65,      // 1 GBP ≈ 4.65 AED
+    EUR: 3.98,      // 1 EUR ≈ 3.98 AED
+    KWD: 11.95,     // 1 KWD ≈ 11.95 AED
+    QAR: 1.01,      // 1 QAR ≈ 1.01 AED
+    BHD: 9.74,      // 1 BHD ≈ 9.74 AED
+    PKR: 0.013,     // 1 PKR ≈ 0.013 AED
+    INR: 0.044,     // 1 INR ≈ 0.044 AED
+    EGP: 0.076,     // 1 EGP ≈ 0.076 AED
+    JOD: 5.18       // 1 JOD ≈ 5.18 AED
+};
+
+// Convert any currency amount to AED (approximate)
+function convertToAED(amount, currency) {
+    const rate = EXCHANGE_RATES[currency] || 1;
+    return Number(amount) * rate;
+}
+
+// Format price in AED for comparison
+function formatAED(value) {
+    const num = Number(value);
+    if (!Number.isFinite(num)) return "—";
+    return `AED ${num.toFixed(2)}`;
+}
+
+// ========== DESKTOP LAYOUT CSS ==========
 (function injectDesktopCSS(){
     if (window.__cdDesktopCSS) return;
     window.__cdDesktopCSS = true;
@@ -42,6 +74,27 @@ const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
         font-size:22px; cursor:pointer;
       }
       .cd-flag-chip.active { background:#155eef; border-color:#0047c1; color:#fff; }
+      .cd-best-deal {
+        background: linear-gradient(135deg, #ecfdf3 0%, #d1fadf 100%);
+        border: 2px solid #12b76a;
+        border-radius: 14px;
+        padding: 14px;
+        margin-bottom: 14px;
+        position: relative;
+      }
+      .cd-best-deal-badge {
+        position: absolute;
+        top: -10px;
+        left: 12px;
+        background: #12b76a;
+        color: #fff;
+        font-size: 10px;
+        font-weight: 800;
+        padding: 3px 9px;
+        border-radius: 999px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
     `;
     document.head.appendChild(style);
 })();
@@ -707,33 +760,94 @@ async function openDealComparison(dealId) {
             return;
         }
 
-        content.innerHTML = comparisons.map(item => {
+        // ========== BEST DEAL CALCULATION ==========
+        // Find cheapest offer by converting all prices to AED (approximate)
+        let cheapest = null;
+        let cheapestAed = Infinity;
+
+        comparisons.forEach(item => {
+            const normalized = normalizeDeal(item);
+            const currency = getDealCurrency(normalized);
+            const price = Number(normalized.new_price || normalized.price || 0);
+            const priceAed = convertToAED(price, currency);
+
+            if (priceAed > 0 && priceAed < cheapestAed) {
+                cheapestAed = priceAed;
+                cheapest = { normalized, currency, price, priceAed };
+            }
+        });
+
+        // Build Best Deal banner
+        let bestDealHtml = "";
+        if (cheapest && comparisons.length > 1) {
+            const cheapestCountry = COUNTRIES[getDealCountry(cheapest.normalized)];
+            bestDealHtml = `
+                <div class="cd-best-deal">
+                    <div class="cd-best-deal-badge">🏆 Best Deal</div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-[20px]">${cheapestCountry?.flag || "🌐"}</span>
+                        <span class="font-bold text-on-surface text-[15px]">${escapeHtml(cheapest.normalized.store || "Store")}</span>
+                        <span class="text-[11px] text-secondary font-bold bg-savings-green-subtle px-2 py-0.5 rounded-full">CHEAPEST</span>
+                    </div>
+                    <div class="flex items-baseline gap-2 mb-1">
+                        <span class="font-headline-sm text-[22px] font-extrabold text-primary-container">
+                            ${formatPrice(cheapest.price, cheapest.currency)}
+                        </span>
+                        ${cheapest.normalized.old_price ? `<span class="text-[13px] text-outline line-through">${formatPrice(cheapest.normalized.old_price, cheapest.currency)}</span>` : ""}
+                    </div>
+                    <div class="text-[12px] text-on-surface-variant">
+                        ${escapeHtml(cheapest.normalized.title || "").substring(0, 60)}...
+                    </div>
+                    <div class="mt-2 pt-2 border-t border-savings-green/30 text-[11px] text-secondary">
+                        <span class="material-symbols-outlined text-[12px] align-middle">info</span>
+                        Approximate conversion to AED: <strong>${formatAED(cheapest.priceAed)}</strong>
+                        <br>
+                        <span class="opacity-75">Rate may vary. Please confirm on store website.</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        content.innerHTML = bestDealHtml + comparisons.map(item => {
             const normalized = normalizeDeal(item);
             const countryCode = getDealCountry(normalized);
             const currency = getDealCurrency(normalized);
             const price = Number(normalized.new_price || normalized.price || 0);
             const rating = Number(normalized.rating || 0);
+            const priceAed = convertToAED(price, currency);
+            const isCheapest = cheapest && normalized.id === cheapest.normalized.id;
 
             return `
-                <div class="border border-surface-container rounded-xl p-3 mb-3">
+                <div class="border ${isCheapest ? 'border-2 border-savings-green bg-savings-green-subtle/30' : 'border-surface-container'} rounded-xl p-3 mb-3">
                     <div class="flex items-center justify-between gap-3">
                         <div class="min-w-0">
-                            <div class="flex items-center gap-1.5">
+                            <div class="flex items-center gap-1.5 flex-wrap">
                                 <span>${COUNTRIES[countryCode]?.flag || "🌐"}</span>
                                 <span class="font-semibold text-on-surface">${escapeHtml(normalized.store || "Store")}</span>
                                 <span class="text-[11px] text-on-surface-variant">⭐ ${rating > 0 ? rating.toFixed(1) : "—"}</span>
+                                ${isCheapest ? `<span class="text-[10px] font-bold text-secondary bg-savings-green-subtle px-2 py-0.5 rounded-full">BEST PRICE</span>` : ""}
                             </div>
                             <div class="text-[12px] text-on-surface-variant mt-1 line-clamp-2">${escapeHtml(normalized.title || "Product")}</div>
                         </div>
                         <div class="text-right flex-shrink-0">
                             <div class="font-bold text-primary text-[18px]">${formatPrice(price, currency)}</div>
-                            ${normalized.old_price ? `<div class="text-[11px] text-on-surface-variant line-through">${formatPrice(normalized.old_price, currency)}</div>` : ""}
+                            <div class="text-[10px] text-on-surface-variant mt-0.5">≈ ${formatAED(priceAed)}</div>
+                            ${normalized.old_price ? `<div class="text-[11px] text-on-surface-variant line-through mt-0.5">${formatPrice(normalized.old_price, currency)}</div>` : ""}
                         </div>
                     </div>
                     ${normalized.url ? `<a href="${escapeAttribute(normalized.url)}" target="_blank" rel="noopener noreferrer" class="mt-3 inline-flex items-center gap-1 px-3 py-2 rounded-lg bg-primary-container text-on-primary text-[12px] font-semibold">View Deal <span class="material-symbols-outlined text-[15px]">arrow_forward</span></a>` : ""}
                 </div>
             `;
         }).join("");
+
+        // Add footer note if there are multiple offers
+        if (comparisons.length > 1 && cheapest) {
+            content.innerHTML += `
+                <div class="mt-3 p-2 bg-surface-container-low rounded-lg text-[10px] text-on-surface-variant text-center">
+                    💡 Prices converted to AED for comparison. Exchange rates are approximate and may vary.
+                </div>
+            `;
+        }
 
     } catch (error) {
         console.error("Comparison error:", error);
