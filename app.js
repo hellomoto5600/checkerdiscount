@@ -1,5 +1,5 @@
 // CheckerDiscount - Complete App.js with all features
-// Country filtering, ratings, savings, all-countries default, Best Deal comparison
+// Country filtering, ratings, savings, all-countries default, Best Deal comparison (with Tie support)
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
 
@@ -760,10 +760,10 @@ async function openDealComparison(dealId) {
             return;
         }
 
-        // ========== BEST DEAL CALCULATION ==========
-        // Find cheapest offer by converting all prices to AED (approximate)
-        let cheapest = null;
+        // ========== BEST DEAL CALCULATION (with Tie handling) ==========
+        // Convert all prices to AED and find the cheapest (handles ties)
         let cheapestAed = Infinity;
+        let cheapestOffers = []; // Array to hold all offers with the lowest price
 
         comparisons.forEach(item => {
             const normalized = normalizeDeal(item);
@@ -771,41 +771,80 @@ async function openDealComparison(dealId) {
             const price = Number(normalized.new_price || normalized.price || 0);
             const priceAed = convertToAED(price, currency);
 
-            if (priceAed > 0 && priceAed < cheapestAed) {
-                cheapestAed = priceAed;
-                cheapest = { normalized, currency, price, priceAed };
+            if (priceAed > 0) {
+                if (priceAed < cheapestAed - 0.01) {
+                    // New cheapest found - reset array
+                    cheapestAed = priceAed;
+                    cheapestOffers = [{ normalized, currency, price, priceAed }];
+                } else if (Math.abs(priceAed - cheapestAed) < 0.01) {
+                    // Tie - same price (within 0.01 AED tolerance)
+                    cheapestOffers.push({ normalized, currency, price, priceAed });
+                }
             }
         });
 
-        // Build Best Deal banner
+        // Build Best Deal banner (handles single winner or tie)
         let bestDealHtml = "";
-        if (cheapest && comparisons.length > 1) {
-            const cheapestCountry = COUNTRIES[getDealCountry(cheapest.normalized)];
-            bestDealHtml = `
-                <div class="cd-best-deal">
-                    <div class="cd-best-deal-badge">🏆 Best Deal</div>
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="text-[20px]">${cheapestCountry?.flag || "🌐"}</span>
-                        <span class="font-bold text-on-surface text-[15px]">${escapeHtml(cheapest.normalized.store || "Store")}</span>
-                        <span class="text-[11px] text-secondary font-bold bg-savings-green-subtle px-2 py-0.5 rounded-full">CHEAPEST</span>
+        if (cheapestOffers.length > 0 && comparisons.length > 1) {
+            if (cheapestOffers.length === 1) {
+                // Single cheapest
+                const cheapest = cheapestOffers[0];
+                const cheapestCountry = COUNTRIES[getDealCountry(cheapest.normalized)];
+                bestDealHtml = `
+                    <div class="cd-best-deal">
+                        <div class="cd-best-deal-badge">🏆 Best Deal</div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-[20px]">${cheapestCountry?.flag || "🌐"}</span>
+                            <span class="font-bold text-on-surface text-[15px]">${escapeHtml(cheapest.normalized.store || "Store")}</span>
+                            <span class="text-[11px] text-secondary font-bold bg-savings-green-subtle px-2 py-0.5 rounded-full">CHEAPEST</span>
+                        </div>
+                        <div class="flex items-baseline gap-2 mb-1">
+                            <span class="font-headline-sm text-[22px] font-extrabold text-primary-container">
+                                ${formatPrice(cheapest.price, cheapest.currency)}
+                            </span>
+                            ${cheapest.normalized.old_price ? `<span class="text-[13px] text-outline line-through">${formatPrice(cheapest.normalized.old_price, cheapest.currency)}</span>` : ""}
+                        </div>
+                        <div class="text-[12px] text-on-surface-variant">
+                            ${escapeHtml(cheapest.normalized.title || "").substring(0, 60)}...
+                        </div>
+                        <div class="mt-2 pt-2 border-t border-savings-green/30 text-[11px] text-secondary">
+                            <span class="material-symbols-outlined text-[12px] align-middle">info</span>
+                            Approximate conversion to AED: <strong>${formatAED(cheapest.priceAed)}</strong>
+                            <br>
+                            <span class="opacity-75">Rate may vary. Please confirm on store website.</span>
+                        </div>
                     </div>
-                    <div class="flex items-baseline gap-2 mb-1">
-                        <span class="font-headline-sm text-[22px] font-extrabold text-primary-container">
-                            ${formatPrice(cheapest.price, cheapest.currency)}
-                        </span>
-                        ${cheapest.normalized.old_price ? `<span class="text-[13px] text-outline line-through">${formatPrice(cheapest.normalized.old_price, cheapest.currency)}</span>` : ""}
+                `;
+            } else {
+                // TIE - multiple stores with same price
+                const storesList = cheapestOffers.map(o => {
+                    const c = COUNTRIES[getDealCountry(o.normalized)];
+                    return `<span class="inline-flex items-center gap-1 mr-2"><span>${c?.flag || "🌐"}</span> <strong>${escapeHtml(o.normalized.store || "Store")}</strong></span>`;
+                }).join("");
+
+                bestDealHtml = `
+                    <div class="cd-best-deal" style="border-color:#f79009;background:linear-gradient(135deg,#fffaeb 0%,#fef0c7 100%);">
+                        <div class="cd-best-deal-badge" style="background:#f79009;">⚡ Best Price (Tie)</div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-[11px] font-bold text-orange-700 uppercase">Same price at ${cheapestOffers.length} stores</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-1 mb-2">
+                            ${storesList}
+                        </div>
+                        <div class="flex items-baseline gap-2 mb-1">
+                            <span class="font-headline-sm text-[22px] font-extrabold text-orange-600">
+                                ${formatPrice(cheapestOffers[0].price, cheapestOffers[0].currency)}
+                            </span>
+                        </div>
+                        <div class="mt-2 pt-2 border-t border-orange-200 text-[11px] text-orange-700">
+                            <span class="material-symbols-outlined text-[12px] align-middle">info</span>
+                            Both stores offer the same price. Choose based on delivery, rating, or preference.
+                            <br>
+                            <span class="opacity-75">Rate may vary. Please confirm on store website.</span>
+                        </div>
                     </div>
-                    <div class="text-[12px] text-on-surface-variant">
-                        ${escapeHtml(cheapest.normalized.title || "").substring(0, 60)}...
-                    </div>
-                    <div class="mt-2 pt-2 border-t border-savings-green/30 text-[11px] text-secondary">
-                        <span class="material-symbols-outlined text-[12px] align-middle">info</span>
-                        Approximate conversion to AED: <strong>${formatAED(cheapest.priceAed)}</strong>
-                        <br>
-                        <span class="opacity-75">Rate may vary. Please confirm on store website.</span>
-                    </div>
-                </div>
-            `;
+                `;
+            }
         }
 
         content.innerHTML = bestDealHtml + comparisons.map(item => {
@@ -815,7 +854,7 @@ async function openDealComparison(dealId) {
             const price = Number(normalized.new_price || normalized.price || 0);
             const rating = Number(normalized.rating || 0);
             const priceAed = convertToAED(price, currency);
-            const isCheapest = cheapest && normalized.id === cheapest.normalized.id;
+            const isCheapest = cheapestOffers.some(o => o.normalized.id === normalized.id);
 
             return `
                 <div class="border ${isCheapest ? 'border-2 border-savings-green bg-savings-green-subtle/30' : 'border-surface-container'} rounded-xl p-3 mb-3">
@@ -841,7 +880,7 @@ async function openDealComparison(dealId) {
         }).join("");
 
         // Add footer note if there are multiple offers
-        if (comparisons.length > 1 && cheapest) {
+        if (comparisons.length > 1 && cheapestOffers.length > 0) {
             content.innerHTML += `
                 <div class="mt-3 p-2 bg-surface-container-low rounded-lg text-[10px] text-on-surface-variant text-center">
                     💡 Prices converted to AED for comparison. Exchange rates are approximate and may vary.
