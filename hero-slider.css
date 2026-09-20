@@ -1,6 +1,6 @@
 /* =========================================
-   CheckerDiscount - Hero Slider CSS
-   5 Slides: 1 Text + 4 Images (Square)
+   CheckerDiscount - Amazon Style Hero Slider
+   Slide Effect + Full Width on Mobile
    ========================================= */
 
 .cd-hero-slider {
@@ -16,15 +16,20 @@
     background: #0B1220;
 }
 
-.cd-hero-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
+/* Inner track - holds all slides horizontally */
+.cd-hero-track {
+    display: flex;
     width: 100%;
     height: 100%;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+.cd-hero-slide {
+    position: relative;
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -32,12 +37,6 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-}
-
-.cd-hero-slide.active {
-    opacity: 1;
-    visibility: visible;
-    z-index: 2;
 }
 
 /* Only slide 1 has overlay (text slide) */
@@ -243,7 +242,7 @@
     background-image: url('slide-discounts.jpg');
 }
 
-/* ========== RESPONSIVE ========== */
+/* ========== MOBILE: FULL WIDTH ========== */
 @media (max-width: 640px) {
     .cd-hero-slider {
         border-radius: 0;
@@ -251,6 +250,8 @@
         box-shadow: none;
         aspect-ratio: 1 / 1;
         max-height: none;
+        width: 100vw;
+        margin-left: calc(-50vw + 50%);
     }
     
     .cd-hero-slide {
