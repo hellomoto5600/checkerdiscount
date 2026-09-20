@@ -1,12 +1,14 @@
 /* =========================================
    CheckerDiscount - Hero Slider CSS
-   5 Slides: 1 Text + 4 Images
+   5 Slides: 1 Text + 4 Images (Square)
    ========================================= */
 
 .cd-hero-slider {
     position: relative;
     width: 100%;
-    height: 500px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    max-height: 500px;
     border-radius: 20px;
     overflow: hidden;
     margin: 16px 0 24px 0;
@@ -38,14 +40,14 @@
     z-index: 2;
 }
 
-.cd-hero-slide::before {
+/* Only slide 1 has overlay (text slide) */
+.cd-slide-1::before {
     content: '';
     position: absolute;
     inset: 0;
     background: linear-gradient(180deg, 
-                rgba(11, 18, 32, 0.15) 0%, 
-                rgba(11, 18, 32, 0.55) 50%,
-                rgba(11, 18, 32, 0.85) 100%);
+                rgba(11, 18, 32, 0.4) 0%, 
+                rgba(11, 18, 32, 0.8) 100%);
     z-index: 1;
 }
 
@@ -56,8 +58,6 @@
     max-width: 600px;
     color: #FFFFFF;
     padding: 0 16px;
-    margin-top: auto;
-    padding-bottom: 60px;
 }
 
 .cd-hero-badge {
@@ -143,6 +143,7 @@
     box-shadow: 0 10px 28px rgba(255, 255, 255, 0.5);
 }
 
+/* ========== DOTS ========== */
 .cd-hero-dots {
     position: absolute;
     bottom: 18px;
@@ -180,6 +181,7 @@
     background: rgba(255, 255, 255, 0.7);
 }
 
+/* ========== ARROWS ========== */
 .cd-hero-arrow {
     position: absolute;
     top: 50%;
@@ -214,7 +216,9 @@
     line-height: 1;
 }
 
-/* Slide 1 - Text (Welcome) */
+/* ========== SLIDE BACKGROUNDS ========== */
+
+/* Slide 1 - Text (Welcome) - Gradient */
 .cd-slide-1 {
     background: linear-gradient(135deg, #0B1220 0%, #155EEF 100%);
 }
@@ -239,16 +243,18 @@
     background-image: url('slide-discounts.jpg');
 }
 
+/* ========== RESPONSIVE ========== */
 @media (max-width: 640px) {
     .cd-hero-slider {
         border-radius: 0;
         margin: 0 0 16px 0;
         box-shadow: none;
-        height: 480px;
+        aspect-ratio: 1 / 1;
+        max-height: none;
     }
     
     .cd-hero-slide {
-        padding: 20px 16px;
+        padding: 16px;
     }
     
     .cd-hero-title {
@@ -287,23 +293,5 @@
         bottom: 12px;
         padding: 6px 12px;
         gap: 6px;
-    }
-    
-    .cd-hero-content {
-        padding-bottom: 40px;
-    }
-}
-
-@media (max-width: 400px) {
-    .cd-hero-slider {
-        height: 440px;
-    }
-    
-    .cd-hero-title {
-        font-size: 20px;
-    }
-    
-    .cd-hero-subtitle {
-        font-size: 12px;
     }
 }
