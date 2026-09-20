@@ -1,6 +1,6 @@
 /* =========================================
    CheckerDiscount - Hero Slider CSS
-   5 Slides: 1 Text + 4 Images (1080x1080)
+   5 Slides: 1 Text + 4 Images
    ========================================= */
 
 .cd-hero-slider {
@@ -143,7 +143,6 @@
     box-shadow: 0 10px 28px rgba(255, 255, 255, 0.5);
 }
 
-/* ========== DOTS ========== */
 .cd-hero-dots {
     position: absolute;
     bottom: 18px;
@@ -181,7 +180,6 @@
     background: rgba(255, 255, 255, 0.7);
 }
 
-/* ========== ARROWS ========== */
 .cd-hero-arrow {
     position: absolute;
     top: 50%;
@@ -216,34 +214,31 @@
     line-height: 1;
 }
 
-/* ========== SLIDE BACKGROUNDS ========== */
-
-/* Slide 1 - ٹیکسٹ (Welcome) — گریڈینٹ */
+/* Slide 1 - Text (Welcome) */
 .cd-slide-1 {
     background: linear-gradient(135deg, #0B1220 0%, #155EEF 100%);
 }
 
-/* Slide 2 - خاندان والی تصویر */
+/* Slide 2 - Family Image */
 .cd-slide-2 {
     background-image: url('slide-family.jpg');
 }
 
-/* Slide 3 - شیلڈ والی تصویر */
+/* Slide 3 - Shield Image */
 .cd-slide-3 {
     background-image: url('slide-shield.jpg');
 }
 
-/* Slide 4 - Apple والی تصویر */
+/* Slide 4 - Apple Image */
 .cd-slide-4 {
     background-image: url('slide-apple.jpg');
 }
 
-/* Slide 5 - Discounts والی تصویر */
+/* Slide 5 - Discounts Image */
 .cd-slide-5 {
     background-image: url('slide-discounts.jpg');
 }
 
-/* ========== RESPONSIVE ========== */
 @media (max-width: 640px) {
     .cd-hero-slider {
         border-radius: 0;
