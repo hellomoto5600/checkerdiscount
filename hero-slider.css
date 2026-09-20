@@ -2,6 +2,7 @@
    CheckerDiscount - Amazon Style Hero Slider
    Slide Effect + Full Width on Mobile
    5 Slides with World-Wide Hero
+   NO OVERLAY — Clean Bright Images
    ========================================= */
 
 .cd-hero-slider {
@@ -39,16 +40,7 @@
     background-repeat: no-repeat;
 }
 
-/* Only slide 1 has overlay (text slide) */
-.cd-slide-1::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, 
-                rgba(11, 18, 32, 0.4) 0%, 
-                rgba(11, 18, 32, 0.8) 100%);
-    z-index: 1;
-}
+/* NO overlay — images are fully bright */
 
 .cd-hero-content {
     position: relative;
@@ -217,27 +209,22 @@
 
 /* ========== SLIDE BACKGROUNDS ========== */
 
-/* Slide 1 - NEW WORLD-WIDE HERO IMAGE */
 .cd-slide-1 {
     background-image: url('slide-hero.jpg');
 }
 
-/* Slide 2 - Family Image */
 .cd-slide-2 {
     background-image: url('slide-family.jpg');
 }
 
-/* Slide 3 - Shield Image */
 .cd-slide-3 {
     background-image: url('slide-shield.jpg');
 }
 
-/* Slide 4 - Apple Image */
 .cd-slide-4 {
     background-image: url('slide-apple.jpg');
 }
 
-/* Slide 5 - Discounts Image */
 .cd-slide-5 {
     background-image: url('slide-discounts.jpg');
 }
