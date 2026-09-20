@@ -1,6 +1,6 @@
 /* =========================================
-   CheckerDiscount - Hero Slider JavaScript
-   Auto-rotate + Manual Controls + Swipe
+   CheckerDiscount - Amazon Style Hero Slider
+   Auto-rotate + Slide Effect + Swipe
    ========================================= */
 
 (function initHeroSlider() {
@@ -8,14 +8,22 @@
     
     let currentSlide = 0;
     let autoRotateTimer = null;
-    const AUTO_ROTATE_INTERVAL = 4000; // 4 seconds
+    const AUTO_ROTATE_INTERVAL = 4000;
+    let slider = null;
+    let track = null;
     let slides = [];
     let dots = [];
     
     function init() {
-        const slider = document.getElementById('cd-hero-slider');
+        slider = document.getElementById('cd-hero-slider');
         if (!slider) {
             console.warn('Hero slider not found');
+            return;
+        }
+        
+        track = slider.querySelector('.cd-hero-track');
+        if (!track) {
+            console.warn('Hero track not found');
             return;
         }
         
@@ -27,12 +35,11 @@
             return;
         }
         
-        activateSlide(0);
+        goToSlide(0, false);
         
         dots.forEach((dot, index) => {
             dot.addEventListener('click', () => {
-                goToSlide(index);
-                resetAutoRotate();
+                goToSlide(index, true);
             });
         });
         
@@ -42,14 +49,12 @@
         if (prevBtn) {
             prevBtn.addEventListener('click', () => {
                 prevSlide();
-                resetAutoRotate();
             });
         }
         
         if (nextBtn) {
             nextBtn.addEventListener('click', () => {
                 nextSlide();
-                resetAutoRotate();
             });
         }
         
@@ -57,74 +62,71 @@
         slider.addEventListener('mouseleave', startAutoRotate);
         
         let touchStartX = 0;
+        let touchStartY = 0;
         let touchEndX = 0;
         
         slider.addEventListener('touchstart', (e) => {
             touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
         }, { passive: true });
         
         slider.addEventListener('touchend', (e) => {
             touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
+            const touchEndY = e.changedTouches[0].screenY;
+            
+            const diffX = Math.abs(touchEndX - touchStartX);
+            const diffY = Math.abs(touchEndY - touchStartY);
+            
+            if (diffX > diffY && diffX > 50) {
+                if (touchEndX < touchStartX) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
         }, { passive: true });
         
-        function handleSwipe() {
-            const swipeDistance = touchEndX - touchStartX;
-            const minSwipe = 50;
-            
-            if (swipeDistance < -minSwipe) {
-                nextSlide();
-                resetAutoRotate();
-            } else if (swipeDistance > minSwipe) {
-                prevSlide();
-                resetAutoRotate();
-            }
-        }
-        
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') {
-                prevSlide();
-                resetAutoRotate();
-            } else if (e.key === 'ArrowRight') {
-                nextSlide();
-                resetAutoRotate();
-            }
+            if (e.key === 'ArrowLeft') prevSlide();
+            else if (e.key === 'ArrowRight') nextSlide();
         });
         
         startAutoRotate();
     }
     
-    function activateSlide(index) {
+    function goToSlide(index, animate) {
         if (index < 0) index = slides.length - 1;
         if (index >= slides.length) index = 0;
         
-        slides.forEach((slide, i) => {
-            slide.classList.toggle('active', i === index);
-        });
+        currentSlide = index;
+        
+        // Move the entire track using transform
+        if (track) {
+            track.style.transition = animate === false 
+                ? 'none' 
+                : 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            track.style.transform = `translateX(-${index * 100}%)`;
+        }
         
         dots.forEach((dot, i) => {
             dot.classList.toggle('active', i === index);
         });
-        
-        currentSlide = index;
     }
     
     function nextSlide() {
-        activateSlide(currentSlide + 1);
+        goToSlide(currentSlide + 1, true);
+        resetAutoRotate();
     }
     
     function prevSlide() {
-        activateSlide(currentSlide - 1);
-    }
-    
-    function goToSlide(index) {
-        activateSlide(index);
+        goToSlide(currentSlide - 1, true);
+        resetAutoRotate();
     }
     
     function startAutoRotate() {
         stopAutoRotate();
         autoRotateTimer = setInterval(() => {
-            nextSlide();
+            goToSlide(currentSlide + 1, true);
         }, AUTO_ROTATE_INTERVAL);
     }
     
@@ -149,7 +151,7 @@
     window.cdHeroSlider = {
         next: nextSlide,
         prev: prevSlide,
-        goTo: goToSlide,
+        goTo: (i) => goToSlide(i, true),
         stop: stopAutoRotate,
         start: startAutoRotate
     };
