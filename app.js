@@ -1,9 +1,9 @@
-// CheckerDiscount - Complete App.js with modern professional design
-// Country filtering, ratings, savings, all-countries default, Best Deal comparison, Modern Cards
+// CheckerDiscount - Complete App.js with all features
+// Country filtering, ratings, savings, all-countries default, Best Deal comparison, Modern Cards, Professional Menu
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
 
-// ========== EXCHANGE RATES ==========
+// ========== EXCHANGE RATES (Approximate - for comparison only) ==========
 const EXCHANGE_RATES = {
     AED: 1.00, OMR: 9.54, SAR: 0.98, USD: 3.67, GBP: 4.65,
     EUR: 3.98, KWD: 11.95, QAR: 1.01, BHD: 9.74, PKR: 0.013,
@@ -21,10 +21,10 @@ function formatAED(value) {
     return `AED ${num.toFixed(2)}`;
 }
 
-// ========== ADVANCED MODERN CSS ==========
-(function injectModernCSS(){
-    if (window.__cdModernCSS) return;
-    window.__cdModernCSS = true;
+// ========== DESKTOP LAYOUT CSS ==========
+(function injectDesktopCSS(){
+    if (window.__cdDesktopCSS) return;
+    window.__cdDesktopCSS = true;
     const style = document.createElement("style");
     style.textContent = `
       @media (min-width: 900px) {
@@ -96,8 +96,20 @@ function formatAED(value) {
         width: 100%; height: 100%;
         object-fit: cover;
       }
-      
-      /* ========== MODERN BUTTON STYLES ========== */
+      .cd-card {
+        background: #FFFFFF;
+        border-radius: 18px;
+        padding: 16px;
+        box-shadow: 0 2px 12px rgba(16, 24, 40, 0.06);
+        border: 1px solid #F0F2F5;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        transition: box-shadow 0.2s ease;
+      }
+      .cd-card:hover {
+        box-shadow: 0 6px 24px rgba(16, 24, 40, 0.1);
+      }
       .cd-btn {
         display: inline-flex;
         align-items: center;
@@ -114,11 +126,7 @@ function formatAED(value) {
         white-space: nowrap;
         user-select: none;
       }
-      .cd-btn:active {
-        transform: scale(0.96);
-      }
-      
-      /* Compare Button - Soft Blue */
+      .cd-btn:active { transform: scale(0.96); }
       .cd-btn-compare {
         background: linear-gradient(135deg, #EFF4FF 0%, #DBE7FF 100%);
         color: #155EEF;
@@ -130,8 +138,6 @@ function formatAED(value) {
         background: linear-gradient(135deg, #DBE7FF 0%, #C7DBFF 100%);
         box-shadow: 0 4px 8px rgba(21, 94, 239, 0.15);
       }
-      
-      /* Share Button - Neutral */
       .cd-btn-share {
         background: #F9FAFB;
         color: #475467;
@@ -140,12 +146,7 @@ function formatAED(value) {
         width: 42px;
         flex-shrink: 0;
       }
-      .cd-btn-share:hover {
-        background: #F2F4F7;
-        color: #101828;
-      }
-      
-      /* Get Deal Button - Primary Blue */
+      .cd-btn-share:hover { background: #F2F4F7; color: #101828; }
       .cd-btn-primary {
         background: linear-gradient(135deg, #155EEF 0%, #0047C1 100%);
         color: #FFFFFF;
@@ -157,8 +158,6 @@ function formatAED(value) {
         background: linear-gradient(135deg, #0047C1 0%, #0038A8 100%);
         box-shadow: 0 6px 16px rgba(21, 94, 239, 0.4);
       }
-      
-      /* Store Badge */
       .cd-store-badge {
         display: inline-flex;
         align-items: center;
@@ -172,23 +171,6 @@ function formatAED(value) {
         width: fit-content;
         max-width: 100%;
       }
-      
-      /* Product Card */
-      .cd-card {
-        background: #FFFFFF;
-        border-radius: 18px;
-        padding: 16px;
-        box-shadow: 0 2px 12px rgba(16, 24, 40, 0.06);
-        border: 1px solid #F0F2F5;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        transition: box-shadow 0.2s ease;
-      }
-      .cd-card:hover {
-        box-shadow: 0 6px 24px rgba(16, 24, 40, 0.1);
-      }
-      
       @media (max-width: 640px) {
         .cd-card { padding: 14px; border-radius: 16px; }
         .cd-btn { font-size: 12px; padding: 9px 12px; }
@@ -721,7 +703,6 @@ function loadDeals(filter = "all") {
             : 0;
 
         card.innerHTML = `
-          <!-- Header: Category + Discount Badge -->
           <div class="flex items-start justify-between gap-2">
             <div class="flex-1 min-w-0">
               ${deal.category ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-primary-container/10 text-primary text-[10px] font-bold uppercase tracking-wide">${escapeHtml(deal.category)}</span>` : ""}
@@ -732,7 +713,6 @@ function loadDeals(filter = "all") {
             </span>
           </div>
 
-          <!-- Product Image + Details -->
           <div class="flex gap-3">
             <div class="w-[76px] h-[76px] rounded-2xl bg-surface-subtle overflow-hidden flex-shrink-0 border border-surface-container flex items-center justify-center">
               <img src="${escapeAttribute(imgSrc)}" class="w-full h-full object-cover" alt="Deal"
@@ -758,14 +738,12 @@ function loadDeals(filter = "all") {
             </div>
           </div>
 
-          <!-- Savings Banner -->
           ${savings > 0 ? `
           <div class="px-3 py-2 rounded-xl bg-gradient-to-r from-savings-green-subtle to-savings-green-subtle/30 text-savings-green font-bold text-[12px] flex items-center gap-1.5 border border-savings-green-border/50">
             <span class="material-symbols-outlined text-[15px]" style="font-variation-settings:'FILL' 1;">savings</span>
             You Save ${formatPrice(savings, currency)}
           </div>` : ""}
 
-          <!-- Store Badge -->
           <div class="cd-store-badge">
             <span class="text-[16px] flex-shrink-0">${getDealFlag(deal)}</span>
             <span class="font-semibold text-on-surface">${escapeHtml(storeName)}</span>
@@ -773,7 +751,6 @@ function loadDeals(filter = "all") {
             <span class="truncate">${escapeHtml(getDealCountryName(deal))}</span>
           </div>
 
-          <!-- Action Buttons (Modern) -->
           <div class="flex items-center gap-2">
             ${dealId ? `
               <button onclick="openDealComparison('${escapeAttribute(String(dealId))}')" 
@@ -861,7 +838,6 @@ async function openDealComparison(dealId) {
             return;
         }
 
-        // ========== BEST DEAL CALCULATION ==========
         let cheapestAed = Infinity;
         let cheapestOffers = [];
 
@@ -1038,51 +1014,114 @@ function initBurgerMenu() {
     menuOverlay.className = "fixed inset-0 z-50 bg-navy-deep/60 backdrop-blur-sm hidden transition-opacity duration-300";
 
     menuOverlay.innerHTML = `
-        <div class="absolute right-0 top-0 h-full w-[280px] bg-surface-container-lowest shadow-2xl p-5 flex flex-col justify-between transform translate-x-full transition-transform duration-300">
-            <div>
-                <div class="flex items-center justify-between pb-4 border-b border-surface-container">
+        <div class="absolute right-0 top-0 h-full w-[320px] bg-surface-container-lowest shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300">
+
+            <!-- Header with Real Logo -->
+            <div class="bg-gradient-to-br from-primary-container via-primary to-primary-dark p-5 pb-6 relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-savings-green/20 rounded-full blur-2xl"></div>
+
+                <div class="relative flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary font-bold text-[14px]">CD</div>
-                        <span class="font-headline-sm text-[16px] font-bold text-on-surface">Navigation Menu</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" class="h-11 w-auto">
+                            <defs>
+                                <linearGradient id="cdMenuGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#70FDA7" />
+                                    <stop offset="100%" stop-color="#12B76A" />
+                                </linearGradient>
+                            </defs>
+                            <g>
+                                <path d="M26 4C14 4 6 8 6 8C6 24 10 42 26 56C42 42 46 24 46 8C46 8 38 4 26 4Z" fill="#FFFFFF" opacity="0.95" />
+                                <path d="M18 28L23 33L34 20" stroke="url(#cdMenuGreen)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="36" cy="14" r="4" fill="url(#cdMenuGreen)" />
+                            </g>
+                            <text x="60" y="39" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="20" font-weight="800" fill="#FFFFFF" letter-spacing="-0.03em">
+                                Checker<tspan font-weight="500" fill="#70FDA7">Discount</tspan>
+                            </text>
+                        </svg>
                     </div>
-                    <button id="closeBurgerMenu" class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface hover:bg-surface-container">
-                        <span class="material-symbols-outlined text-[18px]">close</span>
+                    <button id="closeBurgerMenu" class="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center text-white transition-colors" type="button">
+                        <span class="material-symbols-outlined text-[20px]">close</span>
                     </button>
                 </div>
-                <div class="flex flex-col gap-2 pt-4">
-                    <a href="index.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-low text-on-surface font-label-md text-[14px]">
-                        <span class="material-symbols-outlined text-[20px] text-primary">home</span>
-                        Home
-                    </a>
-                    <a href="customer.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-low text-on-surface font-label-md text-[14px]">
-                        <span class="material-symbols-outlined text-[20px] text-primary">person</span>
-                        My Account
-                    </a>
-                    <a href="#market-deals" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-low text-on-surface font-label-md text-[14px]">
-                        <span class="material-symbols-outlined text-[20px] text-primary">local_offer</span>
-                        Top Deals
-                    </a>
-                    <a href="#savings-tool" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-low text-on-surface font-label-md text-[14px]">
-                        <span class="material-symbols-outlined text-[20px] text-primary">calculate</span>
-                        Savings Checker
-                    </a>
-                    <a href="#tool-comparison" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-low text-on-surface font-label-md text-[14px]">
-                        <span class="material-symbols-outlined text-[20px] text-primary">compare_arrows</span>
-                        Price Comparison
-                    </a>
-                    <a href="#tool-history" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-low text-on-surface font-label-md text-[14px]">
-                        <span class="material-symbols-outlined text-[20px] text-primary">trending_down</span>
-                        Price History
-                    </a>
-                    <a href="#tool-watchlist" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container-low text-on-surface font-label-md text-[14px]">
-                        <span class="material-symbols-outlined text-[20px] text-primary">bookmark</span>
-                        Watchlist
-                    </a>
+
+                <p class="relative text-white/80 text-[11px] mt-3 font-medium tracking-wide uppercase">Smart Shopping Made Easy</p>
+            </div>
+
+            <!-- Menu Items -->
+            <div class="flex-1 overflow-y-auto p-4">
+
+                <div class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest px-3 mb-3 mt-2">Main Menu</div>
+
+                <a href="index.html" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
+                    <span class="w-9 h-9 rounded-lg bg-primary-container/10 text-primary flex items-center justify-center flex-shrink-0 group-hover:bg-primary-container group-hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">home</span>
+                    </span>
+                    <span class="flex-1">Home</span>
+                    <span class="material-symbols-outlined text-[18px] text-outline opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+                </a>
+
+                <a href="customer.html" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
+                    <span class="w-9 h-9 rounded-lg bg-primary-container/10 text-primary flex items-center justify-center flex-shrink-0 group-hover:bg-primary-container group-hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">person</span>
+                    </span>
+                    <span class="flex-1">My Account</span>
+                    <span class="material-symbols-outlined text-[18px] text-outline opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+                </a>
+
+                <a href="#market-deals" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
+                    <span class="w-9 h-9 rounded-lg bg-savings-green-subtle text-savings-green flex items-center justify-center flex-shrink-0 group-hover:bg-savings-green group-hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">local_offer</span>
+                    </span>
+                    <span class="flex-1">Top Deals</span>
+                    <span class="px-2 py-0.5 rounded-full bg-savings-green-subtle text-savings-green text-[10px] font-bold">HOT</span>
+                </a>
+
+                <a href="#savings-tool" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
+                    <span class="w-9 h-9 rounded-lg bg-warning-amber-subtle text-warning-amber flex items-center justify-center flex-shrink-0 group-hover:bg-warning-amber group-hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">calculate</span>
+                    </span>
+                    <span class="flex-1">Savings Checker</span>
+                    <span class="material-symbols-outlined text-[18px] text-outline opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+                </a>
+
+                <div class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest px-3 mb-3 mt-5">Tools</div>
+
+                <a href="#tool-comparison" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
+                    <span class="w-9 h-9 rounded-lg bg-primary-container/10 text-primary flex items-center justify-center flex-shrink-0 group-hover:bg-primary-container group-hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">compare_arrows</span>
+                    </span>
+                    <span class="flex-1">Price Comparison</span>
+                    <span class="material-symbols-outlined text-[18px] text-outline opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+                </a>
+
+                <a href="#tool-history" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
+                    <span class="w-9 h-9 rounded-lg bg-primary-container/10 text-primary flex items-center justify-center flex-shrink-0 group-hover:bg-primary-container group-hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">trending_down</span>
+                    </span>
+                    <span class="flex-1">Price History</span>
+                    <span class="material-symbols-outlined text-[18px] text-outline opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+                </a>
+
+                <a href="#tool-watchlist" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
+                    <span class="w-9 h-9 rounded-lg bg-primary-container/10 text-primary flex items-center justify-center flex-shrink-0 group-hover:bg-primary-container group-hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">bookmark</span>
+                    </span>
+                    <span class="flex-1">Watchlist</span>
+                    <span class="material-symbols-outlined text-[18px] text-outline opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+                </a>
+
+            </div>
+
+            <!-- Footer -->
+            <div class="p-4 border-t border-surface-container bg-surface-container-low/50">
+                <div class="flex items-center justify-center gap-2 text-[11px] text-on-surface-variant">
+                    <span class="material-symbols-outlined text-savings-green text-[14px]">verified</span>
+                    <span class="font-semibold">Verified Deals Worldwide</span>
                 </div>
+                <div class="text-center text-[10px] text-outline mt-1">© 2025 CheckerDiscount</div>
             </div>
-            <div class="pt-4 border-t border-surface-container text-center text-[12px] text-on-surface-variant">
-                CheckerDiscount
-            </div>
+
         </div>
     `;
 
