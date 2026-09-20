@@ -1,23 +1,13 @@
-// CheckerDiscount - Complete App.js with all features
-// Country filtering, ratings, savings, all-countries default, Best Deal comparison (with Tie support), Comparison Images, Mobile-Optimized Cards
+// CheckerDiscount - Complete App.js with modern professional design
+// Country filtering, ratings, savings, all-countries default, Best Deal comparison, Modern Cards
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
 
-// ========== EXCHANGE RATES (Approximate - for comparison only) ==========
+// ========== EXCHANGE RATES ==========
 const EXCHANGE_RATES = {
-    AED: 1.00,
-    OMR: 9.54,
-    SAR: 0.98,
-    USD: 3.67,
-    GBP: 4.65,
-    EUR: 3.98,
-    KWD: 11.95,
-    QAR: 1.01,
-    BHD: 9.74,
-    PKR: 0.013,
-    INR: 0.044,
-    EGP: 0.076,
-    JOD: 5.18
+    AED: 1.00, OMR: 9.54, SAR: 0.98, USD: 3.67, GBP: 4.65,
+    EUR: 3.98, KWD: 11.95, QAR: 1.01, BHD: 9.74, PKR: 0.013,
+    INR: 0.044, EGP: 0.076, JOD: 5.18
 };
 
 function convertToAED(amount, currency) {
@@ -31,10 +21,10 @@ function formatAED(value) {
     return `AED ${num.toFixed(2)}`;
 }
 
-// ========== DESKTOP LAYOUT CSS ==========
-(function injectDesktopCSS(){
-    if (window.__cdDesktopCSS) return;
-    window.__cdDesktopCSS = true;
+// ========== ADVANCED MODERN CSS ==========
+(function injectModernCSS(){
+    if (window.__cdModernCSS) return;
+    window.__cdModernCSS = true;
     const style = document.createElement("style");
     style.textContent = `
       @media (min-width: 900px) {
@@ -73,7 +63,7 @@ function formatAED(value) {
       .cd-best-deal {
         background: linear-gradient(135deg, #ecfdf3 0%, #d1fadf 100%);
         border: 2px solid #12b76a;
-        border-radius: 14px;
+        border-radius: 16px;
         padding: 14px;
         margin-bottom: 14px;
         position: relative;
@@ -92,9 +82,8 @@ function formatAED(value) {
         text-transform: uppercase;
       }
       .cd-comparison-img {
-        width: 72px;
-        height: 72px;
-        border-radius: 10px;
+        width: 72px; height: 72px;
+        border-radius: 12px;
         background: #f6f8fc;
         border: 1px solid #e4e7ec;
         overflow: hidden;
@@ -104,14 +93,106 @@ function formatAED(value) {
         justify-content: center;
       }
       .cd-comparison-img img {
-        width: 100%;
-        height: 100%;
+        width: 100%; height: 100%;
         object-fit: cover;
       }
-      /* Mobile optimization for deal cards */
+      
+      /* ========== MODERN BUTTON STYLES ========== */
+      .cd-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        font-weight: 600;
+        font-size: 13px;
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        text-decoration: none;
+        white-space: nowrap;
+        user-select: none;
+      }
+      .cd-btn:active {
+        transform: scale(0.96);
+      }
+      
+      /* Compare Button - Soft Blue */
+      .cd-btn-compare {
+        background: linear-gradient(135deg, #EFF4FF 0%, #DBE7FF 100%);
+        color: #155EEF;
+        border: 1.5px solid #B2CCFF;
+        box-shadow: 0 2px 4px rgba(21, 94, 239, 0.08);
+        flex: 1;
+      }
+      .cd-btn-compare:hover {
+        background: linear-gradient(135deg, #DBE7FF 0%, #C7DBFF 100%);
+        box-shadow: 0 4px 8px rgba(21, 94, 239, 0.15);
+      }
+      
+      /* Share Button - Neutral */
+      .cd-btn-share {
+        background: #F9FAFB;
+        color: #475467;
+        border: 1.5px solid #E4E7EC;
+        padding: 10px;
+        width: 42px;
+        flex-shrink: 0;
+      }
+      .cd-btn-share:hover {
+        background: #F2F4F7;
+        color: #101828;
+      }
+      
+      /* Get Deal Button - Primary Blue */
+      .cd-btn-primary {
+        background: linear-gradient(135deg, #155EEF 0%, #0047C1 100%);
+        color: #FFFFFF;
+        border: none;
+        box-shadow: 0 4px 12px rgba(21, 94, 239, 0.3);
+        flex: 1;
+      }
+      .cd-btn-primary:hover {
+        background: linear-gradient(135deg, #0047C1 0%, #0038A8 100%);
+        box-shadow: 0 6px 16px rgba(21, 94, 239, 0.4);
+      }
+      
+      /* Store Badge */
+      .cd-store-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        background: #F9FAFB;
+        border: 1px solid #E4E7EC;
+        border-radius: 10px;
+        font-size: 11px;
+        color: #475467;
+        width: fit-content;
+        max-width: 100%;
+      }
+      
+      /* Product Card */
+      .cd-card {
+        background: #FFFFFF;
+        border-radius: 18px;
+        padding: 16px;
+        box-shadow: 0 2px 12px rgba(16, 24, 40, 0.06);
+        border: 1px solid #F0F2F5;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        transition: box-shadow 0.2s ease;
+      }
+      .cd-card:hover {
+        box-shadow: 0 6px 24px rgba(16, 24, 40, 0.1);
+      }
+      
       @media (max-width: 640px) {
-        #discountsContainer > div { padding: 12px !important; }
-        .cd-store-badge { font-size: 10px !important; }
+        .cd-card { padding: 14px; border-radius: 16px; }
+        .cd-btn { font-size: 12px; padding: 9px 12px; }
+        .cd-btn-share { width: 38px; padding: 9px; }
       }
     `;
     document.head.appendChild(style);
@@ -492,7 +573,6 @@ function loadSpotlight() {
     if (!deals.length) return;
 
     let featuredDeal = deals.find(d => Number(d.is_featured) === 1);
-
     if (!featuredDeal) {
         featuredDeal = [...deals].sort(
             (a, b) => (Number(b.discount_percent) || 0) - (Number(a.discount_percent) || 0)
@@ -625,10 +705,9 @@ function loadDeals(filter = "all") {
         const oldPrice = deal.old_price ? Number(deal.old_price) : null;
 
         const card = document.createElement("div");
-        card.className = "bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container/60 flex flex-col gap-3";
+        card.className = "cd-card";
 
         const dealId = deal.id || "";
-
         const storeName = String(
             deal.store || deal.store_name || deal.storeName ||
             deal.retailer || deal.retailer_name || "Store"
@@ -642,30 +721,32 @@ function loadDeals(filter = "all") {
             : 0;
 
         card.innerHTML = `
+          <!-- Header: Category + Discount Badge -->
           <div class="flex items-start justify-between gap-2">
             <div class="flex-1 min-w-0">
-              ${deal.category ? `<span class="inline-block text-[10px] font-semibold text-primary mb-1">${escapeHtml(deal.category)}</span>` : ""}
+              ${deal.category ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-primary-container/10 text-primary text-[10px] font-bold uppercase tracking-wide">${escapeHtml(deal.category)}</span>` : ""}
             </div>
-            <span class="px-2.5 py-0.5 rounded-full bg-savings-green-subtle text-secondary font-badge-caps text-[10px] font-bold flex items-center gap-1 flex-shrink-0">
-              <span class="material-symbols-outlined text-[12px]">verified</span>
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-savings-green-subtle to-savings-green-subtle/50 text-savings-green text-[11px] font-bold flex-shrink-0 border border-savings-green-border">
+              <span class="material-symbols-outlined text-[13px]" style="font-variation-settings:'FILL' 1;">local_offer</span>
               ${escapeHtml(discountText)}
             </span>
           </div>
 
+          <!-- Product Image + Details -->
           <div class="flex gap-3">
-            <div class="w-20 h-20 rounded-xl bg-surface-subtle overflow-hidden flex-shrink-0 relative border border-surface-container flex items-center justify-center">
+            <div class="w-[76px] h-[76px] rounded-2xl bg-surface-subtle overflow-hidden flex-shrink-0 border border-surface-container flex items-center justify-center">
               <img src="${escapeAttribute(imgSrc)}" class="w-full h-full object-cover" alt="Deal"
                    onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400'">
             </div>
             <div class="flex flex-col min-w-0 justify-center flex-1">
-              <h3 class="font-headline-sm text-[14px] text-on-surface font-semibold leading-snug line-clamp-2">
+              <h3 class="text-[14px] text-on-surface font-semibold leading-snug line-clamp-2">
                 ${escapeHtml(deal.title || "Deal")}
               </h3>
-              <div class="flex items-baseline gap-2 mt-1.5">
-                <span class="font-headline-sm text-[18px] font-extrabold text-primary-container">
+              <div class="flex items-baseline gap-2 mt-1.5 flex-wrap">
+                <span class="text-[18px] font-extrabold text-primary-container">
                   ${formatPrice(newPrice, currency)}
                 </span>
-                ${oldPrice ? `<span class="font-price-strikethrough text-[13px] text-outline line-through">${formatPrice(oldPrice, currency)}</span>` : ""}
+                ${oldPrice ? `<span class="text-[12px] text-outline line-through">${formatPrice(oldPrice, currency)}</span>` : ""}
               </div>
               <div class="flex items-center gap-1 mt-1">
                 <span class="material-symbols-outlined text-warning-amber text-[14px]" style="font-variation-settings:'FILL' 1;">star</span>
@@ -677,43 +758,41 @@ function loadDeals(filter = "all") {
             </div>
           </div>
 
+          <!-- Savings Banner -->
           ${savings > 0 ? `
-          <div class="px-3 py-2 rounded-xl bg-savings-green-subtle text-savings-green font-bold text-[12px] flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-[15px]">savings</span>
+          <div class="px-3 py-2 rounded-xl bg-gradient-to-r from-savings-green-subtle to-savings-green-subtle/30 text-savings-green font-bold text-[12px] flex items-center gap-1.5 border border-savings-green-border/50">
+            <span class="material-symbols-outlined text-[15px]" style="font-variation-settings:'FILL' 1;">savings</span>
             You Save ${formatPrice(savings, currency)}
           </div>` : ""}
 
-          <!-- Store Badge + Actions (Mobile Optimized) -->
-          <div class="flex flex-col gap-2 pt-2 border-t border-surface-container-low">
+          <!-- Store Badge -->
+          <div class="cd-store-badge">
+            <span class="text-[16px] flex-shrink-0">${getDealFlag(deal)}</span>
+            <span class="font-semibold text-on-surface">${escapeHtml(storeName)}</span>
+            <span class="text-outline">·</span>
+            <span class="truncate">${escapeHtml(getDealCountryName(deal))}</span>
+          </div>
 
-            <!-- Store Badge -->
-            <div class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-surface-container-low border border-surface-container w-fit">
-              <span class="text-[14px] flex-shrink-0">${getDealFlag(deal)}</span>
-              <span class="text-[11px] font-bold text-on-surface truncate">${escapeHtml(storeName)}</span>
-              <span class="text-[10px] text-on-surface-variant">· ${escapeHtml(getDealCountryName(deal))}</span>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="flex items-center gap-2">
-              ${dealId ? `
-                <button onclick="openDealComparison('${escapeAttribute(String(dealId))}')" 
-                        class="flex-1 py-2 px-2 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-semibold flex items-center justify-center gap-1 shadow-sm transition-colors"
-                        title="Compare prices across stores">
-                  <span class="material-symbols-outlined text-[15px]">compare_arrows</span>
-                  <span class="text-[11px] truncate">Compare</span>
-                </button>
-              ` : ""}
-              <button onclick="shareDeal('${encodeURIComponent(deal.title || "")}', '${escapeAttribute(deal.url || window.location.href)}')" 
-                      class="w-9 h-9 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface flex items-center justify-center flex-shrink-0 transition-colors" 
-                      title="Share Deal">
-                <span class="material-symbols-outlined text-[18px]">share</span>
+          <!-- Action Buttons (Modern) -->
+          <div class="flex items-center gap-2">
+            ${dealId ? `
+              <button onclick="openDealComparison('${escapeAttribute(String(dealId))}')" 
+                      class="cd-btn cd-btn-compare"
+                      title="Compare prices across stores">
+                <span class="material-symbols-outlined text-[16px]">compare_arrows</span>
+                <span>Compare</span>
               </button>
-              <a href="${escapeAttribute(deal.url || "#")}" target="_blank" rel="noopener noreferrer"
-                 class="flex-1 py-2 px-2 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-semibold flex items-center justify-center gap-1 shadow-sm transition-colors">
-                <span class="text-[11px] truncate">Get Deal</span>
-                <span class="material-symbols-outlined text-[15px]">arrow_forward</span>
-              </a>
-            </div>
+            ` : ""}
+            <button onclick="shareDeal('${encodeURIComponent(deal.title || "")}', '${escapeAttribute(deal.url || window.location.href)}')" 
+                    class="cd-btn cd-btn-share" 
+                    title="Share Deal">
+              <span class="material-symbols-outlined text-[16px]">share</span>
+            </button>
+            <a href="${escapeAttribute(deal.url || "#")}" target="_blank" rel="noopener noreferrer"
+               class="cd-btn cd-btn-primary">
+              <span>Get Deal</span>
+              <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+            </a>
           </div>
         `;
 
@@ -895,7 +974,7 @@ async function openDealComparison(dealId) {
                 "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200";
 
             return `
-                <div class="border ${isCheapest ? 'border-2 border-savings-green bg-savings-green-subtle/30' : 'border-surface-container'} rounded-xl p-3 mb-3">
+                <div class="border ${isCheapest ? 'border-2 border-savings-green bg-savings-green-subtle/30' : 'border-surface-container'} rounded-2xl p-3 mb-3">
                     <div class="flex items-center gap-3">
                         <div class="cd-comparison-img">
                             <img src="${escapeAttribute(imgSrc)}"
@@ -917,7 +996,7 @@ async function openDealComparison(dealId) {
                             </div>
                         </div>
                     </div>
-                    ${normalized.url ? `<a href="${escapeAttribute(normalized.url)}" target="_blank" rel="noopener noreferrer" class="mt-3 inline-flex items-center gap-1 px-3 py-2 rounded-lg bg-primary-container text-on-primary text-[12px] font-semibold">View Deal <span class="material-symbols-outlined text-[15px]">arrow_forward</span></a>` : ""}
+                    ${normalized.url ? `<a href="${escapeAttribute(normalized.url)}" target="_blank" rel="noopener noreferrer" class="cd-btn cd-btn-primary mt-3 w-full">View Deal <span class="material-symbols-outlined text-[15px]">arrow_forward</span></a>` : ""}
                 </div>
             `;
         }).join("");
@@ -1063,12 +1142,8 @@ function calculateSavings() {
     const deltaEl = document.getElementById("savingsDelta");
     const adviceEl = document.getElementById("savingsAdvice");
 
-    if (deltaEl) {
-        deltaEl.textContent = `$${Math.max(0, delta).toFixed(2)}`;
-    }
-    if (adviceEl) {
-        adviceEl.textContent = `${store}: $${paid.toFixed(2)} vs $${current.toFixed(2)} yields ${pct}% price drop. Eligible for store price adjustments.`;
-    }
+    if (deltaEl) deltaEl.textContent = `$${Math.max(0, delta).toFixed(2)}`;
+    if (adviceEl) adviceEl.textContent = `${store}: $${paid.toFixed(2)} vs $${current.toFixed(2)} yields ${pct}% price drop. Eligible for store price adjustments.`;
 }
 
 function runFinalPriceCalc() {
@@ -1091,7 +1166,6 @@ function addToWatchlist() {
     const name = document.getElementById("watchProductName")?.value;
     const price = document.getElementById("watchAlertPrice")?.value;
     const status = document.getElementById("watchStatusText");
-
     if (name && status) {
         status.textContent = `Tracking "${name}" for drops below $${price || "0.00"}`;
         alert("Added to price drop watchlist successfully!");
@@ -1109,7 +1183,6 @@ function runPriceHistoryCheck() {
     const input = document.getElementById("historyProductInput");
     const value = input?.value?.trim();
     if (!value) { alert("Please enter a product name."); return; }
-
     const floor = document.getElementById("priceFloorDisplay");
     const trend = document.getElementById("priceTrendDisplay");
     if (floor) floor.textContent = "Checking price history...";
@@ -1132,9 +1205,7 @@ function escapeHtml(value) {
         .replace(/'/g, "&#039;");
 }
 
-function escapeAttribute(value) {
-    return escapeHtml(value);
-}
+function escapeAttribute(value) { return escapeHtml(value); }
 
 window.selectCountry = selectCountry;
 window.closeMenu = closeMenu;
