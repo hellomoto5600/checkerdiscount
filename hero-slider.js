@@ -63,7 +63,6 @@
         
         let touchStartX = 0;
         let touchStartY = 0;
-        let touchEndX = 0;
         
         slider.addEventListener('touchstart', (e) => {
             touchStartX = e.changedTouches[0].screenX;
@@ -71,7 +70,7 @@
         }, { passive: true });
         
         slider.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
+            const touchEndX = e.changedTouches[0].screenX;
             const touchEndY = e.changedTouches[0].screenY;
             
             const diffX = Math.abs(touchEndX - touchStartX);
@@ -100,7 +99,6 @@
         
         currentSlide = index;
         
-        // Move the entire track using transform
         if (track) {
             track.style.transition = animate === false 
                 ? 'none' 
