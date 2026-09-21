@@ -1,5 +1,5 @@
-// CheckerDiscount - Complete App.js v6.0
-// 5 Smart Tools + Working Watchlist/Favorites + Live Currency
+// CheckerDiscount - Complete App.js v7.0
+// Country Selector + Trust Badge + Views + Rating + 5 Tools + Watchlist
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
 
@@ -10,7 +10,6 @@ const FALLBACK_RATES = {
     INR: 0.044, EGP: 0.076, JOD: 5.18
 };
 
-// ========== LIVE CURRENCY RATES ==========
 let LIVE_RATES = null;
 
 async function loadLiveRates() {
@@ -18,9 +17,7 @@ async function loadLiveRates() {
         const response = await fetch('https://open.er-api.com/v6/latest/AED');
         const data = await response.json();
         if (data && data.rates) LIVE_RATES = data.rates;
-    } catch (e) {
-        console.warn('Live rates unavailable, using fallback');
-    }
+    } catch (e) { console.warn('Live rates unavailable'); }
 }
 
 function convertToAED(amount, currency) {
@@ -42,28 +39,118 @@ function formatAED(value) {
     return `AED ${num.toFixed(2)}`;
 }
 
-// ========== WATCHLIST / FAVORITES ==========
+// ========== TRUST BADGE ==========
+function getTrustBadge(deal) {
+    const store = String(deal.store || '').toLowerCase();
+    const sourceType = String(deal.source_type || '').toLowerCase();
+    
+    const officialStores = ['amazon', 'noon', 'temu', 'ebay', 'walmart', 'carrefour', 'sharaf', 'lulu'];
+    const isOfficial = officialStores.some(s => store.includes(s)) && sourceType !== 'third-party';
+    
+    if (isOfficial) {
+        return {
+            label: 'Official Store',
+            icon: 'verified',
+            bgClass: 'bg-savings-green-subtle',
+            textClass: 'text-savings-green',
+            borderClass: 'border-savings-green-border'
+        };
+    }
+    return {
+        label: 'Third-Party',
+        icon: 'storefront',
+        bgClass: 'bg-warning-amber-subtle',
+        textClass: 'text-warning-amber',
+        borderClass: 'border-warning-amber/40'
+    };
+}
+
+// ========== VIEWS COUNTER ==========
+function getDealViews(dealId) {
+    if (!dealId) return 0;
+    try {
+        const views = localStorage.getItem(`cd_views_${dealId}`);
+        return views ? parseInt(views) : 0;
+    } catch (e) { return 0; }
+}
+
+function incrementDealViews(dealId) {
+    if (!dealId) return;
+    try {
+        const current = getDealViews(dealId);
+        localStorage.setItem(`cd_views_${dealId}`, current + 1);
+    } catch (e) {}
+}
+
+function formatViews(n) {
+    if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+    if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+    return n.toString();
+}
+
+// ========== RATING (👍/👎) ==========
+function getDealRating(dealId) {
+    if (!dealId) return { up: 0, down: 0, userVote: null };
+    try {
+        const data = localStorage.getItem(`cd_rating_${dealId}`);
+        const parsed = data ? JSON.parse(data) : { up: 0, down: 0, userVote: null };
+        return parsed;
+    } catch (e) {
+        return { up: 0, down: 0, userVote: null };
+    }
+}
+
+function saveDealRating(dealId, rating) {
+    if (!dealId) return;
+    try {
+        localStorage.setItem(`cd_rating_${dealId}`, JSON.stringify(rating));
+    } catch (e) {}
+}
+
+function voteDeal(dealId, voteType) {
+    if (!dealId) return;
+    const rating = getDealRating(dealId);
+    
+    if (rating.userVote === voteType) {
+        if (voteType === 'up') rating.up = Math.max(0, rating.up - 1);
+        else rating.down = Math.max(0, rating.down - 1);
+        rating.userVote = null;
+        showToast('Vote removed');
+    } else {
+        if (rating.userVote === 'up') rating.up = Math.max(0, rating.up - 1);
+        if (rating.userVote === 'down') rating.down = Math.max(0, rating.down - 1);
+        
+        if (voteType === 'up') rating.up++;
+        else rating.down++;
+        rating.userVote = voteType;
+        showToast(voteType === 'up' ? '👍 Thanks for voting!' : '👎 Noted!');
+    }
+    
+    saveDealRating(dealId, rating);
+    loadDeals(currentCategory);
+}
+
+function calculateRatingPercent(rating) {
+    const total = rating.up + rating.down;
+    if (total === 0) return 0;
+    return Math.round((rating.up / total) * 100);
+}
+
+// ========== WATCHLIST ==========
 function getWatchlist() {
     try {
         const data = localStorage.getItem('cd_watchlist');
         return data ? JSON.parse(data) : [];
-    } catch (e) {
-        return [];
-    }
+    } catch (e) { return []; }
 }
 
 function saveWatchlist(list) {
-    try {
-        localStorage.setItem('cd_watchlist', JSON.stringify(list));
-    } catch (e) {
-        console.warn('Could not save watchlist');
-    }
+    try { localStorage.setItem('cd_watchlist', JSON.stringify(list)); } catch (e) {}
 }
 
 function isInWatchlist(dealId) {
     if (!dealId) return false;
-    const list = getWatchlist();
-    return list.some(item => String(item.id) === String(dealId));
+    return getWatchlist().some(item => String(item.id) === String(dealId));
 }
 
 function toggleWatchlist(dealId, dealData) {
@@ -131,7 +218,7 @@ function renderFavorites() {
     }
 
     container.innerHTML = list.map(item => `
-        <div class="flex gap-3 p-3 rounded-xl border border-surface-container bg-surface-subtle/50 hover:bg-surface-subtle transition-colors">
+        <div class="flex gap-3 p-3 rounded-xl border border-surface-container bg-surface-subtle/50">
             <img src="${escapeAttribute(item.image_url || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=100')}" 
                  class="w-16 h-16 rounded-lg object-cover flex-shrink-0 border border-surface-container"
                  onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=100'">
@@ -142,13 +229,11 @@ function renderFavorites() {
             </div>
             <div class="flex flex-col gap-1.5 self-center flex-shrink-0">
                 <a href="${escapeAttribute(item.url)}" target="_blank" rel="noopener noreferrer" 
-                   class="w-8 h-8 rounded-lg bg-primary-container text-white flex items-center justify-center shadow-sm" 
-                   title="View Deal">
+                   class="w-8 h-8 rounded-lg bg-primary-container text-white flex items-center justify-center">
                     <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
                 </a>
                 <button onclick="removeFromFavorites('${escapeAttribute(String(item.id))}')" 
-                        class="w-8 h-8 rounded-lg bg-error-container text-error flex items-center justify-center hover:bg-error hover:text-white transition-colors" 
-                        title="Remove">
+                        class="w-8 h-8 rounded-lg bg-error-container text-error flex items-center justify-center">
                     <span class="material-symbols-outlined text-[16px]">delete</span>
                 </button>
             </div>
@@ -171,7 +256,7 @@ function showToast(message) {
     setTimeout(() => { toast.remove(); }, 2600);
 }
 
-// ========== DESKTOP LAYOUT CSS ==========
+// ========== DESKTOP CSS ==========
 (function injectDesktopCSS(){
     if (window.__cdDesktopCSS) return;
     window.__cdDesktopCSS = true;
@@ -180,165 +265,35 @@ function showToast(message) {
       @media (min-width: 900px) {
         main.w-full.pt-16 { padding-top: 64px; }
         #market-deals, #favorites-section, #smart-tools { max-width: 1240px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
-        #discountsContainer {
-          display: grid !important;
-          grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-          gap: 18px;
-        }
+        #discountsContainer { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 18px; }
         #discountsContainer > div { height: 100%; }
       }
-      @media (min-width: 1200px) {
-        #discountsContainer { grid-template-columns: repeat(3, 1fr); }
-      }
-      .cd-flag-chip {
-        display:inline-flex; align-items:center; justify-content:center;
-        width:44px; height:40px; border-radius:12px;
-        background:#eef2f6; border:2px solid transparent;
-        font-size:22px; cursor:pointer;
-      }
+      @media (min-width: 1200px) { #discountsContainer { grid-template-columns: repeat(3, 1fr); } }
+      .cd-flag-chip { display:inline-flex; align-items:center; justify-content:center; width:44px; height:40px; border-radius:12px; background:#eef2f6; border:2px solid transparent; font-size:22px; cursor:pointer; }
       .cd-flag-chip.active { background:#155eef; border-color:#0047c1; color:#fff; }
-      .cd-best-deal {
-        background: linear-gradient(135deg, #ecfdf3 0%, #d1fadf 100%);
-        border: 2px solid #12b76a;
-        border-radius: 16px;
-        padding: 14px;
-        margin-bottom: 14px;
-        position: relative;
-      }
-      .cd-best-deal-badge {
-        position: absolute;
-        top: -10px;
-        left: 12px;
-        background: #12b76a;
-        color: #fff;
-        font-size: 10px;
-        font-weight: 800;
-        padding: 3px 9px;
-        border-radius: 999px;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-      }
-      .cd-comparison-img {
-        width: 72px; height: 72px;
-        border-radius: 12px;
-        background: #f6f8fc;
-        border: 1px solid #e4e7ec;
-        overflow: hidden;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
+      .cd-best-deal { background: linear-gradient(135deg, #ecfdf3 0%, #d1fadf 100%); border: 2px solid #12b76a; border-radius: 16px; padding: 14px; margin-bottom: 14px; position: relative; }
+      .cd-best-deal-badge { position: absolute; top: -10px; left: 12px; background: #12b76a; color: #fff; font-size: 10px; font-weight: 800; padding: 3px 9px; border-radius: 999px; letter-spacing: 0.05em; text-transform: uppercase; }
+      .cd-comparison-img { width: 72px; height: 72px; border-radius: 12px; background: #f6f8fc; border: 1px solid #e4e7ec; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
       .cd-comparison-img img { width: 100%; height: 100%; object-fit: cover; }
-      .cd-card {
-        background: #FFFFFF;
-        border-radius: 18px;
-        padding: 16px;
-        box-shadow: 0 2px 12px rgba(16, 24, 40, 0.06);
-        border: 1px solid #F0F2F5;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        transition: box-shadow 0.2s ease;
-        position: relative;
-      }
+      .cd-card { background: #FFFFFF; border-radius: 18px; padding: 16px; box-shadow: 0 2px 12px rgba(16, 24, 40, 0.06); border: 1px solid #F0F2F5; display: flex; flex-direction: column; gap: 12px; position: relative; transition: box-shadow 0.2s ease; }
       .cd-card:hover { box-shadow: 0 6px 24px rgba(16, 24, 40, 0.1); }
-      
-      .cd-heart-btn {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: #FFFFFF;
-        border: 1.5px solid #E4E7EC;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        z-index: 5;
-        padding: 0;
-      }
-      .cd-heart-btn:hover {
-        border-color: #D92D20;
-        transform: scale(1.1);
-      }
-      .cd-heart-btn.saved {
-        background: #FEE4E2;
-        border-color: #D92D20;
-      }
-      .cd-heart-btn .material-symbols-outlined {
-        font-size: 20px;
-        color: #98A2B3;
-        transition: all 0.2s ease;
-        font-variation-settings: 'FILL' 0, 'wght' 500;
-      }
-      .cd-heart-btn.saved .material-symbols-outlined {
-        color: #D92D20;
-        font-variation-settings: 'FILL' 1, 'wght' 600;
-      }
-      
-      .cd-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        font-weight: 600;
-        font-size: 13px;
-        padding: 10px 14px;
-        border-radius: 12px;
-        border: none;
-        cursor: pointer;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        text-decoration: none;
-        white-space: nowrap;
-        user-select: none;
-      }
+      .cd-heart-btn { position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border-radius: 50%; background: #FFFFFF; border: 1.5px solid #E4E7EC; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; z-index: 5; padding: 0; }
+      .cd-heart-btn:hover { border-color: #D92D20; transform: scale(1.1); }
+      .cd-heart-btn.saved { background: #FEE4E2; border-color: #D92D20; }
+      .cd-heart-btn .material-symbols-outlined { font-size: 20px; color: #98A2B3; font-variation-settings: 'FILL' 0, 'wght' 500; }
+      .cd-heart-btn.saved .material-symbols-outlined { color: #D92D20; font-variation-settings: 'FILL' 1, 'wght' 600; }
+      .cd-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600; font-size: 13px; padding: 10px 14px; border-radius: 12px; border: none; cursor: pointer; transition: all 0.2s; text-decoration: none; white-space: nowrap; }
       .cd-btn:active { transform: scale(0.96); }
-      .cd-btn-compare {
-        background: linear-gradient(135deg, #EFF4FF 0%, #DBE7FF 100%);
-        color: #155EEF;
-        border: 1.5px solid #B2CCFF;
-        box-shadow: 0 2px 4px rgba(21, 94, 239, 0.08);
-        flex: 1;
-      }
-      .cd-btn-compare:hover {
-        background: linear-gradient(135deg, #DBE7FF 0%, #C7DBFF 100%);
-      }
-      .cd-btn-share {
-        background: #F9FAFB;
-        color: #475467;
-        border: 1.5px solid #E4E7EC;
-        padding: 10px;
-        width: 42px;
-        flex-shrink: 0;
-      }
-      .cd-btn-share:hover { background: #F2F4F7; color: #101828; }
-      .cd-btn-primary {
-        background: linear-gradient(135deg, #155EEF 0%, #0047C1 100%);
-        color: #FFFFFF;
-        border: none;
-        box-shadow: 0 4px 12px rgba(21, 94, 239, 0.3);
-        flex: 1;
-      }
-      .cd-btn-primary:hover {
-        background: linear-gradient(135deg, #0047C1 0%, #0038A8 100%);
-      }
-      .cd-store-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 10px;
-        background: #F9FAFB;
-        border: 1px solid #E4E7EC;
-        border-radius: 10px;
-        font-size: 11px;
-        color: #475467;
-        width: fit-content;
-        max-width: 100%;
-      }
+      .cd-btn-compare { background: linear-gradient(135deg, #EFF4FF 0%, #DBE7FF 100%); color: #155EEF; border: 1.5px solid #B2CCFF; flex: 1; }
+      .cd-btn-share { background: #F9FAFB; color: #475467; border: 1.5px solid #E4E7EC; padding: 10px; width: 42px; flex-shrink: 0; }
+      .cd-btn-primary { background: linear-gradient(135deg, #155EEF 0%, #0047C1 100%); color: #FFFFFF; flex: 1; }
+      .cd-store-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; background: #F9FAFB; border: 1px solid #E4E7EC; border-radius: 10px; font-size: 11px; color: #475467; width: fit-content; max-width: 100%; }
+      .cd-vote-btn { display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; cursor: pointer; border: 1.5px solid transparent; transition: all 0.2s; }
+      .cd-vote-btn.up { background: #ECFDF3; color: #027A48; border-color: #A6F4C5; }
+      .cd-vote-btn.up.active { background: #12B76A; color: white; border-color: #12B76A; }
+      .cd-vote-btn.down { background: #FEF3F2; color: #B42318; border-color: #FECDCA; }
+      .cd-vote-btn.down.active { background: #D92D20; color: white; border-color: #D92D20; }
+      .cd-vote-btn:hover { transform: scale(1.05); }
       @media (max-width: 640px) {
         .cd-card { padding: 14px; border-radius: 16px; }
         .cd-btn { font-size: 12px; padding: 9px 12px; }
@@ -425,7 +380,7 @@ function setupCountrySystem() {
 
     const wrapper = document.createElement("div");
     wrapper.id = "cdCountrySelector";
-    wrapper.className = "mb-4";
+    wrapper.className = "mb-2";
 
     wrapper.innerHTML = `
         <div class="bg-surface-container-lowest rounded-2xl border border-surface-container p-4 shadow-sm">
@@ -760,6 +715,10 @@ function loadDeals(filter = "all") {
         const hasRating = rating > 0;
         const savings = (oldPrice && newPrice && oldPrice > newPrice) ? (oldPrice - newPrice) : 0;
         const saved = isInWatchlist(dealId);
+        const trust = getTrustBadge(deal);
+        const views = getDealViews(dealId);
+        const dealRating = getDealRating(dealId);
+        const upPercent = calculateRatingPercent(dealRating);
 
         const dealDataJson = escapeAttribute(JSON.stringify({
             id: dealId,
@@ -780,10 +739,15 @@ function loadDeals(filter = "all") {
             <span class="material-symbols-outlined">favorite</span>
           </button>
 
-          <div class="flex items-start justify-between gap-2">
-            <div class="flex-1 min-w-0">
-              ${deal.category ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-primary-container/10 text-primary text-[10px] font-bold uppercase tracking-wide">${escapeHtml(deal.category)}</span>` : ""}
-            </div>
+          <div class="flex items-center gap-2 flex-wrap pr-12">
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full ${trust.bgClass} ${trust.textClass} text-[10px] font-bold border ${trust.borderClass}">
+              <span class="material-symbols-outlined text-[12px]" style="font-variation-settings:'FILL' 1;">${trust.icon}</span>
+              ${trust.label}
+            </span>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-[10px] font-semibold">
+              <span class="material-symbols-outlined text-[12px]">visibility</span>
+              ${formatViews(views)} views
+            </span>
           </div>
 
           <div class="flex gap-3">
@@ -810,6 +774,18 @@ function loadDeals(filter = "all") {
             You Save ${formatPrice(savings, currency)}
           </div>` : ""}
 
+          <div class="flex items-center gap-2 flex-wrap">
+            <button onclick="voteDeal('${escapeAttribute(String(dealId))}', 'up')" 
+                    class="cd-vote-btn up ${dealRating.userVote === 'up' ? 'active' : ''}">
+              <span class="material-symbols-outlined text-[14px]" style="font-variation-settings:'FILL' 1;">thumb_up</span>
+              ${dealRating.up > 0 ? `(${dealRating.up})` : ''} ${upPercent > 0 ? upPercent + '%' : 'Helpful'}
+            </button>
+            <button onclick="voteDeal('${escapeAttribute(String(dealId))}', 'down')" 
+                    class="cd-vote-btn down ${dealRating.userVote === 'down' ? 'active' : ''}">
+              <span class="material-symbols-outlined text-[14px]">thumb_down</span>
+            </button>
+          </div>
+
           <div class="cd-store-badge">
             <span class="text-[16px] flex-shrink-0">${getDealFlag(deal)}</span>
             <span class="font-semibold text-on-surface">${escapeHtml(storeName)}</span>
@@ -825,7 +801,7 @@ function loadDeals(filter = "all") {
             <button onclick="shareDeal('${encodeURIComponent(deal.title || "")}', '${escapeAttribute(deal.url || window.location.href)}')" class="cd-btn cd-btn-share" title="Share Deal">
               <span class="material-symbols-outlined text-[16px]">share</span>
             </button>
-            <a href="${escapeAttribute(deal.url || "#")}" target="_blank" rel="noopener noreferrer" class="cd-btn cd-btn-primary">
+            <a href="${escapeAttribute(deal.url || "#")}" target="_blank" rel="noopener noreferrer" class="cd-btn cd-btn-primary" onclick="incrementDealViews('${escapeAttribute(String(dealId))}')">
               <span>Get Deal</span>
               <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
             </a>
@@ -896,6 +872,7 @@ async function openDealComparison(dealId) {
                 const cheapest = cheapestOffers[0];
                 const cheapestCountry = COUNTRIES[getDealCountry(cheapest.normalized)];
                 const cheapestImg = cheapest.normalized.image_url || cheapest.normalized.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200";
+                const cheapestTrust = getTrustBadge(cheapest.normalized);
                 bestDealHtml = `<div class="cd-best-deal">
                     <div class="cd-best-deal-badge">🏆 Best Deal</div>
                     <div class="flex items-center gap-3 mb-2">
@@ -906,7 +883,9 @@ async function openDealComparison(dealId) {
                             <div class="flex items-center gap-2 mb-1 flex-wrap">
                                 <span class="text-[16px]">${cheapestCountry?.flag || "🌐"}</span>
                                 <span class="font-bold text-on-surface text-[15px]">${escapeHtml(cheapest.normalized.store || "Store")}</span>
-                                <span class="text-[11px] text-secondary font-bold bg-savings-green-subtle px-2 py-0.5 rounded-full">CHEAPEST</span>
+                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full ${cheapestTrust.bgClass} ${cheapestTrust.textClass} text-[10px] font-bold">
+                                    <span class="material-symbols-outlined text-[11px]">${cheapestTrust.icon}</span>${cheapestTrust.label}
+                                </span>
                             </div>
                             <div class="flex items-baseline gap-2">
                                 <span class="font-headline-sm text-[20px] font-extrabold text-primary-container">${formatPrice(cheapest.price, cheapest.currency)}</span>
@@ -949,6 +928,7 @@ async function openDealComparison(dealId) {
             const priceAed = convertToAED(price, currency);
             const isCheapest = cheapestOffers.some(o => o.normalized.id === normalized.id);
             const imgSrc = normalized.image_url || normalized.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200";
+            const trust = getTrustBadge(normalized);
             return `<div class="border ${isCheapest ? 'border-2 border-savings-green bg-savings-green-subtle/30' : 'border-surface-container'} rounded-2xl p-3 mb-3">
                 <div class="flex items-center gap-3">
                     <div class="cd-comparison-img"><img src="${escapeAttribute(imgSrc)}" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200'"></div>
@@ -958,6 +938,9 @@ async function openDealComparison(dealId) {
                             <span class="font-semibold text-on-surface">${escapeHtml(normalized.store || "Store")}</span>
                             <span class="text-[11px] text-on-surface-variant">⭐ ${rating > 0 ? rating.toFixed(1) : "—"}</span>
                             ${isCheapest ? `<span class="text-[10px] font-bold text-secondary bg-savings-green-subtle px-2 py-0.5 rounded-full">BEST PRICE</span>` : ""}
+                            <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full ${trust.bgClass} ${trust.textClass} text-[9px] font-bold">
+                                <span class="material-symbols-outlined text-[10px]">${trust.icon}</span>${trust.label}
+                            </span>
                         </div>
                         <div class="text-[12px] text-on-surface-variant mt-1 line-clamp-2">${escapeHtml(normalized.title || "Product")}</div>
                         <div class="flex items-baseline gap-2 mt-1 flex-wrap">
@@ -1461,6 +1444,7 @@ window.closeMenu = closeMenu;
 window.shareDeal = shareDeal;
 window.toggleWatchlist = toggleWatchlist;
 window.removeFromFavorites = removeFromFavorites;
+window.voteDeal = voteDeal;
 window.openDealComparison = openDealComparison;
 window.closeComparisonModal = closeComparisonModal;
 window.showToast = showToast;
