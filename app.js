@@ -1,5 +1,5 @@
-// CheckerDiscount - Complete App.js v7.0
-// Country Selector + Trust Badge + Views + Rating + 5 Tools + Watchlist
+// CheckerDiscount - Complete App.js v8.0
+// Country Selector + Trust Badge + Admin Views + Rating + 5 Tools + Watchlist
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
 
@@ -39,15 +39,11 @@ function formatAED(value) {
     return `AED ${num.toFixed(2)}`;
 }
 
-// ========== TRUST BADGE ==========
+// ========== TRUST BADGE (uses store_type from admin) ==========
 function getTrustBadge(deal) {
-    const store = String(deal.store || '').toLowerCase();
-    const sourceType = String(deal.source_type || '').toLowerCase();
+    const storeType = String(deal.store_type || 'third-party').toLowerCase();
     
-    const officialStores = ['amazon', 'noon', 'temu', 'ebay', 'walmart', 'carrefour', 'sharaf', 'lulu'];
-    const isOfficial = officialStores.some(s => store.includes(s)) && sourceType !== 'third-party';
-    
-    if (isOfficial) {
+    if (storeType === 'official') {
         return {
             label: 'Official Store',
             icon: 'verified',
@@ -57,7 +53,7 @@ function getTrustBadge(deal) {
         };
     }
     return {
-        label: 'Third-Party',
+        label: 'Third-Party / Local',
         icon: 'storefront',
         bgClass: 'bg-warning-amber-subtle',
         textClass: 'text-warning-amber',
@@ -65,8 +61,11 @@ function getTrustBadge(deal) {
     };
 }
 
-// ========== VIEWS COUNTER ==========
-function getDealViews(dealId) {
+// ========== VIEWS (uses admin-provided views) ==========
+function getDealViews(dealId, deal) {
+    if (deal && deal.views) {
+        return Number(deal.views);
+    }
     if (!dealId) return 0;
     try {
         const views = localStorage.getItem(`cd_views_${dealId}`);
@@ -93,8 +92,7 @@ function getDealRating(dealId) {
     if (!dealId) return { up: 0, down: 0, userVote: null };
     try {
         const data = localStorage.getItem(`cd_rating_${dealId}`);
-        const parsed = data ? JSON.parse(data) : { up: 0, down: 0, userVote: null };
-        return parsed;
+        return data ? JSON.parse(data) : { up: 0, down: 0, userVote: null };
     } catch (e) {
         return { up: 0, down: 0, userVote: null };
     }
@@ -102,9 +100,7 @@ function getDealRating(dealId) {
 
 function saveDealRating(dealId, rating) {
     if (!dealId) return;
-    try {
-        localStorage.setItem(`cd_rating_${dealId}`, JSON.stringify(rating));
-    } catch (e) {}
+    try { localStorage.setItem(`cd_rating_${dealId}`, JSON.stringify(rating)); } catch (e) {}
 }
 
 function voteDeal(dealId, voteType) {
@@ -528,6 +524,8 @@ function normalizeDeal(deal) {
     copy.category = copy.category || copy.category_name || copy.categoryName || "";
     copy.currency = copy.currency || copy.currency_code || copy.currencyCode || "";
     copy.store = copy.store || copy.store_name || copy.storeName || copy.retailer || copy.retailer_name || "";
+    copy.store_type = copy.store_type || "third-party";
+    copy.views = copy.views || 0;
     return copy;
 }
 
@@ -716,7 +714,7 @@ function loadDeals(filter = "all") {
         const savings = (oldPrice && newPrice && oldPrice > newPrice) ? (oldPrice - newPrice) : 0;
         const saved = isInWatchlist(dealId);
         const trust = getTrustBadge(deal);
-        const views = getDealViews(dealId);
+        const views = getDealViews(dealId, deal);
         const dealRating = getDealRating(dealId);
         const upPercent = calculateRatingPercent(dealRating);
 
@@ -801,7 +799,7 @@ function loadDeals(filter = "all") {
             <button onclick="shareDeal('${encodeURIComponent(deal.title || "")}', '${escapeAttribute(deal.url || window.location.href)}')" class="cd-btn cd-btn-share" title="Share Deal">
               <span class="material-symbols-outlined text-[16px]">share</span>
             </button>
-            <a href="${escapeAttribute(deal.url || "#")}" target="_blank" rel="noopener noreferrer" class="cd-btn cd-btn-primary" onclick="incrementDealViews('${escapeAttribute(String(dealId))}')">
+            <a href="${escapeAttribute(deal.url || "#")}" target="_blank" rel="noopener noreferrer" class="cd-btn cd-btn-primary">
               <span>Get Deal</span>
               <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
             </a>
