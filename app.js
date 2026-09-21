@@ -1,24 +1,113 @@
-// CheckerDiscount - Complete App.js with all features
-// Country filtering, ratings, savings, all-countries default, Best Deal comparison, Modern Cards, Professional Menu
+// CheckerDiscount - Complete App.js v5.0
+// 5 Smart Tools + Watchlist + Live Currency + Best Time to Buy
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
 
-// ========== EXCHANGE RATES (Approximate - for comparison only) ==========
-const EXCHANGE_RATES = {
+// ========== FALLBACK RATES (if API fails) ==========
+const FALLBACK_RATES = {
     AED: 1.00, OMR: 9.54, SAR: 0.98, USD: 3.67, GBP: 4.65,
     EUR: 3.98, KWD: 11.95, QAR: 1.01, BHD: 9.74, PKR: 0.013,
     INR: 0.044, EGP: 0.076, JOD: 5.18
 };
 
+// ========== LIVE CURRENCY RATES ==========
+let LIVE_RATES = null;
+let LIVE_RATES_TIME = null;
+
+async function loadLiveRates() {
+    try {
+        const response = await fetch('https://open.er-api.com/v6/latest/AED');
+        const data = await response.json();
+        if (data && data.rates) {
+            LIVE_RATES = data.rates;
+            LIVE_RATES_TIME = new Date();
+        }
+    } catch (e) {
+        console.warn('Live rates unavailable, using fallback');
+    }
+}
+
 function convertToAED(amount, currency) {
-    const rate = EXCHANGE_RATES[currency] || 1;
+    const rates = LIVE_RATES || FALLBACK_RATES;
+    const rate = rates[currency] || FALLBACK_RATES[currency] || 1;
     return Number(amount) * rate;
+}
+
+function getRate(from, to) {
+    const rates = LIVE_RATES || FALLBACK_RATES;
+    const fromRate = rates[from] || FALLBACK_RATES[from] || 1;
+    const toRate = rates[to] || FALLBACK_RATES[to] || 1;
+    return toRate / fromRate;
 }
 
 function formatAED(value) {
     const num = Number(value);
     if (!Number.isFinite(num)) return "—";
     return `AED ${num.toFixed(2)}`;
+}
+
+// ========== WATCHLIST (localStorage) ==========
+function getWatchlist() {
+    try {
+        const data = localStorage.getItem('cd_watchlist');
+        return data ? JSON.parse(data) : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function saveWatchlist(list) {
+    try {
+        localStorage.setItem('cd_watchlist', JSON.stringify(list));
+    } catch (e) {
+        console.warn('Could not save watchlist');
+    }
+}
+
+function isInWatchlist(dealId) {
+    if (!dealId) return false;
+    const list = getWatchlist();
+    return list.some(item => String(item.id) === String(dealId));
+}
+
+function toggleWatchlist(dealId, dealData) {
+    if (!dealId) return;
+    let list = getWatchlist();
+    const exists = list.some(item => String(item.id) === String(dealId));
+
+    if (exists) {
+        list = list.filter(item => String(item.id) !== String(dealId));
+        saveWatchlist(list);
+        showToast('❤️ Removed from Favorites');
+        return false;
+    } else {
+        list.push({
+            id: dealId,
+            title: dealData.title || 'Deal',
+            store: dealData.store || 'Store',
+            price: dealData.new_price || dealData.price || 0,
+            old_price: dealData.old_price || null,
+            currency: getDealCurrency(dealData),
+            image_url: dealData.image_url || dealData.image || '',
+            url: dealData.url || '#',
+            country: getDealCountry(dealData),
+            added_at: new Date().toISOString()
+        });
+        saveWatchlist(list);
+        showToast('❤️ Saved to Favorites!');
+        return true;
+    }
+}
+
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 z-[200] bg-navy-deep text-white px-5 py-3 rounded-xl shadow-2xl text-[13px] font-semibold transition-all duration-300 opacity-0';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => { toast.style.opacity = '1'; toast.style.transform = 'translateX(-50%) translateY(-10px)'; }, 10);
+    setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(-50%) translateY(0)'; }, 2500);
+    setTimeout(() => { toast.remove(); }, 3000);
 }
 
 // ========== DESKTOP LAYOUT CSS ==========
@@ -37,11 +126,12 @@ function formatAED(value) {
         }
         #discountsContainer > div { height: 100%; }
         section#savings-tool,
-        section#tool-comparison,
-        section#tool-history,
-        section#tool-coupons,
-        section#tool-calculator,
-        section#tool-watchlist {
+        section#tool-dealscore,
+        section#tool-finalprice,
+        section#tool-currency,
+        section#tool-unitprice,
+        section#tool-besttime,
+        section#favorites-section {
           max-width: 1240px;
           margin-left: auto;
           margin-right: auto;
@@ -106,10 +196,45 @@ function formatAED(value) {
         flex-direction: column;
         gap: 12px;
         transition: box-shadow 0.2s ease;
+        position: relative;
       }
-      .cd-card:hover {
-        box-shadow: 0 6px 24px rgba(16, 24, 40, 0.1);
+      .cd-card:hover { box-shadow: 0 6px 24px rgba(16, 24, 40, 0.1); }
+      
+      /* Heart button on card */
+      .cd-heart-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #FFFFFF;
+        border: 1.5px solid #E4E7EC;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        z-index: 5;
       }
+      .cd-heart-btn:hover {
+        border-color: #D92D20;
+        transform: scale(1.1);
+      }
+      .cd-heart-btn.saved {
+        background: #FEE4E2;
+        border-color: #D92D20;
+      }
+      .cd-heart-btn .material-symbols-outlined {
+        font-size: 20px;
+        color: #667085;
+        transition: all 0.2s ease;
+      }
+      .cd-heart-btn.saved .material-symbols-outlined {
+        color: #D92D20;
+        font-variation-settings: 'FILL' 1;
+      }
+      
       .cd-btn {
         display: inline-flex;
         align-items: center;
@@ -175,6 +300,8 @@ function formatAED(value) {
         .cd-card { padding: 14px; border-radius: 16px; }
         .cd-btn { font-size: 12px; padding: 9px 12px; }
         .cd-btn-share { width: 38px; padding: 9px; }
+        .cd-heart-btn { width: 32px; height: 32px; top: 10px; right: 10px; }
+        .cd-heart-btn .material-symbols-outlined { font-size: 18px; }
       }
     `;
     document.head.appendChild(style);
@@ -227,11 +354,13 @@ let globalDeals = [];
 let currentCountry = "ALL";
 let currentCategory = "all";
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    await loadLiveRates();
     currentCountry = detectCountry();
     setupCountrySystem();
     fetchDealsAndInit();
     initBurgerMenu();
+    setupAllTools();
 });
 
 function detectCountry() {
@@ -247,10 +376,7 @@ function setupCountrySystem() {
     if (document.getElementById("cdCountrySelector")) return;
 
     const filterRow = marketSection.querySelector(".overflow-x-auto");
-    if (!filterRow) {
-        console.warn("CheckerDiscount: original category filter row not found.");
-        return;
-    }
+    if (!filterRow) return;
 
     const wrapper = document.createElement("div");
     wrapper.id = "cdCountrySelector";
@@ -289,9 +415,7 @@ function setupCountrySystem() {
             const more = document.getElementById("cdMoreCountries");
             if (!more) return;
             more.classList.toggle("hidden");
-            moreBtn.textContent = more.classList.contains("hidden")
-                ? "More Countries"
-                : "Hide Countries";
+            moreBtn.textContent = more.classList.contains("hidden") ? "More Countries" : "Hide Countries";
         });
     }
 }
@@ -318,13 +442,11 @@ function renderCountryButtons() {
         popular.appendChild(createCountryButton(country));
     });
 
-    Object.keys(COUNTRIES)
-        .filter(code => !POPULAR_COUNTRIES.includes(code))
-        .forEach(code => {
-            const country = COUNTRIES[code];
-            if (!country) return;
-            more.appendChild(createCountryButton(country));
-        });
+    Object.keys(COUNTRIES).filter(code => !POPULAR_COUNTRIES.includes(code)).forEach(code => {
+        const country = COUNTRIES[code];
+        if (!country) return;
+        more.appendChild(createCountryButton(country));
+    });
 }
 
 function createCountryButton(country) {
@@ -341,10 +463,7 @@ function createCountryButton(country) {
 function renderCountryName() {
     const el = document.getElementById("cdSelectedCountryName");
     if (!el) return;
-    if (currentCountry === "ALL") {
-        el.textContent = "🌐 All Countries";
-        return;
-    }
+    if (currentCountry === "ALL") { el.textContent = "🌐 All Countries"; return; }
     const country = COUNTRIES[currentCountry];
     if (!country) return;
     el.textContent = `${country.flag} ${country.name} Deals`;
@@ -365,13 +484,7 @@ async function fetchDealsAndInit() {
         const response = await fetch(`${API_BASE}/api/deals`);
         if (!response.ok) throw new Error(`API returned ${response.status}`);
         const data = await response.json();
-        if (data.success && Array.isArray(data.deals)) {
-            globalDeals = data.deals;
-        } else if (Array.isArray(data.deals)) {
-            globalDeals = data.deals;
-        } else {
-            globalDeals = [];
-        }
+        globalDeals = data.success && Array.isArray(data.deals) ? data.deals : (Array.isArray(data.deals) ? data.deals : []);
     } catch (error) {
         console.error("Failed to fetch deals:", error);
         globalDeals = [];
@@ -387,33 +500,21 @@ async function fetchCountryDeals() {
             const response = await fetch(`${API_BASE}/api/deals`);
             if (response.ok) {
                 const data = await response.json();
-                if (data.success && Array.isArray(data.deals)) {
-                    globalDeals = data.deals.map(normalizeDeal);
-                }
+                if (data.success && Array.isArray(data.deals)) globalDeals = data.deals.map(normalizeDeal);
             }
-        } catch (e) {
-            console.warn("All-deals fetch failed:", e);
-        }
+        } catch (e) { console.warn("All-deals fetch failed:", e); }
     } else {
         try {
-            const response = await fetch(
-                `${API_BASE}/api/deals?country=${encodeURIComponent(currentCountry)}`
-            );
+            const response = await fetch(`${API_BASE}/api/deals?country=${encodeURIComponent(currentCountry)}`);
             if (response.ok) {
                 const data = await response.json();
                 if (data.success && Array.isArray(data.deals) && data.deals.length > 0) {
                     const apiDeals = data.deals.map(normalizeDeal);
-                    const filtered = apiDeals.filter(
-                        d => getDealCountry(d) === currentCountry
-                    );
+                    const filtered = apiDeals.filter(d => getDealCountry(d) === currentCountry);
                     if (filtered.length > 0) globalDeals = filtered;
-                } else {
-                    globalDeals = globalDeals.map(normalizeDeal);
-                }
+                } else { globalDeals = globalDeals.map(normalizeDeal); }
             }
-        } catch (e) {
-            console.warn("Country API failed. Using local filtering:", e);
-        }
+        } catch (e) { console.warn("Country API failed. Using local filtering:", e); }
     }
 
     globalDeals = globalDeals.map(normalizeDeal);
@@ -436,23 +537,18 @@ function getDealCountry(deal) {
     if (!deal) return "";
     let country = deal.country || deal.country_code || deal.countryCode || deal.market || deal.market_code || "";
     country = String(country).trim().toUpperCase();
-
     const nameMap = {
         "UNITED STATES": "US", "USA": "US", "AMERICA": "US",
         "UNITED KINGDOM": "GB", "UK": "GB",
-        "OMAN": "OM",
-        "UNITED ARAB EMIRATES": "AE", "UAE": "AE",
-        "SAUDI ARABIA": "SA",
-        "PAKISTAN": "PK", "INDIA": "IN", "CANADA": "CA", "AUSTRALIA": "AU",
-        "GERMANY": "DE", "FRANCE": "FR", "ITALY": "IT", "SPAIN": "ES"
+        "OMAN": "OM", "UNITED ARAB EMIRATES": "AE", "UAE": "AE",
+        "SAUDI ARABIA": "SA", "PAKISTAN": "PK", "INDIA": "IN",
+        "CANADA": "CA", "AUSTRALIA": "AU", "GERMANY": "DE",
+        "FRANCE": "FR", "ITALY": "IT", "SPAIN": "ES"
     };
-
     if (nameMap[country]) return nameMap[country];
     if (COUNTRIES[country]) return country;
-
     if (!country && String(deal.currency || "").toUpperCase() === "USD") return "US";
     if (!country && String(deal.currency || "").toUpperCase() === "OMR") return "OM";
-
     return "";
 }
 
@@ -460,65 +556,38 @@ function renderCountryCategories() {
     const container = document.getElementById("cdCategorySelector");
     if (!container) return;
 
-    const scoped = currentCountry === "ALL"
-        ? globalDeals
-        : globalDeals.filter(d => getDealCountry(d) === currentCountry);
+    const scoped = currentCountry === "ALL" ? globalDeals : globalDeals.filter(d => getDealCountry(d) === currentCountry);
+    const categories = [...new Set(scoped.map(d => String(d.category || "").trim()).filter(Boolean))];
 
-    const categories = [...new Set(
-        scoped.map(d => String(d.category || "").trim()).filter(Boolean)
-    )];
-
-    let html = `
-      <div class="flex items-center gap-2 overflow-x-auto pb-1">
-        <button type="button" data-category="all"
-          class="cd-category-btn flex-shrink-0 px-3.5 py-1.5 rounded-xl font-label-md text-[13px]">
-          All (${scoped.length})
-        </button>
-    `;
+    let html = `<div class="flex items-center gap-2 overflow-x-auto pb-1">
+        <button type="button" data-category="all" class="cd-category-btn flex-shrink-0 px-3.5 py-1.5 rounded-xl font-label-md text-[13px]">All (${scoped.length})</button>`;
 
     categories.forEach(category => {
-        const count = scoped.filter(
-            d => String(d.category || "").toLowerCase() === category.toLowerCase()
-        ).length;
-        html += `
-          <button type="button" data-category="${escapeAttribute(category)}"
-            class="cd-category-btn flex-shrink-0 px-3.5 py-1.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-md text-[13px]">
-            ${escapeHtml(category)} (${count})
-          </button>
-        `;
+        const count = scoped.filter(d => String(d.category || "").toLowerCase() === category.toLowerCase()).length;
+        html += `<button type="button" data-category="${escapeAttribute(category)}" class="cd-category-btn flex-shrink-0 px-3.5 py-1.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-md text-[13px]">${escapeHtml(category)} (${count})</button>`;
     });
-
     html += `</div>`;
 
-    if (categories.length === 0) {
-        html = `<div class="text-[12px] text-on-surface-variant">No categories available yet.</div>`;
-    }
-
+    if (categories.length === 0) html = `<div class="text-[12px] text-on-surface-variant">No categories available yet.</div>`;
     container.innerHTML = html;
 
     const buttons = container.querySelectorAll(".cd-category-btn");
     buttons.forEach(button => {
         button.addEventListener("click", () => {
             currentCategory = button.dataset.category || "all";
-            buttons.forEach(btn => {
-                btn.className = "cd-category-btn flex-shrink-0 px-3.5 py-1.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-md text-[13px]";
-            });
+            buttons.forEach(btn => btn.className = "cd-category-btn flex-shrink-0 px-3.5 py-1.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-md text-[13px]");
             button.className = "cd-category-btn flex-shrink-0 px-3.5 py-1.5 rounded-xl bg-primary-container text-on-primary font-label-md text-[13px] font-semibold shadow-sm";
             loadDeals(currentCategory);
         });
     });
 
     const allButton = container.querySelector('[data-category="all"]');
-    if (allButton) {
-        allButton.className = "cd-category-btn flex-shrink-0 px-3.5 py-1.5 rounded-xl bg-primary-container text-on-primary font-label-md text-[13px] font-semibold shadow-sm";
-    }
+    if (allButton) allButton.className = "cd-category-btn flex-shrink-0 px-3.5 py-1.5 rounded-xl bg-primary-container text-on-primary font-label-md text-[13px] font-semibold shadow-sm";
 }
 
 function getDealCurrency(deal) {
     const dealCountry = getDealCountry(deal);
-    if (dealCountry && COUNTRIES[dealCountry]) {
-        return COUNTRIES[dealCountry].currency;
-    }
+    if (dealCountry && COUNTRIES[dealCountry]) return COUNTRIES[dealCountry].currency;
     if (deal.currency) return String(deal.currency).toUpperCase();
     return "USD";
 }
@@ -528,12 +597,7 @@ function formatPrice(value, currency) {
     if (!Number.isFinite(number)) return "—";
     const curr = currency || "USD";
     try {
-        return new Intl.NumberFormat(undefined, {
-            style: "currency",
-            currency: curr,
-            minimumFractionDigits: curr === "JPY" || curr === "KRW" ? 0 : 2,
-            maximumFractionDigits: curr === "JPY" || curr === "KRW" ? 0 : 2
-        }).format(number);
+        return new Intl.NumberFormat(undefined, { style: "currency", currency: curr, minimumFractionDigits: curr === "JPY" || curr === "KRW" ? 0 : 2, maximumFractionDigits: curr === "JPY" || curr === "KRW" ? 0 : 2 }).format(number);
     } catch (e) {
         const country = Object.values(COUNTRIES).find(c => c.currency === curr);
         return `${country ? country.symbol : curr} ${number.toFixed(2)}`;
@@ -555,27 +619,17 @@ function loadSpotlight() {
     if (!deals.length) return;
 
     let featuredDeal = deals.find(d => Number(d.is_featured) === 1);
-    if (!featuredDeal) {
-        featuredDeal = [...deals].sort(
-            (a, b) => (Number(b.discount_percent) || 0) - (Number(a.discount_percent) || 0)
-        )[0];
-    }
+    if (!featuredDeal) featuredDeal = [...deals].sort((a, b) => (Number(b.discount_percent) || 0) - (Number(a.discount_percent) || 0))[0];
 
     const spotlightContainer = document.querySelector(".relative.w-full.bg-gradient-to-b");
     if (!spotlightContainer || !featuredDeal) return;
 
-    const imgSrc = featuredDeal.image_url || featuredDeal.image ||
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
-
-    const discountText = featuredDeal.discount_percent
-        ? `${Math.round(featuredDeal.discount_percent)}% OFF`
-        : "Special Offer";
-
+    const imgSrc = featuredDeal.image_url || featuredDeal.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
+    const discountText = featuredDeal.discount_percent ? `${Math.round(featuredDeal.discount_percent)}% OFF` : "Special Offer";
     const oldPrice = Number(featuredDeal.old_price || 0);
     const newPrice = Number(featuredDeal.new_price || featuredDeal.price || 0);
     const savingsAmount = oldPrice > newPrice ? oldPrice - newPrice : 0;
     const currency = getDealCurrency(featuredDeal);
-
     const rating = Number(featuredDeal.rating || 0);
     const hasRating = rating > 0;
 
@@ -585,22 +639,16 @@ function loadSpotlight() {
     showcaseBox.innerHTML = `
       <div class="flex items-center justify-between gap-2 pb-3 border-b border-surface-container-low">
         <div class="flex items-center gap-1 text-primary font-badge-caps text-[11px] font-bold uppercase tracking-wider">
-          <span class="material-symbols-outlined text-[15px]">bolt</span>
-          Deal Spotlight
+          <span class="material-symbols-outlined text-[15px]">bolt</span> Deal Spotlight
         </div>
         <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-savings-green-subtle text-secondary font-badge-caps text-[10px] font-bold">
-          <span class="material-symbols-outlined text-[12px]">verified</span>
-          ${escapeHtml(discountText)}
+          <span class="material-symbols-outlined text-[12px]">verified</span> ${escapeHtml(discountText)}
         </span>
       </div>
-
       <div class="flex gap-3 pt-3">
         <div class="w-20 h-20 rounded-xl bg-surface-subtle overflow-hidden flex-shrink-0 relative border border-surface-container flex items-center justify-center">
-          <img class="w-full h-full object-cover" src="${escapeAttribute(imgSrc)}" alt="Spotlight Deal"
-               onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400'">
-          <div class="absolute bottom-1 right-1 bg-navy-deep/80 text-on-primary text-[9px] px-1 py-0.5 rounded font-mono">
-            ${escapeHtml(featuredDeal.store || "Store")}
-          </div>
+          <img class="w-full h-full object-cover" src="${escapeAttribute(imgSrc)}" alt="Spotlight Deal" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400'">
+          <div class="absolute bottom-1 right-1 bg-navy-deep/80 text-on-primary text-[9px] px-1 py-0.5 rounded font-mono">${escapeHtml(featuredDeal.store || "Store")}</div>
         </div>
         <div class="flex flex-col min-w-0 justify-center flex-1">
           <div class="flex items-center gap-1 text-caption-timestamp text-[11px] text-on-surface-variant">
@@ -611,30 +659,22 @@ function loadSpotlight() {
             <span class="inline-flex text-warning-amber text-[12px] material-symbols-outlined" style="font-variation-settings:'FILL' 1;">star</span>
             <span class="font-bold text-on-surface">${hasRating ? rating.toFixed(1) : "—"}</span>
           </div>
-          <h3 class="font-headline-sm text-[14px] text-on-surface font-semibold leading-snug line-clamp-2 mt-0.5">
-            ${escapeHtml(featuredDeal.title || "Special Deal")}
-          </h3>
+          <h3 class="font-headline-sm text-[14px] text-on-surface font-semibold leading-snug line-clamp-2 mt-0.5">${escapeHtml(featuredDeal.title || "Special Deal")}</h3>
           <div class="flex items-baseline gap-2 mt-1.5">
-            <span class="font-headline-sm text-[20px] font-extrabold text-primary-container">
-              ${formatPrice(newPrice, currency)}
-            </span>
+            <span class="font-headline-sm text-[20px] font-extrabold text-primary-container">${formatPrice(newPrice, currency)}</span>
             ${oldPrice ? `<span class="font-price-strikethrough text-[13px] text-outline line-through">${formatPrice(oldPrice, currency)}</span>` : ""}
           </div>
         </div>
       </div>
-
       <div class="mt-3 pt-2.5 border-t border-surface-container flex items-center justify-between">
         <div class="px-2.5 py-1 rounded-lg bg-savings-green-subtle text-savings-green font-bold text-[12px] flex items-center gap-1">
-          <span class="material-symbols-outlined text-[14px]">savings</span>
-          You Save ${formatPrice(savingsAmount, currency)}
+          <span class="material-symbols-outlined text-[14px]">savings</span> You Save ${formatPrice(savingsAmount, currency)}
         </div>
         <div class="flex items-center gap-2">
-          <button onclick="shareDeal('${encodeURIComponent(featuredDeal.title || "")}', '${escapeAttribute(featuredDeal.url || window.location.href)}')"
-                  class="w-9 h-9 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface flex items-center justify-center transition-colors shadow-sm" title="Share Deal">
+          <button onclick="shareDeal('${encodeURIComponent(featuredDeal.title || "")}', '${escapeAttribute(featuredDeal.url || window.location.href)}')" class="w-9 h-9 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface flex items-center justify-center transition-colors shadow-sm" title="Share Deal">
             <span class="material-symbols-outlined text-[18px]">share</span>
           </button>
-          <a href="${escapeAttribute(featuredDeal.url || "#")}" target="_blank" rel="noopener noreferrer"
-             class="py-2 px-3 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-md text-[13px] font-semibold flex items-center gap-1 shadow-sm transition-colors">
+          <a href="${escapeAttribute(featuredDeal.url || "#")}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-md text-[13px] font-semibold flex items-center gap-1 shadow-sm transition-colors">
             <span>Check Deal</span>
             <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
           </a>
@@ -648,91 +688,62 @@ function loadDeals(filter = "all") {
     if (!container) return;
 
     let deals = [...globalDeals];
-
-    if (currentCountry !== "ALL") {
-        deals = deals.filter(d => getDealCountry(d) === currentCountry);
-    }
-
-    if (filter !== "all") {
-        deals = deals.filter(
-            d => String(d.category || "").toLowerCase() === String(filter).toLowerCase()
-        );
-    }
+    if (currentCountry !== "ALL") deals = deals.filter(d => getDealCountry(d) === currentCountry);
+    if (filter !== "all") deals = deals.filter(d => String(d.category || "").toLowerCase() === String(filter).toLowerCase());
 
     container.innerHTML = "";
 
     if (deals.length === 0) {
         const country = COUNTRIES[currentCountry];
-        container.innerHTML = `
-            <div class="p-6 text-center text-on-surface-variant bg-surface-container-lowest rounded-2xl border border-surface-container">
-                <div class="text-3xl mb-2">${country ? country.flag : "🌐"}</div>
-                <div class="font-semibold text-on-surface mb-1">No verified deals available</div>
-                <div class="text-[12px]">There are currently no deals listed for ${country ? escapeHtml(country.name) : "this selection"}.</div>
-            </div>
-        `;
+        container.innerHTML = `<div class="p-6 text-center text-on-surface-variant bg-surface-container-lowest rounded-2xl border border-surface-container">
+            <div class="text-3xl mb-2">${country ? country.flag : "🌐"}</div>
+            <div class="font-semibold text-on-surface mb-1">No verified deals available</div>
+            <div class="text-[12px]">There are currently no deals listed for ${country ? escapeHtml(country.name) : "this selection"}.</div>
+        </div>`;
         return;
     }
 
     deals.forEach(deal => {
-
-        const imgSrc = deal.image_url || deal.image ||
-            "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
-
-        const discountText = deal.discount_percent
-            ? `${Math.round(deal.discount_percent)}% OFF`
-            : "Special Deal";
-
+        const imgSrc = deal.image_url || deal.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
+        const discountText = deal.discount_percent ? `${Math.round(deal.discount_percent)}% OFF` : "Special Deal";
         const currency = getDealCurrency(deal);
         const newPrice = Number(deal.new_price || deal.price || 0);
         const oldPrice = deal.old_price ? Number(deal.old_price) : null;
-
         const card = document.createElement("div");
         card.className = "cd-card";
-
         const dealId = deal.id || "";
-        const storeName = String(
-            deal.store || deal.store_name || deal.storeName ||
-            deal.retailer || deal.retailer_name || "Store"
-        ).trim();
-
+        const storeName = String(deal.store || deal.store_name || deal.storeName || deal.retailer || deal.retailer_name || "Store").trim();
         const rating = Number(deal.rating || 0);
         const hasRating = rating > 0;
-
-        const savings = (oldPrice && newPrice && oldPrice > newPrice)
-            ? (oldPrice - newPrice)
-            : 0;
+        const savings = (oldPrice && newPrice && oldPrice > newPrice) ? (oldPrice - newPrice) : 0;
+        const saved = isInWatchlist(dealId);
 
         card.innerHTML = `
+          <button class="cd-heart-btn ${saved ? 'saved' : ''}" 
+                  onclick="toggleWatchlist('${escapeAttribute(String(dealId))}', ${escapeAttribute(JSON.stringify({id: dealId, title: deal.title, store: storeName, new_price: newPrice, old_price: oldPrice, image_url: imgSrc, url: deal.url, country: deal.country || deal.country_code}))})"
+                  title="${saved ? 'Remove from Favorites' : 'Save to Favorites'}">
+            <span class="material-symbols-outlined">favorite</span>
+          </button>
+
           <div class="flex items-start justify-between gap-2">
             <div class="flex-1 min-w-0">
               ${deal.category ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-primary-container/10 text-primary text-[10px] font-bold uppercase tracking-wide">${escapeHtml(deal.category)}</span>` : ""}
             </div>
-            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-gradient-to-r from-savings-green-subtle to-savings-green-subtle/50 text-savings-green text-[11px] font-bold flex-shrink-0 border border-savings-green-border">
-              <span class="material-symbols-outlined text-[13px]" style="font-variation-settings:'FILL' 1;">local_offer</span>
-              ${escapeHtml(discountText)}
-            </span>
           </div>
 
           <div class="flex gap-3">
             <div class="w-[76px] h-[76px] rounded-2xl bg-surface-subtle overflow-hidden flex-shrink-0 border border-surface-container flex items-center justify-center">
-              <img src="${escapeAttribute(imgSrc)}" class="w-full h-full object-cover" alt="Deal"
-                   onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400'">
+              <img src="${escapeAttribute(imgSrc)}" class="w-full h-full object-cover" alt="Deal" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400'">
             </div>
             <div class="flex flex-col min-w-0 justify-center flex-1">
-              <h3 class="text-[14px] text-on-surface font-semibold leading-snug line-clamp-2">
-                ${escapeHtml(deal.title || "Deal")}
-              </h3>
+              <h3 class="text-[14px] text-on-surface font-semibold leading-snug line-clamp-2">${escapeHtml(deal.title || "Deal")}</h3>
               <div class="flex items-baseline gap-2 mt-1.5 flex-wrap">
-                <span class="text-[18px] font-extrabold text-primary-container">
-                  ${formatPrice(newPrice, currency)}
-                </span>
+                <span class="text-[18px] font-extrabold text-primary-container">${formatPrice(newPrice, currency)}</span>
                 ${oldPrice ? `<span class="text-[12px] text-outline line-through">${formatPrice(oldPrice, currency)}</span>` : ""}
               </div>
               <div class="flex items-center gap-1 mt-1">
                 <span class="material-symbols-outlined text-warning-amber text-[14px]" style="font-variation-settings:'FILL' 1;">star</span>
-                <span class="text-[12px] font-bold text-on-surface">
-                  ${hasRating ? rating.toFixed(1) : "—"}
-                </span>
+                <span class="text-[12px] font-bold text-on-surface">${hasRating ? rating.toFixed(1) : "—"}</span>
                 <span class="text-[11px] text-on-surface-variant">/ 5</span>
               </div>
             </div>
@@ -752,27 +763,19 @@ function loadDeals(filter = "all") {
           </div>
 
           <div class="flex items-center gap-2">
-            ${dealId ? `
-              <button onclick="openDealComparison('${escapeAttribute(String(dealId))}')" 
-                      class="cd-btn cd-btn-compare"
-                      title="Compare prices across stores">
+            ${dealId ? `<button onclick="openDealComparison('${escapeAttribute(String(dealId))}')" class="cd-btn cd-btn-compare" title="Compare prices across stores">
                 <span class="material-symbols-outlined text-[16px]">compare_arrows</span>
                 <span>Compare</span>
-              </button>
-            ` : ""}
-            <button onclick="shareDeal('${encodeURIComponent(deal.title || "")}', '${escapeAttribute(deal.url || window.location.href)}')" 
-                    class="cd-btn cd-btn-share" 
-                    title="Share Deal">
+              </button>` : ""}
+            <button onclick="shareDeal('${encodeURIComponent(deal.title || "")}', '${escapeAttribute(deal.url || window.location.href)}')" class="cd-btn cd-btn-share" title="Share Deal">
               <span class="material-symbols-outlined text-[16px]">share</span>
             </button>
-            <a href="${escapeAttribute(deal.url || "#")}" target="_blank" rel="noopener noreferrer"
-               class="cd-btn cd-btn-primary">
+            <a href="${escapeAttribute(deal.url || "#")}" target="_blank" rel="noopener noreferrer" class="cd-btn cd-btn-primary">
               <span>Get Deal</span>
               <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
             </a>
           </div>
         `;
-
         container.appendChild(card);
     });
 }
@@ -781,7 +784,6 @@ function setupFilters() {}
 
 async function openDealComparison(dealId) {
     let modal = document.getElementById("cdComparisonModal");
-
     if (!modal) {
         modal = document.createElement("div");
         modal.id = "cdComparisonModal";
@@ -797,44 +799,25 @@ async function openDealComparison(dealId) {
                         <span class="material-symbols-outlined">close</span>
                     </button>
                 </div>
-                <div id="cdComparisonContent" class="p-4">
-                    <div class="text-center py-8 text-on-surface-variant">Loading comparison...</div>
-                </div>
-            </div>
-        `;
+                <div id="cdComparisonContent" class="p-4"><div class="text-center py-8 text-on-surface-variant">Loading comparison...</div></div>
+            </div>`;
         document.body.appendChild(modal);
     }
-
     modal.classList.remove("hidden");
     modal.classList.add("flex");
 
     const content = document.getElementById("cdComparisonContent");
     if (!content) return;
-
-    content.innerHTML = `
-        <div class="text-center py-8 text-on-surface-variant">
-            <span class="material-symbols-outlined animate-spin">progress_activity</span>
-            <div class="mt-2">Checking other stores...</div>
-        </div>
-    `;
+    content.innerHTML = `<div class="text-center py-8 text-on-surface-variant"><span class="material-symbols-outlined animate-spin">progress_activity</span><div class="mt-2">Checking other stores...</div></div>`;
 
     try {
         const response = await fetch(`${API_BASE}/api/deals/${encodeURIComponent(dealId)}/compare`);
         if (!response.ok) throw new Error("Comparison API failed");
-
         const data = await response.json();
-        const comparisons = Array.isArray(data)
-            ? data
-            : (Array.isArray(data.deals) ? data.deals : (Array.isArray(data.offers) ? data.offers : (Array.isArray(data.comparisons) ? data.comparisons : [])));
+        const comparisons = Array.isArray(data) ? data : (Array.isArray(data.deals) ? data.deals : (Array.isArray(data.offers) ? data.offers : (Array.isArray(data.comparisons) ? data.comparisons : [])));
 
         if (!comparisons.length) {
-            content.innerHTML = `
-                <div class="text-center py-8">
-                    <div class="text-3xl mb-2">🔎</div>
-                    <div class="font-semibold text-on-surface">No other store prices found</div>
-                    <div class="text-[12px] text-on-surface-variant mt-1">We will show more comparisons as they become available.</div>
-                </div>
-            `;
+            content.innerHTML = `<div class="text-center py-8"><div class="text-3xl mb-2">🔎</div><div class="font-semibold text-on-surface">No other store prices found</div><div class="text-[12px] text-on-surface-variant mt-1">We will show more comparisons as they become available.</div></div>`;
             return;
         }
 
@@ -846,14 +829,9 @@ async function openDealComparison(dealId) {
             const currency = getDealCurrency(normalized);
             const price = Number(normalized.new_price || normalized.price || 0);
             const priceAed = convertToAED(price, currency);
-
             if (priceAed > 0) {
-                if (priceAed < cheapestAed - 0.01) {
-                    cheapestAed = priceAed;
-                    cheapestOffers = [{ normalized, currency, price, priceAed }];
-                } else if (Math.abs(priceAed - cheapestAed) < 0.01) {
-                    cheapestOffers.push({ normalized, currency, price, priceAed });
-                }
+                if (priceAed < cheapestAed - 0.01) { cheapestAed = priceAed; cheapestOffers = [{ normalized, currency, price, priceAed }]; }
+                else if (Math.abs(priceAed - cheapestAed) < 0.01) { cheapestOffers.push({ normalized, currency, price, priceAed }); }
             }
         });
 
@@ -862,16 +840,13 @@ async function openDealComparison(dealId) {
             if (cheapestOffers.length === 1) {
                 const cheapest = cheapestOffers[0];
                 const cheapestCountry = COUNTRIES[getDealCountry(cheapest.normalized)];
-                const cheapestImg = cheapest.normalized.image_url || cheapest.normalized.image ||
-                    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200";
-
+                const cheapestImg = cheapest.normalized.image_url || cheapest.normalized.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200";
                 bestDealHtml = `
                     <div class="cd-best-deal">
                         <div class="cd-best-deal-badge">🏆 Best Deal</div>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="cd-comparison-img" style="border-color:#12b76a;">
-                                <img src="${escapeAttribute(cheapestImg)}" alt="Best Deal"
-                                     onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200'">
+                                <img src="${escapeAttribute(cheapestImg)}" alt="Best Deal" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200'">
                             </div>
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center gap-2 mb-1 flex-wrap">
@@ -880,61 +855,45 @@ async function openDealComparison(dealId) {
                                     <span class="text-[11px] text-secondary font-bold bg-savings-green-subtle px-2 py-0.5 rounded-full">CHEAPEST</span>
                                 </div>
                                 <div class="flex items-baseline gap-2">
-                                    <span class="font-headline-sm text-[20px] font-extrabold text-primary-container">
-                                        ${formatPrice(cheapest.price, cheapest.currency)}
-                                    </span>
+                                    <span class="font-headline-sm text-[20px] font-extrabold text-primary-container">${formatPrice(cheapest.price, cheapest.currency)}</span>
                                     ${cheapest.normalized.old_price ? `<span class="text-[13px] text-outline line-through">${formatPrice(cheapest.normalized.old_price, cheapest.currency)}</span>` : ""}
                                 </div>
                             </div>
                         </div>
-                        <div class="text-[12px] text-on-surface-variant">
-                            ${escapeHtml(cheapest.normalized.title || "").substring(0, 80)}...
-                        </div>
+                        <div class="text-[12px] text-on-surface-variant">${escapeHtml(cheapest.normalized.title || "").substring(0, 80)}...</div>
                         <div class="mt-2 pt-2 border-t border-savings-green/30 text-[11px] text-secondary">
                             <span class="material-symbols-outlined text-[12px] align-middle">info</span>
                             Approximate conversion to AED: <strong>${formatAED(cheapest.priceAed)}</strong>
-                            <br>
-                            <span class="opacity-75">Rate may vary. Please confirm on store website.</span>
+                            <br><span class="opacity-75">Rate may vary. Please confirm on store website.</span>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             } else {
-                const tieImg = cheapestOffers[0].normalized.image_url || cheapestOffers[0].normalized.image ||
-                    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200";
-
+                const tieImg = cheapestOffers[0].normalized.image_url || cheapestOffers[0].normalized.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200";
                 const storesList = cheapestOffers.map(o => {
                     const c = COUNTRIES[getDealCountry(o.normalized)];
                     return `<span class="inline-flex items-center gap-1 mr-2"><span>${c?.flag || "🌐"}</span> <strong>${escapeHtml(o.normalized.store || "Store")}</strong></span>`;
                 }).join("");
-
                 bestDealHtml = `
                     <div class="cd-best-deal" style="border-color:#f79009;background:linear-gradient(135deg,#fffaeb 0%,#fef0c7 100%);">
                         <div class="cd-best-deal-badge" style="background:#f79009;">⚡ Best Price (Tie)</div>
                         <div class="flex items-center gap-3 mb-2">
                             <div class="cd-comparison-img" style="border-color:#f79009;">
-                                <img src="${escapeAttribute(tieImg)}" alt="Tie"
-                                     onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200'">
+                                <img src="${escapeAttribute(tieImg)}" alt="Tie" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200'">
                             </div>
                             <div class="flex-1 min-w-0">
                                 <div class="text-[11px] font-bold text-orange-700 uppercase mb-1">Same price at ${cheapestOffers.length} stores</div>
-                                <div class="flex flex-wrap items-center gap-1 mb-2">
-                                    ${storesList}
-                                </div>
+                                <div class="flex flex-wrap items-center gap-1 mb-2">${storesList}</div>
                                 <div class="flex items-baseline gap-2">
-                                    <span class="font-headline-sm text-[20px] font-extrabold text-orange-600">
-                                        ${formatPrice(cheapestOffers[0].price, cheapestOffers[0].currency)}
-                                    </span>
+                                    <span class="font-headline-sm text-[20px] font-extrabold text-orange-600">${formatPrice(cheapestOffers[0].price, cheapestOffers[0].currency)}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="mt-2 pt-2 border-t border-orange-200 text-[11px] text-orange-700">
                             <span class="material-symbols-outlined text-[12px] align-middle">info</span>
                             Both stores offer the same price. Choose based on delivery, rating, or preference.
-                            <br>
-                            <span class="opacity-75">Rate may vary. Please confirm on store website.</span>
+                            <br><span class="opacity-75">Rate may vary. Please confirm on store website.</span>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             }
         }
 
@@ -946,16 +905,12 @@ async function openDealComparison(dealId) {
             const rating = Number(normalized.rating || 0);
             const priceAed = convertToAED(price, currency);
             const isCheapest = cheapestOffers.some(o => o.normalized.id === normalized.id);
-            const imgSrc = normalized.image_url || normalized.image ||
-                "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200";
-
+            const imgSrc = normalized.image_url || normalized.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200";
             return `
                 <div class="border ${isCheapest ? 'border-2 border-savings-green bg-savings-green-subtle/30' : 'border-surface-container'} rounded-2xl p-3 mb-3">
                     <div class="flex items-center gap-3">
                         <div class="cd-comparison-img">
-                            <img src="${escapeAttribute(imgSrc)}"
-                                 alt="${escapeAttribute(normalized.title || 'Product')}"
-                                 onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200'">
+                            <img src="${escapeAttribute(imgSrc)}" alt="Product" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200'">
                         </div>
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center gap-1.5 flex-wrap">
@@ -973,27 +928,15 @@ async function openDealComparison(dealId) {
                         </div>
                     </div>
                     ${normalized.url ? `<a href="${escapeAttribute(normalized.url)}" target="_blank" rel="noopener noreferrer" class="cd-btn cd-btn-primary mt-3 w-full">View Deal <span class="material-symbols-outlined text-[15px]">arrow_forward</span></a>` : ""}
-                </div>
-            `;
+                </div>`;
         }).join("");
 
         if (comparisons.length > 1 && cheapestOffers.length > 0) {
-            content.innerHTML += `
-                <div class="mt-3 p-2 bg-surface-container-low rounded-lg text-[10px] text-on-surface-variant text-center">
-                    💡 Prices converted to AED for comparison. Exchange rates are approximate and may vary.
-                </div>
-            `;
+            content.innerHTML += `<div class="mt-3 p-2 bg-surface-container-low rounded-lg text-[10px] text-on-surface-variant text-center">💡 Prices converted to AED for comparison. Exchange rates are approximate and may vary.</div>`;
         }
-
     } catch (error) {
         console.error("Comparison error:", error);
-        content.innerHTML = `
-            <div class="text-center py-8 text-on-surface-variant">
-                <div class="text-2xl mb-2">⚠️</div>
-                <div class="font-semibold text-on-surface">Comparison is not available yet</div>
-                <div class="text-[12px] mt-1">Please try again later.</div>
-            </div>
-        `;
+        content.innerHTML = `<div class="text-center py-8 text-on-surface-variant"><div class="text-2xl mb-2">⚠️</div><div class="font-semibold text-on-surface">Comparison is not available yet</div><div class="text-[12px] mt-1">Please try again later.</div></div>`;
     }
 }
 
@@ -1004,6 +947,335 @@ function closeComparisonModal() {
     modal.classList.remove("flex");
 }
 
+// ========== 5 SMART TOOLS ==========
+function setupAllTools() {
+    setupDealScoreTool();
+    setupFinalPriceTool();
+    setupCurrencyTool();
+    setupUnitPriceTool();
+    setupBestTimeTool();
+}
+
+// TOOL 1: Deal Score
+function setupDealScoreTool() {
+    const container = document.getElementById('tool-dealscore');
+    if (!container) return;
+    container.innerHTML = `
+        <div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container/60 space-y-3">
+            <div class="flex items-center gap-2">
+                <span class="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[20px]">stars</span>
+                </span>
+                <div>
+                    <h3 class="font-headline-sm text-[16px] font-bold text-on-surface">Deal Score</h3>
+                    <p class="text-[11px] text-on-surface-variant">Is this deal good? Get instant score</p>
+                </div>
+            </div>
+            <div class="space-y-2">
+                <input id="ds-price" class="w-full px-3.5 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline font-body-sm text-[14px] focus:outline-none border border-surface-container" placeholder="Current price (e.g. 899)" type="number" step="0.01">
+                <input id="ds-old" class="w-full px-3.5 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline font-body-sm text-[14px] focus:outline-none border border-surface-container" placeholder="Old price (e.g. 1299)" type="number" step="0.01">
+                <select id="ds-category" class="w-full px-3.5 py-2.5 rounded-xl bg-surface text-on-surface font-body-sm text-[14px] focus:outline-none border border-surface-container">
+                    <option value="general">Category: General</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="home">Home & Kitchen</option>
+                    <option value="fashion">Fashion</option>
+                    <option value="beauty">Beauty</option>
+                </select>
+                <button onclick="calculateDealScore()" class="w-full py-2.5 px-4 rounded-xl bg-primary-container text-on-primary font-label-md text-[13px] font-semibold shadow-sm">Calculate Deal Score</button>
+            </div>
+            <div id="ds-result" class="hidden p-3 rounded-xl bg-surface-subtle text-[13px]"></div>
+        </div>
+    `;
+}
+
+window.calculateDealScore = function() {
+    const price = parseFloat(document.getElementById('ds-price')?.value) || 0;
+    const oldPrice = parseFloat(document.getElementById('ds-old')?.value) || 0;
+    const category = document.getElementById('ds-category')?.value || 'general';
+    const resultEl = document.getElementById('ds-result');
+    if (!resultEl) return;
+
+    if (!price || !oldPrice || oldPrice <= price) {
+        resultEl.className = 'p-3 rounded-xl bg-error-container text-on-error-container text-[13px]';
+        resultEl.textContent = '⚠️ Please enter valid prices (old must be higher than new)';
+        resultEl.classList.remove('hidden');
+        return;
+    }
+
+    const discountPct = ((oldPrice - price) / oldPrice) * 100;
+    const avgDiscounts = { general: 25, electronics: 20, home: 30, fashion: 35, beauty: 25 };
+    const avg = avgDiscounts[category] || 25;
+    let score = Math.min(10, (discountPct / avg) * 7);
+    score = Math.round(score * 10) / 10;
+
+    let verdict, emoji, colorClass;
+    if (score >= 8) { verdict = 'Excellent Deal! Buy Now'; emoji = '🌟'; colorClass = 'bg-savings-green-subtle text-savings-green'; }
+    else if (score >= 6) { verdict = 'Good Deal — Worth Buying'; emoji = '✅'; colorClass = 'bg-savings-green-subtle text-savings-green'; }
+    else if (score >= 4) { verdict = 'Average Deal — Consider Waiting'; emoji = '⚠️'; colorClass = 'bg-warning-amber-subtle text-warning-amber'; }
+    else { verdict = 'Weak Deal — Better Options Likely'; emoji = '❌'; colorClass = 'bg-error-container text-on-error-container'; }
+
+    const stars = '⭐'.repeat(Math.round(score / 2)) + '☆'.repeat(5 - Math.round(score / 2));
+
+    resultEl.className = `p-3 rounded-xl ${colorClass} text-[13px] space-y-1`;
+    resultEl.innerHTML = `
+        <div class="font-bold text-[15px]">${emoji} ${score.toFixed(1)} / 10</div>
+        <div class="text-[13px]">${stars}</div>
+        <div class="font-semibold">${verdict}</div>
+        <div class="text-[11px] opacity-80">You save ${discountPct.toFixed(1)}% (avg for this category: ${avg}%)</div>
+    `;
+    resultEl.classList.remove('hidden');
+};
+
+// TOOL 2: Final Price
+function setupFinalPriceTool() {
+    const container = document.getElementById('tool-finalprice');
+    if (!container) return;
+    container.innerHTML = `
+        <div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container/60 space-y-3">
+            <div class="flex items-center gap-2">
+                <span class="w-9 h-9 rounded-lg bg-warning-amber/10 text-warning-amber flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[20px]">calculate</span>
+                </span>
+                <div>
+                    <h3 class="font-headline-sm text-[16px] font-bold text-on-surface">Final Price Calculator</h3>
+                    <p class="text-[11px] text-on-surface-variant">Total cost at checkout</p>
+                </div>
+            </div>
+            <div class="space-y-2">
+                <input id="fp-price" class="w-full px-3.5 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline text-[14px] border border-surface-container" placeholder="Product price (e.g. 899)" type="number" step="0.01">
+                <input id="fp-coupon" class="w-full px-3.5 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline text-[14px] border border-surface-container" placeholder="Coupon / discount (e.g. 50)" type="number" step="0.01">
+                <input id="fp-shipping" class="w-full px-3.5 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline text-[14px] border border-surface-container" placeholder="Shipping (e.g. 15)" type="number" step="0.01">
+                <input id="fp-vat" class="w-full px-3.5 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline text-[14px] border border-surface-container" placeholder="VAT % (e.g. 5)" type="number" step="0.01">
+                <button onclick="calculateFinalPrice()" class="w-full py-2.5 px-4 rounded-xl bg-primary-container text-on-primary text-[13px] font-semibold shadow-sm">Calculate Total</button>
+            </div>
+            <div id="fp-result" class="hidden p-3 rounded-xl bg-savings-green-subtle text-savings-green text-[13px]"></div>
+        </div>
+    `;
+}
+
+window.calculateFinalPrice = function() {
+    const price = parseFloat(document.getElementById('fp-price')?.value) || 0;
+    const coupon = parseFloat(document.getElementById('fp-coupon')?.value) || 0;
+    const shipping = parseFloat(document.getElementById('fp-shipping')?.value) || 0;
+    const vatPct = parseFloat(document.getElementById('fp-vat')?.value) || 0;
+    const resultEl = document.getElementById('fp-result');
+    if (!resultEl) return;
+
+    if (!price) {
+        resultEl.className = 'p-3 rounded-xl bg-error-container text-on-error-container text-[13px]';
+        resultEl.textContent = '⚠️ Please enter product price';
+        resultEl.classList.remove('hidden');
+        return;
+    }
+
+    const subtotal = Math.max(0, price - coupon);
+    const vat = subtotal * (vatPct / 100);
+    const total = subtotal + vat + shipping;
+
+    resultEl.className = 'p-3 rounded-xl bg-savings-green-subtle text-savings-green text-[13px] space-y-1';
+    resultEl.innerHTML = `
+        <div class="flex justify-between"><span>Product:</span><strong>AED ${price.toFixed(2)}</strong></div>
+        ${coupon > 0 ? `<div class="flex justify-between"><span>Coupon:</span><strong class="text-savings-green">- AED ${coupon.toFixed(2)}</strong></div>` : ''}
+        ${vat > 0 ? `<div class="flex justify-between"><span>VAT (${vatPct}%):</span><strong>+ AED ${vat.toFixed(2)}</strong></div>` : ''}
+        ${shipping > 0 ? `<div class="flex justify-between"><span>Shipping:</span><strong>+ AED ${shipping.toFixed(2)}</strong></div>` : ''}
+        <div class="flex justify-between pt-2 border-t border-savings-green/30 text-[15px]"><span class="font-bold">💰 Total:</span><strong>AED ${total.toFixed(2)}</strong></div>
+    `;
+    resultEl.classList.remove('hidden');
+};
+
+// TOOL 3: Currency Converter (Live)
+function setupCurrencyTool() {
+    const container = document.getElementById('tool-currency');
+    if (!container) return;
+    const currencyOptions = Object.entries(COUNTRIES).map(([code, c]) => `<option value="${c.currency}">${c.currency}</option>`).join('');
+    const uniqueCurrencies = [...new Set(Object.values(COUNTRIES).map(c => c.currency))];
+    const opts = uniqueCurrencies.map(c => `<option value="${c}">${c}</option>`).join('');
+
+    container.innerHTML = `
+        <div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container/60 space-y-3">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[20px]">currency_exchange</span>
+                    </span>
+                    <div>
+                        <h3 class="font-headline-sm text-[16px] font-bold text-on-surface">Currency Converter</h3>
+                        <p class="text-[11px] text-on-surface-variant">${LIVE_RATES ? '🟢 Live rates' : '🟡 Approximate rates'}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-2">
+                <input id="cc-amount" class="w-full px-3.5 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline text-[14px] border border-surface-container" placeholder="Amount (e.g. 100)" type="number" step="0.01" value="100">
+                <div class="grid grid-cols-2 gap-2">
+                    <select id="cc-from" class="px-3 py-2.5 rounded-xl bg-surface text-on-surface text-[13px] border border-surface-container">${opts}</select>
+                    <select id="cc-to" class="px-3 py-2.5 rounded-xl bg-surface text-on-surface text-[13px] border border-surface-container">${opts}</select>
+                </div>
+                <button onclick="convertCurrency()" class="w-full py-2.5 px-4 rounded-xl bg-primary-container text-on-primary text-[13px] font-semibold shadow-sm">Convert</button>
+            </div>
+            <div id="cc-result" class="hidden p-3 rounded-xl bg-primary-container/10 text-primary text-[13px]"></div>
+        </div>
+    `;
+
+    const fromSel = document.getElementById('cc-from');
+    const toSel = document.getElementById('cc-to');
+    if (fromSel) fromSel.value = 'USD';
+    if (toSel) toSel.value = 'AED';
+}
+
+window.convertCurrency = function() {
+    const amount = parseFloat(document.getElementById('cc-amount')?.value) || 0;
+    const from = document.getElementById('cc-from')?.value || 'USD';
+    const to = document.getElementById('cc-to')?.value || 'AED';
+    const resultEl = document.getElementById('cc-result');
+    if (!resultEl) return;
+
+    const rate = getRate(from, to);
+    const result = amount * rate;
+
+    resultEl.className = 'p-3 rounded-xl bg-primary-container/10 text-primary text-[13px] space-y-1';
+    resultEl.innerHTML = `
+        <div class="text-[16px] font-bold">${amount.toFixed(2)} ${from} = ${result.toFixed(2)} ${to}</div>
+        <div class="text-[11px] opacity-75">1 ${from} = ${rate.toFixed(4)} ${to}</div>
+        <div class="text-[10px] opacity-60">${LIVE_RATES ? '✅ Live rate' : '⚠️ Approximate rate — may vary'}</div>
+    `;
+    resultEl.classList.remove('hidden');
+};
+
+// TOOL 4: Unit Price
+function setupUnitPriceTool() {
+    const container = document.getElementById('tool-unitprice');
+    if (!container) return;
+    container.innerHTML = `
+        <div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container/60 space-y-3">
+            <div class="flex items-center gap-2">
+                <span class="w-9 h-9 rounded-lg bg-savings-green-subtle text-savings-green flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[20px]">balance</span>
+                </span>
+                <div>
+                    <h3 class="font-headline-sm text-[16px] font-bold text-on-surface">Unit Price Comparison</h3>
+                    <p class="text-[11px] text-on-surface-variant">Which pack is cheaper per gram/ml?</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <input id="up-p1" class="px-3 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline text-[13px] border border-surface-container" placeholder="P1 price" type="number" step="0.01">
+                <input id="up-w1" class="px-3 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline text-[13px] border border-surface-container" placeholder="P1 weight" type="number" step="0.01">
+                <input id="up-p2" class="px-3 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline text-[13px] border border-surface-container" placeholder="P2 price" type="number" step="0.01">
+                <input id="up-w2" class="px-3 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline text-[13px] border border-surface-container" placeholder="P2 weight" type="number" step="0.01">
+            </div>
+            <button onclick="compareUnitPrice()" class="w-full py-2.5 px-4 rounded-xl bg-primary-container text-on-primary text-[13px] font-semibold shadow-sm">Compare Unit Prices</button>
+            <div id="up-result" class="hidden p-3 rounded-xl text-[13px]"></div>
+        </div>
+    `;
+}
+
+window.compareUnitPrice = function() {
+    const p1 = parseFloat(document.getElementById('up-p1')?.value) || 0;
+    const w1 = parseFloat(document.getElementById('up-w1')?.value) || 0;
+    const p2 = parseFloat(document.getElementById('up-p2')?.value) || 0;
+    const w2 = parseFloat(document.getElementById('up-w2')?.value) || 0;
+    const resultEl = document.getElementById('up-result');
+    if (!resultEl) return;
+
+    if (!p1 || !w1 || !p2 || !w2) {
+        resultEl.className = 'p-3 rounded-xl bg-error-container text-on-error-container text-[13px]';
+        resultEl.textContent = '⚠️ Please fill all fields';
+        resultEl.classList.remove('hidden');
+        return;
+    }
+
+    const u1 = p1 / w1;
+    const u2 = p2 / w2;
+    const winner = u1 < u2 ? 'Product 1' : 'Product 2';
+    const saving = Math.abs(u1 - u2).toFixed(4);
+
+    resultEl.className = 'p-3 rounded-xl bg-savings-green-subtle text-savings-green text-[13px] space-y-1';
+    resultEl.innerHTML = `
+        <div class="flex justify-between"><span>Product 1:</span><strong>${u1.toFixed(4)} per unit</strong></div>
+        <div class="flex justify-between"><span>Product 2:</span><strong>${u2.toFixed(4)} per unit</strong></div>
+        <div class="pt-2 border-t border-savings-green/30 font-bold">🏆 ${winner} is cheaper by ${saving} per unit</div>
+    `;
+    resultEl.classList.remove('hidden');
+};
+
+// TOOL 5: Best Time to Buy
+function setupBestTimeTool() {
+    const container = document.getElementById('tool-besttime');
+    if (!container) return;
+    container.innerHTML = `
+        <div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container/60 space-y-3">
+            <div class="flex items-center gap-2">
+                <span class="w-9 h-9 rounded-lg bg-warning-amber-subtle text-warning-amber flex items-center justify-center">
+                    <span class="material-symbols-outlined text-[20px]">schedule</span>
+                </span>
+                <div>
+                    <h3 class="font-headline-sm text-[16px] font-bold text-on-surface">Best Time to Buy</h3>
+                    <p class="text-[11px] text-on-surface-variant">Should you wait for a better price?</p>
+                </div>
+            </div>
+            <div class="space-y-2">
+                <select id="bt-category" class="w-full px-3.5 py-2.5 rounded-xl bg-surface text-on-surface text-[13px] border border-surface-container">
+                    <option value="electronics">Electronics</option>
+                    <option value="home">Home & Kitchen</option>
+                    <option value="fashion">Fashion</option>
+                    <option value="beauty">Beauty</option>
+                    <option value="general">General</option>
+                </select>
+                <input id="bt-discount" class="w-full px-3.5 py-2.5 rounded-xl bg-surface text-on-surface placeholder:text-outline text-[13px] border border-surface-container" placeholder="Current discount % (e.g. 30)" type="number" step="0.1">
+                <button onclick="checkBestTime()" class="w-full py-2.5 px-4 rounded-xl bg-primary-container text-on-primary text-[13px] font-semibold shadow-sm">Check Best Time</button>
+            </div>
+            <div id="bt-result" class="hidden p-3 rounded-xl text-[13px]"></div>
+        </div>
+    `;
+}
+
+window.checkBestTime = function() {
+    const category = document.getElementById('bt-category')?.value || 'general';
+    const currentDiscount = parseFloat(document.getElementById('bt-discount')?.value) || 0;
+    const resultEl = document.getElementById('bt-result');
+    if (!resultEl) return;
+
+    const monthData = {
+        electronics: { Sep: 20, Oct: 25, Nov: 45, Dec: 40, Jan: 30, Feb: 20, Mar: 15, Apr: 15, May: 15, Jun: 18, Jul: 18, Aug: 20, best: 'November (Black Friday)' },
+        home: { Sep: 25, Oct: 28, Nov: 45, Dec: 42, Jan: 35, Feb: 25, Mar: 20, Apr: 22, May: 22, Jun: 25, Jul: 28, Aug: 28, best: 'November (Black Friday)' },
+        fashion: { Sep: 30, Oct: 32, Nov: 50, Dec: 48, Jan: 45, Feb: 35, Mar: 30, Apr: 30, May: 28, Jun: 32, Jul: 35, Aug: 35, best: 'November (Black Friday)' },
+        beauty: { Sep: 25, Oct: 28, Nov: 42, Dec: 40, Jan: 30, Feb: 25, Mar: 22, Apr: 25, May: 25, Jun: 28, Jul: 28, Aug: 28, best: 'November (Black Friday)' },
+        general: { Sep: 25, Oct: 28, Nov: 45, Dec: 42, Jan: 35, Feb: 28, Mar: 25, Apr: 25, May: 25, Jun: 28, Jul: 28, Aug: 28, best: 'November (Black Friday)' }
+    };
+
+    const data = monthData[category] || monthData.general;
+    const now = new Date();
+    const currentMonth = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][now.getMonth()];
+
+    const bestMonthDiscount = Math.max(data.Nov, data.Dec);
+    const currentAvg = data[currentMonth] || 25;
+
+    let verdict, emoji, colorClass;
+
+    if (currentDiscount >= bestMonthDiscount * 0.85) {
+        verdict = 'Buy Now — Price is near lowest'; emoji = '🌟';
+        colorClass = 'bg-savings-green-subtle text-savings-green';
+    } else if (currentDiscount >= currentAvg) {
+        verdict = 'Good Deal — Could wait for better'; emoji = '✅';
+        colorClass = 'bg-savings-green-subtle text-savings-green';
+    } else {
+        verdict = 'Wait — Better deals come in ' + data.best; emoji = '⏳';
+        colorClass = 'bg-warning-amber-subtle text-warning-amber';
+    }
+
+    resultEl.className = `p-3 rounded-xl ${colorClass} text-[13px] space-y-1`;
+    resultEl.innerHTML = `
+        <div class="font-bold text-[14px]">${emoji} ${verdict}</div>
+        <div class="text-[11px] opacity-80">
+            📊 Current: ${currentDiscount}% off<br>
+            🎯 Best expected: ${bestMonthDiscount}% off (${data.best})<br>
+            📅 Avg this month: ${currentAvg}%
+        </div>
+        <div class="text-[10px] opacity-70 pt-1">💡 Based on typical seasonal patterns</div>
+    `;
+    resultEl.classList.remove('hidden');
+};
+
+// ========== BURGER MENU ==========
 function initBurgerMenu() {
     const btn = document.getElementById("burgerMenuBtn");
     if (!btn) return;
@@ -1015,60 +1287,44 @@ function initBurgerMenu() {
 
     menuOverlay.innerHTML = `
         <div class="absolute right-0 top-0 h-full w-[320px] bg-surface-container-lowest shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300">
-
-            <!-- Header with Real Logo -->
             <div class="bg-gradient-to-br from-primary-container via-primary to-primary-dark p-5 pb-6 relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-                <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-savings-green/20 rounded-full blur-2xl"></div>
-
                 <div class="relative flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" class="h-11 w-auto">
-                            <defs>
-                                <linearGradient id="cdMenuGreen" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#70FDA7" />
-                                    <stop offset="100%" stop-color="#12B76A" />
-                                </linearGradient>
-                            </defs>
-                            <g>
-                                <path d="M26 4C14 4 6 8 6 8C6 24 10 42 26 56C42 42 46 24 46 8C46 8 38 4 26 4Z" fill="#FFFFFF" opacity="0.95" />
-                                <path d="M18 28L23 33L34 20" stroke="url(#cdMenuGreen)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <circle cx="36" cy="14" r="4" fill="url(#cdMenuGreen)" />
-                            </g>
-                            <text x="60" y="39" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="20" font-weight="800" fill="#FFFFFF" letter-spacing="-0.03em">
-                                Checker<tspan font-weight="500" fill="#70FDA7">Discount</tspan>
-                            </text>
-                        </svg>
-                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" class="h-11 w-auto">
+                        <defs>
+                            <linearGradient id="cdMenuGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#70FDA7" />
+                                <stop offset="100%" stop-color="#12B76A" />
+                            </linearGradient>
+                        </defs>
+                        <g>
+                            <path d="M26 4C14 4 6 8 6 8C6 24 10 42 26 56C42 42 46 24 46 8C46 8 38 4 26 4Z" fill="#FFFFFF" opacity="0.95" />
+                            <path d="M18 28L23 33L34 20" stroke="url(#cdMenuGreen)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="36" cy="14" r="4" fill="url(#cdMenuGreen)" />
+                        </g>
+                        <text x="60" y="39" font-family="'Inter', system-ui" font-size="20" font-weight="800" fill="#FFFFFF" letter-spacing="-0.03em">Checker<tspan font-weight="500" fill="#70FDA7">Discount</tspan></text>
+                    </svg>
                     <button id="closeBurgerMenu" class="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-sm flex items-center justify-center text-white transition-colors" type="button">
                         <span class="material-symbols-outlined text-[20px]">close</span>
                     </button>
                 </div>
-
                 <p class="relative text-white/80 text-[11px] mt-3 font-medium tracking-wide uppercase">Smart Shopping Made Easy</p>
             </div>
 
-            <!-- Menu Items -->
             <div class="flex-1 overflow-y-auto p-4">
-
                 <div class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest px-3 mb-3 mt-2">Main Menu</div>
-
                 <a href="index.html" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
                     <span class="w-9 h-9 rounded-lg bg-primary-container/10 text-primary flex items-center justify-center flex-shrink-0 group-hover:bg-primary-container group-hover:text-white transition-colors">
                         <span class="material-symbols-outlined text-[20px]">home</span>
                     </span>
                     <span class="flex-1">Home</span>
-                    <span class="material-symbols-outlined text-[18px] text-outline opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
                 </a>
-
                 <a href="customer.html" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
                     <span class="w-9 h-9 rounded-lg bg-primary-container/10 text-primary flex items-center justify-center flex-shrink-0 group-hover:bg-primary-container group-hover:text-white transition-colors">
                         <span class="material-symbols-outlined text-[20px]">person</span>
                     </span>
                     <span class="flex-1">My Account</span>
-                    <span class="material-symbols-outlined text-[18px] text-outline opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
                 </a>
-
                 <a href="#market-deals" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
                     <span class="w-9 h-9 rounded-lg bg-savings-green-subtle text-savings-green flex items-center justify-center flex-shrink-0 group-hover:bg-savings-green group-hover:text-white transition-colors">
                         <span class="material-symbols-outlined text-[20px]">local_offer</span>
@@ -1076,44 +1332,47 @@ function initBurgerMenu() {
                     <span class="flex-1">Top Deals</span>
                     <span class="px-2 py-0.5 rounded-full bg-savings-green-subtle text-savings-green text-[10px] font-bold">HOT</span>
                 </a>
+                <a href="#favorites-section" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
+                    <span class="w-9 h-9 rounded-lg bg-error-container text-error flex items-center justify-center flex-shrink-0 group-hover:bg-error group-hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1;">favorite</span>
+                    </span>
+                    <span class="flex-1">My Favorites</span>
+                    <span id="menu-fav-count" class="px-2 py-0.5 rounded-full bg-error-container text-error text-[10px] font-bold">0</span>
+                </a>
 
-                <a href="#savings-tool" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
-                    <span class="w-9 h-9 rounded-lg bg-warning-amber-subtle text-warning-amber flex items-center justify-center flex-shrink-0 group-hover:bg-warning-amber group-hover:text-white transition-colors">
+                <div class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest px-3 mb-3 mt-5">Smart Tools</div>
+                <a href="#tool-dealscore" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
+                    <span class="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 group-hover:bg-primary group-hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">stars</span>
+                    </span>
+                    <span class="flex-1">Deal Score</span>
+                </a>
+                <a href="#tool-finalprice" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
+                    <span class="w-9 h-9 rounded-lg bg-warning-amber/10 text-warning-amber flex items-center justify-center flex-shrink-0 group-hover:bg-warning-amber group-hover:text-white transition-colors">
                         <span class="material-symbols-outlined text-[20px]">calculate</span>
                     </span>
-                    <span class="flex-1">Savings Checker</span>
-                    <span class="material-symbols-outlined text-[18px] text-outline opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+                    <span class="flex-1">Final Price</span>
                 </a>
-
-                <div class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest px-3 mb-3 mt-5">Tools</div>
-
-                <a href="#tool-comparison" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
+                <a href="#tool-currency" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
                     <span class="w-9 h-9 rounded-lg bg-primary-container/10 text-primary flex items-center justify-center flex-shrink-0 group-hover:bg-primary-container group-hover:text-white transition-colors">
-                        <span class="material-symbols-outlined text-[20px]">compare_arrows</span>
+                        <span class="material-symbols-outlined text-[20px]">currency_exchange</span>
                     </span>
-                    <span class="flex-1">Price Comparison</span>
-                    <span class="material-symbols-outlined text-[18px] text-outline opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+                    <span class="flex-1">Currency Converter</span>
                 </a>
-
-                <a href="#tool-history" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
-                    <span class="w-9 h-9 rounded-lg bg-primary-container/10 text-primary flex items-center justify-center flex-shrink-0 group-hover:bg-primary-container group-hover:text-white transition-colors">
-                        <span class="material-symbols-outlined text-[20px]">trending_down</span>
+                <a href="#tool-unitprice" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
+                    <span class="w-9 h-9 rounded-lg bg-savings-green-subtle text-savings-green flex items-center justify-center flex-shrink-0 group-hover:bg-savings-green group-hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">balance</span>
                     </span>
-                    <span class="flex-1">Price History</span>
-                    <span class="material-symbols-outlined text-[18px] text-outline opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+                    <span class="flex-1">Unit Price</span>
                 </a>
-
-                <a href="#tool-watchlist" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
-                    <span class="w-9 h-9 rounded-lg bg-primary-container/10 text-primary flex items-center justify-center flex-shrink-0 group-hover:bg-primary-container group-hover:text-white transition-colors">
-                        <span class="material-symbols-outlined text-[20px]">bookmark</span>
+                <a href="#tool-besttime" onclick="closeMenu()" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px] transition-all group">
+                    <span class="w-9 h-9 rounded-lg bg-warning-amber-subtle text-warning-amber flex items-center justify-center flex-shrink-0 group-hover:bg-warning-amber group-hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">schedule</span>
                     </span>
-                    <span class="flex-1">Watchlist</span>
-                    <span class="material-symbols-outlined text-[18px] text-outline opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+                    <span class="flex-1">Best Time to Buy</span>
                 </a>
-
             </div>
 
-            <!-- Footer -->
             <div class="p-4 border-t border-surface-container bg-surface-container-low/50">
                 <div class="flex items-center justify-center gap-2 text-[11px] text-on-surface-variant">
                     <span class="material-symbols-outlined text-savings-green text-[14px]">verified</span>
@@ -1121,29 +1380,27 @@ function initBurgerMenu() {
                 </div>
                 <div class="text-center text-[10px] text-outline mt-1">© 2025 CheckerDiscount</div>
             </div>
-
         </div>
     `;
 
     document.body.appendChild(menuOverlay);
-
     const drawer = menuOverlay.querySelector("div > div");
 
     btn.addEventListener("click", () => {
+        updateFavCount();
         menuOverlay.classList.remove("hidden");
-        setTimeout(() => {
-            drawer.classList.remove("translate-x-full");
-        }, 10);
+        setTimeout(() => drawer.classList.remove("translate-x-full"), 10);
     });
 
     const closeBtn = document.getElementById("closeBurgerMenu");
-    if (closeBtn) {
-        closeBtn.addEventListener("click", closeMenu);
-    }
+    if (closeBtn) closeBtn.addEventListener("click", closeMenu);
+    menuOverlay.addEventListener("click", e => { if (e.target === menuOverlay) closeMenu(); });
+}
 
-    menuOverlay.addEventListener("click", e => {
-        if (e.target === menuOverlay) closeMenu();
-    });
+function updateFavCount() {
+    const count = getWatchlist().length;
+    const el = document.getElementById('menu-fav-count');
+    if (el) el.textContent = count;
 }
 
 function closeMenu() {
@@ -1151,9 +1408,7 @@ function closeMenu() {
     if (!menuOverlay) return;
     const drawer = menuOverlay.querySelector("div > div");
     drawer.classList.add("translate-x-full");
-    setTimeout(() => {
-        menuOverlay.classList.add("hidden");
-    }, 300);
+    setTimeout(() => menuOverlay.classList.add("hidden"), 300);
 }
 
 function shareDeal(title, url) {
@@ -1161,99 +1416,21 @@ function shareDeal(title, url) {
     if (navigator.share) {
         navigator.share({ title: decodedTitle, url: url }).catch(() => {});
     } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(url).then(() => {
-            alert("Deal link copied to clipboard!");
-        }).catch(() => {
-            alert("Deal link: " + url);
-        });
-    } else {
-        alert("Deal link: " + url);
-    }
-}
-
-function calculateSavings() {
-    const paid = parseFloat(document.getElementById("checkerPaid")?.value) || 0;
-    const current = parseFloat(document.getElementById("checkerCurrent")?.value) || 0;
-    const store = document.getElementById("checkerStore")?.value || "Store";
-    const delta = paid - current;
-    const pct = paid > 0 ? ((delta / paid) * 100).toFixed(1) : 0;
-
-    const deltaEl = document.getElementById("savingsDelta");
-    const adviceEl = document.getElementById("savingsAdvice");
-
-    if (deltaEl) deltaEl.textContent = `$${Math.max(0, delta).toFixed(2)}`;
-    if (adviceEl) adviceEl.textContent = `${store}: $${paid.toFixed(2)} vs $${current.toFixed(2)} yields ${pct}% price drop. Eligible for store price adjustments.`;
-}
-
-function runFinalPriceCalc() {
-    const price = parseFloat(document.getElementById("calcPrice")?.value) || 0;
-    const coupon = parseFloat(document.getElementById("calcCoupon")?.value) || 0;
-    const shipping = parseFloat(document.getElementById("calcShipping")?.value) || 0;
-    const tax = parseFloat(document.getElementById("calcTax")?.value) || 0;
-    const total = Math.max(0, price - coupon + shipping + tax);
-
-    const display = document.querySelector("#finalPriceDisplay strong") || document.getElementById("finalPriceDisplay");
-    if (display) {
-        display.innerHTML = `
-            <span class="text-on-surface-variant">Total Out-of-Pocket:</span>
-            <span class="font-bold text-on-surface text-[16px]">$${total.toFixed(2)}</span>
-        `;
-    }
-}
-
-function addToWatchlist() {
-    const name = document.getElementById("watchProductName")?.value;
-    const price = document.getElementById("watchAlertPrice")?.value;
-    const status = document.getElementById("watchStatusText");
-    if (name && status) {
-        status.textContent = `Tracking "${name}" for drops below $${price || "0.00"}`;
-        alert("Added to price drop watchlist successfully!");
-    }
-}
-
-function runPriceComparison() {
-    const input = document.getElementById("compareProductInput");
-    const value = input?.value?.trim();
-    if (!value) { alert("Please enter a product name."); return; }
-    alert(`Price comparison search for "${value}" will use available verified store data.`);
-}
-
-function runPriceHistoryCheck() {
-    const input = document.getElementById("historyProductInput");
-    const value = input?.value?.trim();
-    if (!value) { alert("Please enter a product name."); return; }
-    const floor = document.getElementById("priceFloorDisplay");
-    const trend = document.getElementById("priceTrendDisplay");
-    if (floor) floor.textContent = "Checking price history...";
-    if (trend) trend.textContent = `Price history for "${value}" will appear when historical data is available.`;
-}
-
-function runCouponChecker() {
-    const store = document.getElementById("couponStoreInput")?.value?.trim();
-    const keyword = document.getElementById("couponKeywordInput")?.value?.trim();
-    if (!store && !keyword) { alert("Please enter a store or product keyword."); return; }
-    alert("Coupon checker is ready for future verified coupon data.");
+        navigator.clipboard.writeText(url).then(() => showToast('🔗 Link copied!')).catch(() => alert("Deal link: " + url));
+    } else { alert("Deal link: " + url); }
 }
 
 function escapeHtml(value) {
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    return String(value ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 
 function escapeAttribute(value) { return escapeHtml(value); }
 
+// Global exports
 window.selectCountry = selectCountry;
 window.closeMenu = closeMenu;
 window.shareDeal = shareDeal;
-window.calculateSavings = calculateSavings;
-window.runFinalPriceCalc = runFinalPriceCalc;
-window.addToWatchlist = addToWatchlist;
-window.runPriceComparison = runPriceComparison;
-window.runPriceHistoryCheck = runPriceHistoryCheck;
-window.runCouponChecker = runCouponChecker;
+window.toggleWatchlist = toggleWatchlist;
 window.openDealComparison = openDealComparison;
 window.closeComparisonModal = closeComparisonModal;
+window.showToast = showToast;
