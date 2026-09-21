@@ -4,419 +4,77 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CheckerDiscount Admin</title>
-
 <style>
-:root{
-    --primary:#155eef;
-    --primary-dark:#0047c1;
-    --green:#12b76a;
-    --red:#d92d20;
-    --orange:#f79009;
-    --bg:#f5f7fb;
-    --card:#ffffff;
-    --text:#101828;
-    --muted:#667085;
-    --border:#e4e7ec;
-    --shadow:0 4px 18px rgba(16,24,40,.07);
-}
-
-*{
-    box-sizing:border-box;
-}
-
-body{
-    margin:0;
-    font-family:Arial,Helvetica,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-}
-
-header{
-    background:#fff;
-    border-bottom:1px solid var(--border);
-    padding:18px 24px;
-    position:sticky;
-    top:0;
-    z-index:20;
-}
-
-.header-inner{
-    max-width:1400px;
-    margin:auto;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:20px;
-}
-
-.logo{
-    font-size:23px;
-    font-weight:800;
-    color:#0b1220;
-}
-
-.logo span{
-    color:var(--primary);
-}
-
-.header-right{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-
-.container{
-    max-width:1400px;
-    margin:25px auto;
-    padding:0 18px 50px;
-}
-
-h1{
-    margin:0 0 6px;
-    font-size:28px;
-}
-
-.subtitle{
-    color:var(--muted);
-    margin-bottom:25px;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:15px;
-    margin-bottom:25px;
-}
-
-.stat{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:14px;
-    padding:20px;
-    box-shadow:var(--shadow);
-}
-
-.stat-label{
-    color:var(--muted);
-    font-size:13px;
-}
-
-.stat-value{
-    font-size:28px;
-    font-weight:800;
-    margin-top:7px;
-}
-
-.card{
-    background:#fff;
-    border:1px solid var(--border);
-    border-radius:15px;
-    padding:22px;
-    box-shadow:var(--shadow);
-    margin-bottom:22px;
-}
-
-.card h2{
-    margin:0 0 18px;
-    font-size:20px;
-}
-
-.form-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:15px;
-}
-
-.field{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-}
-
-.field.full{
-    grid-column:1/-1;
-}
-
-label{
-    font-size:13px;
-    font-weight:700;
-    color:#344054;
-}
-
-input,
-select{
-    width:100%;
-    min-height:43px;
-    border:1px solid #d0d5dd;
-    border-radius:9px;
-    padding:10px 12px;
-    background:#fff;
-    color:#101828;
-    font-size:14px;
-    outline:none;
-}
-
-input:focus,
-select:focus{
-    border-color:var(--primary);
-    box-shadow:0 0 0 3px rgba(21,94,239,.10);
-}
-
-.actions{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-top:18px;
-}
-
-button{
-    border:0;
-    border-radius:9px;
-    padding:10px 15px;
-    cursor:pointer;
-    font-weight:700;
-    font-size:13px;
-}
-
-.btn-primary{
-    background:var(--primary);
-    color:#fff;
-}
-
-.btn-primary:hover{
-    background:var(--primary-dark);
-}
-
-.btn-secondary{
-    background:#eef2f6;
-    color:#344054;
-}
-
-.btn-green{
-    background:#e8f8f0;
-    color:#087443;
-}
-
-.btn-orange{
-    background:#fff4e5;
-    color:#b54708;
-}
-
-.btn-red{
-    background:#feeceb;
-    color:#b42318;
-}
-
-.btn-dark{
-    background:#101828;
-    color:#fff;
-}
-
-.edit-mode{
-    border:2px solid var(--primary);
-    background:#f8faff;
-}
-
-.edit-banner{
-    display:none;
-    background:#eef4ff;
-    border:1px solid #b2ccff;
-    color:#1849a9;
-    border-radius:10px;
-    padding:12px 14px;
-    margin-bottom:18px;
-    font-weight:700;
-}
-
-.edit-banner.show{
-    display:block;
-}
-
-.table-wrap{
-    width:100%;
-    overflow-x:auto;
-}
-
-.toolbar{
-    display:flex;
-    gap:12px;
-    margin-bottom:15px;
-    flex-wrap:wrap;
-}
-
-.toolbar input{
-    max-width:420px;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    min-width:1050px;
-}
-
-th,
-td{
-    text-align:left;
-    padding:12px 10px;
-    border-bottom:1px solid var(--border);
-    vertical-align:middle;
-}
-
-th{
-    background:#f8fafc;
-    font-size:12px;
-    color:#475467;
-    text-transform:uppercase;
-}
-
-td{
-    font-size:13px;
-}
-
-.deal-title{
-    font-weight:700;
-    max-width:280px;
-}
-
-.small{
-    font-size:12px;
-    color:var(--muted);
-}
-
-.badge{
-    display:inline-flex;
-    align-items:center;
-    gap:4px;
-    border-radius:999px;
-    padding:5px 9px;
-    font-size:11px;
-    font-weight:800;
-}
-
-.badge-green{
-    background:#ecfdf3;
-    color:#027a48;
-}
-
-.badge-orange{
-    background:#fffaeb;
-    color:#b54708;
-}
-
-.badge-red{
-    background:#fef3f2;
-    color:#b42318;
-}
-
-.badge-blue{
-    background:#eff8ff;
-    color:#175cd3;
-}
-
-.row-actions{
-    display:flex;
-    flex-wrap:wrap;
-    gap:6px;
-}
-
-.row-actions button{
-    padding:7px 9px;
-    font-size:11px;
-}
-
-.message{
-    display:none;
-    margin-bottom:18px;
-    padding:12px 14px;
-    border-radius:9px;
-    font-size:14px;
-    font-weight:700;
-}
-
-.message.show{
-    display:block;
-}
-
-.message.success{
-    background:#ecfdf3;
-    color:#027a48;
-    border:1px solid #abefc6;
-}
-
-.message.error{
-    background:#fef3f2;
-    color:#b42318;
-    border:1px solid #fecdca;
-}
-
-.loading{
-    padding:30px;
-    text-align:center;
-    color:var(--muted);
-}
-
-.empty{
-    padding:30px;
-    text-align:center;
-    color:var(--muted);
-}
-
-.hidden{
-    display:none!important;
-}
-
-@media(max-width:1000px){
-    .grid{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    .form-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
-}
-
-@media(max-width:650px){
-    header{
-        padding:15px;
-    }
-
-    .header-inner{
-        align-items:flex-start;
-        flex-direction:column;
-    }
-
-    .container{
-        margin:18px auto;
-        padding:0 12px 40px;
-    }
-
-    .grid{
-        grid-template-columns:1fr 1fr;
-    }
-
-    .form-grid{
-        grid-template-columns:1fr;
-    }
-
-    .field.full{
-        grid-column:auto;
-    }
-
-    .card{
-        padding:15px;
-    }
-}
+:root{--primary:#155eef;--primary-dark:#0047c1;--green:#12b76a;--red:#d92d20;--orange:#f79009;--bg:#f5f7fb;--card:#ffffff;--text:#101828;--muted:#667085;--border:#e4e7ec;--shadow:0 4px 18px rgba(16,24,40,.07);}
+*{box-sizing:border-box;}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);}
+header{background:#fff;border-bottom:1px solid var(--border);padding:18px 24px;position:sticky;top:0;z-index:20;}
+.header-inner{max-width:1400px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:20px;}
+.logo{font-size:23px;font-weight:800;color:#0b1220;}
+.logo span{color:var(--primary);}
+.header-right{display:flex;align-items:center;gap:10px;}
+.container{max-width:1400px;margin:25px auto;padding:0 18px 50px;}
+h1{margin:0 0 6px;font-size:28px;}
+.subtitle{color:var(--muted);margin-bottom:25px;}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:25px;}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:var(--shadow);}
+.stat-label{color:var(--muted);font-size:13px;}
+.stat-value{font-size:28px;font-weight:800;margin-top:7px;}
+.card{background:#fff;border:1px solid var(--border);border-radius:15px;padding:22px;box-shadow:var(--shadow);margin-bottom:22px;}
+.card h2{margin:0 0 18px;font-size:20px;}
+.form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;}
+.field{display:flex;flex-direction:column;gap:6px;}
+.field.full{grid-column:1/-1;}
+label{font-size:13px;font-weight:700;color:#344054;}
+input,select{width:100%;min-height:43px;border:1px solid #d0d5dd;border-radius:9px;padding:10px 12px;background:#fff;color:#101828;font-size:14px;outline:none;}
+input:focus,select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(21,94,239,.10);}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+button{border:0;border-radius:9px;padding:10px 15px;cursor:pointer;font-weight:700;font-size:13px;}
+.btn-primary{background:var(--primary);color:#fff;}
+.btn-primary:hover{background:var(--primary-dark);}
+.btn-secondary{background:#eef2f6;color:#344054;}
+.btn-green{background:#e8f8f0;color:#087443;}
+.btn-orange{background:#fff4e5;color:#b54708;}
+.btn-red{background:#feeceb;color:#b42318;}
+.btn-dark{background:#101828;color:#fff;}
+.btn-blue{background:#eff8ff;color:#175cd3;}
+.edit-mode{border:2px solid var(--primary);background:#f8faff;}
+.edit-banner{display:none;background:#eef4ff;border:1px solid #b2ccff;color:#1849a9;border-radius:10px;padding:12px 14px;margin-bottom:18px;font-weight:700;}
+.edit-banner.show{display:block;}
+.table-wrap{width:100%;overflow-x:auto;}
+.toolbar{display:flex;gap:12px;margin-bottom:15px;flex-wrap:wrap;}
+.toolbar input{max-width:420px;}
+table{width:100%;border-collapse:collapse;min-width:1150px;}
+th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--border);vertical-align:middle;}
+th{background:#f8fafc;font-size:12px;color:#475467;text-transform:uppercase;}
+td{font-size:13px;}
+.deal-title{font-weight:700;max-width:280px;}
+.small{font-size:12px;color:var(--muted);}
+.badge{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:800;}
+.badge-green{background:#ecfdf3;color:#027a48;}
+.badge-orange{background:#fffaeb;color:#b54708;}
+.badge-red{background:#fef3f2;color:#b42318;}
+.badge-blue{background:#eff8ff;color:#175cd3;}
+.badge-purple{background:#f4f3ff;color:#5925dc;}
+.row-actions{display:flex;flex-wrap:wrap;gap:6px;}
+.row-actions button{padding:7px 9px;font-size:11px;}
+.message{display:none;margin-bottom:18px;padding:12px 14px;border-radius:9px;font-size:14px;font-weight:700;}
+.message.show{display:block;}
+.message.success{background:#ecfdf3;color:#027a48;border:1px solid #abefc6;}
+.message.error{background:#fef3f2;color:#b42318;border:1px solid #fecdca;}
+.loading{padding:30px;text-align:center;color:var(--muted);}
+.empty{padding:30px;text-align:center;color:var(--muted);}
+.hidden{display:none!important;}
+.help{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4;}
+@media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr);}.form-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:650px){header{padding:15px;}.header-inner{align-items:flex-start;flex-direction:column;}.container{margin:18px auto;padding:0 12px 40px;}.grid{grid-template-columns:1fr 1fr;}.form-grid{grid-template-columns:1fr;}.field.full{grid-column:auto;}.card{padding:15px;}}
 </style>
 </head>
-
 <body>
 
 <header>
     <div class="header-inner">
-        <div class="logo">
-            Checker<span>Discount</span> Admin
-        </div>
-
+        <div class="logo">Checker<span>Discount</span> Admin</div>
         <div class="header-right">
             <button class="btn-secondary" onclick="refreshAll()">Refresh</button>
             <button class="btn-dark" onclick="logout()">Logout</button>
@@ -427,108 +85,49 @@ td{
 <div class="container">
 
     <h1>Admin Dashboard</h1>
-    <div class="subtitle">
-        Manage deals, countries, categories, verification and featured offers.
-    </div>
+    <div class="subtitle">Manage deals, countries, categories, verification and featured offers.</div>
 
     <div id="message" class="message"></div>
 
-    <!-- STATS -->
     <div class="grid">
-        <div class="stat">
-            <div class="stat-label">Total Deals</div>
-            <div class="stat-value" id="statTotal">0</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-label">Verified</div>
-            <div class="stat-value" id="statVerified">0</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-label">Featured</div>
-            <div class="stat-value" id="statFeatured">0</div>
-        </div>
-
-        <div class="stat">
-            <div class="stat-label">Pending</div>
-            <div class="stat-value" id="statPending">0</div>
-        </div>
+        <div class="stat"><div class="stat-label">Total Deals</div><div class="stat-value" id="statTotal">0</div></div>
+        <div class="stat"><div class="stat-label">Verified</div><div class="stat-value" id="statVerified">0</div></div>
+        <div class="stat"><div class="stat-label">Featured</div><div class="stat-value" id="statFeatured">0</div></div>
+        <div class="stat"><div class="stat-label">Pending</div><div class="stat-value" id="statPending">0</div></div>
     </div>
 
-    <!-- ADD / EDIT DEAL -->
     <div class="card" id="dealFormCard">
-
-        <div id="editBanner" class="edit-banner">
-            Editing Deal. Make your changes and click "Update Deal".
-        </div>
-
+        <div id="editBanner" class="edit-banner">Editing Deal. Make your changes and click "Update Deal".</div>
         <h2 id="formTitle">Add New Deal</h2>
-
         <form id="dealForm" onsubmit="saveDeal(event)">
-
             <div class="form-grid">
-
+                <div class="field"><label>Deal Title *</label><input id="title" required></div>
+                <div class="field"><label>Store *</label><input id="store" required placeholder="e.g. Amazon, Noon, Local Store"></div>
                 <div class="field">
-                    <label>Deal Title *</label>
-                    <input id="title" required>
+                    <label>Store Type *</label>
+                    <select id="store_type" required>
+                        <option value="third-party">Third-Party / Local Store</option>
+                        <option value="official">Official Brand Store</option>
+                    </select>
+                    <div class="help">Official = original brand store (Apple, Samsung). Third-party = local reseller.</div>
                 </div>
-
-                <div class="field">
-                    <label>Store *</label>
-                    <input id="store" required>
-                </div>
-
                 <div class="field">
                     <label>Country *</label>
                     <select id="country" required onchange="syncCurrencyFromCountry()">
                         <option value="">Select Country</option>
                     </select>
                 </div>
-
                 <div class="field">
                     <label>Category *</label>
-                    <select id="category" required>
-                        <option value="">Select Category</option>
-                    </select>
+                    <select id="category" required><option value="">Select Category</option></select>
                 </div>
-
-                <div class="field">
-                    <label>Comparison ID</label>
-                    <input id="comparison_id" placeholder="Example: B0ABC12345">
-                </div>
-
-                <div class="field">
-                    <label>ASIN</label>
-                    <input id="asin">
-                </div>
-
-                <div class="field">
-                    <label>Currency *</label>
-                    <select id="currency" required>
-                    </select>
-                </div>
-
-                <div class="field">
-                    <label>Old Price</label>
-                    <input id="old" type="number" step="0.01" min="0">
-                </div>
-
-                <div class="field">
-                    <label>New Price *</label>
-                    <input id="new" type="number" step="0.01" min="0" required>
-                </div>
-
-                <div class="field">
-                    <label>Deal URL *</label>
-                    <input id="url" type="url" required>
-                </div>
-
-                <div class="field">
-                    <label>Image URL</label>
-                    <input id="image" type="url">
-                </div>
-
+                <div class="field"><label>Comparison ID</label><input id="comparison_id" placeholder="e.g. B0ABC12345"></div>
+                <div class="field"><label>ASIN</label><input id="asin"></div>
+                <div class="field"><label>Currency *</label><select id="currency" required></select></div>
+                <div class="field"><label>Old Price</label><input id="old" type="number" step="0.01" min="0"></div>
+                <div class="field"><label>New Price *</label><input id="new" type="number" step="0.01" min="0" required></div>
+                <div class="field"><label>Deal URL *</label><input id="url" type="url" required></div>
+                <div class="field"><label>Image URL</label><input id="image" type="url"></div>
                 <div class="field">
                     <label>Source Type</label>
                     <select id="source_type">
@@ -541,7 +140,6 @@ td{
                         <option value="api">API</option>
                     </select>
                 </div>
-
                 <div class="field">
                     <label>Verification Status</label>
                     <select id="verification_status">
@@ -550,1415 +148,455 @@ td{
                         <option value="EXPIRED">EXPIRED</option>
                     </select>
                 </div>
-
                 <div class="field">
                     <label>Rating (0–5)</label>
                     <input id="rating" type="number" step="0.1" min="0" max="5" placeholder="e.g. 4.5">
+                    <div class="help">Original product rating from store (shown to customers).</div>
                 </div>
-
+                <div class="field">
+                    <label>Views Count</label>
+                    <input id="views" type="number" step="1" min="0" placeholder="e.g. 9000">
+                    <div class="help">How many people viewed this deal (e.g. 9000).</div>
+                </div>
             </div>
-
             <div class="actions">
-                <button type="submit" class="btn-primary" id="saveButton">
-                    Add Deal
-                </button>
-
-                <button type="button" class="btn-secondary" onclick="resetDealForm()">
-                    Clear
-                </button>
-
-                <button type="button"
-                        class="btn-orange hidden"
-                        id="cancelEditButton"
-                        onclick="cancelEdit()">
-                    Cancel Edit
-                </button>
+                <button type="submit" class="btn-primary" id="saveButton">Add Deal</button>
+                <button type="button" class="btn-secondary" onclick="resetDealForm()">Clear</button>
+                <button type="button" class="btn-orange hidden" id="cancelEditButton" onclick="cancelEdit()">Cancel Edit</button>
             </div>
-
         </form>
     </div>
 
-
-    <!-- DEAL MANAGEMENT -->
     <div class="card">
-
         <h2>Deal Management</h2>
-
         <div class="toolbar">
-            <input
-                id="dealSearch"
-                placeholder="Search deals by title, store, country, category..."
-                oninput="renderDeals()"
-            >
-
-            <button class="btn-secondary" onclick="refreshDeals()">
-                Refresh Deals
-            </button>
+            <input id="dealSearch" placeholder="Search deals by title, store, country, category..." oninput="renderDeals()">
+            <button class="btn-secondary" onclick="refreshDeals()">Refresh Deals</button>
         </div>
-
         <div class="table-wrap">
             <table>
-
                 <thead>
                     <tr>
                         <th>Deal</th>
+                        <th>Store</th>
+                        <th>Type</th>
                         <th>Country</th>
                         <th>Category</th>
                         <th>Price</th>
+                        <th>Rating</th>
+                        <th>Views</th>
                         <th>Status</th>
-                        <th>Comparison</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
-
                 <tbody id="dealsTable">
-                    <tr>
-                        <td colspan="7" class="loading">
-                            Loading deals...
-                        </td>
-                    </tr>
+                    <tr><td colspan="10" class="loading">Loading deals...</td></tr>
                 </tbody>
-
             </table>
         </div>
-
     </div>
 
 </div>
 
-
 <script>
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
-
 let ADMIN_KEY = "";
 let allDeals = [];
-let allCoupons = [];
 let editingDealId = null;
 
-
-/* =========================================================
-   COUNTRIES
-========================================================= */
-
 const COUNTRIES = {
-
-    US:{flag:"🇺🇸",name:"USA",currency:"USD"},
-    GB:{flag:"🇬🇧",name:"United Kingdom",currency:"GBP"},
-    SA:{flag:"🇸🇦",name:"Saudi Arabia",currency:"SAR"},
-    AE:{flag:"🇦🇪",name:"UAE",currency:"AED"},
-    OM:{flag:"🇴🇲",name:"Oman",currency:"OMR"},
-    PK:{flag:"🇵🇰",name:"Pakistan",currency:"PKR"},
-    IN:{flag:"🇮🇳",name:"India",currency:"INR"},
-    CA:{flag:"🇨🇦",name:"Canada",currency:"CAD"},
-    AU:{flag:"🇦🇺",name:"Australia",currency:"AUD"},
-    DE:{flag:"🇩🇪",name:"Germany",currency:"EUR"},
-    FR:{flag:"🇫🇷",name:"France",currency:"EUR"},
-    IT:{flag:"🇮🇹",name:"Italy",currency:"EUR"},
-    ES:{flag:"🇪🇸",name:"Spain",currency:"EUR"},
-    NL:{flag:"🇳🇱",name:"Netherlands",currency:"EUR"},
-    BE:{flag:"🇧🇪",name:"Belgium",currency:"EUR"},
-    AT:{flag:"🇦🇹",name:"Austria",currency:"EUR"},
-    CH:{flag:"🇨🇭",name:"Switzerland",currency:"CHF"},
-    NO:{flag:"🇳🇴",name:"Norway",currency:"NOK"},
-    SE:{flag:"🇸🇪",name:"Sweden",currency:"SEK"},
-    DK:{flag:"🇩🇰",name:"Denmark",currency:"DKK"},
-    NZ:{flag:"🇳🇿",name:"New Zealand",currency:"NZD"},
-    JP:{flag:"🇯🇵",name:"Japan",currency:"JPY"},
-    CN:{flag:"🇨🇳",name:"China",currency:"CNY"},
-    KR:{flag:"🇰🇷",name:"South Korea",currency:"KRW"},
-    SG:{flag:"🇸🇬",name:"Singapore",currency:"SGD"},
-    MY:{flag:"🇲🇾",name:"Malaysia",currency:"MYR"},
-    TH:{flag:"🇹🇭",name:"Thailand",currency:"THB"},
-    ID:{flag:"🇮🇩",name:"Indonesia",currency:"IDR"},
-    PH:{flag:"🇵🇭",name:"Philippines",currency:"PHP"},
-    VN:{flag:"🇻🇳",name:"Vietnam",currency:"VND"},
-    TR:{flag:"🇹🇷",name:"Turkey",currency:"TRY"},
-    BR:{flag:"🇧🇷",name:"Brazil",currency:"BRL"},
-    MX:{flag:"🇲🇽",name:"Mexico",currency:"MXN"},
-    ZA:{flag:"🇿🇦",name:"South Africa",currency:"ZAR"},
-    QA:{flag:"🇶🇦",name:"Qatar",currency:"QAR"},
-    KW:{flag:"🇰🇼",name:"Kuwait",currency:"KWD"},
+    US:{flag:"🇺🇸",name:"USA",currency:"USD"},GB:{flag:"🇬🇧",name:"United Kingdom",currency:"GBP"},
+    SA:{flag:"🇸🇦",name:"Saudi Arabia",currency:"SAR"},AE:{flag:"🇦🇪",name:"UAE",currency:"AED"},
+    OM:{flag:"🇴🇲",name:"Oman",currency:"OMR"},PK:{flag:"🇵🇰",name:"Pakistan",currency:"PKR"},
+    IN:{flag:"🇮🇳",name:"India",currency:"INR"},CA:{flag:"🇨🇦",name:"Canada",currency:"CAD"},
+    AU:{flag:"🇦🇺",name:"Australia",currency:"AUD"},DE:{flag:"🇩🇪",name:"Germany",currency:"EUR"},
+    FR:{flag:"🇫🇷",name:"France",currency:"EUR"},IT:{flag:"🇮🇹",name:"Italy",currency:"EUR"},
+    ES:{flag:"🇪🇸",name:"Spain",currency:"EUR"},NL:{flag:"🇳🇱",name:"Netherlands",currency:"EUR"},
+    BE:{flag:"🇧🇪",name:"Belgium",currency:"EUR"},AT:{flag:"🇦🇹",name:"Austria",currency:"EUR"},
+    CH:{flag:"🇨🇭",name:"Switzerland",currency:"CHF"},NO:{flag:"🇳🇴",name:"Norway",currency:"NOK"},
+    SE:{flag:"🇸🇪",name:"Sweden",currency:"SEK"},DK:{flag:"🇩🇰",name:"Denmark",currency:"DKK"},
+    NZ:{flag:"🇳🇿",name:"New Zealand",currency:"NZD"},JP:{flag:"🇯🇵",name:"Japan",currency:"JPY"},
+    CN:{flag:"🇨🇳",name:"China",currency:"CNY"},KR:{flag:"🇰🇷",name:"South Korea",currency:"KRW"},
+    SG:{flag:"🇸🇬",name:"Singapore",currency:"SGD"},MY:{flag:"🇲🇾",name:"Malaysia",currency:"MYR"},
+    TH:{flag:"🇹🇭",name:"Thailand",currency:"THB"},ID:{flag:"🇮🇩",name:"Indonesia",currency:"IDR"},
+    PH:{flag:"🇵🇭",name:"Philippines",currency:"PHP"},VN:{flag:"🇻🇳",name:"Vietnam",currency:"VND"},
+    TR:{flag:"🇹🇷",name:"Turkey",currency:"TRY"},BR:{flag:"🇧🇷",name:"Brazil",currency:"BRL"},
+    MX:{flag:"🇲🇽",name:"Mexico",currency:"MXN"},ZA:{flag:"🇿🇦",name:"South Africa",currency:"ZAR"},
+    QA:{flag:"🇶🇦",name:"Qatar",currency:"QAR"},KW:{flag:"🇰🇼",name:"Kuwait",currency:"KWD"},
     BH:{flag:"🇧🇭",name:"Bahrain",currency:"BHD"}
-
 };
 
+const CATEGORIES = ["Mobiles","Laptops","Headphones","Audio","TV","Electronics","Home","Kitchen","Appliances","Fashion","Beauty","Sports","Toys","Gaming","Automotive","Tools","Health","Office","Garden","Other"];
 
-/* =========================================================
-   CATEGORIES
-========================================================= */
+const CURRENCIES = ["USD","GBP","SAR","AED","OMR","PKR","INR","CAD","AUD","EUR","CHF","NOK","SEK","DKK","NZD","JPY","CNY","KRW","SGD","MYR","THB","IDR","PHP","VND","TRY","BRL","MXN","ZAR","QAR","KWD","BHD"];
 
-const CATEGORIES = [
-    "Mobiles",
-    "Laptops",
-    "Headphones",
-    "Audio",
-    "TV",
-    "Electronics",
-    "Home",
-    "Kitchen",
-    "Appliances",
-    "Fashion",
-    "Beauty",
-    "Sports",
-    "Toys",
-    "Gaming",
-    "Automotive",
-    "Tools",
-    "Health",
-    "Office",
-    "Garden",
-    "Other"
-];
+function $(id){return document.getElementById(id);}
 
-
-/* =========================================================
-   CURRENCIES
-========================================================= */
-
-const CURRENCIES = [
-    "USD",
-    "GBP",
-    "SAR",
-    "AED",
-    "OMR",
-    "PKR",
-    "INR",
-    "CAD",
-    "AUD",
-    "EUR",
-    "CHF",
-    "NOK",
-    "SEK",
-    "DKK",
-    "NZD",
-    "JPY",
-    "CNY",
-    "KRW",
-    "SGD",
-    "MYR",
-    "THB",
-    "IDR",
-    "PHP",
-    "VND",
-    "TRY",
-    "BRL",
-    "MXN",
-    "ZAR",
-    "QAR",
-    "KWD",
-    "BHD"
-];
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function $(id){
-    return document.getElementById(id);
-}
-
-
-function escapeHtml(value){
-
-    return String(value ?? "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
-
+function escapeHtml(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");}
 
 function showMessage(text,type="success"){
-
-    const box = $("message");
-
-    box.textContent = text;
-    box.className = "message show " + type;
-
+    const box=$("message");
+    box.textContent=text;
+    box.className="message show "+type;
     clearTimeout(window.messageTimer);
-
-    window.messageTimer = setTimeout(()=>{
-        box.className = "message";
-    },5000);
-
+    window.messageTimer=setTimeout(()=>{box.className="message";},5000);
 }
 
-
-function normalizeCountryCode(value){
-
-    if(!value) return "";
-
-    const v = String(value).trim().toUpperCase();
-
-    if(COUNTRIES[v]) return v;
-
-    const found = Object.entries(COUNTRIES).find(
-        ([code,data]) =>
-            data.name.toLowerCase() === String(value).trim().toLowerCase()
-    );
-
-    return found ? found[0] : "";
-
+function normalizeCountryCode(v){
+    if(!v)return "";
+    const val=String(v).trim().toUpperCase();
+    if(COUNTRIES[val])return val;
+    const found=Object.entries(COUNTRIES).find(([c,d])=>d.name.toLowerCase()===String(v).trim().toLowerCase());
+    return found?found[0]:"";
 }
 
+function normalizeStatus(v){return String(v||"PENDING").toUpperCase();}
 
-function normalizeStatus(value){
-
-    return String(value || "PENDING").toUpperCase();
-
+function formatPrice(v,c){
+    const n=Number(v);
+    if(!Number.isFinite(n))return "-";
+    return `${c||"USD"} ${n.toFixed(2)}`;
 }
-
-
-function formatPrice(value,currency){
-
-    const number = Number(value);
-
-    if(!Number.isFinite(number)) return "-";
-
-    return `${currency || "USD"} ${number.toFixed(2)}`;
-
-}
-
-
-/* =========================================================
-   API
-========================================================= */
 
 async function api(path,options={}){
-
-    const headers = {
-        "Content-Type":"application/json",
-        ...(options.headers || {})
-    };
-
-    if(ADMIN_KEY){
-        headers["X-Admin-Key"] = ADMIN_KEY;
-    }
-
-    const response = await fetch(API_BASE + path,{
-        ...options,
-        headers
-    });
-
-    let data = null;
-
-    try{
-        data = await response.json();
-    }catch(e){
-        data = {};
-    }
-
+    const headers={"Content-Type":"application/json",...(options.headers||{})};
+    if(ADMIN_KEY)headers["X-Admin-Key"]=ADMIN_KEY;
+    const response=await fetch(API_BASE+path,{...options,headers});
+    let data=null;
+    try{data=await response.json();}catch(e){data={};}
     if(!response.ok){
-
-        throw new Error(
-            data?.error ||
-            data?.message ||
-            `Request failed (${response.status})`
-        );
-
+        throw new Error(data?.error||data?.message||`Request failed (${response.status})`);
     }
-
     return data;
-
 }
 
-
-/* =========================================================
-   LOGIN
-========================================================= */
-
-function loadAdminKey(){
-
-    ADMIN_KEY = localStorage.getItem("checkerdiscount_admin_key") || "";
-
-}
-
+function loadAdminKey(){ADMIN_KEY=localStorage.getItem("checkerdiscount_admin_key")||"";}
 
 function askAdminKey(){
-
-    if(ADMIN_KEY) return true;
-
-    const key = prompt("Enter Admin Key:");
-
-    if(!key){
-        return false;
-    }
-
-    ADMIN_KEY = key.trim();
-
-    localStorage.setItem(
-        "checkerdiscount_admin_key",
-        ADMIN_KEY
-    );
-
+    if(ADMIN_KEY)return true;
+    const key=prompt("Enter Admin Key:");
+    if(!key)return false;
+    ADMIN_KEY=key.trim();
+    localStorage.setItem("checkerdiscount_admin_key",ADMIN_KEY);
     return true;
-
 }
-
 
 function logout(){
-
     localStorage.removeItem("checkerdiscount_admin_key");
-
-    ADMIN_KEY = "";
-
+    ADMIN_KEY="";
     location.reload();
-
 }
-
-
-/* =========================================================
-   FORM OPTIONS
-========================================================= */
 
 function populateCountries(){
-
-    const select = $("country");
-
-    select.innerHTML = `
-        <option value="">Select Country</option>
-    `;
-
+    const select=$("country");
+    select.innerHTML='<option value="">Select Country</option>';
     Object.entries(COUNTRIES).forEach(([code,data])=>{
-
-        const option = document.createElement("option");
-
-        option.value = code;
-
-        option.textContent =
-            `${data.flag} ${data.name} (${code})`;
-
+        const option=document.createElement("option");
+        option.value=code;
+        option.textContent=`${data.flag} ${data.name} (${code})`;
         select.appendChild(option);
-
     });
-
 }
-
 
 function populateCategories(){
-
-    const select = $("category");
-
-    select.innerHTML = `
-        <option value="">Select Category</option>
-    `;
-
-    CATEGORIES.forEach(category=>{
-
-        const option = document.createElement("option");
-
-        option.value = category;
-        option.textContent = category;
-
+    const select=$("category");
+    select.innerHTML='<option value="">Select Category</option>';
+    CATEGORIES.forEach(c=>{
+        const option=document.createElement("option");
+        option.value=c;
+        option.textContent=c;
         select.appendChild(option);
-
     });
-
 }
-
 
 function populateCurrencies(){
-
-    const select = $("currency");
-
-    select.innerHTML = "";
-
-    CURRENCIES.forEach(currency=>{
-
-        const option = document.createElement("option");
-
-        option.value = currency;
-        option.textContent = currency;
-
+    const select=$("currency");
+    select.innerHTML="";
+    CURRENCIES.forEach(c=>{
+        const option=document.createElement("option");
+        option.value=c;
+        option.textContent=c;
         select.appendChild(option);
-
     });
-
-    select.value = "USD";
-
+    select.value="USD";
 }
-
 
 function syncCurrencyFromCountry(){
-
-    const country = $("country").value;
-
-    if(
-        country &&
-        COUNTRIES[country]
-    ){
-
-        $("currency").value =
-            COUNTRIES[country].currency;
-
+    const country=$("country").value;
+    if(country&&COUNTRIES[country]){
+        $("currency").value=COUNTRIES[country].currency;
     }
-
 }
-
-
-/* =========================================================
-   RESET FORM
-========================================================= */
 
 function resetDealForm(){
-
-    editingDealId = null;
-
+    editingDealId=null;
     $("dealForm").reset();
-
-    $("currency").value = "USD";
-
-    $("verification_status").value = "PENDING";
-
-    $("source_type").value = "manual";
-
-    $("rating").value = "";
-
-    $("formTitle").textContent = "Add New Deal";
-
-    $("saveButton").textContent = "Add Deal";
-
+    $("currency").value="USD";
+    $("store_type").value="third-party";
+    $("verification_status").value="PENDING";
+    $("source_type").value="manual";
+    $("rating").value="";
+    $("views").value="";
+    $("formTitle").textContent="Add New Deal";
+    $("saveButton").textContent="Add Deal";
     $("cancelEditButton").classList.add("hidden");
-
     $("editBanner").classList.remove("show");
-
     $("dealFormCard").classList.remove("edit-mode");
-
 }
-
-
-/* =========================================================
-   EDIT DEAL
-========================================================= */
 
 function editDeal(id){
+    const deal=allDeals.find(i=>String(i.id)===String(id));
+    if(!deal){showMessage("Deal not found.","error");return;}
 
-    const deal = allDeals.find(
-        item => String(item.id) === String(id)
-    );
+    editingDealId=deal.id;
+    $("title").value=deal.title||"";
+    $("store").value=deal.store||"";
+    $("store_type").value=deal.store_type||"third-party";
+    $("country").value=normalizeCountryCode(deal.country_code??deal.country??"");
+    $("category").value=deal.category||"";
+    $("comparison_id").value=deal.comparison_id||"";
+    $("asin").value=deal.asin||"";
+    $("currency").value=deal.currency||"USD";
+    $("old").value=deal.old_price??"";
+    $("new").value=deal.new_price??"";
+    $("url").value=deal.url||"";
+    $("image").value=deal.image_url||"";
+    $("source_type").value=deal.source_type||"manual";
+    $("verification_status").value=normalizeStatus(deal.verification_status);
+    $("rating").value=deal.rating??"";
+    $("views").value=deal.views??"";
 
-    if(!deal){
-
-        showMessage(
-            "Deal not found.",
-            "error"
-        );
-
-        return;
-
-    }
-
-    editingDealId = deal.id;
-
-    $("title").value =
-        deal.title || "";
-
-    $("store").value =
-        deal.store || "";
-
-    $("country").value =
-        normalizeCountryCode(
-            deal.country_code ??
-            deal.country ??
-            ""
-        );
-
-    $("category").value =
-        deal.category || "";
-
-    $("comparison_id").value =
-        deal.comparison_id || "";
-
-    $("asin").value =
-        deal.asin || "";
-
-    $("currency").value =
-        deal.currency || "USD";
-
-    $("old").value =
-        deal.old_price ?? "";
-
-    $("new").value =
-        deal.new_price ?? "";
-
-    $("url").value =
-        deal.url || "";
-
-    $("image").value =
-        deal.image_url || "";
-
-    $("source_type").value =
-        deal.source_type || "manual";
-
-    $("verification_status").value =
-        normalizeStatus(
-            deal.verification_status
-        );
-
-    $("rating").value =
-        deal.rating ?? "";
-
-    $("formTitle").textContent =
-        "Edit Deal #" + deal.id;
-
-    $("saveButton").textContent =
-        "Update Deal";
-
-    $("cancelEditButton")
-        .classList
-        .remove("hidden");
-
-    $("editBanner")
-        .classList
-        .add("show");
-
-    $("dealFormCard")
-        .classList
-        .add("edit-mode");
-
-    $("dealFormCard").scrollIntoView({
-        behavior:"smooth",
-        block:"start"
-    });
-
+    $("formTitle").textContent="Edit Deal #"+deal.id;
+    $("saveButton").textContent="Update Deal";
+    $("cancelEditButton").classList.remove("hidden");
+    $("editBanner").classList.add("show");
+    $("dealFormCard").classList.add("edit-mode");
+    $("dealFormCard").scrollIntoView({behavior:"smooth",block:"start"});
 }
 
-
-/* =========================================================
-   CANCEL EDIT
-========================================================= */
-
-function cancelEdit(){
-
-    resetDealForm();
-
-}
-
-
-/* =========================================================
-   ADD / UPDATE DEAL
-========================================================= */
+function cancelEdit(){resetDealForm();}
 
 async function saveDeal(event){
-
     event.preventDefault();
+    if(!askAdminKey())return;
 
-    if(!askAdminKey()) return;
+    const oldPrice=$("old").value===""?null:Number($("old").value);
+    const newPrice=$("new").value===""?null:Number($("new").value);
+    const ratingValue=$("rating").value===""?null:Number($("rating").value);
+    const viewsValue=$("views").value===""?0:Number($("views").value);
 
-    const oldPrice =
-        $("old").value === ""
-            ? null
-            : Number($("old").value);
-
-    const newPrice =
-        $("new").value === ""
-            ? null
-            : Number($("new").value);
-
-    const ratingValue =
-        $("rating").value === ""
-            ? null
-            : Number($("rating").value);
-
-    const body = {
-
+    const body={
         title:$("title").value.trim(),
-
         store:$("store").value.trim(),
-
+        store_type:$("store_type").value,
         country_code:$("country").value,
-
         country:$("country").value,
-
         category:$("category").value,
-
-        comparison_id:
-            $("comparison_id").value.trim(),
-
+        comparison_id:$("comparison_id").value.trim(),
         old_price:oldPrice,
-
         new_price:newPrice,
-
         url:$("url").value.trim(),
-
-        image_url:
-            $("image").value.trim(),
-
+        image_url:$("image").value.trim(),
         asin:$("asin").value.trim(),
-
         currency:$("currency").value,
-
-        source_type:
-            $("source_type").value,
-
-        verification_status:
-            $("verification_status").value,
-
-        rating:ratingValue
-
+        source_type:$("source_type").value,
+        verification_status:$("verification_status").value,
+        rating:ratingValue,
+        views:viewsValue
     };
 
-
     try{
-
-        $("saveButton").disabled = true;
-
-        $("saveButton").textContent =
-            editingDealId
-                ? "Updating..."
-                : "Adding...";
-
+        $("saveButton").disabled=true;
+        $("saveButton").textContent=editingDealId?"Updating...":"Adding...";
 
         if(editingDealId){
-
-            await api(
-                `/api/admin/deals/${editingDealId}/update`,
-                {
-                    method:"POST",
-                    body:JSON.stringify(body)
-                }
-            );
-
-            showMessage(
-                "Deal updated successfully.",
-                "success"
-            );
-
+            await api(`/api/admin/deals/${editingDealId}/update`,{method:"POST",body:JSON.stringify(body)});
+            showMessage("Deal updated successfully.","success");
         }else{
-
-            await api(
-                "/api/admin/deals",
-                {
-                    method:"POST",
-                    body:JSON.stringify(body)
-                }
-            );
-
-            showMessage(
-                "Deal added successfully.",
-                "success"
-            );
-
+            await api("/api/admin/deals",{method:"POST",body:JSON.stringify(body)});
+            showMessage("Deal added successfully.","success");
         }
-
 
         resetDealForm();
-
         await refreshAll();
-
-
     }catch(error){
-
         console.error(error);
-
-        showMessage(
-            error.message ||
-            "Something went wrong.",
-            "error"
-        );
-
+        showMessage(error.message||"Something went wrong.","error");
     }finally{
-
-        $("saveButton").disabled = false;
-
-        if(!editingDealId){
-            $("saveButton").textContent = "Add Deal";
-        }
-
+        $("saveButton").disabled=false;
+        if(!editingDealId){$("saveButton").textContent="Add Deal";}
     }
-
 }
-
-
-/* =========================================================
-   LOAD STATS
-========================================================= */
 
 async function refreshStats(){
-
     try{
-
-        const data =
-            await api("/api/admin/stats");
-
-        const stats =
-            data?.stats ||
-            data ||
-            {};
-
-        $("statTotal").textContent =
-            stats.total ??
-            stats.total_deals ??
-            0;
-
-        $("statVerified").textContent =
-            stats.verified ??
-            stats.verified_deals ??
-            0;
-
-        $("statFeatured").textContent =
-            stats.featured ??
-            stats.featured_deals ??
-            0;
-
-        $("statPending").textContent =
-            stats.pending ??
-            stats.pending_deals ??
-            0;
-
-    }catch(error){
-
-        console.error(
-            "Stats error:",
-            error
-        );
-
-    }
-
+        const data=await api("/api/admin/stats");
+        const stats=data?.stats||data||{};
+        $("statTotal").textContent=stats.total??stats.total_deals??0;
+        $("statVerified").textContent=stats.verified??stats.verified_deals??0;
+        $("statFeatured").textContent=stats.featured??stats.featured_deals??0;
+        $("statPending").textContent=stats.pending??stats.pending_deals??0;
+    }catch(error){console.error("Stats error:",error);}
 }
-
-
-/* =========================================================
-   LOAD DEALS
-========================================================= */
 
 async function refreshDeals(){
-
-    if(!askAdminKey()) return;
-
+    if(!askAdminKey())return;
     try{
-
-        $("dealsTable").innerHTML = `
-            <tr>
-                <td colspan="7" class="loading">
-                    Loading deals...
-                </td>
-            </tr>
-        `;
-
-        const data =
-            await api("/api/admin/deals");
-
-        allDeals =
-            Array.isArray(data)
-                ? data
-                : (
-                    data?.deals ||
-                    data?.data ||
-                    []
-                );
-
+        $("dealsTable").innerHTML='<tr><td colspan="10" class="loading">Loading deals...</td></tr>';
+        const data=await api("/api/admin/deals");
+        allDeals=Array.isArray(data)?data:(data?.deals||data?.data||[]);
         renderDeals();
-
     }catch(error){
-
         console.error(error);
-
-        $("dealsTable").innerHTML = `
-            <tr>
-                <td colspan="7" class="empty">
-                    ${escapeHtml(error.message)}
-                </td>
-            </tr>
-        `;
-
-        showMessage(
-            error.message ||
-            "Unable to load deals.",
-            "error"
-        );
-
+        $("dealsTable").innerHTML=`<tr><td colspan="10" class="empty">${escapeHtml(error.message)}</td></tr>`;
+        showMessage(error.message||"Unable to load deals.","error");
     }
-
 }
-
-
-/* =========================================================
-   RENDER DEALS
-========================================================= */
 
 function renderDeals(){
-
-    const tbody = $("dealsTable");
-
-    const search =
-        $("dealSearch")
-            .value
-            .trim()
-            .toLowerCase();
-
-
-    let deals = [...allDeals];
-
+    const tbody=$("dealsTable");
+    const search=$("dealSearch").value.trim().toLowerCase();
+    let deals=[...allDeals];
 
     if(search){
-
-        deals = deals.filter(deal=>{
-
-            const countryCode =
-                normalizeCountryCode(
-                    deal.country_code ??
-                    deal.country ??
-                    ""
-                );
-
-            const countryName =
-                COUNTRIES[countryCode]?.name ||
-                "";
-
-            const searchable = [
-
-                deal.id,
-
-                deal.title,
-
-                deal.store,
-
-                countryCode,
-
-                countryName,
-
-                deal.category,
-
-                deal.currency,
-
-                deal.comparison_id,
-
-                deal.asin,
-
-                deal.verification_status,
-
-                deal.rating
-
-            ]
-            .join(" ")
-            .toLowerCase();
-
+        deals=deals.filter(deal=>{
+            const countryCode=normalizeCountryCode(deal.country_code??deal.country??"");
+            const countryName=COUNTRIES[countryCode]?.name||"";
+            const searchable=[deal.id,deal.title,deal.store,countryCode,countryName,deal.category,deal.currency,deal.comparison_id,deal.asin,deal.verification_status,deal.rating,deal.store_type].join(" ").toLowerCase();
             return searchable.includes(search);
-
         });
-
     }
-
 
     if(!deals.length){
-
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="7" class="empty">
-                    No deals found.
-                </td>
-            </tr>
-        `;
-
+        tbody.innerHTML='<tr><td colspan="10" class="empty">No deals found.</td></tr>';
         return;
-
     }
 
-
-    tbody.innerHTML = deals.map(deal=>{
-
-        const countryCode =
-            normalizeCountryCode(
-                deal.country_code ??
-                deal.country ??
-                ""
-            );
-
-        const country =
-            COUNTRIES[countryCode];
-
-        const countryHtml =
-            country
-                ? `${country.flag} ${escapeHtml(country.name)}`
-                : `<span class="small">Not assigned</span>`;
-
-
-        const category =
-            deal.category
-                ? escapeHtml(deal.category)
-                : `<span class="small">Not assigned</span>`;
-
-
-        const status =
-            normalizeStatus(
-                deal.verification_status
-            );
-
-
-        let statusClass =
-            "badge-orange";
-
-        if(status === "VERIFIED"){
-            statusClass = "badge-green";
-        }
-
-        if(status === "EXPIRED"){
-            statusClass = "badge-red";
-        }
-
-
-        const featured =
-            Number(deal.is_featured) === 1;
-
-
-        const rating =
-            Number(deal.rating || 0);
-
-
-        const comparison =
-            deal.comparison_id ||
-            deal.asin ||
-            "-";
-
+    tbody.innerHTML=deals.map(deal=>{
+        const countryCode=normalizeCountryCode(deal.country_code??deal.country??"");
+        const country=COUNTRIES[countryCode];
+        const countryHtml=country?`${country.flag} ${escapeHtml(country.name)}`:`<span class="small">Not assigned</span>`;
+        const category=deal.category?escapeHtml(deal.category):`<span class="small">-</span>`;
+        const status=normalizeStatus(deal.verification_status);
+        let statusClass="badge-orange";
+        if(status==="VERIFIED")statusClass="badge-green";
+        if(status==="EXPIRED")statusClass="badge-red";
+        const featured=Number(deal.is_featured)===1;
+        const rating=Number(deal.rating||0);
+        const views=Number(deal.views||0);
+        const storeType=deal.store_type||"third-party";
+        const typeLabel=storeType==="official"?"Official":"Third-Party";
+        const typeClass=storeType==="official"?"badge-green":"badge-orange";
+        const comparison=deal.comparison_id||deal.asin||"-";
 
         return `
-
             <tr>
-
                 <td>
-
-                    <div class="deal-title">
-                        ${escapeHtml(
-                            deal.title ||
-                            "Untitled Deal"
-                        )}
-                    </div>
-
-                    <div class="small">
-                        #${escapeHtml(deal.id)}
-                        ·
-                        ${escapeHtml(
-                            deal.store ||
-                            "Unknown Store"
-                        )}
-                    </div>
-
+                    <div class="deal-title">${escapeHtml(deal.title||"Untitled Deal")}</div>
+                    <div class="small">#${escapeHtml(deal.id)} · ${escapeHtml(deal.store||"Unknown Store")}</div>
                 </td>
-
-
+                <td>${escapeHtml(deal.store||"-")}</td>
+                <td><span class="badge ${typeClass}">${typeLabel}</span></td>
+                <td>${countryHtml}</td>
+                <td>${category}</td>
                 <td>
-                    ${countryHtml}
+                    <strong>${formatPrice(deal.new_price,deal.currency)}</strong>
+                    ${deal.old_price?`<div class="small">Old: ${formatPrice(deal.old_price,deal.currency)}</div>`:""}
+                    ${deal.discount_percent?`<div class="small">${Number(deal.discount_percent).toFixed(0)}% OFF</div>`:""}
                 </td>
-
-
+                <td>⭐ ${rating>0?rating.toFixed(1):"—"}</td>
+                <td>👁️ ${views.toLocaleString()}</td>
                 <td>
-                    ${category}
+                    <span class="badge ${statusClass}">${escapeHtml(status)}</span>
+                    ${featured?'<div style="margin-top:5px"><span class="badge badge-blue">★ Featured</span></div>':""}
                 </td>
-
-
                 <td>
-
-                    <strong>
-                        ${formatPrice(
-                            deal.new_price,
-                            deal.currency
-                        )}
-                    </strong>
-
-                    ${
-                        deal.old_price
-                            ? `
-                                <div class="small">
-                                    Old:
-                                    ${formatPrice(
-                                        deal.old_price,
-                                        deal.currency
-                                    )}
-                                </div>
-                              `
-                            : ""
-                    }
-
-                    ${
-                        deal.discount_percent
-                            ? `
-                                <div class="small">
-                                    ${Number(
-                                        deal.discount_percent
-                                    ).toFixed(0)}% OFF
-                                </div>
-                              `
-                            : ""
-                    }
-
-                </td>
-
-
-                <td>
-
-                    <span class="badge ${statusClass}">
-                        ${escapeHtml(status)}
-                    </span>
-
-                    ${
-                        featured
-                            ? `
-                                <div style="margin-top:5px">
-                                    <span class="badge badge-blue">
-                                        ★ Featured
-                                    </span>
-                                </div>
-                              `
-                            : ""
-                    }
-
-                    <div style="margin-top:5px" class="small">
-                        ⭐ ${rating > 0 ? rating.toFixed(1) : "—"}
-                    </div>
-
-                </td>
-
-
-                <td>
-                    <span class="small">
-                        ${escapeHtml(
-                            comparison
-                        )}
-                    </span>
-                </td>
-
-
-                <td>
-
                     <div class="row-actions">
-
-                        <button
-                            class="btn-primary"
-                            onclick="editDeal(${Number(deal.id)})">
-                            Edit
-                        </button>
-
-                        ${
-                            status !== "VERIFIED"
-                            ? `
-                                <button
-                                    class="btn-green"
-                                    onclick="verifyDeal(${Number(deal.id)})">
-                                    Verify
-                                </button>
-                              `
-                            : ""
-                        }
-
-                        ${
-                            featured
-                            ? `
-                                <button
-                                    class="btn-orange"
-                                    onclick="unfeatureDeal(${Number(deal.id)})">
-                                    Unfeature
-                                </button>
-                              `
-                            : `
-                                <button
-                                    class="btn-green"
-                                    onclick="featureDeal(${Number(deal.id)})">
-                                    Feature
-                                </button>
-                              `
-                        }
-
-                        ${
-                            status !== "EXPIRED"
-                            ? `
-                                <button
-                                    class="btn-orange"
-                                    onclick="expireDeal(${Number(deal.id)})">
-                                    Expire
-                                </button>
-                              `
-                            : ""
-                        }
-
-                        <button
-                            class="btn-red"
-                            onclick="deleteDeal(${Number(deal.id)})">
-                            Delete
-                        </button>
-
+                        <button class="btn-primary" onclick="editDeal(${Number(deal.id)})">Edit</button>
+                        ${status!=="VERIFIED"?`<button class="btn-green" onclick="verifyDeal(${Number(deal.id)})">Verify</button>`:""}
+                        ${featured?`<button class="btn-orange" onclick="unfeatureDeal(${Number(deal.id)})">Unfeature</button>`:`<button class="btn-green" onclick="featureDeal(${Number(deal.id)})">Feature</button>`}
+                        ${status!=="EXPIRED"?`<button class="btn-orange" onclick="expireDeal(${Number(deal.id)})">Expire</button>`:""}
+                        <button class="btn-red" onclick="deleteDeal(${Number(deal.id)})">Delete</button>
                     </div>
-
                 </td>
-
             </tr>
-
         `;
-
     }).join("");
-
 }
-
-
-/* =========================================================
-   VERIFY
-========================================================= */
 
 async function verifyDeal(id){
-
-    if(!askAdminKey()) return;
-
-    if(!confirm(
-        "Verify this deal?"
-    )) return;
-
-
+    if(!askAdminKey())return;
+    if(!confirm("Verify this deal?"))return;
     try{
-
-        await api(
-            `/api/admin/deals/${id}/verify`,
-            {
-                method:"POST"
-            }
-        );
-
-        showMessage(
-            "Deal verified.",
-            "success"
-        );
-
+        await api(`/api/admin/deals/${id}/verify`,{method:"POST"});
+        showMessage("Deal verified.","success");
         await refreshAll();
-
-    }catch(error){
-
-        showMessage(
-            error.message,
-            "error"
-        );
-
-    }
-
+    }catch(error){showMessage(error.message,"error");}
 }
-
-
-/* =========================================================
-   FEATURE
-========================================================= */
 
 async function featureDeal(id){
-
-    if(!askAdminKey()) return;
-
+    if(!askAdminKey())return;
     try{
-
-        await api(
-            `/api/admin/deals/${id}/featured`,
-            {
-                method:"POST"
-            }
-        );
-
-        showMessage(
-            "Deal featured.",
-            "success"
-        );
-
+        await api(`/api/admin/deals/${id}/featured`,{method:"POST"});
+        showMessage("Deal featured.","success");
         await refreshAll();
-
-    }catch(error){
-
-        showMessage(
-            error.message,
-            "error"
-        );
-
-    }
-
+    }catch(error){showMessage(error.message,"error");}
 }
-
-
-/* =========================================================
-   UNFEATURE
-========================================================= */
 
 async function unfeatureDeal(id){
-
-    if(!askAdminKey()) return;
-
+    if(!askAdminKey())return;
     try{
-
-        await api(
-            `/api/admin/deals/${id}/unfeatured`,
-            {
-                method:"POST"
-            }
-        );
-
-        showMessage(
-            "Deal removed from featured.",
-            "success"
-        );
-
+        await api(`/api/admin/deals/${id}/unfeatured`,{method:"POST"});
+        showMessage("Deal removed from featured.","success");
         await refreshAll();
-
-    }catch(error){
-
-        showMessage(
-            error.message,
-            "error"
-        );
-
-    }
-
+    }catch(error){showMessage(error.message,"error");}
 }
-
-
-/* =========================================================
-   EXPIRE
-========================================================= */
 
 async function expireDeal(id){
-
-    if(!askAdminKey()) return;
-
-    if(!confirm(
-        "Expire this deal?"
-    )) return;
-
-
+    if(!askAdminKey())return;
+    if(!confirm("Expire this deal?"))return;
     try{
-
-        await api(
-            `/api/admin/deals/${id}/expire`,
-            {
-                method:"POST"
-            }
-        );
-
-        showMessage(
-            "Deal expired.",
-            "success"
-        );
-
+        await api(`/api/admin/deals/${id}/expire`,{method:"POST"});
+        showMessage("Deal expired.","success");
         await refreshAll();
-
-    }catch(error){
-
-        showMessage(
-            error.message,
-            "error"
-        );
-
-    }
-
+    }catch(error){showMessage(error.message,"error");}
 }
-
-
-/* =========================================================
-   DELETE
-========================================================= */
 
 async function deleteDeal(id){
-
-    if(!askAdminKey()) return;
-
-    if(!confirm(
-        "Are you sure you want to permanently delete this deal?"
-    )) return;
-
-
+    if(!askAdminKey())return;
+    if(!confirm("Are you sure you want to permanently delete this deal?"))return;
     try{
-
-        await api(
-            `/api/admin/deals/${id}`,
-            {
-                method:"DELETE"
-            }
-        );
-
-        showMessage(
-            "Deal deleted.",
-            "success"
-        );
-
-        if(
-            String(editingDealId) ===
-            String(id)
-        ){
-            resetDealForm();
-        }
-
+        await api(`/api/admin/deals/${id}`,{method:"DELETE"});
+        showMessage("Deal deleted.","success");
+        if(String(editingDealId)===String(id)){resetDealForm();}
         await refreshAll();
-
-    }catch(error){
-
-        showMessage(
-            error.message,
-            "error"
-        );
-
-    }
-
+    }catch(error){showMessage(error.message,"error");}
 }
-
-
-/* =========================================================
-   REFRESH ALL
-========================================================= */
 
 async function refreshAll(){
-
-    if(!askAdminKey()) return;
-
-    await Promise.all([
-        refreshStats(),
-        refreshDeals()
-    ]);
-
+    if(!askAdminKey())return;
+    await Promise.all([refreshStats(),refreshDeals()]);
 }
-
-
-/* =========================================================
-   INITIALIZE
-========================================================= */
 
 function init(){
-
     loadAdminKey();
-
     populateCountries();
-
     populateCategories();
-
     populateCurrencies();
-
-    $("currency").value = "USD";
-
+    $("currency").value="USD";
     if(!ADMIN_KEY){
-
-        const accepted = askAdminKey();
-
+        const accepted=askAdminKey();
         if(!accepted){
-
-            $("dealsTable").innerHTML = `
-                <tr>
-                    <td colspan="7" class="empty">
-                        Admin key required.
-                    </td>
-                </tr>
-            `;
-
+            $("dealsTable").innerHTML='<tr><td colspan="10" class="empty">Admin key required.</td></tr>';
             return;
-
         }
-
     }
-
     refreshAll();
-
 }
 
-
-document.addEventListener(
-    "DOMContentLoaded",
-    init
-);
+document.addEventListener("DOMContentLoaded",init);
 
 </script>
-
 </body>
 </html>
