@@ -37,7 +37,6 @@ html{margin:0;padding:0;width:100%;min-height:100%;overflow-x:hidden !important;
 body{margin:0;padding:0;width:100%;min-height:100vh;overflow-x:hidden !important;overflow-y:auto !important;position:static !important;height:auto !important;overscroll-behavior-y:auto;touch-action:pan-y;-webkit-overflow-scrolling:touch;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
 body.cd-menu-open{overflow-y:hidden !important;}
 
-/* HEADER */
 .cd-header{position:fixed;top:0;left:0;right:0;width:100%;height:64px;z-index:9000;background:rgba(255,255,255,.96);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(226,232,240,.65);box-shadow:0 1px 8px rgba(0,0,0,.04);}
 .cd-header-inner{width:100%;max-width:1240px;height:64px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:10px;box-sizing:border-box;}
 .cd-logo{display:flex;align-items:center;flex:0 1 auto;min-width:0;height:52px;text-decoration:none;flex-shrink:1;overflow:visible;}
@@ -103,11 +102,9 @@ button,a{-webkit-tap-highlight-color:transparent;}
 
 <body class="bg-background text-on-surface antialiased">
 
-<!-- HEADER -->
 <header class="cd-header">
   <div class="cd-header-inner">
 
-    <!-- LOGO -->
     <a href="index.html" class="cd-logo" aria-label="CheckerDiscount Home">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" aria-hidden="true">
         <defs>
@@ -132,7 +129,6 @@ button,a{-webkit-tap-highlight-color:transparent;}
       </svg>
     </a>
 
-    <!-- DESKTOP NAV -->
     <nav class="cd-desktop-nav" aria-label="Main Navigation">
       <a href="index.html" class="cd-nav-link active">
         <span class="material-symbols-outlined">home</span><span>Home</span>
@@ -151,7 +147,6 @@ button,a{-webkit-tap-highlight-color:transparent;}
       </a>
     </nav>
 
-    <!-- HEADER RIGHT -->
     <div class="cd-header-actions">
       <a href="index.html" class="cd-mobile-home" aria-label="Home">
         <span class="material-symbols-outlined">home</span>
@@ -167,11 +162,9 @@ button,a{-webkit-tap-highlight-color:transparent;}
   </div>
 </header>
 
-<!-- MAIN -->
 <main class="w-full pt-16 pb-24 bg-background">
 <div class="flex flex-col w-full">
 
-<!-- HERO SLIDER -->
 <section class="relative w-full bg-gradient-to-b from-surface via-surface-container-low/40 to-background overflow-hidden pb-6 pt-4 px-4">
   <div id="cd-hero-slider" class="cd-hero-slider">
     <div class="cd-hero-track">
@@ -219,7 +212,6 @@ button,a{-webkit-tap-highlight-color:transparent;}
   </div>
 </section>
 
-<!-- MARKET DEALS -->
 <section id="market-deals" class="w-full px-4 py-5 space-y-4">
   <div class="flex flex-col gap-1">
     <div class="inline-flex items-center gap-1 text-primary text-[11px] font-bold tracking-wider uppercase">
@@ -243,7 +235,6 @@ button,a{-webkit-tap-highlight-color:transparent;}
   </div>
 </section>
 
-<!-- FAVORITES -->
 <section id="favorites-section" class="w-full px-4 py-5">
   <div class="bg-surface-container-lowest rounded-2xl p-4 shadow-md border border-surface-container/60">
     <div class="flex items-center justify-between mb-3">
@@ -267,7 +258,6 @@ button,a{-webkit-tap-highlight-color:transparent;}
   </div>
 </section>
 
-<!-- SMART TOOLS -->
 <section id="smart-tools" class="w-full px-4 py-5 space-y-4">
   <div class="flex flex-col gap-1">
     <div class="inline-flex items-center gap-1 text-primary text-[11px] font-bold uppercase tracking-wider">
@@ -286,7 +276,6 @@ button,a{-webkit-tap-highlight-color:transparent;}
 </div>
 </main>
 
-<!-- FOOTER -->
 <footer class="w-full bg-navy-deep text-on-tertiary pt-space-xl pb-space-lg">
   <div class="w-full px-4 pt-6 pb-28 flex flex-col gap-6">
     <div class="flex flex-col gap-3">
@@ -347,7 +336,6 @@ button,a{-webkit-tap-highlight-color:transparent;}
   </div>
 </footer>
 
-<!-- BOTTOM NAV -->
 <nav aria-label="Mobile Navigation" class="cd-bottom-nav fixed bottom-0 inset-x-0 z-50 bg-surface-container-lowest/95 backdrop-blur-xl border-t border-surface-container px-3 py-2 flex items-center justify-around shadow-lg">
   <a class="flex flex-col items-center gap-0.5 text-primary-container text-[11px] font-semibold py-1 px-2.5 rounded-xl" href="#market-deals">
     <span class="material-symbols-outlined text-[20px]">local_offer</span><span>Deals</span>
@@ -367,7 +355,7 @@ button,a{-webkit-tap-highlight-color:transparent;}
 </nav>
 
 <script src="hero-slider.js"></script>
-<script src="app.js"></script>
+<script src="app.js?v=10"></script>
 
 </body>
 </html>
