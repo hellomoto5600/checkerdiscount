@@ -38,6 +38,7 @@ button{border:0;border-radius:9px;padding:10px 15px;cursor:pointer;font-weight:7
 .btn-red{background:#feeceb;color:#b42318;}
 .btn-dark{background:#101828;color:#fff;}
 .btn-blue{background:#eff8ff;color:#175cd3;}
+.btn-purple{background:#f4f3ff;color:#5925dc;}
 .edit-mode{border:2px solid var(--primary);background:#f8faff;}
 .edit-banner{display:none;background:#eef4ff;border:1px solid #b2ccff;color:#1849a9;border-radius:10px;padding:12px 14px;margin-bottom:18px;font-weight:700;}
 .edit-banner.show{display:block;}
@@ -66,8 +67,51 @@ td{font-size:13px;}
 .empty{padding:30px;text-align:center;color:var(--muted);}
 .hidden{display:none!important;}
 .help{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4;}
+
+/* Modal Styles */
+.modal-overlay{position:fixed;inset:0;background:rgba(11,18,32,.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:1000;padding:15px;}
+.modal-overlay.show{display:flex;}
+.modal{background:#fff;border-radius:16px;max-width:700px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.modal-header{background:linear-gradient(135deg,#155eef 0%,#0047c1 100%);color:#fff;padding:20px;border-radius:16px 16px 0 0;display:flex;justify-content:space-between;align-items:center;}
+.modal-header h3{margin:0;font-size:18px;}
+.modal-close{background:rgba(255,255,255,.2);border:0;width:34px;height:34px;border-radius:50%;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
+.modal-close:hover{background:rgba(255,255,255,.35);}
+.modal-body{padding:20px;}
+.modal-footer{padding:15px 20px;background:#f8fafc;border-radius:0 0 16px 16px;display:flex;justify-content:flex-end;gap:10px;border-top:1px solid var(--border);}
+.source-info{background:#f8faff;border:1px solid #d0e0ff;border-radius:10px;padding:14px;margin-bottom:20px;}
+.source-info-title{font-weight:800;color:#101828;font-size:15px;margin-bottom:6px;}
+.source-info-meta{color:#475467;font-size:12px;line-height:1.6;}
+.source-info-meta strong{color:#0b1220;}
+
+.country-clone-list{display:flex;flex-direction:column;gap:10px;}
+.country-clone-item{display:flex;align-items:center;gap:10px;padding:12px;border:2px solid #e4e7ec;border-radius:12px;background:#fafbfc;transition:all .2s;}
+.country-clone-item.selected{border-color:var(--primary);background:#eff6ff;}
+.country-clone-item input[type="checkbox"]{width:20px;height:20px;min-height:20px;cursor:pointer;flex-shrink:0;margin:0;}
+.country-flag{font-size:24px;flex-shrink:0;}
+.country-name{font-weight:700;font-size:13px;flex:1;min-width:100px;}
+.country-fields{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap;}
+.country-fields input{width:95px;min-height:36px;padding:6px 8px;font-size:12px;}
+.quick-templates{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;}
+.quick-templates button{padding:8px 12px;font-size:12px;border-radius:8px;background:#eef2f6;color:#344054;border:1px solid #d0d5dd;}
+.quick-templates button:hover{background:#e4e7ec;}
+.warning-box{background:#fffaeb;border:1px solid #fedf89;color:#b54708;padding:12px;border-radius:9px;font-size:12px;margin-top:15px;display:none;}
+.warning-box.show{display:block;}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#101828;color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;transition:opacity .3s;z-index:2000;pointer-events:none;}
+.toast.show{opacity:1;}
+
 @media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr);}.form-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:650px){header{padding:15px;}.header-inner{align-items:flex-start;flex-direction:column;}.container{margin:18px auto;padding:0 12px 40px;}.grid{grid-template-columns:1fr 1fr;}.form-grid{grid-template-columns:1fr;}.field.full{grid-column:auto;}.card{padding:15px;}}
+@media(max-width:650px){
+  header{padding:15px;}
+  .header-inner{align-items:flex-start;flex-direction:column;}
+  .container{margin:18px auto;padding:0 12px 40px;}
+  .grid{grid-template-columns:1fr 1fr;}
+  .form-grid{grid-template-columns:1fr;}
+  .field.full{grid-column:auto;}
+  .card{padding:15px;}
+  .country-clone-item{flex-wrap:wrap;}
+  .country-fields{width:100%;}
+  .country-fields input{flex:1;}
+}
 </style>
 </head>
 <body>
@@ -96,20 +140,21 @@ td{font-size:13px;}
         <div class="stat"><div class="stat-label">Pending</div><div class="stat-value" id="statPending">0</div></div>
     </div>
 
+    <!-- ADD/EDIT DEAL FORM -->
     <div class="card" id="dealFormCard">
         <div id="editBanner" class="edit-banner">Editing Deal. Make your changes and click "Update Deal".</div>
         <h2 id="formTitle">Add New Deal</h2>
         <form id="dealForm" onsubmit="saveDeal(event)">
             <div class="form-grid">
                 <div class="field"><label>Deal Title *</label><input id="title" required></div>
-                <div class="field"><label>Store *</label><input id="store" required placeholder="e.g. Amazon, Noon, Local Store"></div>
+                <div class="field"><label>Store *</label><input id="store" required placeholder="e.g. Amazon, Noon, AliExpress"></div>
                 <div class="field">
                     <label>Store Type *</label>
                     <select id="store_type" required>
                         <option value="third-party">Third-Party / Local Store</option>
                         <option value="official">Official Brand Store</option>
                     </select>
-                    <div class="help">Official = original brand store (Apple, Samsung). Third-party = local reseller.</div>
+                    <div class="help">Official = original brand (Apple, Samsung). Third-party = reseller.</div>
                 </div>
                 <div class="field">
                     <label>Country *</label>
@@ -133,6 +178,8 @@ td{font-size:13px;}
                     <select id="source_type">
                         <option value="manual">Manual</option>
                         <option value="amazon">Amazon</option>
+                        <option value="noon">Noon</option>
+                        <option value="aliexpress">AliExpress</option>
                         <option value="ebay">eBay</option>
                         <option value="walmart">Walmart</option>
                         <option value="temu">Temu</option>
@@ -151,12 +198,12 @@ td{font-size:13px;}
                 <div class="field">
                     <label>Rating (0–5)</label>
                     <input id="rating" type="number" step="0.1" min="0" max="5" placeholder="e.g. 4.5">
-                    <div class="help">Original product rating from store (shown to customers).</div>
+                    <div class="help">Original product rating from store.</div>
                 </div>
                 <div class="field">
                     <label>Views Count</label>
                     <input id="views" type="number" step="1" min="0" placeholder="e.g. 9000">
-                    <div class="help">How many people viewed this deal (e.g. 9000).</div>
+                    <div class="help">How many people viewed (e.g. 9000).</div>
                 </div>
             </div>
             <div class="actions">
@@ -167,6 +214,7 @@ td{font-size:13px;}
         </form>
     </div>
 
+    <!-- DEAL MANAGEMENT -->
     <div class="card">
         <h2>Deal Management</h2>
         <div class="toolbar">
@@ -198,12 +246,65 @@ td{font-size:13px;}
 
 </div>
 
+<!-- CLONE MODAL -->
+<div id="cloneModal" class="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>🔄 Clone Deal to Other Countries</h3>
+            <button class="modal-close" onclick="closeCloneModal()" type="button">✕</button>
+        </div>
+
+        <div class="modal-body">
+
+            <div class="source-info">
+                <div class="source-info-title" id="cloneSourceTitle">Loading...</div>
+                <div class="source-info-meta" id="cloneSourceMeta"></div>
+            </div>
+
+            <div class="quick-templates">
+                <button type="button" onclick="applyTemplate('gcc')">🌍 GCC All</button>
+                <button type="button" onclick="applyTemplate('gcc3')">🇦🇪🇸🇦🇴🇲 UAE + Saudi + Oman</button>
+                <button type="button" onclick="applyTemplate('asia')">🌏 Asia</button>
+                <button type="button" onclick="applyTemplate('clear')">✕ Clear All</button>
+            </div>
+
+            <div style="margin-bottom:12px;font-weight:700;font-size:13px;color:#344054;">
+                Select Countries to Clone:
+            </div>
+
+            <div id="cloneCountries" class="country-clone-list"></div>
+
+            <div id="cloneWarning" class="warning-box"></div>
+
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn-secondary" onclick="closeCloneModal()">Cancel</button>
+            <button type="button" class="btn-primary" id="cloneSubmitBtn" onclick="submitClone()">🔄 Clone Now</button>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
 <script>
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
+
+const EXCHANGE_RATES = {
+    AED: 1.00, OMR: 9.54, SAR: 0.98, USD: 3.67, GBP: 4.65,
+    EUR: 3.98, KWD: 11.95, QAR: 1.01, BHD: 9.74, PKR: 0.013,
+    INR: 0.044, EGP: 0.076, JOD: 5.18, TRY: 0.11, BRL: 0.68,
+    MXN: 0.18, ZAR: 0.20, JPY: 0.024, CNY: 0.51, KRW: 0.0027,
+    SGD: 2.74, MYR: 0.82, THB: 0.10, IDR: 0.00023, PHP: 0.064,
+    VND: 0.00015, NZD: 2.24, CHF: 4.18, NOK: 0.34, SEK: 0.35,
+    DKK: 0.53, CAD: 2.72, AUD: 2.42
+};
+
 let ADMIN_KEY = "";
 let allDeals = [];
 let editingDealId = null;
+let cloneSourceDeal = null;
 
 const COUNTRIES = {
     US:{flag:"🇺🇸",name:"USA",currency:"USD"},GB:{flag:"🇬🇧",name:"United Kingdom",currency:"GBP"},
@@ -235,6 +336,14 @@ function $(id){return document.getElementById(id);}
 
 function escapeHtml(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");}
 
+function showToast(text){
+    const t=$("toast");
+    t.textContent=text;
+    t.classList.add("show");
+    clearTimeout(window.toastTimer);
+    window.toastTimer=setTimeout(()=>t.classList.remove("show"),3000);
+}
+
 function showMessage(text,type="success"){
     const box=$("message");
     box.textContent=text;
@@ -257,6 +366,13 @@ function formatPrice(v,c){
     const n=Number(v);
     if(!Number.isFinite(n))return "-";
     return `${c||"USD"} ${n.toFixed(2)}`;
+}
+
+function convertPrice(amount, fromCurrency, toCurrency){
+    if(!amount||!fromCurrency||!toCurrency)return null;
+    const fromRate=EXCHANGE_RATES[fromCurrency]||1;
+    const toRate=EXCHANGE_RATES[toCurrency]||1;
+    return (Number(amount)*fromRate)/toRate;
 }
 
 async function api(path,options={}){
@@ -514,6 +630,7 @@ function renderDeals(){
                 <td>
                     <div class="row-actions">
                         <button class="btn-primary" onclick="editDeal(${Number(deal.id)})">Edit</button>
+                        <button class="btn-purple" onclick="openCloneModal(${Number(deal.id)})">🔄 Clone</button>
                         ${status!=="VERIFIED"?`<button class="btn-green" onclick="verifyDeal(${Number(deal.id)})">Verify</button>`:""}
                         ${featured?`<button class="btn-orange" onclick="unfeatureDeal(${Number(deal.id)})">Unfeature</button>`:`<button class="btn-green" onclick="featureDeal(${Number(deal.id)})">Feature</button>`}
                         ${status!=="EXPIRED"?`<button class="btn-orange" onclick="expireDeal(${Number(deal.id)})">Expire</button>`:""}
@@ -574,6 +691,228 @@ async function deleteDeal(id){
     }catch(error){showMessage(error.message,"error");}
 }
 
+/* =========================================================
+   CLONE FEATURE
+   ========================================================= */
+
+function openCloneModal(id){
+    const deal=allDeals.find(i=>String(i.id)===String(id));
+    if(!deal){
+        showMessage("Deal not found.","error");
+        return;
+    }
+
+    cloneSourceDeal=deal;
+
+    const sourceCountryCode=normalizeCountryCode(deal.country_code??deal.country??"");
+    const sourceCountry=COUNTRIES[sourceCountryCode];
+
+    $("cloneSourceTitle").textContent=`📦 ${deal.title||"Untitled"}`;
+
+    $("cloneSourceMeta").innerHTML=`
+        🏪 <strong>${escapeHtml(deal.store||"-")}</strong>
+        · ${sourceCountry?sourceCountry.flag+" "+escapeHtml(sourceCountry.name):"Unknown"}
+        · <strong>${formatPrice(deal.new_price,deal.currency)}</strong>
+        ${deal.comparison_id?`<br>🔗 Comparison ID: <strong>${escapeHtml(deal.comparison_id)}</strong>`:""}
+    `;
+
+    // Render country list
+    const container=$("cloneCountries");
+    container.innerHTML="";
+
+    Object.entries(COUNTRIES).forEach(([code,data])=>{
+        // Skip source country
+        if(code===sourceCountryCode)return;
+
+        const item=document.createElement("div");
+        item.className="country-clone-item";
+        item.dataset.country=code;
+
+        // Auto-convert price (default)
+        const convertedOld=deal.old_price?convertPrice(deal.old_price,deal.currency,data.currency):null;
+        const convertedNew=deal.new_price?convertPrice(deal.new_price,deal.currency,data.currency):null;
+
+        item.innerHTML=`
+            <input type="checkbox" data-country="${code}" onchange="toggleCountryItem(this)">
+            <span class="country-flag">${data.flag}</span>
+            <span class="country-name">${data.name}</span>
+            <div class="country-fields">
+                <input type="number" step="0.01" min="0" 
+                       data-field="old_price" 
+                       data-country="${code}"
+                       placeholder="Old"
+                       value="${convertedOld?convertedOld.toFixed(2):''}"
+                       disabled>
+                <input type="number" step="0.01" min="0" 
+                       data-field="new_price" 
+                       data-country="${code}"
+                       placeholder="New"
+                       value="${convertedNew?convertedNew.toFixed(2):''}"
+                       disabled>
+            </div>
+        `;
+
+        container.appendChild(item);
+    });
+
+    $("cloneWarning").classList.remove("show");
+    $("cloneModal").classList.add("show");
+}
+
+function closeCloneModal(){
+    $("cloneModal").classList.remove("show");
+    cloneSourceDeal=null;
+}
+
+function toggleCountryItem(checkbox){
+    const country=checkbox.dataset.country;
+    const item=checkbox.closest(".country-clone-item");
+    const fields=item.querySelectorAll("input[data-field]");
+
+    if(checkbox.checked){
+        item.classList.add("selected");
+        fields.forEach(f=>f.disabled=false);
+    }else{
+        item.classList.remove("selected");
+        fields.forEach(f=>f.disabled=true);
+    }
+
+    checkDuplicateWarning();
+}
+
+function checkDuplicateWarning(){
+    if(!cloneSourceDeal)return;
+
+    const selectedCountries=[];
+    document.querySelectorAll('#cloneCountries input[type="checkbox"]:checked').forEach(cb=>{
+        selectedCountries.push(cb.dataset.country);
+    });
+
+    if(!selectedCountries.length){
+        $("cloneWarning").classList.remove("show");
+        return;
+    }
+
+    // Check if any selected country already has same comparison_id + store
+    const duplicates=[];
+    selectedCountries.forEach(code=>{
+        const existing=allDeals.find(d=>
+            String(d.comparison_id||"")===String(cloneSourceDeal.comparison_id||"") &&
+            normalizeCountryCode(d.country_code||"")===code &&
+            String(d.store||"")===String(cloneSourceDeal.store||"")
+        );
+        if(existing){
+            duplicates.push(`${COUNTRIES[code].flag} ${COUNTRIES[code].name} (ID: ${existing.id})`);
+        }
+    });
+
+    const warningBox=$("cloneWarning");
+
+    if(duplicates.length){
+        warningBox.innerHTML=`
+            ⚠️ <strong>Warning:</strong> Similar deals already exist in:
+            <br>• ${duplicates.join("<br>• ")}
+            <br><br>Cloning may create duplicates. Server will skip them automatically.
+        `;
+        warningBox.classList.add("show");
+    }else{
+        warningBox.classList.remove("show");
+    }
+}
+
+function applyTemplate(type){
+    const allCheckboxes=document.querySelectorAll('#cloneCountries input[type="checkbox"]');
+
+    const templates={
+        gcc:["AE","SA","OM","QA","KW","BH"],
+        gcc3:["AE","SA","OM"],
+        asia:["PK","IN","SG","MY"],
+        clear:[]
+    };
+
+    const selected=templates[type]||[];
+
+    allCheckboxes.forEach(cb=>{
+        cb.checked=selected.includes(cb.dataset.country);
+        toggleCountryItem(cb);
+    });
+}
+
+async function submitClone(){
+    if(!cloneSourceDeal){
+        showToast("No source deal selected");
+        return;
+    }
+
+    if(!askAdminKey())return;
+
+    const targets=[];
+
+    document.querySelectorAll('#cloneCountries input[type="checkbox"]:checked').forEach(cb=>{
+        const code=cb.dataset.country;
+
+        const oldInput=document.querySelector(`input[data-field="old_price"][data-country="${code}"]`);
+        const newInput=document.querySelector(`input[data-field="new_price"][data-country="${code}"]`);
+
+        const oldPrice=oldInput.value===""?null:Number(oldInput.value);
+        const newPrice=newInput.value===""?null:Number(newInput.value);
+
+        if(!newPrice||newPrice<=0){
+            showToast(`⚠️ Enter valid New Price for ${COUNTRIES[code].name}`);
+            return;
+        }
+
+        targets.push({
+            country_code:code,
+            currency:COUNTRIES[code].currency,
+            old_price:oldPrice,
+            new_price:newPrice
+        });
+    });
+
+    if(!targets.length){
+        showToast("⚠️ Select at least one country");
+        return;
+    }
+
+    try{
+        $("cloneSubmitBtn").disabled=true;
+        $("cloneSubmitBtn").textContent="Cloning...";
+
+        const response=await api(
+            `/api/admin/deals/${cloneSourceDeal.id}/clone`,
+            {
+                method:"POST",
+                body:JSON.stringify({targets})
+            }
+        );
+
+        const count=response.cloned_count||0;
+        const errors=response.error_count||0;
+
+        if(count>0){
+            showMessage(`✅ ${count} deals cloned successfully!${errors>0?` (${errors} skipped)`:''}`,"success");
+            showToast(`🎉 ${count} countries added!`);
+        }else{
+            showMessage("No deals cloned. All may be duplicates.","error");
+        }
+
+        closeCloneModal();
+        await refreshAll();
+
+    }catch(error){
+        console.error(error);
+        showMessage(error.message||"Clone failed.","error");
+    }finally{
+        $("cloneSubmitBtn").disabled=false;
+        $("cloneSubmitBtn").textContent="🔄 Clone Now";
+    }
+}
+
+/* =========================================================
+   REFRESH ALL
+   ========================================================= */
+
 async function refreshAll(){
     if(!askAdminKey())return;
     await Promise.all([refreshStats(),refreshDeals()]);
@@ -585,6 +924,7 @@ function init(){
     populateCategories();
     populateCurrencies();
     $("currency").value="USD";
+
     if(!ADMIN_KEY){
         const accepted=askAdminKey();
         if(!accepted){
@@ -592,6 +932,7 @@ function init(){
             return;
         }
     }
+
     refreshAll();
 }
 
