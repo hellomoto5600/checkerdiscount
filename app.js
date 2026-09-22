@@ -1,5 +1,5 @@
-// CheckerDiscount - Complete App.js v8.0
-// Country Selector + Trust Badge + Admin Views + Rating + 5 Tools + Watchlist
+// CheckerDiscount - Complete App.js v9.0
+// Country Selector + Trust Badge + Admin Views + Rating + 5 Tools + Watchlist + Blog
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
 
@@ -39,33 +39,26 @@ function formatAED(value) {
     return `AED ${num.toFixed(2)}`;
 }
 
-// ========== TRUST BADGE (uses store_type from admin) ==========
+// ========== TRUST BADGE ==========
 function getTrustBadge(deal) {
     const storeType = String(deal.store_type || 'third-party').toLowerCase();
-    
     if (storeType === 'official') {
         return {
-            label: 'Official Store',
-            icon: 'verified',
-            bgClass: 'bg-savings-green-subtle',
-            textClass: 'text-savings-green',
+            label: 'Official Store', icon: 'verified',
+            bgClass: 'bg-savings-green-subtle', textClass: 'text-savings-green',
             borderClass: 'border-savings-green-border'
         };
     }
     return {
-        label: 'Third-Party / Local',
-        icon: 'storefront',
-        bgClass: 'bg-warning-amber-subtle',
-        textClass: 'text-warning-amber',
+        label: 'Third-Party / Local', icon: 'storefront',
+        bgClass: 'bg-warning-amber-subtle', textClass: 'text-warning-amber',
         borderClass: 'border-warning-amber/40'
     };
 }
 
-// ========== VIEWS (uses admin-provided views) ==========
+// ========== VIEWS ==========
 function getDealViews(dealId, deal) {
-    if (deal && deal.views) {
-        return Number(deal.views);
-    }
+    if (deal && deal.views) return Number(deal.views);
     if (!dealId) return 0;
     try {
         const views = localStorage.getItem(`cd_views_${dealId}`);
@@ -87,15 +80,13 @@ function formatViews(n) {
     return n.toString();
 }
 
-// ========== RATING (👍/👎) ==========
+// ========== RATING ==========
 function getDealRating(dealId) {
     if (!dealId) return { up: 0, down: 0, userVote: null };
     try {
         const data = localStorage.getItem(`cd_rating_${dealId}`);
         return data ? JSON.parse(data) : { up: 0, down: 0, userVote: null };
-    } catch (e) {
-        return { up: 0, down: 0, userVote: null };
-    }
+    } catch (e) { return { up: 0, down: 0, userVote: null }; }
 }
 
 function saveDealRating(dealId, rating) {
@@ -106,7 +97,6 @@ function saveDealRating(dealId, rating) {
 function voteDeal(dealId, voteType) {
     if (!dealId) return;
     const rating = getDealRating(dealId);
-    
     if (rating.userVote === voteType) {
         if (voteType === 'up') rating.up = Math.max(0, rating.up - 1);
         else rating.down = Math.max(0, rating.down - 1);
@@ -115,13 +105,11 @@ function voteDeal(dealId, voteType) {
     } else {
         if (rating.userVote === 'up') rating.up = Math.max(0, rating.up - 1);
         if (rating.userVote === 'down') rating.down = Math.max(0, rating.down - 1);
-        
         if (voteType === 'up') rating.up++;
         else rating.down++;
         rating.userVote = voteType;
         showToast(voteType === 'up' ? '👍 Thanks for voting!' : '👎 Noted!');
     }
-    
     saveDealRating(dealId, rating);
     loadDeals(currentCategory);
 }
@@ -388,7 +376,7 @@ function setupCountrySystem() {
                 <span class="material-symbols-outlined text-primary">public</span>
             </div>
             <div id="cdPopularCountries" class="flex gap-2 overflow-x-auto pb-1"></div>
-            <div id="cdMoreCountries" class="hidden mt-3 pt-3 border-t border-surface-container">
+            <div id="cdMoreCountries" class="hidden mt-3">
                 <div class="text-[11px] font-semibold text-on-surface-variant mb-2">More Countries</div>
                 <div id="cdMoreCountryList" class="flex flex-wrap gap-2"></div>
             </div>
@@ -1282,7 +1270,7 @@ function checkBestTime() {
 }
 window.checkBestTime = checkBestTime;
 
-// ========== BURGER MENU ==========
+// ========== BURGER MENU (v9 — Logo + Blog link added) ==========
 function initBurgerMenu() {
     const btn = document.getElementById("burgerMenuBtn");
     if (!btn) return;
@@ -1326,6 +1314,14 @@ function initBurgerMenu() {
                         <span class="material-symbols-outlined text-[20px]">home</span>
                     </span>
                     <span class="flex-1">Home</span>
+                </a>
+
+                <a href="blog.html" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px]">
+                    <span class="w-9 h-9 rounded-lg bg-primary-container text-white flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-[20px]">article</span>
+                    </span>
+                    <span class="flex-1">Blog</span>
+                    <span class="px-2 py-0.5 rounded-full bg-primary text-white text-[10px] font-bold">NEW</span>
                 </a>
 
                 <a href="customer.html" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px]">
