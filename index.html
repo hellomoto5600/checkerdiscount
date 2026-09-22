@@ -1,556 +1,1009 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <meta name="theme-color" content="#ffffff"/>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffffff">
 
-  <style>
-    @layer base {
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-      }
+<title>CheckerDiscount - Better Deals, Real Savings</title>
 
-      html {
-        overflow-x: hidden;
-      }
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+  rel="stylesheet"
+>
 
-      body {
-        overscroll-behavior: none;
-        overflow-x: hidden;
-      }
+<link
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+  rel="stylesheet"
+>
 
-      main > :first-child {
-        margin-top: 0 !important;
-      }
+<script src="https://cdn.tailwindcss.com"></script>
 
-      main > :last-child {
-        margin-bottom: 0 !important;
-      }
-    }
+<script>
+tailwind.config = {
+  darkMode: "class",
 
-    ::-webkit-scrollbar {
-      display: none;
-    }
+  theme: {
+    extend: {
 
-    /* =========================================================
-       CHECKERDISCOUNT HEADER
-       Professional responsive header
-       ========================================================= */
+      colors: {
+        "on-tertiary":"#ffffff",
+        "surface-subtle":"#F6F8FC",
+        "on-primary-fixed-variant":"#003da9",
+        "on-secondary-container":"#007440",
+        "secondary-container":"#70fda7",
+        "surface-variant":"#d3e4fe",
+        "on-primary":"#ffffff",
+        "on-tertiary-container":"#e5ebff",
+        "on-tertiary-fixed-variant":"#404757",
+        "surface-container-low":"#eff4ff",
+        "tertiary-fixed":"#dce2f6",
+        "warning-amber":"#F79009",
+        "savings-green":"#12B76A",
+        "surface-container-high":"#dce9ff",
+        "inverse-on-surface":"#eaf1ff",
+        "on-primary-container":"#e7eaff",
+        "savings-green-border":"#A6F4C5",
+        "on-secondary":"#ffffff",
+        "on-error-container":"#93000a",
+        "secondary-fixed-dim":"#51df8e",
+        "on-surface-variant":"#434655",
+        "on-tertiary-fixed":"#151b2a",
+        "on-surface":"#0b1c30",
+        "savings-green-subtle":"#ECFDF3",
+        "surface-dim":"#cbdbf5",
+        "inverse-primary":"#b4c5ff",
+        "inverse-surface":"#213145",
+        "surface-container-highest":"#d3e4fe",
+        "primary-fixed":"#dbe1ff",
+        "surface-container":"#e5eeff",
+        "tertiary-container":"#636a7b",
+        "navy-surface":"#0F172A",
+        "primary":"#0047c1",
+        "outline":"#737687",
+        "error":"#ba1a1a",
+        "background":"#f8f9ff",
+        "on-secondary-fixed-variant":"#00522c",
+        "navy-deep":"#0B1220",
+        "on-secondary-fixed":"#00210e",
+        "warning-amber-subtle":"#FEF0C7",
+        "primary-container":"#155eef",
+        "tertiary-fixed-dim":"#c0c6da",
+        "surface-tint":"#0052dc",
+        "surface-bright":"#f8f9ff",
+        "outline-variant":"#c3c6d8",
+        "on-error":"#ffffff",
+        "tertiary":"#4b5262",
+        "surface-container-lowest":"#ffffff",
+        "on-background":"#0b1c30",
+        "secondary-fixed":"#70fda7",
+        "error-container":"#ffdad6",
+        "on-primary-fixed":"#00174b",
+        "surface":"#f8f9ff",
+        "primary-fixed-dim":"#b4c5ff",
+        "surface-border":"#E2E8F0",
+        "secondary":"#006d3c"
+      },
 
-    .cd-header {
-      height: 64px;
-      width: 100%;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 50;
-      background: rgba(255, 255, 255, 0.94);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      box-shadow: 0 1px 8px rgba(0, 0, 0, 0.04);
-    }
+      borderRadius: {
+        DEFAULT:"0.25rem",
+        lg:"0.5rem",
+        xl:"0.75rem",
+        full:"9999px"
+      },
 
-    .cd-header-inner {
-      height: 64px;
-      width: 100%;
-      max-width: 1240px;
-      margin: 0 auto;
-      padding: 0 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      box-sizing: border-box;
-    }
+      spacing: {
+        "margin-mobile":"1rem",
+        "margin":"2rem",
+        "gutter":"1.5rem",
+        "space-lg":"1.5rem",
+        "space-xs":"0.25rem",
+        "space-md":"1rem",
+        "space-xl":"2.5rem",
+        "space-sm":"0.5rem",
+        "gutter-mobile":"1rem"
+      },
 
-    /* ---------- LOGO ---------- */
-
-    .cd-logo {
-      display: flex;
-      align-items: center;
-      flex: 0 1 auto;
-      min-width: 0;
-      width: auto;
-      max-width: 245px;
-      height: 52px;
-      text-decoration: none;
-      flex-shrink: 1;
-    }
-
-    .cd-logo svg {
-      display: block;
-      width: auto;
-      height: 46px;
-      max-width: 100%;
-    }
-
-    /* ---------- DESKTOP NAV ---------- */
-
-    .cd-desktop-nav {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      flex: 1 1 auto;
-      min-width: 0;
-      margin-left: 4px;
-    }
-
-    .cd-nav-link {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      padding: 7px 11px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      line-height: 1;
-      color: #434655;
-      text-decoration: none;
-      transition:
-        background-color .18s ease,
-        color .18s ease,
-        transform .18s ease;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .cd-nav-link:hover {
-      background: #eff4ff;
-      color: #155eef;
-    }
-
-    .cd-nav-link.active {
-      background: #eff4ff;
-      color: #155eef;
-    }
-
-    .cd-nav-link .material-symbols-outlined {
-      font-size: 19px;
-      line-height: 1;
-    }
-
-    /* ---------- RIGHT ACTIONS ---------- */
-
-    .cd-header-actions {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      flex-shrink: 0;
-      margin-left: auto;
-    }
-
-    .cd-account-link {
-      flex-shrink: 0;
-    }
-
-    .cd-menu-button {
-      width: 42px;
-      height: 42px;
-      padding: 0;
-      border: 0;
-      background: transparent;
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-
-    .cd-menu-button:hover {
-      background: #eff4ff;
-    }
-
-    .cd-menu-button .material-symbols-outlined {
-      font-size: 22px;
-    }
-
-    /* ---------- TABLET ---------- */
-
-    @media (min-width: 901px) and (max-width: 1100px) {
-      .cd-header-inner {
-        padding-left: 12px;
-        padding-right: 12px;
-        gap: 6px;
-      }
-
-      .cd-logo {
-        max-width: 215px;
-      }
-
-      .cd-logo svg {
-        height: 43px;
-      }
-
-      .cd-desktop-nav {
-        margin-left: 0;
-      }
-
-      .cd-nav-link {
-        padding: 6px 8px;
-        font-size: 12px;
-        gap: 4px;
-      }
-
-      .cd-nav-link .material-symbols-outlined {
-        font-size: 17px;
+      fontFamily: {
+        "price-strikethrough":["Inter"],
+        "body-sm":["Inter"],
+        "display-hero":["Inter"],
+        "display-hero-mobile":["Inter"],
+        "caption-timestamp":["Inter"],
+        "headline-sm":["Inter"],
+        "label-md":["Inter"],
+        "body-lg":["Inter"],
+        "headline-lg-mobile":["Inter"],
+        "headline-md":["Inter"],
+        "price-featured":["Inter"],
+        "badge-caps":["Inter"],
+        "headline-lg":["Inter"],
+        "body-md":["Inter"]
       }
     }
+  }
+};
+</script>
 
-    /* =========================================================
-       MOBILE HEADER
-       ========================================================= */
+<link rel="stylesheet" href="hero-slider.css">
 
-    @media (max-width: 900px) {
 
-      .cd-header {
-        height: 60px;
-      }
+<style>
 
-      .cd-header-inner {
-        height: 60px;
-        padding: 0 10px;
-        gap: 6px;
-      }
+/* =========================================================
+   GLOBAL SCROLL FIX
+   ========================================================= */
 
-      /* Hide desktop navigation */
-      .cd-desktop-nav {
-        display: none !important;
-      }
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scroll-behavior: smooth;
+}
 
-      /* Hide desktop account link */
-      .cd-account-link {
-        display: none !important;
-      }
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
 
-      /* Mobile logo */
-      .cd-logo {
-        height: 48px;
-        max-width: calc(100% - 50px);
-        min-width: 0;
-        flex: 1 1 auto;
-      }
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
 
-      .cd-logo svg {
-        height: 42px;
-        width: auto;
-        max-width: 100%;
-      }
+  position: static !important;
+  height: auto !important;
 
-      /* Burger always stays visible */
-      .cd-header-actions {
-        margin-left: auto;
-        gap: 0;
-      }
+  overscroll-behavior-y: auto;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
 
-      .cd-menu-button {
-        width: 42px;
-        height: 42px;
-        border-radius: 10px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-      }
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
 
-      .cd-menu-button .material-symbols-outlined {
-        font-size: 23px;
-      }
-    }
+body.cd-menu-open {
+  overflow-y: hidden !important;
+}
 
-    /* Smaller phones */
-    @media (max-width: 380px) {
 
-      .cd-header-inner {
-        padding-left: 8px;
-        padding-right: 8px;
-      }
+/* =========================================================
+   HEADER
+   ========================================================= */
 
-      .cd-logo {
-        max-width: calc(100% - 46px);
-      }
+.cd-header {
 
-      .cd-logo svg {
-        height: 38px;
-      }
+  position: fixed;
 
-      .cd-menu-button {
-        width: 40px;
-        height: 40px;
-      }
-    }
+  top: 0;
+  left: 0;
+  right: 0;
 
-    /* Very small phones */
-    @media (max-width: 340px) {
+  width: 100%;
+  height: 64px;
 
-      .cd-logo svg {
-        height: 35px;
-      }
+  z-index: 9000;
 
-      .cd-menu-button {
-        width: 38px;
-        height: 38px;
-      }
+  background: rgba(255,255,255,.96);
 
-      .cd-menu-button .material-symbols-outlined {
-        font-size: 21px;
-      }
-    }
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 
-    /* Prevent accidental horizontal overflow */
-    .cd-header,
-    .cd-header-inner,
-    .cd-logo,
-    .cd-logo svg {
-      overflow: hidden;
-    }
+  border-bottom: 1px solid rgba(226,232,240,.65);
 
-  </style>
+  box-shadow:
+    0 1px 8px rgba(0,0,0,.04);
+}
 
-  <script src="https://cdn.tailwindcss.com"></script>
 
-  <script id="tailwind-config">
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "on-tertiary": "#ffffff",
-            "surface-subtle": "#F6F8FC",
-            "on-primary-fixed-variant": "#003da9",
-            "on-secondary-container": "#007440",
-            "secondary-container": "#70fda7",
-            "surface-variant": "#d3e4fe",
-            "on-primary": "#ffffff",
-            "on-tertiary-container": "#e5ebff",
-            "on-tertiary-fixed-variant": "#404757",
-            "surface-container-low": "#eff4ff",
-            "tertiary-fixed": "#dce2f6",
-            "warning-amber": "#F79009",
-            "savings-green": "#12B76A",
-            "surface-container-high": "#dce9ff",
-            "inverse-on-surface": "#eaf1ff",
-            "on-primary-container": "#e7eaff",
-            "savings-green-border": "#A6F4C5",
-            "on-secondary": "#ffffff",
-            "on-error-container": "#93000a",
-            "secondary-fixed-dim": "#51df8e",
-            "on-surface-variant": "#434655",
-            "on-tertiary-fixed": "#151b2a",
-            "on-surface": "#0b1c30",
-            "savings-green-subtle": "#ECFDF3",
-            "surface-dim": "#cbdbf5",
-            "inverse-primary": "#b4c5ff",
-            "inverse-surface": "#213145",
-            "surface-container-highest": "#d3e4fe",
-            "primary-fixed": "#dbe1ff",
-            "surface-container": "#e5eeff",
-            "tertiary-container": "#636a7b",
-            "navy-surface": "#0F172A",
-            "primary": "#0047c1",
-            "outline": "#737687",
-            "error": "#ba1a1a",
-            "background": "#f8f9ff",
-            "on-secondary-fixed-variant": "#00522c",
-            "navy-deep": "#0B1220",
-            "on-secondary-fixed": "#00210e",
-            "warning-amber-subtle": "#FEF0C7",
-            "primary-container": "#155eef",
-            "tertiary-fixed-dim": "#c0c6da",
-            "surface-tint": "#0052dc",
-            "surface-bright": "#f8f9ff",
-            "outline-variant": "#c3c6d8",
-            "on-error": "#ffffff",
-            "tertiary": "#4b5262",
-            "surface-container-lowest": "#ffffff",
-            "on-background": "#0b1c30",
-            "secondary-fixed": "#70fda7",
-            "error-container": "#ffdad6",
-            "on-primary-fixed": "#00174b",
-            "surface": "#f8f9ff",
-            "primary-fixed-dim": "#b4c5ff",
-            "surface-border": "#E2E8F0",
-            "secondary": "#006d3c"
-          },
+.cd-header-inner {
 
-          borderRadius: {
-            DEFAULT: "0.25rem",
-            lg: "0.5rem",
-            xl: "0.75rem",
-            full: "9999px"
-          },
+  width: 100%;
+  max-width: 1240px;
 
-          spacing: {
-            "margin-mobile": "1rem",
-            "margin": "2rem",
-            "gutter": "1.5rem",
-            "space-lg": "1.5rem",
-            "space-xs": "0.25rem",
-            "space-md": "1rem",
-            "space-xl": "2.5rem",
-            "space-sm": "0.5rem",
-            "gutter-mobile": "1rem"
-          },
+  height: 64px;
 
-          fontFamily: {
-            "price-strikethrough": ["Inter"],
-            "body-sm": ["Inter"],
-            "display-hero": ["Inter"],
-            "display-hero-mobile": ["Inter"],
-            "caption-timestamp": ["Inter"],
-            "headline-sm": ["Inter"],
-            "label-md": ["Inter"],
-            "body-lg": ["Inter"],
-            "headline-lg-mobile": ["Inter"],
-            "headline-md": ["Inter"],
-            "price-featured": ["Inter"],
-            "badge-caps": ["Inter"],
-            "headline-lg": ["Inter"],
-            "body-md": ["Inter"]
-          },
+  margin: 0 auto;
 
-          fontSize: {
-            "price-strikethrough": [
-              "15px",
-              {
-                lineHeight: "20px",
-                letterSpacing: "0em",
-                fontWeight: "400"
-              }
-            ],
-            "body-sm": [
-              "13px",
-              {
-                lineHeight: "18px",
-                letterSpacing: "0em",
-                fontWeight: "400"
-              }
-            ],
-            "display-hero": [
-              "52px",
-              {
-                lineHeight: "60px",
-                letterSpacing: "-0.03em",
-                fontWeight: "800"
-              }
-            ],
-            "display-hero-mobile": [
-              "34px",
-              {
-                lineHeight: "40px",
-                letterSpacing: "-0.025em",
-                fontWeight: "800"
-              }
-            ],
-            "caption-timestamp": [
-              "11px",
-              {
-                lineHeight: "14px",
-                letterSpacing: "0.01em",
-                fontWeight: "500"
-              }
-            ],
-            "headline-sm": [
-              "18px",
-              {
-                lineHeight: "24px",
-                letterSpacing: "-0.01em",
-                fontWeight: "600"
-              }
-            ],
-            "label-md": [
-              "14px",
-              {
-                lineHeight: "18px",
-                letterSpacing: "-0.005em",
-                fontWeight: "600"
-              }
-            ],
-            "body-lg": [
-              "17px",
-              {
-                lineHeight: "26px",
-                letterSpacing: "-0.005em",
-                fontWeight: "400"
-              }
-            ],
-            "headline-lg-mobile": [
-              "26px",
-              {
-                lineHeight: "32px",
-                letterSpacing: "-0.015em",
-                fontWeight: "700"
-              }
-            ],
-            "headline-md": [
-              "22px",
-              {
-                lineHeight: "28px",
-                letterSpacing: "-0.015em",
-                fontWeight: "700"
-              }
-            ],
-            "price-featured": [
-              "26px",
-              {
-                lineHeight: "30px",
-                letterSpacing: "-0.02em",
-                fontWeight: "700"
-              }
-            ],
-            "badge-caps": [
-              "11px",
-              {
-                lineHeight: "14px",
-                letterSpacing: "0.06em",
-                fontWeight: "700"
-              }
-            ],
-            "headline-lg": [
-              "32px",
-              {
-                lineHeight: "40px",
-                letterSpacing: "-0.02em",
-                fontWeight: "700"
-              }
-            ],
-            "body-md": [
-              "15px",
-              {
-                lineHeight: "22px",
-                letterSpacing: "0em",
-                fontWeight: "400"
-              }
-            ]
-          }
-        }
-      }
-    };
-  </script>
+  padding:
+    0 16px;
 
-  <link rel="stylesheet" href="hero-slider.css">
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
+.cd-logo {
+
+  display: flex;
+  align-items: center;
+
+  flex: 0 1 auto;
+
+  min-width: 0;
+
+  height: 52px;
+
+  text-decoration: none;
+
+  flex-shrink: 1;
+
+  overflow: visible;
+}
+
+
+.cd-logo svg {
+
+  display: block;
+
+  width: auto;
+  height: 46px;
+
+  max-width: 100%;
+
+  overflow: visible;
+}
+
+
+/* =========================================================
+   DESKTOP NAV
+   ========================================================= */
+
+.cd-desktop-nav {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 2px;
+
+  flex: 1 1 auto;
+
+  min-width: 0;
+
+  margin-left: 6px;
+}
+
+
+.cd-nav-link {
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  padding: 7px 11px;
+
+  border-radius: 10px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  line-height: 1;
+
+  color: #434655;
+
+  text-decoration: none;
+
+  white-space: nowrap;
+
+  transition:
+    background .18s ease,
+    color .18s ease;
+
+  flex-shrink: 0;
+}
+
+
+.cd-nav-link:hover {
+
+  background: #eff4ff;
+  color: #155eef;
+}
+
+
+.cd-nav-link.active {
+
+  background: #eff4ff;
+  color: #155eef;
+}
+
+
+.cd-nav-link .material-symbols-outlined {
+
+  font-size: 19px;
+
+  line-height: 1;
+}
+
+
+/* =========================================================
+   HEADER RIGHT
+   ========================================================= */
+
+.cd-header-actions {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+
+  margin-left: auto;
+
+  flex-shrink: 0;
+}
+
+
+/* =========================================================
+   MOBILE HOME BUTTON
+   ========================================================= */
+
+.cd-mobile-home {
+
+  display: none;
+
+  width: 40px;
+  height: 40px;
+
+  border-radius: 10px;
+
+  align-items: center;
+  justify-content: center;
+
+  color: #155eef;
+
+  background: #eff4ff;
+
+  text-decoration: none;
+
+  flex-shrink: 0;
+}
+
+
+.cd-mobile-home .material-symbols-outlined {
+
+  font-size: 22px;
+}
+
+
+/* =========================================================
+   BURGER
+   ========================================================= */
+
+.cd-menu-button {
+
+  width: 42px;
+  height: 42px;
+
+  padding: 0;
+
+  border: 0;
+
+  border-radius: 10px;
+
+  background: transparent;
+
+  color: #434655;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+
+  transition:
+    background .18s ease,
+    color .18s ease;
+}
+
+
+.cd-menu-button:hover {
+
+  background: #eff4ff;
+  color: #155eef;
+}
+
+
+.cd-menu-button .material-symbols-outlined {
+
+  font-size: 25px;
+}
+
+
+/* =========================================================
+   MOBILE SIDE DRAWER
+   ========================================================= */
+
+.cd-mobile-overlay {
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9998;
+
+  background: rgba(11,18,32,.42);
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  transition:
+    opacity .22s ease,
+    visibility .22s ease;
+
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+
+.cd-mobile-overlay.open {
+
+  opacity: 1;
+
+  visibility: visible;
+}
+
+
+.cd-mobile-drawer {
+
+  position: fixed;
+
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  z-index: 9999;
+
+  width: min(86vw, 360px);
+
+  background: #ffffff;
+
+  box-shadow:
+    -10px 0 40px rgba(11,18,32,.18);
+
+  transform: translateX(105%);
+
+  transition:
+    transform .25s cubic-bezier(.4,0,.2,1);
+
+  display: flex;
+
+  flex-direction: column;
+
+  overflow-y: auto;
+
+  -webkit-overflow-scrolling: touch;
+}
+
+
+.cd-mobile-drawer.open {
+
+  transform: translateX(0);
+}
+
+
+/* drawer header */
+
+.cd-drawer-header {
+
+  min-height: 72px;
+
+  padding:
+    0 16px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid #e2e8f0;
+
+  flex-shrink: 0;
+}
+
+
+.cd-drawer-title {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+
+.cd-drawer-logo {
+
+  width: 38px;
+  height: 38px;
+
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #155eef,
+      #0047c1
+    );
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  box-shadow:
+    0 4px 12px rgba(0,71,193,.22);
+}
+
+
+.cd-drawer-logo .material-symbols-outlined {
+
+  color: #70fda7;
+
+  font-size: 25px;
+
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 700;
+}
+
+
+.cd-drawer-brand {
+
+  font-size: 18px;
+
+  font-weight: 800;
+
+  color: #0b1c30;
+}
+
+
+.cd-drawer-brand span {
+
+  color: #155eef;
+
+  font-weight: 500;
+}
+
+
+.cd-drawer-close {
+
+  width: 40px;
+  height: 40px;
+
+  border: 0;
+
+  border-radius: 10px;
+
+  background: #f6f8fc;
+
+  color: #434655;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+
+.cd-drawer-close:hover {
+
+  background: #eff4ff;
+  color: #155eef;
+}
+
+
+/* drawer nav */
+
+.cd-drawer-nav {
+
+  padding: 14px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 5px;
+}
+
+
+.cd-drawer-link {
+
+  width: 100%;
+
+  min-height: 50px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 13px;
+
+  padding: 0 14px;
+
+  border-radius: 12px;
+
+  text-decoration: none;
+
+  color: #253247;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  transition:
+    background .18s ease,
+    color .18s ease;
+}
+
+
+.cd-drawer-link:hover {
+
+  background: #eff4ff;
+  color: #155eef;
+}
+
+
+.cd-drawer-link.active {
+
+  background: #eff4ff;
+  color: #155eef;
+}
+
+
+.cd-drawer-link .material-symbols-outlined {
+
+  font-size: 22px;
+
+  flex-shrink: 0;
+}
+
+
+.cd-drawer-divider {
+
+  height: 1px;
+
+  background: #e2e8f0;
+
+  margin: 9px 14px;
+}
+
+
+.cd-drawer-section-title {
+
+  padding:
+    7px 14px 5px;
+
+  color: #737687;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  letter-spacing: .08em;
+
+  text-transform: uppercase;
+}
+
+
+/* drawer footer */
+
+.cd-drawer-footer {
+
+  margin-top: auto;
+
+  padding: 16px;
+
+  border-top: 1px solid #e2e8f0;
+
+  color: #737687;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (min-width:901px) and (max-width:1100px) {
+
+  .cd-header-inner {
+
+    padding-left: 12px;
+    padding-right: 12px;
+
+    gap: 5px;
+  }
+
+
+  .cd-logo svg {
+
+    height: 43px;
+  }
+
+
+  .cd-desktop-nav {
+
+    margin-left: 0;
+  }
+
+
+  .cd-nav-link {
+
+    padding:
+      6px 8px;
+
+    font-size: 12px;
+
+    gap: 4px;
+  }
+
+
+  .cd-nav-link .material-symbols-outlined {
+
+    font-size: 17px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width:900px) {
+
+  .cd-header {
+
+    height: 60px;
+  }
+
+
+  .cd-header-inner {
+
+    height: 60px;
+
+    padding:
+      0 10px;
+
+    gap: 6px;
+  }
+
+
+  .cd-desktop-nav {
+
+    display: none !important;
+  }
+
+
+  .cd-account-desktop {
+
+    display: none !important;
+  }
+
+
+  .cd-logo {
+
+    height: 48px;
+
+    max-width:
+      calc(100% - 94px);
+
+    flex:
+      1 1 auto;
+  }
+
+
+  .cd-logo svg {
+
+    height: 41px;
+
+    width: auto;
+
+    max-width: 100%;
+  }
+
+
+  .cd-mobile-home {
+
+    display: inline-flex;
+  }
+
+
+  .cd-menu-button {
+
+    width: 40px;
+    height: 40px;
+  }
+
+
+  main {
+
+    padding-top: 60px !important;
+  }
+
+
+  .cd-mobile-drawer,
+  .cd-mobile-overlay {
+
+    display: block;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width:380px) {
+
+  .cd-header-inner {
+
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+
+  .cd-logo {
+
+    max-width:
+      calc(100% - 88px);
+  }
+
+
+  .cd-logo svg {
+
+    height: 37px;
+  }
+
+
+  .cd-mobile-home {
+
+    width: 38px;
+    height: 38px;
+  }
+
+
+  .cd-menu-button {
+
+    width: 38px;
+    height: 38px;
+  }
+
+}
+
+
+/* =========================================================
+   EXTRA SMALL
+   ========================================================= */
+
+@media (max-width:340px) {
+
+  .cd-logo svg {
+
+    height: 34px;
+  }
+
+
+  .cd-mobile-home {
+
+    width: 36px;
+    height: 36px;
+  }
+
+
+  .cd-menu-button {
+
+    width: 36px;
+    height: 36px;
+  }
+
+
+  .cd-mobile-home .material-symbols-outlined,
+  .cd-menu-button .material-symbols-outlined {
+
+    font-size: 21px;
+  }
+
+}
+
+
+/* =========================================================
+   BODY WHEN MENU IS OPEN
+   ========================================================= */
+
+body.cd-menu-open {
+
+  overflow: hidden !important;
+
+  touch-action: none;
+}
+
+
+/* =========================================================
+   MOBILE BOTTOM NAV
+   ========================================================= */
+
+.cd-bottom-nav {
+
+  padding-bottom:
+    max(8px, env(safe-area-inset-bottom));
+}
+
+
+/* =========================================================
+   REMOVE ACCIDENTAL OVERFLOW
+   ========================================================= */
+
+* {
+
+  box-sizing: border-box;
+}
+
+
+img,
+svg {
+
+  max-width: 100%;
+}
+
+
+button,
+a {
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+</style>
+
 </head>
 
-<body class="bg-background font-body-md text-body-md text-on-surface antialiased">
+
+<body class="bg-background text-on-surface antialiased">
+
 
 <!-- =========================================================
-     PROFESSIONAL RESPONSIVE HEADER
+     HEADER
      ========================================================= -->
 
 <header class="cd-header">
 
   <div class="cd-header-inner">
 
+
     <!-- LOGO -->
+
     <a
-      class="cd-logo"
-      data-path="home"
       href="index.html"
+      class="cd-logo"
       aria-label="CheckerDiscount Home"
     >
+
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 320 64"
@@ -567,9 +1020,17 @@
             x2="100%"
             y2="100%"
           >
-            <stop offset="0%" stop-color="#155EEF"/>
-            <stop offset="100%" stop-color="#0047C1"/>
+            <stop
+              offset="0%"
+              stop-color="#155EEF"
+            />
+
+            <stop
+              offset="100%"
+              stop-color="#0047C1"
+            />
           </linearGradient>
+
 
           <linearGradient
             id="cdGreenGrad"
@@ -578,9 +1039,19 @@
             x2="100%"
             y2="100%"
           >
-            <stop offset="0%" stop-color="#70FDA7"/>
-            <stop offset="100%" stop-color="#12B76A"/>
+
+            <stop
+              offset="0%"
+              stop-color="#70FDA7"
+            />
+
+            <stop
+              offset="100%"
+              stop-color="#12B76A"
+            />
+
           </linearGradient>
+
 
           <filter
             id="cdShadow"
@@ -589,6 +1060,7 @@
             width="120%"
             height="120%"
           >
+
             <feDropShadow
               dx="0"
               dy="3"
@@ -596,9 +1068,11 @@
               flood-color="#0047C1"
               flood-opacity="0.22"
             />
+
           </filter>
 
         </defs>
+
 
         <g filter="url(#cdShadow)">
 
@@ -607,6 +1081,7 @@
             fill="url(#cdPrimaryGrad)"
           />
 
+
           <path
             d="M18 28L23 33L34 20"
             stroke="url(#cdGreenGrad)"
@@ -614,6 +1089,7 @@
             stroke-linecap="round"
             stroke-linejoin="round"
           />
+
 
           <circle
             cx="36"
@@ -624,26 +1100,31 @@
 
         </g>
 
+
         <text
           x="60"
           y="39"
-          font-family="Inter, system-ui, -apple-system, sans-serif"
+          font-family="Inter, system-ui, sans-serif"
           font-size="24"
           font-weight="800"
           fill="#0B1C30"
           letter-spacing="-0.03em"
         >
+
           Checker<tspan
             font-weight="500"
             fill="#155EEF"
           >Discount</tspan>
+
         </text>
 
       </svg>
+
     </a>
 
 
-    <!-- DESKTOP NAVIGATION -->
+    <!-- DESKTOP NAV -->
+
     <nav
       class="cd-desktop-nav"
       aria-label="Main Navigation"
@@ -653,66 +1134,138 @@
         href="index.html"
         class="cd-nav-link active"
       >
-        <span class="material-symbols-outlined">home</span>
-        <span>Home</span>
+
+        <span class="material-symbols-outlined">
+          home
+        </span>
+
+        <span>
+          Home
+        </span>
+
       </a>
+
 
       <a
         href="blog.html"
         class="cd-nav-link"
       >
-        <span class="material-symbols-outlined">article</span>
-        <span>Blog</span>
+
+        <span class="material-symbols-outlined">
+          article
+        </span>
+
+        <span>
+          Blog
+        </span>
+
       </a>
+
 
       <a
         href="#market-deals"
         class="cd-nav-link"
       >
-        <span class="material-symbols-outlined">local_offer</span>
-        <span>Deals</span>
+
+        <span class="material-symbols-outlined">
+          local_offer
+        </span>
+
+        <span>
+          Deals
+        </span>
+
       </a>
+
 
       <a
         href="#smart-tools"
         class="cd-nav-link"
       >
-        <span class="material-symbols-outlined">construction</span>
-        <span>Tools</span>
+
+        <span class="material-symbols-outlined">
+          construction
+        </span>
+
+        <span>
+          Tools
+        </span>
+
       </a>
+
 
       <a
         href="#favorites-section"
         class="cd-nav-link"
       >
-        <span class="material-symbols-outlined">favorite</span>
-        <span>Favorites</span>
+
+        <span class="material-symbols-outlined">
+          favorite
+        </span>
+
+        <span>
+          Favorites
+        </span>
+
       </a>
 
     </nav>
 
 
-    <!-- RIGHT SIDE -->
+    <!-- HEADER RIGHT -->
+
     <div class="cd-header-actions">
 
-      <!-- Account: desktop only -->
+
+      <!-- MOBILE HOME -->
+
       <a
-        href="customer.html"
-        class="cd-nav-link cd-account-link"
-        aria-label="Account"
+        href="index.html"
+        class="cd-mobile-home"
+        aria-label="Home"
       >
-        <span class="material-symbols-outlined">person</span>
-        <span>Account</span>
+
+        <span class="material-symbols-outlined">
+          home
+        </span>
+
       </a>
 
-      <!-- Burger -->
+
+      <!-- DESKTOP ACCOUNT -->
+
+      <a
+        href="customer.html"
+        class="cd-nav-link cd-account-desktop"
+        aria-label="Account"
+      >
+
+        <span class="material-symbols-outlined">
+          person
+        </span>
+
+        <span>
+          Account
+        </span>
+
+      </a>
+
+
+      <!-- BURGER -->
+
       <button
-        aria-label="Open Navigation Menu"
-        class="cd-nav-link cd-menu-button"
         id="burgerMenuBtn"
         type="button"
+        class="cd-menu-button"
+        aria-label="Open Navigation Menu"
+        aria-controls="cdMobileDrawer"
+        aria-expanded="false"
       >
-        <span class="material-symbols-outlined">menu</span>
+
+        <span class="material-symbols-outlined">
+          menu
+        </span>
+
       </button>
 
     </div>
@@ -722,9 +1275,223 @@
 </header>
 
 
-<main class="w-full pt-16 pb-24 bg-background">
+
+<!-- =========================================================
+     MOBILE MENU OVERLAY
+     ========================================================= -->
+
+<div
+  id="cdMobileOverlay"
+  class="cd-mobile-overlay"
+  aria-hidden="true"
+></div>
+
+
+
+<!-- =========================================================
+     MOBILE SIDE MENU
+     ========================================================= -->
+
+<aside
+  id="cdMobileDrawer"
+  class="cd-mobile-drawer"
+  aria-label="Mobile Navigation"
+  aria-hidden="true"
+>
+
+
+  <div class="cd-drawer-header">
+
+    <div class="cd-drawer-title">
+
+      <div class="cd-drawer-logo">
+
+        <span class="material-symbols-outlined">
+          verified
+        </span>
+
+      </div>
+
+
+      <div class="cd-drawer-brand">
+
+        Checker<span>Discount</span>
+
+      </div>
+
+    </div>
+
+
+    <button
+      id="cdDrawerClose"
+      type="button"
+      class="cd-drawer-close"
+      aria-label="Close Menu"
+    >
+
+      <span class="material-symbols-outlined">
+        close
+      </span>
+
+    </button>
+
+  </div>
+
+
+
+  <nav class="cd-drawer-nav">
+
+
+    <div class="cd-drawer-section-title">
+      Navigation
+    </div>
+
+
+    <!-- HOME -->
+
+    <a
+      href="index.html"
+      class="cd-drawer-link active"
+    >
+
+      <span class="material-symbols-outlined">
+        home
+      </span>
+
+      <span>
+        Home
+      </span>
+
+    </a>
+
+
+    <!-- BLOG -->
+
+    <a
+      href="blog.html"
+      class="cd-drawer-link"
+    >
+
+      <span class="material-symbols-outlined">
+        article
+      </span>
+
+      <span>
+        Blog
+      </span>
+
+    </a>
+
+
+    <!-- DEALS -->
+
+    <a
+      href="#market-deals"
+      class="cd-drawer-link"
+    >
+
+      <span class="material-symbols-outlined">
+        local_offer
+      </span>
+
+      <span>
+        Deals
+      </span>
+
+    </a>
+
+
+    <!-- TOOLS -->
+
+    <a
+      href="#smart-tools"
+      class="cd-drawer-link"
+    >
+
+      <span class="material-symbols-outlined">
+        construction
+      </span>
+
+      <span>
+        Smart Tools
+      </span>
+
+    </a>
+
+
+    <!-- FAVORITES -->
+
+    <a
+      href="#favorites-section"
+      class="cd-drawer-link"
+    >
+
+      <span class="material-symbols-outlined">
+        favorite
+      </span>
+
+      <span>
+        Favorites
+      </span>
+
+    </a>
+
+
+    <div class="cd-drawer-divider"></div>
+
+
+    <div class="cd-drawer-section-title">
+      Account
+    </div>
+
+
+    <!-- ACCOUNT -->
+
+    <a
+      href="customer.html"
+      class="cd-drawer-link"
+    >
+
+      <span class="material-symbols-outlined">
+        person
+      </span>
+
+      <span>
+        My Account
+      </span>
+
+    </a>
+
+
+  </nav>
+
+
+  <div class="cd-drawer-footer">
+
+    <strong>
+      CheckerDiscount
+    </strong>
+
+    <br>
+
+    Verified deals and smarter shopping.
+
+  </div>
+
+</aside>
+
+
+
+<!-- =========================================================
+     MAIN
+     ========================================================= -->
+
+<main
+  class="w-full pt-16 pb-24 bg-background"
+>
 
 <div class="flex flex-col w-full">
+
 
 
 <!-- =========================================================
@@ -735,39 +1502,48 @@
   class="relative w-full bg-gradient-to-b from-surface via-surface-container-low/40 to-background overflow-hidden pb-6 pt-4 px-4"
 >
 
+
   <div
     id="cd-hero-slider"
     class="cd-hero-slider"
   >
 
+
     <div class="cd-hero-track">
+
 
       <div
         class="cd-hero-slide cd-slide-1"
         data-index="0"
       ></div>
 
+
       <div
         class="cd-hero-slide cd-slide-2"
         data-index="1"
       ></div>
+
 
       <div
         class="cd-hero-slide cd-slide-3"
         data-index="2"
       ></div>
 
+
       <div
         class="cd-hero-slide cd-slide-4"
         data-index="3"
       ></div>
+
 
       <div
         class="cd-hero-slide cd-slide-5"
         data-index="4"
       ></div>
 
+
     </div>
+
 
 
     <button
@@ -775,7 +1551,9 @@
       aria-label="Previous slide"
       type="button"
     >
+
       <span>‹</span>
+
     </button>
 
 
@@ -784,11 +1562,15 @@
       aria-label="Next slide"
       type="button"
     >
+
       <span>›</span>
+
     </button>
 
 
+
     <div class="cd-hero-dots">
+
 
       <button
         class="cd-hero-dot active"
@@ -797,12 +1579,14 @@
         type="button"
       ></button>
 
+
       <button
         class="cd-hero-dot"
         data-slide="1"
         aria-label="Slide 2"
         type="button"
       ></button>
+
 
       <button
         class="cd-hero-dot"
@@ -811,12 +1595,14 @@
         type="button"
       ></button>
 
+
       <button
         class="cd-hero-dot"
         data-slide="3"
         aria-label="Slide 4"
         type="button"
       ></button>
+
 
       <button
         class="cd-hero-dot"
@@ -825,27 +1611,38 @@
         type="button"
       ></button>
 
+
     </div>
 
   </div>
 
 
-  <div class="flex flex-col w-full gap-2.5 pt-4">
+
+  <div
+    class="flex flex-col w-full gap-2.5 pt-4"
+  >
+
 
     <a
-      class="w-full py-3 px-4 rounded-xl bg-primary-container text-on-primary font-label-md text-[14px] shadow-md shadow-primary-container/25 flex items-center justify-center gap-2 font-semibold active:scale-[0.99] transition-transform"
+      class="w-full py-3 px-4 rounded-xl bg-primary-container text-on-primary text-[14px] shadow-md shadow-primary-container/25 flex items-center justify-center gap-2 font-semibold active:scale-[0.99] transition-transform"
       href="#market-deals"
     >
-      <span>Explore Verified Deals</span>
+
+      <span>
+        Explore Verified Deals
+      </span>
+
 
       <span class="material-symbols-outlined text-[18px]">
         arrow_forward
       </span>
+
     </a>
 
 
+
     <a
-      class="w-full py-3 px-4 rounded-xl bg-surface-container-lowest text-on-surface font-label-md text-[14px] border border-surface-container-high flex items-center justify-center gap-2 font-semibold shadow-sm active:bg-surface-container-low transition-colors"
+      class="w-full py-3 px-4 rounded-xl bg-surface-container-lowest text-on-surface text-[14px] border border-surface-container-high flex items-center justify-center gap-2 font-semibold shadow-sm active:bg-surface-container-low transition-colors"
       href="#smart-tools"
     >
 
@@ -853,16 +1650,22 @@
         construction
       </span>
 
-      <span>Try Smart Tools</span>
+
+      <span>
+        Try Smart Tools
+      </span>
 
     </a>
 
+
   </div>
+
 
 
   <div
     class="flex items-center justify-between w-full pt-3 text-on-surface-variant border-t border-surface-container-high/60 mt-4"
   >
+
 
     <div class="inline-flex items-center gap-1">
 
@@ -902,6 +1705,7 @@
 
     </div>
 
+
   </div>
 
 </section>
@@ -913,14 +1717,16 @@
      ========================================================= -->
 
 <section
-  class="w-full px-4 py-5 space-y-4"
   id="market-deals"
+  class="w-full px-4 py-5 space-y-4"
 >
+
 
   <div class="flex flex-col gap-1">
 
+
     <div
-      class="inline-flex items-center gap-1 text-primary font-badge-caps text-[11px] font-bold tracking-wider uppercase"
+      class="inline-flex items-center gap-1 text-primary text-[11px] font-bold tracking-wider uppercase"
     >
 
       <span class="material-symbols-outlined text-[15px]">
@@ -934,38 +1740,54 @@
 
     <div class="flex items-center justify-between">
 
+
       <h2
-        class="font-headline-md text-[20px] font-bold text-on-surface tracking-tight"
+        class="text-[20px] font-bold text-on-surface tracking-tight"
       >
         Deals Worth Checking
       </h2>
 
 
-      <span class="flex items-center gap-1 text-[11px] text-on-surface-variant">
+      <span
+        class="flex items-center gap-1 text-[11px] text-on-surface-variant"
+      >
 
-        <span class="w-2 h-2 rounded-full bg-savings-green animate-pulse"></span>
+        <span
+          class="w-2 h-2 rounded-full bg-savings-green animate-pulse"
+        ></span>
 
         Audited
 
       </span>
+
 
     </div>
 
   </div>
 
 
-  <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none"></div>
+
+  <!--
+    IMPORTANT:
+    Existing app.js dynamically creates the
+    country selector, category filters and deal cards.
+  -->
+
+  <div
+    class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none"
+  ></div>
 
 
   <div
-    class="flex flex-col gap-3"
     id="discountsContainer"
+    class="flex flex-col gap-3"
   ></div>
 
 
   <div
     class="p-3 bg-surface-container-low/60 rounded-xl flex items-center justify-between text-[12px] text-on-surface-variant"
   >
+
 
     <div class="flex items-center gap-1.5">
 
@@ -981,10 +1803,11 @@
 
 
     <span
-      class="font-badge-caps text-[10px] text-primary font-bold uppercase tracking-wider"
+      class="text-[10px] text-primary font-bold uppercase tracking-wider"
     >
       24/7 Monitored
     </span>
+
 
   </div>
 
@@ -997,17 +1820,25 @@
      ========================================================= -->
 
 <section
-  class="w-full px-4 py-5"
   id="favorites-section"
+  class="w-full px-4 py-5"
 >
+
 
   <div
     class="bg-surface-container-lowest rounded-2xl p-4 shadow-md border border-surface-container/60"
   >
 
-    <div class="flex items-center justify-between mb-3">
 
-      <div class="flex items-center gap-2.5">
+    <div
+      class="flex items-center justify-between mb-3"
+    >
+
+
+      <div
+        class="flex items-center gap-2.5"
+      >
+
 
         <div
           class="w-9 h-9 rounded-xl bg-error-container text-error flex items-center justify-center flex-shrink-0"
@@ -1026,18 +1857,20 @@
         <div>
 
           <h3
-            class="font-headline-sm text-[17px] font-bold text-on-surface leading-tight"
+            class="text-[17px] font-bold text-on-surface leading-tight"
           >
             My Favorites
           </h3>
 
+
           <p
-            class="font-body-sm text-[12px] text-on-surface-variant"
+            class="text-[12px] text-on-surface-variant"
           >
             Deals you saved to check later
           </p>
 
         </div>
+
 
       </div>
 
@@ -1049,7 +1882,9 @@
         0
       </span>
 
+
     </div>
+
 
 
     <div
@@ -1073,6 +1908,7 @@
 
     </div>
 
+
   </div>
 
 </section>
@@ -1084,14 +1920,16 @@
      ========================================================= -->
 
 <section
-  class="w-full px-4 py-5 space-y-4"
   id="smart-tools"
+  class="w-full px-4 py-5 space-y-4"
 >
+
 
   <div class="flex flex-col gap-1">
 
+
     <div
-      class="inline-flex items-center gap-1 text-primary font-badge-caps text-[11px] font-bold uppercase tracking-wider"
+      class="inline-flex items-center gap-1 text-primary text-[11px] font-bold uppercase tracking-wider"
     >
 
       <span class="material-symbols-outlined text-[15px]">
@@ -1104,19 +1942,21 @@
 
 
     <h2
-      class="font-headline-lg text-[20px] font-bold text-on-surface tracking-tight"
+      class="text-[20px] font-bold text-on-surface tracking-tight"
     >
       Check Before You Buy
     </h2>
 
 
     <p
-      class="font-body-sm text-[13px] text-on-surface-variant"
+      class="text-[13px] text-on-surface-variant"
     >
       Free calculators to help you shop smarter and save more.
     </p>
 
+
   </div>
+
 
 
   <div id="tool-dealscore"></div>
@@ -1128,6 +1968,7 @@
   <div id="tool-unitprice"></div>
 
   <div id="tool-besttime"></div>
+
 
 </section>
 
@@ -1146,11 +1987,14 @@
   class="w-full bg-navy-deep text-on-tertiary pt-space-xl pb-space-lg"
 >
 
+
   <div
     class="w-full px-4 pt-6 pb-28 flex flex-col gap-6"
   >
 
+
     <div class="flex flex-col gap-3">
+
 
       <a
         class="flex items-center gap-2.5 group py-1 w-fit"
@@ -1173,9 +2017,19 @@
               x2="100%"
               y2="100%"
             >
-              <stop offset="0%" stop-color="#155EEF"/>
-              <stop offset="100%" stop-color="#0047C1"/>
+
+              <stop
+                offset="0%"
+                stop-color="#155EEF"
+              />
+
+              <stop
+                offset="100%"
+                stop-color="#0047C1"
+              />
+
             </linearGradient>
+
 
             <linearGradient
               id="cdGreenGradFooter"
@@ -1184,36 +2038,43 @@
               x2="100%"
               y2="100%"
             >
-              <stop offset="0%" stop-color="#70FDA7"/>
-              <stop offset="100%" stop-color="#12B76A"/>
+
+              <stop
+                offset="0%"
+                stop-color="#70FDA7"
+              />
+
+              <stop
+                offset="100%"
+                stop-color="#12B76A"
+              />
+
             </linearGradient>
 
           </defs>
 
 
-          <g>
+          <path
+            d="M26 4C14 4 6 8 6 8C6 24 10 42 26 56C42 42 46 24 46 8C46 8 38 4 26 4Z"
+            fill="url(#cdPrimaryGradFooter)"
+          />
 
-            <path
-              d="M26 4C14 4 6 8 6 8C6 24 10 42 26 56C42 42 46 24 46 8C46 8 38 4 26 4Z"
-              fill="url(#cdPrimaryGradFooter)"
-            />
 
-            <path
-              d="M18 28L23 33L34 20"
-              stroke="url(#cdGreenGradFooter)"
-              stroke-width="4.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
+          <path
+            d="M18 28L23 33L34 20"
+            stroke="url(#cdGreenGradFooter)"
+            stroke-width="4.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
 
-            <circle
-              cx="36"
-              cy="14"
-              r="4"
-              fill="url(#cdGreenGradFooter)"
-            />
 
-          </g>
+          <circle
+            cx="36"
+            cy="14"
+            r="4"
+            fill="url(#cdGreenGradFooter)"
+          />
 
 
           <text
@@ -1225,10 +2086,12 @@
             fill="#ffffff"
             letter-spacing="-0.03em"
           >
+
             Checker<tspan
               font-weight="500"
               fill="#70FDA7"
             >Discount</tspan>
+
           </text>
 
         </svg>
@@ -1237,13 +2100,16 @@
 
 
       <p
-        class="font-body-sm text-[12px] text-tertiary-fixed-dim leading-relaxed"
+        class="text-[12px] text-tertiary-fixed-dim leading-relaxed"
       >
         Algorithmic deal verification and real-time price monitoring across major retailers worldwide.
       </p>
 
 
-      <div class="flex flex-wrap gap-2 pt-1">
+      <div
+        class="flex flex-wrap gap-2 pt-1"
+      >
+
 
         <div
           class="inline-flex items-center gap-1 px-2.5 py-1 bg-navy-surface rounded-lg text-[11px] text-tertiary-fixed"
@@ -1274,24 +2140,29 @@
 
         </div>
 
+
       </div>
 
     </div>
+
 
 
     <div
       class="grid grid-cols-2 gap-4 border-t border-navy-surface pt-4"
     >
 
+
       <div>
 
         <h4
-          class="font-label-md text-[12px] font-bold text-on-tertiary uppercase tracking-wider mb-2"
+          class="text-[12px] font-bold text-on-tertiary uppercase tracking-wider mb-2"
         >
           Explore
         </h4>
 
+
         <ul class="space-y-2 text-[12px]">
+
 
           <li>
             <a
@@ -1302,6 +2173,7 @@
             </a>
           </li>
 
+
           <li>
             <a
               class="text-tertiary-fixed-dim hover:text-on-tertiary"
@@ -1310,6 +2182,7 @@
               Blog
             </a>
           </li>
+
 
           <li>
             <a
@@ -1320,6 +2193,7 @@
             </a>
           </li>
 
+
           <li>
             <a
               class="text-tertiary-fixed-dim hover:text-on-tertiary"
@@ -1328,6 +2202,7 @@
               Smart Tools
             </a>
           </li>
+
 
           <li>
             <a
@@ -1338,20 +2213,24 @@
             </a>
           </li>
 
+
         </ul>
 
       </div>
 
 
+
       <div>
 
         <h4
-          class="font-label-md text-[12px] font-bold text-on-tertiary uppercase tracking-wider mb-2"
+          class="text-[12px] font-bold text-on-tertiary uppercase tracking-wider mb-2"
         >
           Company &amp; Legal
         </h4>
 
+
         <ul class="space-y-2 text-[12px]">
+
 
           <li>
             <a
@@ -1362,6 +2241,7 @@
             </a>
           </li>
 
+
           <li>
             <a
               class="text-tertiary-fixed-dim hover:text-on-tertiary"
@@ -1370,6 +2250,7 @@
               Privacy Policy
             </a>
           </li>
+
 
           <li>
             <a
@@ -1380,6 +2261,7 @@
             </a>
           </li>
 
+
           <li>
             <a
               class="text-tertiary-fixed-dim hover:text-on-tertiary"
@@ -1389,11 +2271,13 @@
             </a>
           </li>
 
+
         </ul>
 
       </div>
 
     </div>
+
 
 
     <div
@@ -1413,6 +2297,7 @@
           © 2026 CheckerDiscount.com
         </span>
 
+
         <span>
           SSL Encrypted
         </span>
@@ -1421,6 +2306,7 @@
 
     </div>
 
+
   </div>
 
 </footer>
@@ -1428,16 +2314,17 @@
 
 
 <!-- =========================================================
-     MOBILE BOTTOM NAVIGATION
+     MOBILE BOTTOM NAV
      ========================================================= -->
 
 <nav
   aria-label="Mobile Navigation"
-  class="fixed bottom-0 inset-x-0 z-50 bg-surface-container-lowest/95 backdrop-blur-xl border-t border-surface-container px-3 py-2 flex items-center justify-around shadow-lg"
+  class="cd-bottom-nav fixed bottom-0 inset-x-0 z-50 bg-surface-container-lowest/95 backdrop-blur-xl border-t border-surface-container px-3 py-2 flex items-center justify-around shadow-lg"
 >
 
+
   <a
-    class="flex flex-col items-center gap-0.5 text-primary-container font-label-md text-[11px] font-semibold py-1 px-2.5 rounded-xl"
+    class="flex flex-col items-center gap-0.5 text-primary-container text-[11px] font-semibold py-1 px-2.5 rounded-xl"
     href="#market-deals"
   >
 
@@ -1445,13 +2332,15 @@
       local_offer
     </span>
 
-    <span>Deals</span>
+    <span>
+      Deals
+    </span>
 
   </a>
 
 
   <a
-    class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface font-label-md text-[11px] py-1 px-2.5 rounded-xl transition-colors"
+    class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface text-[11px] py-1 px-2.5 rounded-xl"
     href="blog.html"
   >
 
@@ -1459,13 +2348,15 @@
       article
     </span>
 
-    <span>Blog</span>
+    <span>
+      Blog
+    </span>
 
   </a>
 
 
   <a
-    class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface font-label-md text-[11px] py-1 px-2.5 rounded-xl transition-colors"
+    class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface text-[11px] py-1 px-2.5 rounded-xl"
     href="#favorites-section"
   >
 
@@ -1473,13 +2364,15 @@
       favorite
     </span>
 
-    <span>Favorites</span>
+    <span>
+      Favorites
+    </span>
 
   </a>
 
 
   <a
-    class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface font-label-md text-[11px] py-1 px-2.5 rounded-xl transition-colors"
+    class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface text-[11px] py-1 px-2.5 rounded-xl"
     href="#smart-tools"
   >
 
@@ -1487,13 +2380,15 @@
       construction
     </span>
 
-    <span>Tools</span>
+    <span>
+      Tools
+    </span>
 
   </a>
 
 
   <a
-    class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface font-label-md text-[11px] py-1 px-2.5 rounded-xl transition-colors"
+    class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface text-[11px] py-1 px-2.5 rounded-xl"
     href="customer.html"
   >
 
@@ -1501,7 +2396,9 @@
       person
     </span>
 
-    <span>Account</span>
+    <span>
+      Account
+    </span>
 
   </a>
 
@@ -1510,11 +2407,327 @@
 
 
 <!-- =========================================================
-     JAVASCRIPT
+     EXISTING PROJECT JAVASCRIPT
      ========================================================= -->
 
 <script src="hero-slider.js"></script>
+
 <script src="app.js"></script>
+
+
+
+<!-- =========================================================
+     MOBILE HEADER + SCROLL CONTROL
+     ========================================================= -->
+
+<script>
+
+(function () {
+
+  "use strict";
+
+
+  /* ---------------------------------------------------------
+     ELEMENTS
+     --------------------------------------------------------- */
+
+  const burger =
+    document.getElementById("burgerMenuBtn");
+
+  const drawer =
+    document.getElementById("cdMobileDrawer");
+
+  const overlay =
+    document.getElementById("cdMobileOverlay");
+
+  const closeButton =
+    document.getElementById("cdDrawerClose");
+
+
+  if (!burger || !drawer || !overlay) {
+    return;
+  }
+
+
+  /* ---------------------------------------------------------
+     OPEN MENU
+     --------------------------------------------------------- */
+
+  function openMobileMenu() {
+
+    drawer.classList.add("open");
+
+    overlay.classList.add("open");
+
+    drawer.setAttribute(
+      "aria-hidden",
+      "false"
+    );
+
+    overlay.setAttribute(
+      "aria-hidden",
+      "false"
+    );
+
+    burger.setAttribute(
+      "aria-expanded",
+      "true"
+    );
+
+
+    burger.innerHTML =
+      '<span class="material-symbols-outlined">close</span>';
+
+
+    document.body.classList.add(
+      "cd-menu-open"
+    );
+
+  }
+
+
+  /* ---------------------------------------------------------
+     CLOSE MENU
+     --------------------------------------------------------- */
+
+  function closeMobileMenu() {
+
+    drawer.classList.remove("open");
+
+    overlay.classList.remove("open");
+
+    drawer.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+    overlay.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+    burger.setAttribute(
+      "aria-expanded",
+      "false"
+    );
+
+
+    burger.innerHTML =
+      '<span class="material-symbols-outlined">menu</span>';
+
+
+    document.body.classList.remove(
+      "cd-menu-open"
+    );
+
+
+    /* Restore scrolling */
+
+    document.documentElement.style.setProperty(
+      "overflow-y",
+      "auto",
+      "important"
+    );
+
+    document.body.style.setProperty(
+      "overflow-y",
+      "auto",
+      "important"
+    );
+
+  }
+
+
+  /* ---------------------------------------------------------
+     BURGER CLICK
+     --------------------------------------------------------- */
+
+  burger.addEventListener(
+    "click",
+    function (event) {
+
+      event.preventDefault();
+
+      event.stopPropagation();
+
+      if (
+        drawer.classList.contains("open")
+      ) {
+
+        closeMobileMenu();
+
+      } else {
+
+        openMobileMenu();
+
+      }
+
+    },
+    true
+  );
+
+
+  /* ---------------------------------------------------------
+     CLOSE BUTTON
+     --------------------------------------------------------- */
+
+  if (closeButton) {
+
+    closeButton.addEventListener(
+      "click",
+      function () {
+
+        closeMobileMenu();
+
+      }
+    );
+
+  }
+
+
+  /* ---------------------------------------------------------
+     OVERLAY CLOSE
+     --------------------------------------------------------- */
+
+  overlay.addEventListener(
+    "click",
+    function () {
+
+      closeMobileMenu();
+
+    }
+  );
+
+
+  /* ---------------------------------------------------------
+     MENU LINK CLICK
+     --------------------------------------------------------- */
+
+  const drawerLinks =
+    drawer.querySelectorAll(
+      ".cd-drawer-link"
+    );
+
+
+  drawerLinks.forEach(
+    function (link) {
+
+      link.addEventListener(
+        "click",
+        function () {
+
+          closeMobileMenu();
+
+        }
+      );
+
+    }
+  );
+
+
+  /* ---------------------------------------------------------
+     ESCAPE KEY
+     --------------------------------------------------------- */
+
+  document.addEventListener(
+    "keydown",
+    function (event) {
+
+      if (
+        event.key === "Escape" &&
+        drawer.classList.contains("open")
+      ) {
+
+        closeMobileMenu();
+
+      }
+
+    }
+  );
+
+
+  /* ---------------------------------------------------------
+     FORCE NORMAL PAGE SCROLL
+     
+     This protects the page if app.js adds
+     overflow:hidden or a fixed body style.
+     --------------------------------------------------------- */
+
+  function restorePageScroll() {
+
+    if (
+      !drawer.classList.contains("open")
+    ) {
+
+      document.documentElement.style.setProperty(
+        "overflow-y",
+        "auto",
+        "important"
+      );
+
+      document.body.style.setProperty(
+        "overflow-y",
+        "auto",
+        "important"
+      );
+
+      document.body.style.setProperty(
+        "height",
+        "auto",
+        "important"
+      );
+
+      document.body.style.setProperty(
+        "position",
+        "static",
+        "important"
+      );
+
+    }
+
+  }
+
+
+  restorePageScroll();
+
+
+  window.addEventListener(
+    "load",
+    restorePageScroll
+  );
+
+
+  window.addEventListener(
+    "pageshow",
+    restorePageScroll
+  );
+
+
+  /* ---------------------------------------------------------
+     MOBILE RESIZE
+     --------------------------------------------------------- */
+
+  window.addEventListener(
+    "resize",
+    function () {
+
+      if (
+        window.innerWidth > 900 &&
+        drawer.classList.contains("open")
+      ) {
+
+        closeMobileMenu();
+
+      }
+
+    }
+  );
+
+
+})();
+
+</script>
+
 
 </body>
 </html>
