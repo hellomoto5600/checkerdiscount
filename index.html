@@ -2,12 +2,50 @@
 <html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-tertiary":"#ffffff","surface-subtle":"#F6F8FC","on-primary-fixed-variant":"#003da9","on-secondary-container":"#007440","secondary-container":"#70fda7","surface-variant":"#d3e4fe","on-primary":"#ffffff","on-tertiary-container":"#e5ebff","on-tertiary-fixed-variant":"#404757","surface-container-low":"#eff4ff","tertiary-fixed":"#dce2f6","warning-amber":"#F79009","savings-green":"#12B76A","surface-container-high":"#dce9ff","inverse-on-surface":"#eaf1ff","on-primary-container":"#e7eaff","savings-green-border":"#A6F4C5","on-secondary":"#ffffff","on-error-container":"#93000a","secondary-fixed-dim":"#51df8e","on-surface-variant":"#434655","on-tertiary-fixed":"#151b2a","on-surface":"#0b1c30","savings-green-subtle":"#ECFDF3","surface-dim":"#cbdbf5","inverse-primary":"#b4c5ff","inverse-surface":"#213145","surface-container-highest":"#d3e4fe","primary-fixed":"#dbe1ff","surface-container":"#e5eeff","tertiary-container":"#636a7b","navy-surface":"#0F172A","primary":"#0047c1","outline":"#737687","error":"#ba1a1a","background":"#f8f9ff","on-secondary-fixed-variant":"#00522c","navy-deep":"#0B1220","on-secondary-fixed":"#00210e","warning-amber-subtle":"#FEF0C7","primary-container":"#155eef","tertiary-fixed-dim":"#c0c6da","surface-tint":"#0052dc","surface-bright":"#f8f9ff","outline-variant":"#c3c6d8","on-error":"#ffffff","tertiary":"#4b5262","surface-container-lowest":"#ffffff","on-background":"#0b1c30","secondary-fixed":"#70fda7","error-container":"#ffdad6","on-primary-fixed":"#00174b","surface":"#f8f9ff","primary-fixed-dim":"#b4c5ff","surface-border":"#E2E8F0","secondary":"#006d3c"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"margin-mobile":"1rem",margin:"2rem",gutter:"1.5rem","space-lg":"1.5rem","space-xs":"0.25rem","space-md":"1rem","space-xl":"2.5rem","space-sm":"0.5rem","gutter-mobile":"1rem"},fontFamily:{"price-strikethrough":["Inter"],"body-sm":["Inter"],"display-hero":["Inter"],"display-hero-mobile":["Inter"],"caption-timestamp":["Inter"],"headline-sm":["Inter"],"label-md":["Inter"],"body-lg":["Inter"],"headline-lg-mobile":["Inter"],"headline-md":["Inter"],"price-featured":["Inter"],"badge-caps":["Inter"],"headline-lg":["Inter"],"body-md":["Inter"]},fontSize:{"price-strikethrough":["15px",{lineHeight:"20px",letterSpacing:"0em",fontWeight:"400"}],"body-sm":["13px",{lineHeight:"18px",letterSpacing:"0em",fontWeight:"400"}],"display-hero":["52px",{lineHeight:"60px",letterSpacing:"-0.03em",fontWeight:"800"}],"display-hero-mobile":["34px",{lineHeight:"40px",letterSpacing:"-0.025em",fontWeight:"800"}],"caption-timestamp":["11px",{lineHeight:"14px",letterSpacing:"0.01em",fontWeight:"500"}],"headline-sm":["18px",{lineHeight:"24px",letterSpacing:"-0.01em",fontWeight:"600"}],"label-md":["14px",{lineHeight:"18px",letterSpacing:"-0.005em",fontWeight:"600"}],"body-lg":["17px",{lineHeight:"26px",letterSpacing:"-0.005em",fontWeight:"400"}],"headline-lg-mobile":["26px",{lineHeight:"32px",letterSpacing:"-0.015em",fontWeight:"700"}],"headline-md":["22px",{lineHeight:"28px",letterSpacing:"-0.015em",fontWeight:"700"}],"price-featured":["26px",{lineHeight:"30px",letterSpacing:"-0.02em",fontWeight:"700"}],"badge-caps":["11px",{lineHeight:"14px",letterSpacing:"0.06em",fontWeight:"700"}],"headline-lg":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"body-md":["15px",{lineHeight:"22px",letterSpacing:"0em",fontWeight:"400"}]}}}}</script>
 <link rel="stylesheet" href="hero-slider.css">
+<style>
+  /* ===== PROFESSIONAL HEADER NAV ===== */
+  .cd-nav-link{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:8px 14px;
+    border-radius:12px;
+    font-size:13px;
+    font-weight:600;
+    color:#434655;
+    text-decoration:none;
+    transition:all .2s ease;
+    white-space:nowrap;
+  }
+  .cd-nav-link:hover{
+    background:#eff4ff;
+    color:#155eef;
+  }
+  .cd-nav-link.active{
+    background:#eff4ff;
+    color:#155eef;
+  }
+  .cd-nav-link .material-symbols-outlined{
+    font-size:20px;
+  }
+  /* Mobile: صرف icons */
+  @media (max-width: 900px){
+    .cd-nav-text{display:none;}
+    .cd-nav-link{padding:8px 10px;}
+    .cd-nav-desktop-only{display:none !important;}
+  }
+  /* Desktop: text + icons */
+  @media (min-width: 901px){
+    .cd-mobile-header-icons{display:none !important;}
+  }
+</style>
 </head><body class="bg-background font-body-md text-body-md text-on-surface antialiased">
 <header class="fixed top-0 inset-x-0 z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
-  <div class="h-16 max-w-[1240px] mx-auto px-4 flex items-center justify-between">
+  <div class="h-16 max-w-[1240px] mx-auto px-4 flex items-center justify-between gap-3">
     
-    <a class="flex items-center gap-2.5 group py-1" data-path="home" href="#">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" class="h-14 sm:h-16 w-auto transition-transform duration-300 group-hover:scale-105">
+    <!-- LOGO -->
+    <a class="flex items-center gap-2.5 group py-1 flex-shrink-0" data-path="home" href="index.html">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" class="h-12 sm:h-14 w-auto transition-transform duration-300 group-hover:scale-105">
         <defs>
           <linearGradient id="cdPrimaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stop-color="#155EEF" />
@@ -32,18 +70,49 @@
       </svg>
     </a>
 
-    <div class="flex items-center gap-1.5">
-      <a aria-label="Home" class="w-9 h-9 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors" href="index.html">
-        <span class="material-symbols-outlined text-[20px]">home</span>
+    <!-- DESKTOP NAV LINKS -->
+    <nav class="cd-nav-desktop-only hidden md:flex items-center gap-1 flex-1 justify-center">
+      <a href="index.html" class="cd-nav-link active">
+        <span class="material-symbols-outlined">home</span>
+        <span class="cd-nav-text">Home</span>
       </a>
-      <a aria-label="Blog" class="w-9 h-9 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors" href="blog.html">
-        <span class="material-symbols-outlined text-[20px]">article</span>
+      <a href="blog.html" class="cd-nav-link">
+        <span class="material-symbols-outlined">article</span>
+        <span class="cd-nav-text">Blog</span>
       </a>
-      <a aria-label="Account" class="w-9 h-9 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors" href="customer.html">
-        <span class="material-symbols-outlined text-[20px]">person</span>
+      <a href="#market-deals" class="cd-nav-link">
+        <span class="material-symbols-outlined">local_offer</span>
+        <span class="cd-nav-text">Deals</span>
       </a>
-      <button aria-label="Open Navigation Menu" class="w-9 h-9 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors" id="burgerMenuBtn" type="button">
-        <span class="material-symbols-outlined text-[20px]">menu</span>
+      <a href="#smart-tools" class="cd-nav-link">
+        <span class="material-symbols-outlined">construction</span>
+        <span class="cd-nav-text">Tools</span>
+      </a>
+      <a href="#favorites-section" class="cd-nav-link">
+        <span class="material-symbols-outlined">favorite</span>
+        <span class="cd-nav-text">Favorites</span>
+      </a>
+    </nav>
+
+    <!-- RIGHT SIDE ACTIONS -->
+    <div class="flex items-center gap-1.5 flex-shrink-0">
+      <!-- Mobile only: Home + Blog icons -->
+      <a href="index.html" class="cd-mobile-header-icons cd-nav-link active" aria-label="Home">
+        <span class="material-symbols-outlined">home</span>
+      </a>
+      <a href="blog.html" class="cd-mobile-header-icons cd-nav-link" aria-label="Blog">
+        <span class="material-symbols-outlined">article</span>
+      </a>
+      
+      <!-- Account: icon only (both) -->
+      <a href="customer.html" class="cd-nav-link" aria-label="Account">
+        <span class="material-symbols-outlined">person</span>
+        <span class="cd-nav-text">Account</span>
+      </a>
+      
+      <!-- Burger menu -->
+      <button aria-label="Open Navigation Menu" class="cd-nav-link" id="burgerMenuBtn" type="button">
+        <span class="material-symbols-outlined">menu</span>
       </button>
     </div>
   </div>
@@ -170,7 +239,7 @@
 <footer class="w-full bg-navy-deep text-on-tertiary pt-space-xl pb-space-lg">
   <div class="w-full px-4 pt-6 pb-28 flex flex-col gap-6">
     <div class="flex flex-col gap-3">
-      <a class="flex items-center gap-2.5 group py-1 w-fit" href="#">
+      <a class="flex items-center gap-2.5 group py-1 w-fit" href="index.html">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" class="h-12 sm:h-14 w-auto">
           <defs>
             <linearGradient id="cdPrimaryGradFooter" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -206,9 +275,9 @@
       <div>
         <h4 class="font-label-md text-[12px] font-bold text-on-tertiary uppercase tracking-wider mb-2">Explore</h4>
         <ul class="space-y-2 text-[12px]">
-          <li><a class="text-tertiary-fixed-dim hover:text-on-tertiary" href="#market-deals">Top Deals</a></li>
+          <li><a class="text-tertiary-fixed-dim hover:text-on-tertiary" href="index.html">Home</a></li>
           <li><a class="text-tertiary-fixed-dim hover:text-on-tertiary" href="blog.html">Blog</a></li>
-          <li><a class="text-tertiary-fixed-dim hover:text-on-tertiary" href="#favorites-section">My Favorites</a></li>
+          <li><a class="text-tertiary-fixed-dim hover:text-on-tertiary" href="#market-deals">Top Deals</a></li>
           <li><a class="text-tertiary-fixed-dim hover:text-on-tertiary" href="#smart-tools">Smart Tools</a></li>
           <li><a class="text-tertiary-fixed-dim hover:text-on-tertiary" href="customer.html">My Account</a></li>
         </ul>
