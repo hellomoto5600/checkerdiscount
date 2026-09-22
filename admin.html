@@ -16,7 +16,7 @@ header{background:#fff;border-bottom:1px solid var(--border);padding:18px 24px;p
 .container{max-width:1400px;margin:25px auto;padding:0 18px 50px;}
 h1{margin:0 0 6px;font-size:28px;}
 .subtitle{color:var(--muted);margin-bottom:25px;}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:25px;}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:15px;margin-bottom:25px;}
 .stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:var(--shadow);}
 .stat-label{color:var(--muted);font-size:13px;}
 .stat-value{font-size:28px;font-weight:800;margin-top:7px;}
@@ -95,6 +95,26 @@ td{font-size:13px;}
 .warning-box.show{display:block;}
 .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#101828;color:#fff;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;transition:opacity .3s;z-index:2000;pointer-events:none;}
 .toast.show{opacity:1;}
+.blog-tabs{display:flex;gap:8px;margin-bottom:22px;border-bottom:2px solid var(--border);flex-wrap:wrap;}
+.blog-tab{padding:11px 20px;background:transparent;border:0;border-bottom:3px solid transparent;font-weight:700;font-size:14px;color:var(--muted);cursor:pointer;transition:all .2s;margin-bottom:-2px;border-radius:0;}
+.blog-tab:hover{color:var(--primary);}
+.blog-tab.active{color:var(--primary);border-bottom-color:var(--primary);}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+textarea{width:100%;min-height:280px;border:1px solid #d0d5dd;border-radius:9px;padding:12px;background:#fff;color:#101828;font-size:14px;font-family:'Courier New',monospace;outline:none;resize:vertical;line-height:1.6;}
+textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(21,94,239,.10);}
+.blog-post-item{display:flex;gap:14px;padding:14px;border:1px solid var(--border);border-radius:12px;background:#fff;margin-bottom:12px;align-items:flex-start;transition:box-shadow .2s;}
+.blog-post-item:hover{box-shadow:0 6px 20px rgba(16,24,40,.08);}
+.blog-post-thumb{width:88px;height:88px;border-radius:10px;overflow:hidden;background:#f6f8fc;border:1px solid var(--border);flex-shrink:0;}
+.blog-post-thumb img{width:100%;height:100%;object-fit:cover;}
+.blog-post-body{flex:1;min-width:0;}
+.blog-post-title{font-weight:700;font-size:15px;color:var(--text);margin-bottom:4px;line-height:1.35;}
+.blog-post-meta{font-size:12px;color:var(--muted);display:flex;gap:12px;flex-wrap:wrap;margin-bottom:6px;align-items:center;}
+.blog-post-excerpt{font-size:13px;color:#475467;line-height:1.5;margin-bottom:8px;}
+.blog-post-actions{display:flex;gap:6px;flex-wrap:wrap;}
+.blog-post-actions button, .blog-post-actions a{padding:6px 11px;font-size:12px;border-radius:7px;border:0;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:4px;}
+.markdown-help{background:#f8faff;border:1px solid #d0e0ff;border-radius:10px;padding:12px;margin-top:10px;font-size:12px;color:#475467;line-height:1.7;}
+.markdown-help code{background:#eef2f6;padding:2px 6px;border-radius:4px;font-family:monospace;font-size:11px;color:#101828;}
 @media(max-width:1000px){.grid{grid-template-columns:repeat(2,1fr);}.form-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:650px){
   header{padding:15px;}
@@ -107,6 +127,8 @@ td{font-size:13px;}
   .country-clone-item{flex-wrap:wrap;}
   .country-fields{width:100%;}
   .country-fields input{flex:1;}
+  .blog-post-item{flex-direction:column;}
+  .blog-post-thumb{width:100%;height:160px;}
 }
 </style>
 </head>
@@ -125,7 +147,7 @@ td{font-size:13px;}
 <div class="container">
 
     <h1>Admin Dashboard</h1>
-    <div class="subtitle">Manage deals, countries, categories, verification and featured offers.</div>
+    <div class="subtitle">Manage deals, countries, categories, verification, featured offers & blog.</div>
 
     <div id="message" class="message"></div>
 
@@ -134,6 +156,7 @@ td{font-size:13px;}
         <div class="stat"><div class="stat-label">Verified</div><div class="stat-value" id="statVerified">0</div></div>
         <div class="stat"><div class="stat-label">Featured</div><div class="stat-value" id="statFeatured">0</div></div>
         <div class="stat"><div class="stat-label">Pending</div><div class="stat-value" id="statPending">0</div></div>
+        <div class="stat"><div class="stat-label">Blog Posts</div><div class="stat-value" id="statBlog">0</div></div>
     </div>
 
     <div class="card" id="dealFormCard">
@@ -233,6 +256,93 @@ td{font-size:13px;}
         </div>
     </div>
 
+    <div class="card" id="blogSection">
+        <h2>📝 Blog Management</h2>
+        
+        <div class="blog-tabs">
+            <button class="blog-tab active" onclick="switchBlogTab('list')" data-tab="list" type="button">📋 All Posts</button>
+            <button class="blog-tab" onclick="switchBlogTab('editor')" data-tab="editor" type="button">✏️ Create / Edit</button>
+        </div>
+
+        <div id="tab-blog-list" class="tab-content active">
+            <div class="toolbar">
+                <input id="blogSearch" placeholder="Search posts..." oninput="renderBlogPosts()">
+                <button class="btn-secondary" onclick="refreshBlogPosts()" type="button">Refresh</button>
+                <button class="btn-primary" onclick="newBlogPost()" type="button">+ New Post</button>
+            </div>
+            <div id="blogPostsList">
+                <div class="loading">Loading posts...</div>
+            </div>
+        </div>
+
+        <div id="tab-blog-editor" class="tab-content">
+            <div id="blogEditBanner" class="edit-banner">Editing Post. Make changes and click Update.</div>
+            <form id="blogForm" onsubmit="saveBlogPost(event)">
+                <div class="form-grid">
+                    <div class="field full">
+                        <label>Post Title *</label>
+                        <input id="blog_title" required placeholder="e.g. 5 Smart Ways to Save on Amazon UAE">
+                    </div>
+                    <div class="field">
+                        <label>Slug (URL)</label>
+                        <input id="blog_slug" placeholder="auto-generated-from-title">
+                        <div class="help">Leave empty to auto-generate from title.</div>
+                    </div>
+                    <div class="field">
+                        <label>Category *</label>
+                        <input id="blog_category" placeholder="e.g. Guides, Tips, Reviews" list="blogCategoriesList">
+                        <datalist id="blogCategoriesList">
+                            <option value="Guides">
+                            <option value="Tips">
+                            <option value="Reviews">
+                            <option value="Comparison">
+                            <option value="News">
+                        </datalist>
+                    </div>
+                    <div class="field">
+                        <label>Author</label>
+                        <input id="blog_author" value="CheckerDiscount Team">
+                    </div>
+                    <div class="field">
+                        <label>Status</label>
+                        <select id="blog_status">
+                            <option value="published">Published</option>
+                            <option value="draft">Draft</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Tags (comma separated)</label>
+                        <input id="blog_tags" placeholder="amazon, saving, uae">
+                    </div>
+                    <div class="field full">
+                        <label>Cover Image URL</label>
+                        <input id="blog_cover" type="url" placeholder="https://...">
+                    </div>
+                    <div class="field full">
+                        <label>Excerpt (short description)</label>
+                        <input id="blog_excerpt" placeholder="Brief summary that appears in the list (max 500 chars)">
+                    </div>
+                    <div class="field full">
+                        <label>Content * (Markdown supported)</label>
+                        <textarea id="blog_content" required placeholder="Write your post here..."></textarea>
+                        <div class="markdown-help">
+                            <strong>Markdown cheatsheet:</strong><br>
+                            <code>## Heading</code> → Section heading<br>
+                            <code>**bold text**</code> → <strong>bold</strong> · <code>*italic*</code> → <em>italic</em><br>
+                            <code>- item</code> → bullet list · <code>[text](https://url)</code> → link<br>
+                            Double line breaks create new paragraphs.
+                        </div>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button type="submit" class="btn-primary" id="blogSaveBtn">Publish Post</button>
+                    <button type="button" class="btn-secondary" onclick="resetBlogForm()">Clear</button>
+                    <button type="button" class="btn-orange hidden" id="blogCancelEditBtn" onclick="cancelBlogEdit()">Cancel Edit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </div>
 
 <div id="cloneModal" class="modal-overlay">
@@ -275,6 +385,8 @@ let ADMIN_KEY = "";
 let allDeals = [];
 let editingDealId = null;
 let cloneSourceDeal = null;
+let allBlogPosts = [];
+let editingBlogId = null;
 
 const COUNTRIES = {
     US:{flag:"🇺🇸",name:"USA",currency:"USD"},GB:{flag:"🇬🇧",name:"United Kingdom",currency:"GBP"},
@@ -489,6 +601,8 @@ async function refreshStats(){
         $("statVerified").textContent=stats.verified??stats.verified_deals??0;
         $("statFeatured").textContent=stats.featured??stats.featured_deals??0;
         $("statPending").textContent=stats.pending??stats.pending_deals??0;
+        const blogEl=document.getElementById("statBlog");
+        if(blogEl)blogEl.textContent=stats.blog_posts??0;
     }catch(error){console.error("Stats error:",error);}
 }
 
@@ -506,7 +620,6 @@ async function refreshDeals(){
     }
 }
 
-// ===== NEW renderDeals with 10 columns + Clone button =====
 function renderDeals(){
     const tbody=$("dealsTable");
     const search=$("dealSearch").value.trim().toLowerCase();
@@ -541,7 +654,6 @@ function renderDeals(){
         const storeType=deal.store_type||"third-party";
         const typeLabel=storeType==="official"?"Official":"Third-Party";
         const typeClass=storeType==="official"?"badge-green":"badge-orange";
-        const comparison=deal.comparison_id||deal.asin||"-";
 
         return `
             <tr>
@@ -606,7 +718,6 @@ async function deleteDeal(id){
     try{await api(`/api/admin/deals/${id}`,{method:"DELETE"});showMessage("Deal deleted.","success");if(String(editingDealId)===String(id)){resetDealForm();}await refreshAll();}catch(error){showMessage(error.message,"error");}
 }
 
-// ===== CLONE FEATURE =====
 function openCloneModal(id){
     const deal=allDeals.find(i=>String(i.id)===String(id));
     if(!deal){showMessage("Deal not found.","error");return;}
@@ -716,9 +827,178 @@ async function submitClone(){
     finally{$("cloneSubmitBtn").disabled=false;$("cloneSubmitBtn").textContent="🔄 Clone Now";}
 }
 
+/* ===== BLOG SYSTEM ===== */
+
+function switchBlogTab(tab){
+    document.querySelectorAll(".blog-tab").forEach(t=>t.classList.remove("active"));
+    document.querySelectorAll(".tab-content").forEach(c=>c.classList.remove("active"));
+    const tabBtn=document.querySelector(`.blog-tab[data-tab="${tab}"]`);
+    const tabContent=document.getElementById(`tab-blog-${tab}`);
+    if(tabBtn)tabBtn.classList.add("active");
+    if(tabContent)tabContent.classList.add("active");
+    if(tab==="list")refreshBlogPosts();
+}
+
+async function refreshBlogPosts(){
+    if(!askAdminKey())return;
+    const list=document.getElementById("blogPostsList");
+    if(!list)return;
+    list.innerHTML='<div class="loading">Loading posts...</div>';
+    try{
+        const data=await api("/api/admin/blog");
+        allBlogPosts=Array.isArray(data)?data:(data?.posts||data?.data||[]);
+        renderBlogPosts();
+    }catch(error){
+        console.error(error);
+        list.innerHTML=`<div class="empty">${escapeHtml(error.message)}</div>`;
+    }
+}
+
+function renderBlogPosts(){
+    const list=document.getElementById("blogPostsList");
+    if(!list)return;
+    const search=(document.getElementById("blogSearch")?.value||"").trim().toLowerCase();
+    let posts=[...allBlogPosts];
+    if(search){
+        posts=posts.filter(p=>{
+            const s=[p.id,p.title,p.slug,p.category,p.tags,p.author,p.status].join(" ").toLowerCase();
+            return s.includes(search);
+        });
+    }
+    if(!posts.length){
+        list.innerHTML='<div class="empty">No blog posts found. Click "+ New Post" to create one.</div>';
+        return;
+    }
+    list.innerHTML=posts.map(post=>{
+        const img=post.cover_image||"https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&q=80&w=200";
+        const status=String(post.status||"published").toLowerCase();
+        const statusClass=status==="published"?"badge-green":"badge-orange";
+        return `
+            <div class="blog-post-item">
+                <div class="blog-post-thumb">
+                    <img src="${escapeHtml(img)}" onerror="this.src='https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&q=80&w=200'">
+                </div>
+                <div class="blog-post-body">
+                    <div class="blog-post-title">${escapeHtml(post.title||"Untitled")}</div>
+                    <div class="blog-post-meta">
+                        <span>#${post.id}</span>
+                        ${post.category?`<span>📁 ${escapeHtml(post.category)}</span>`:""}
+                        <span>👁️ ${post.views||0}</span>
+                        <span>👤 ${escapeHtml(post.author||"Team")}</span>
+                        <span class="badge ${statusClass}">${escapeHtml(status)}</span>
+                    </div>
+                    ${post.excerpt?`<div class="blog-post-excerpt">${escapeHtml(post.excerpt)}</div>`:""}
+                    <div class="blog-post-actions">
+                        <button class="btn-primary" onclick="editBlogPost(${Number(post.id)})">✏️ Edit</button>
+                        <a href="blog-post.html?slug=${encodeURIComponent(post.slug)}" target="_blank" class="btn-blue">👁️ View</a>
+                        <button class="btn-red" onclick="deleteBlogPost(${Number(post.id)})">🗑️ Delete</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join("");
+}
+
+function newBlogPost(){
+    resetBlogForm();
+    switchBlogTab("editor");
+}
+
+function resetBlogForm(){
+    editingBlogId=null;
+    document.getElementById("blogForm").reset();
+    document.getElementById("blog_author").value="CheckerDiscount Team";
+    document.getElementById("blog_status").value="published";
+    document.getElementById("blogSaveBtn").textContent="Publish Post";
+    document.getElementById("blogCancelEditBtn").classList.add("hidden");
+    document.getElementById("blogEditBanner").classList.remove("show");
+}
+
+function cancelBlogEdit(){
+    resetBlogForm();
+    switchBlogTab("list");
+}
+
+function editBlogPost(id){
+    const post=allBlogPosts.find(p=>String(p.id)===String(id));
+    if(!post){showMessage("Post not found.","error");return;}
+    editingBlogId=post.id;
+    document.getElementById("blog_title").value=post.title||"";
+    document.getElementById("blog_slug").value=post.slug||"";
+    document.getElementById("blog_category").value=post.category||"";
+    document.getElementById("blog_author").value=post.author||"CheckerDiscount Team";
+    document.getElementById("blog_status").value=post.status||"published";
+    document.getElementById("blog_tags").value=post.tags||"";
+    document.getElementById("blog_cover").value=post.cover_image||"";
+    document.getElementById("blog_excerpt").value=post.excerpt||"";
+    document.getElementById("blog_content").value=post.content||"";
+    document.getElementById("blogSaveBtn").textContent="Update Post";
+    document.getElementById("blogCancelEditBtn").classList.remove("hidden");
+    document.getElementById("blogEditBanner").classList.add("show");
+    switchBlogTab("editor");
+}
+
+async function saveBlogPost(event){
+    event.preventDefault();
+    if(!askAdminKey())return;
+    const body={
+        title:document.getElementById("blog_title").value.trim(),
+        slug:document.getElementById("blog_slug").value.trim(),
+        category:document.getElementById("blog_category").value.trim(),
+        author:document.getElementById("blog_author").value.trim()||"CheckerDiscount Team",
+        status:document.getElementById("blog_status").value,
+        tags:document.getElementById("blog_tags").value.trim(),
+        cover_image:document.getElementById("blog_cover").value.trim(),
+        excerpt:document.getElementById("blog_excerpt").value.trim(),
+        content:document.getElementById("blog_content").value.trim()
+    };
+    if(!body.title||!body.content){
+        showMessage("Title and content are required.","error");
+        return;
+    }
+    const btn=document.getElementById("blogSaveBtn");
+    try{
+        btn.disabled=true;
+        btn.textContent=editingBlogId?"Updating...":"Publishing...";
+        if(editingBlogId){
+            await api(`/api/admin/blog/${editingBlogId}/update`,{method:"POST",body:JSON.stringify(body)});
+            showMessage("✅ Post updated successfully!","success");
+        }else{
+            await api("/api/admin/blog",{method:"POST",body:JSON.stringify(body)});
+            showMessage("✅ Post published successfully!","success");
+        }
+        resetBlogForm();
+        await refreshBlogPosts();
+        switchBlogTab("list");
+        refreshStats();
+    }catch(error){
+        console.error(error);
+        showMessage(error.message||"Save failed.","error");
+    }finally{
+        btn.disabled=false;
+        btn.textContent=editingBlogId?"Update Post":"Publish Post";
+    }
+}
+
+async function deleteBlogPost(id){
+    if(!askAdminKey())return;
+    const post=allBlogPosts.find(p=>String(p.id)===String(id));
+    const title=post?.title||"this post";
+    if(!confirm(`Delete post: "${title}"?\n\nThis cannot be undone.`))return;
+    try{
+        await api(`/api/admin/blog/${id}`,{method:"DELETE"});
+        showMessage("🗑️ Post deleted.","success");
+        if(String(editingBlogId)===String(id))resetBlogForm();
+        await refreshBlogPosts();
+        refreshStats();
+    }catch(error){
+        showMessage(error.message||"Delete failed.","error");
+    }
+}
+
 async function refreshAll(){
     if(!askAdminKey())return;
-    await Promise.all([refreshStats(),refreshDeals()]);
+    await Promise.all([refreshStats(),refreshDeals(),refreshBlogPosts()]);
 }
 
 function init(){
