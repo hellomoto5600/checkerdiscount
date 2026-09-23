@@ -1,9 +1,9 @@
-// CheckerDiscount - Blog System v1.0
+// CheckerDiscount - Blog System v1.1 (with image support)
 // Works with blog.html and blog-post.html
 
 const BLOG_API = "https://deal-api.hamraahirn32.workers.dev";
 
-// ========== HELPERS (same as app.js) ==========
+// ========== HELPERS ==========
 function escapeHtml(value) {
     return String(value ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
@@ -224,7 +224,6 @@ async function loadBlogPost() {
         const post = data.post;
         document.title = `${post.title} | CheckerDiscount Blog`;
 
-        // SEO meta update
         const metaDesc = document.querySelector('meta[name="description"]');
         if (metaDesc) metaDesc.setAttribute("content", post.excerpt || post.title);
 
@@ -235,7 +234,6 @@ async function loadBlogPost() {
 
         container.innerHTML = `
             <article class="w-full">
-                <!-- Hero image -->
                 <div class="w-full h-56 sm:h-80 rounded-2xl overflow-hidden bg-surface-subtle border border-surface-container mb-5">
                     <img src="${escapeAttribute(img)}" 
                          class="w-full h-full object-cover"
@@ -243,7 +241,6 @@ async function loadBlogPost() {
                          alt="${escapeAttribute(post.title)}">
                 </div>
 
-                <!-- Category & meta -->
                 <div class="flex items-center gap-2 flex-wrap mb-3">
                     <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary-container/10 text-primary text-[10px] font-bold uppercase tracking-wider">
                         <span class="material-symbols-outlined text-[12px]">label</span>
@@ -259,15 +256,12 @@ async function loadBlogPost() {
                     </span>
                 </div>
 
-                <!-- Title -->
                 <h1 class="text-[26px] sm:text-[34px] font-extrabold text-on-surface leading-tight tracking-tight mb-3">
                     ${escapeHtml(post.title)}
                 </h1>
 
-                <!-- Excerpt -->
                 ${post.excerpt ? `<p class="text-[16px] text-on-surface-variant leading-relaxed mb-4 pb-4 border-b border-surface-container">${escapeHtml(post.excerpt)}</p>` : ""}
 
-                <!-- Author row -->
                 <div class="flex items-center gap-3 mb-6 pb-4 border-b border-surface-container">
                     <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary-container to-primary text-white flex items-center justify-center font-bold text-[14px]">
                         ${escapeHtml((post.author || "C")[0].toUpperCase())}
@@ -278,12 +272,10 @@ async function loadBlogPost() {
                     </div>
                 </div>
 
-                <!-- Content -->
                 <div class="cd-blog-content text-[15px] text-on-surface leading-relaxed">
                     ${renderMarkdown(post.content)}
                 </div>
 
-                <!-- Tags -->
                 ${tags.length ? `
                 <div class="flex flex-wrap gap-2 mt-6 pt-4 border-t border-surface-container">
                     ${tags.map(t => `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant text-[11px] font-semibold">
@@ -291,7 +283,6 @@ async function loadBlogPost() {
                     </span>`).join("")}
                 </div>` : ""}
 
-                <!-- Share + Back -->
                 <div class="flex items-center gap-2 mt-6 pt-4 border-t border-surface-container flex-wrap">
                     <a href="blog.html" class="cd-btn bg-surface-container-lowest border border-surface-container text-on-surface">
                         <span class="material-symbols-outlined text-[16px]">arrow_back</span>
@@ -316,35 +307,66 @@ async function loadBlogPost() {
     }
 }
 
-// Simple markdown-like renderer (paragraphs, bold, links, headings)
+// ========== MARKDOWN RENDERER (with IMAGE support) ==========
 function renderMarkdown(text) {
     if (!text) return "";
-    let html = escapeHtml(text);
-
-    // Headings
+    
+    // Step 1: Extract images FIRST (so URLs are not escaped)
+    const imageStore = [];
+    let processed = String(text).replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, url) => {
+        const placeholder = `___IMG_PLACEHOLDER_${imageStore.length}___`;
+        imageStore.push({ alt: alt || "", url: url.trim() });
+        return placeholder;
+    });
+    
+    // Step 2: Now escape everything else
+    let html = escapeHtml(processed);
+    
+    // Step 3: Headings
     html = html.replace(/^### (.+)$/gm, '<h3 class="text-[18px] font-bold text-on-surface mt-6 mb-2">$1</h3>');
     html = html.replace(/^## (.+)$/gm, '<h2 class="text-[22px] font-bold text-on-surface mt-6 mb-3">$1</h2>');
     html = html.replace(/^# (.+)$/gm, '<h1 class="text-[26px] font-bold text-on-surface mt-6 mb-3">$1</h1>');
-
-    // Bold & italic
+    
+    // Step 4: Bold & italic
     html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
     html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-
-    // Links
+    
+    // Step 5: Links
     html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener" class="text-primary underline">$1</a>');
-
-    // Bullet lists
+    
+    // Step 6: Bullet lists
     html = html.replace(/^\* (.+)$/gm, '<li class="ml-5 list-disc">$1</li>');
     html = html.replace(/^- (.+)$/gm, '<li class="ml-5 list-disc">$1</li>');
-
-    // Line breaks → paragraphs
+    
+    // Step 7: Paragraphs
     const blocks = html.split(/\n\n+/);
     html = blocks.map(b => {
-        if (b.match(/^<(h[1-6]|li|ul|ol)/)) return b;
-        if (b.trim().startsWith("<li")) return `<ul class="my-3">${b}</ul>`;
-        return `<p class="mb-4">${b.replace(/\n/g, "<br>")}</p>`;
+        const trimmed = b.trim();
+        if (!trimmed) return "";
+        // Already a block element
+        if (trimmed.match(/^<(h[1-6]|li|ul|ol|img|figure)/)) {
+            // Wrap bullet items in UL
+            if (trimmed.startsWith("<li")) return `<ul class="my-3">${trimmed}</ul>`;
+            return trimmed;
+        }
+        return `<p class="mb-4">${trimmed.replace(/\n/g, "<br>")}</p>`;
     }).join("");
-
+    
+    // Step 8: Restore images (as figure with optional caption)
+    imageStore.forEach((img, index) => {
+        const placeholder = `___IMG_PLACEHOLDER_${index}___`;
+        const imgHtml = `
+            <figure class="my-6 -mx-2 sm:mx-0">
+                <img src="${escapeAttribute(img.url)}" 
+                     alt="${escapeAttribute(img.alt)}"
+                     class="w-full rounded-2xl border border-surface-container shadow-sm"
+                     loading="lazy"
+                     onerror="this.style.display='none'">
+                ${img.alt ? `<figcaption class="text-center text-[12px] text-on-surface-variant mt-2 italic">${escapeHtml(img.alt)}</figcaption>` : ""}
+            </figure>`;
+        html = html.replace(placeholder, imgHtml);
+    });
+    
     return html;
 }
 
@@ -358,7 +380,7 @@ function shareBlogPost(title, url) {
 }
 window.shareBlogPost = shareBlogPost;
 
-// ========== BURGER MENU (same as app.js, with Blog link added) ==========
+// ========== BURGER MENU ==========
 function initBlogBurgerMenu() {
     const btn = document.getElementById("burgerMenuBtn");
     if (!btn) return;
