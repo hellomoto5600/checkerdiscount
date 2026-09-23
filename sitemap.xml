@@ -1,27 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Main Pages -->
   <url>
     <loc>https://checkerdiscount.com/</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+
+  <!-- Blog -->
+  <url>
+    <loc>https://checkerdiscount.com/blog.html</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Blog Posts (add new posts here) -->
+  <url>
+    <loc>https://checkerdiscount.com/blog-post.html?slug=why-smart-shopping-matters-how-checkerdiscount-com-saves-your-time-and-money-in-the-uae</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://checkerdiscount.com/blog-post.html?slug=shop-smarter-live-better-the-complete-amazon-uae-guide-for-2026</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Customer Account -->
   <url>
     <loc>https://checkerdiscount.com/customer.html</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
+
+  <!-- Company Pages -->
   <url>
     <loc>https://checkerdiscount.com/about.html</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
+
   <url>
     <loc>https://checkerdiscount.com/contact.html</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
+
+  <url>
+    <loc>https://checkerdiscount.com/affiliate-disclosure.html</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <!-- Legal -->
   <url>
     <loc>https://checkerdiscount.com/privacy.html</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
+
   <url>
     <loc>https://checkerdiscount.com/terms.html</loc>
+    <lastmod>2026-09-22</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
+
 </urlset>
