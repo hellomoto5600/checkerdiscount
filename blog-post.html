@@ -21,6 +21,9 @@
   .cd-blog-content li { margin-bottom: 6px; line-height: 1.6; }
   .cd-blog-content strong { font-weight: 700; color: #0b1c30; }
   .cd-blog-content img { max-width: 100%; border-radius: 12px; margin: 16px 0; }
+  .cd-blog-content figure { margin: 24px 0; }
+  .cd-blog-content figure img { margin: 0; width: 100%; }
+  .cd-blog-content figcaption { text-align: center; font-size: 12px; color: #737687; margin-top: 8px; font-style: italic; }
 </style>
 </head>
 <body class="bg-background font-body-md text-body-md text-on-surface antialiased">
@@ -111,5 +114,119 @@
   </div>
 </footer>
 
-<script src="blog.js"></script>
+<script src="blog.js?v=2"></script>
+
+<!-- ========== FEEDBACK FORM + JS ========== -->
+<script>
+(function(){
+  const FORM_URL = "https://script.google.com/macros/s/AKfycbz0sU2fNdXHvLDGxfqU5hlunq9H8bk6Ph82GBB2qRlV6pZeRcNbI2IGQ9nYhAxnNp8/exec";
+
+  // Wait for post to load then inject form
+  const checkInterval = setInterval(() => {
+    const article = document.querySelector("#blogPostContainer article");
+    if (!article) return;
+    
+    // Form already injected?
+    if (document.getElementById("cdFeedbackForm")) {
+      clearInterval(checkInterval);
+      return;
+    }
+    
+    // Inject form after "Share Article" section
+    const shareSection = article.querySelector("div.flex.items-center.gap-2.mt-6");
+    if (!shareSection) return;
+    
+    const formHtml = `
+      <div class="mt-8 pt-6 border-t border-surface-container">
+        <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-surface-container/60">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-[22px]">feedback</span>
+            </span>
+            <div>
+              <h3 class="text-[17px] font-bold text-on-surface leading-tight">Share Your Feedback</h3>
+              <p class="text-[12px] text-on-surface-variant">Your suggestions help us improve</p>
+            </div>
+          </div>
+          <form id="cdFeedbackForm" class="space-y-3">
+            <input type="text" id="fbName" required placeholder="Your Name"
+                   class="w-full px-3.5 py-2.5 rounded-xl bg-surface text-[14px] border border-surface-container focus:outline-none focus:border-primary">
+            <input type="email" id="fbEmail" required placeholder="Your Email"
+                   class="w-full px-3.5 py-2.5 rounded-xl bg-surface text-[14px] border border-surface-container focus:outline-none focus:border-primary">
+            <textarea id="fbMessage" required placeholder="Your suggestions, comments, or requests..." rows="4"
+                      class="w-full px-3.5 py-2.5 rounded-xl bg-surface text-[14px] border border-surface-container focus:outline-none focus:border-primary resize-none"></textarea>
+            <button type="submit" id="fbSubmitBtn"
+                    class="w-full py-3 px-4 rounded-xl bg-primary-container text-on-primary text-[14px] font-semibold shadow-sm hover:bg-primary transition-colors flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined text-[18px]">send</span>
+              <span>Submit Feedback</span>
+            </button>
+          </form>
+          <div id="fbStatus" class="hidden mt-3"></div>
+        </div>
+      </div>
+    `;
+    
+    shareSection.insertAdjacentHTML("afterend", formHtml);
+    clearInterval(checkInterval);
+    attachFormHandler();
+  }, 300);
+
+  function attachFormHandler(){
+    const form = document.getElementById("cdFeedbackForm");
+    const statusEl = document.getElementById("fbStatus");
+    const submitBtn = document.getElementById("fbSubmitBtn");
+    
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = "true";
+    
+    form.addEventListener("submit", async function(e){
+      e.preventDefault();
+      
+      const name = document.getElementById("fbName").value.trim();
+      const email = document.getElementById("fbEmail").value.trim();
+      const message = document.getElementById("fbMessage").value.trim();
+      
+      if (!name || !email || !message) {
+        showStatus("⚠️ Please fill all fields", "warning");
+        return;
+      }
+      
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="material-symbols-outlined text-[18px]">progress_activity</span><span>Sending...</span>';
+      
+      try {
+        await fetch(FORM_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ name, email, message })
+        });
+        
+        showStatus("✅ Thank you! Your feedback has been received.", "success");
+        form.reset();
+        
+      } catch (error) {
+        console.error(error);
+        showStatus("❌ Something went wrong. Please try again.", "error");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span class="material-symbols-outlined text-[18px]">send</span><span>Submit Feedback</span>';
+      }
+    });
+    
+    function showStatus(message, type){
+      const colors = {
+        success: "bg-savings-green-subtle text-savings-green border-savings-green-border",
+        error: "bg-error-container text-error border-error",
+        warning: "bg-warning-amber-subtle text-warning-amber border-warning-amber/40"
+      };
+      statusEl.className = `p-3 rounded-xl border text-[13px] font-semibold ${colors[type] || colors.success}`;
+      statusEl.textContent = message;
+      statusEl.classList.remove("hidden");
+      setTimeout(() => statusEl.classList.add("hidden"), 5000);
+    }
+  }
+})();
+</script>
+
 </body></html>
