@@ -1,5 +1,5 @@
-// CheckerDiscount - Complete App.js v9.0
-// Country Selector + Trust Badge + Admin Views + Rating + 5 Tools + Watchlist + Blog
+// CheckerDiscount - Complete App.js v10.0
+// Country Selector + Trust Badge + Admin Views + Rating + 5 Tools + Watchlist + Blog + Fixed Comparison
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
 
@@ -799,6 +799,7 @@ function loadDeals(filter = "all") {
 
 function setupFilters() {}
 
+// ========== COMPARISON MODAL (v10 — Fixed: no AED conversion, shows You Save) ==========
 async function openDealComparison(dealId) {
     let modal = document.getElementById("cdComparisonModal");
     if (!modal) {
@@ -838,6 +839,7 @@ async function openDealComparison(dealId) {
             return;
         }
 
+        // Convert all to AED for internal comparison only
         let cheapestAed = Infinity;
         let cheapestOffers = [];
 
@@ -852,6 +854,20 @@ async function openDealComparison(dealId) {
             }
         });
 
+        // Helper: Calculate savings for a deal (in its own currency)
+        function calcSavings(deal, price) {
+            const oldPrice = Number(deal.old_price || 0);
+            const newPrice = Number(price || 0);
+            if (oldPrice > newPrice && newPrice > 0) {
+                return {
+                    amount: oldPrice - newPrice,
+                    pct: Math.round(((oldPrice - newPrice) / oldPrice) * 100),
+                    oldPrice: oldPrice
+                };
+            }
+            return null;
+        }
+
         let bestDealHtml = "";
         if (cheapestOffers.length > 0 && comparisons.length > 1) {
             if (cheapestOffers.length === 1) {
@@ -859,6 +875,8 @@ async function openDealComparison(dealId) {
                 const cheapestCountry = COUNTRIES[getDealCountry(cheapest.normalized)];
                 const cheapestImg = cheapest.normalized.image_url || cheapest.normalized.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200";
                 const cheapestTrust = getTrustBadge(cheapest.normalized);
+                const savings = calcSavings(cheapest.normalized, cheapest.price);
+
                 bestDealHtml = `<div class="cd-best-deal">
                     <div class="cd-best-deal-badge">🏆 Best Deal</div>
                     <div class="flex items-center gap-3 mb-2">
@@ -873,14 +891,16 @@ async function openDealComparison(dealId) {
                                     <span class="material-symbols-outlined text-[11px]">${cheapestTrust.icon}</span>${cheapestTrust.label}
                                 </span>
                             </div>
-                            <div class="flex items-baseline gap-2">
+                            <div class="flex items-baseline gap-2 flex-wrap">
                                 <span class="font-headline-sm text-[20px] font-extrabold text-primary-container">${formatPrice(cheapest.price, cheapest.currency)}</span>
+                                ${savings ? `<span class="text-[13px] text-outline line-through">${formatPrice(savings.oldPrice, cheapest.currency)}</span>` : ""}
                             </div>
+                            ${savings ? `
+                            <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-savings-green text-white text-[12px] font-bold shadow-sm">
+                                <span class="material-symbols-outlined text-[14px]" style="font-variation-settings:'FILL' 1;">savings</span>
+                                You Save ${formatPrice(savings.amount, cheapest.currency)} (${savings.pct}%)
+                            </div>` : ""}
                         </div>
-                    </div>
-                    <div class="mt-2 pt-2 border-t border-savings-green/30 text-[11px] text-secondary">
-                        <span class="material-symbols-outlined text-[12px] align-middle">info</span>
-                        Approximate: <strong>${formatAED(cheapest.priceAed)}</strong> · Rate may vary.
                     </div>
                 </div>`;
             } else {
@@ -889,6 +909,8 @@ async function openDealComparison(dealId) {
                     const c = COUNTRIES[getDealCountry(o.normalized)];
                     return `<span class="inline-flex items-center gap-1 mr-2"><span>${c?.flag || "🌐"}</span> <strong>${escapeHtml(o.normalized.store || "Store")}</strong></span>`;
                 }).join("");
+                const tieSavings = calcSavings(cheapestOffers[0].normalized, cheapestOffers[0].price);
+
                 bestDealHtml = `<div class="cd-best-deal" style="border-color:#f79009;background:linear-gradient(135deg,#fffaeb 0%,#fef0c7 100%);">
                     <div class="cd-best-deal-badge" style="background:#f79009;">⚡ Best Price (Tie)</div>
                     <div class="flex items-center gap-3 mb-2">
@@ -898,7 +920,15 @@ async function openDealComparison(dealId) {
                         <div class="flex-1 min-w-0">
                             <div class="text-[11px] font-bold text-orange-700 uppercase mb-1">Same price at ${cheapestOffers.length} stores</div>
                             <div class="flex flex-wrap items-center gap-1 mb-2">${storesList}</div>
-                            <div class="font-headline-sm text-[20px] font-extrabold text-orange-600">${formatPrice(cheapestOffers[0].price, cheapestOffers[0].currency)}</div>
+                            <div class="flex items-baseline gap-2 flex-wrap">
+                                <span class="font-headline-sm text-[20px] font-extrabold text-orange-600">${formatPrice(cheapestOffers[0].price, cheapestOffers[0].currency)}</span>
+                                ${tieSavings ? `<span class="text-[13px] text-outline line-through">${formatPrice(tieSavings.oldPrice, cheapestOffers[0].currency)}</span>` : ""}
+                            </div>
+                            ${tieSavings ? `
+                            <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-savings-green text-white text-[12px] font-bold shadow-sm">
+                                <span class="material-symbols-outlined text-[14px]" style="font-variation-settings:'FILL' 1;">savings</span>
+                                You Save ${formatPrice(tieSavings.amount, cheapestOffers[0].currency)} (${tieSavings.pct}%)
+                            </div>` : ""}
                         </div>
                     </div>
                 </div>`;
@@ -911,10 +941,11 @@ async function openDealComparison(dealId) {
             const currency = getDealCurrency(normalized);
             const price = Number(normalized.new_price || normalized.price || 0);
             const rating = Number(normalized.rating || 0);
-            const priceAed = convertToAED(price, currency);
             const isCheapest = cheapestOffers.some(o => o.normalized.id === normalized.id);
             const imgSrc = normalized.image_url || normalized.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200";
             const trust = getTrustBadge(normalized);
+            const savings = calcSavings(normalized, price);
+
             return `<div class="border ${isCheapest ? 'border-2 border-savings-green bg-savings-green-subtle/30' : 'border-surface-container'} rounded-2xl p-3 mb-3">
                 <div class="flex items-center gap-3">
                     <div class="cd-comparison-img"><img src="${escapeAttribute(imgSrc)}" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200'"></div>
@@ -931,8 +962,13 @@ async function openDealComparison(dealId) {
                         <div class="text-[12px] text-on-surface-variant mt-1 line-clamp-2">${escapeHtml(normalized.title || "Product")}</div>
                         <div class="flex items-baseline gap-2 mt-1 flex-wrap">
                             <span class="font-bold text-primary text-[16px]">${formatPrice(price, currency)}</span>
-                            <span class="text-[10px] text-on-surface-variant">≈ ${formatAED(priceAed)}</span>
+                            ${savings ? `<span class="text-[11px] text-outline line-through">${formatPrice(savings.oldPrice, currency)}</span>` : ""}
                         </div>
+                        ${savings ? `
+                        <div class="mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-savings-green-subtle text-savings-green text-[11px] font-bold">
+                            <span class="material-symbols-outlined text-[12px]" style="font-variation-settings:'FILL' 1;">savings</span>
+                            Save ${formatPrice(savings.amount, currency)} (${savings.pct}%)
+                        </div>` : ""}
                     </div>
                 </div>
                 ${normalized.url ? `<a href="${escapeAttribute(normalized.url)}" target="_blank" rel="noopener noreferrer" class="cd-btn cd-btn-primary mt-3 w-full">View Deal <span class="material-symbols-outlined text-[15px]">arrow_forward</span></a>` : ""}
@@ -1270,7 +1306,7 @@ function checkBestTime() {
 }
 window.checkBestTime = checkBestTime;
 
-// ========== BURGER MENU (v9 — Logo + Blog link added) ==========
+// ========== BURGER MENU ==========
 function initBurgerMenu() {
     const btn = document.getElementById("burgerMenuBtn");
     if (!btn) return;
