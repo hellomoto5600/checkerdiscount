@@ -1,5 +1,5 @@
-// CheckerDiscount - Complete App.js v12.0
-// Amazon-Safe: No promotional tags, no views, no ratings, no manual prices.
+// CheckerDiscount - Complete App.js v13.0
+// Amazon-Safe: No promotional tags, no views, no helpful votes.
 // Country Selector + Trust Badge + 5 Tools + Watchlist + Blog
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
@@ -111,7 +111,7 @@ function formatViews(n) {
     return n.toString();
 }
 
-// ========== RATING ==========
+// ========== RATING (internal only, not displayed on cards) ==========
 function getDealRating(dealId) {
     if (!dealId) return { up: 0, down: 0, userVote: null };
     try {
@@ -123,26 +123,6 @@ function getDealRating(dealId) {
 function saveDealRating(dealId, rating) {
     if (!dealId) return;
     try { localStorage.setItem(`cd_rating_${dealId}`, JSON.stringify(rating)); } catch (e) {}
-}
-
-function voteDeal(dealId, voteType) {
-    if (!dealId) return;
-    const rating = getDealRating(dealId);
-    if (rating.userVote === voteType) {
-        if (voteType === 'up') rating.up = Math.max(0, rating.up - 1);
-        else rating.down = Math.max(0, rating.down - 1);
-        rating.userVote = null;
-        showToast('Vote removed');
-    } else {
-        if (rating.userVote === 'up') rating.up = Math.max(0, rating.up - 1);
-        if (rating.userVote === 'down') rating.down = Math.max(0, rating.down - 1);
-        if (voteType === 'up') rating.up++;
-        else rating.down++;
-        rating.userVote = voteType;
-        showToast(voteType === 'up' ? '👍 Thanks for voting!' : '👎 Noted!');
-    }
-    saveDealRating(dealId, rating);
-    loadDeals(currentCategory);
 }
 
 function calculateRatingPercent(rating) {
@@ -303,12 +283,6 @@ function showToast(message) {
       .cd-btn-share { background: #F9FAFB; color: #475467; border: 1.5px solid #E4E7EC; padding: 10px; width: 42px; flex-shrink: 0; }
       .cd-btn-primary { background: linear-gradient(135deg, #155EEF 0%, #0047C1 100%); color: #FFFFFF; flex: 1; }
       .cd-store-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; background: #F9FAFB; border: 1px solid #E4E7EC; border-radius: 10px; font-size: 11px; color: #475467; width: fit-content; max-width: 100%; }
-      .cd-vote-btn { display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; cursor: pointer; border: 1.5px solid transparent; transition: all 0.2s; }
-      .cd-vote-btn.up { background: #ECFDF3; color: #027A48; border-color: #A6F4C5; }
-      .cd-vote-btn.up.active { background: #12B76A; color: white; border-color: #12B76A; }
-      .cd-vote-btn.down { background: #FEF3F2; color: #B42318; border-color: #FECDCA; }
-      .cd-vote-btn.down.active { background: #D92D20; color: white; border-color: #D92D20; }
-      .cd-vote-btn:hover { transform: scale(1.05); }
       @media (max-width: 640px) {
         .cd-card { padding: 14px; border-radius: 16px; }
         .cd-btn { font-size: 12px; padding: 9px 12px; }
@@ -721,8 +695,6 @@ function loadDeals(filter = "all") {
         const storeName = String(deal.store || deal.store_name || deal.storeName || deal.retailer || deal.retailer_name || "Store").trim();
         const saved = isInWatchlist(dealId);
         const trust = getTrustBadge(deal);
-        const dealRating = getDealRating(dealId);
-        const upPercent = calculateRatingPercent(dealRating);
 
         const dealDataJson = escapeAttribute(JSON.stringify({
             id: dealId,
@@ -736,7 +708,7 @@ function loadDeals(filter = "all") {
             country: getDealCountry(deal)
         }));
 
-        // ✅ صرف Trust Badge (Official/Third-Party)، کوئی پروموشنل ٹیگ نہیں
+        // ✅ صرف Trust Badge (Official/Third-Party)۔ کوئی Views، Helpful، Verified Deal، Real Savings نہیں۔
         card.innerHTML = `
           <button class="cd-heart-btn ${saved ? 'saved' : ''}" 
                   onclick='toggleWatchlist("${escapeAttribute(String(dealId))}", ${dealDataJson})'
@@ -759,18 +731,6 @@ function loadDeals(filter = "all") {
               <h3 class="text-[14px] text-on-surface font-semibold leading-snug line-clamp-2">${escapeHtml(deal.title || "Deal")}</h3>
               <div class="text-[11px] text-on-surface-variant mt-2">Click to check current price</div>
             </div>
-          </div>
-
-          <div class="flex items-center gap-2 flex-wrap">
-            <button onclick="voteDeal('${escapeAttribute(String(dealId))}', 'up')" 
-                    class="cd-vote-btn up ${dealRating.userVote === 'up' ? 'active' : ''}">
-              <span class="material-symbols-outlined text-[14px]" style="font-variation-settings:'FILL' 1;">thumb_up</span>
-              ${dealRating.up > 0 ? `(${dealRating.up})` : ''} ${upPercent > 0 ? upPercent + '%' : 'Helpful'}
-            </button>
-            <button onclick="voteDeal('${escapeAttribute(String(dealId))}', 'down')" 
-                    class="cd-vote-btn down ${dealRating.userVote === 'down' ? 'active' : ''}">
-              <span class="material-symbols-outlined text-[14px]">thumb_down</span>
-            </button>
           </div>
 
           <div class="cd-store-badge">
@@ -1376,7 +1336,6 @@ window.closeMenu = closeMenu;
 window.shareDeal = shareDeal;
 window.toggleWatchlist = toggleWatchlist;
 window.removeFromFavorites = removeFromFavorites;
-window.voteDeal = voteDeal;
 window.openDealComparison = openDealComparison;
 window.closeComparisonModal = closeComparisonModal;
 window.showToast = showToast;
