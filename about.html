@@ -176,6 +176,53 @@
             margin-bottom: 8px;
         }
 
+        .author-card {
+            background: linear-gradient(135deg, #EEF4FF 0%, #FFFFFF 60%, #ECFDF3 100%);
+            border: 1px solid #D7E4FF;
+        }
+
+        .author-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .author-name {
+            color: var(--navy);
+            font-size: 18px;
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        .author-role {
+            color: var(--brand);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .amazon-card {
+            background: linear-gradient(135deg, #FFF8E7 0%, #FFFFFF 60%);
+            border: 1px solid #F5D77A;
+        }
+
+        .amazon-card h2 { color: #B45309; }
+        .amazon-card strong { color: #B45309; }
+
         .footer {
             background: var(--navy);
             color: white;
@@ -197,6 +244,24 @@
 
         .footer a:hover {
             color: white;
+        }
+
+        .footer-disclosure {
+            max-width: 900px;
+            margin: 20px auto 0;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.12);
+            color: #AAB4C5;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .footer-disclosure strong {
+            color: white;
+        }
+
+        .footer-disclosure p {
+            margin-bottom: 6px;
         }
 
         @media(max-width:700px) {
@@ -253,6 +318,35 @@
 
 <main class="content">
 
+    <div class="card author-card">
+
+        <div class="author-header">
+            <div class="author-avatar">R</div>
+            <div>
+                <div class="author-name">Muhammad Rizwan</div>
+                <div class="author-role">Founder, CheckerDiscount</div>
+            </div>
+        </div>
+
+        <p>
+            Hi, I'm Muhammad Rizwan. I created CheckerDiscount because
+            I got tired of watching people overpay for products online.
+        </p>
+
+        <p>
+            Every week, I research products, dig through customer feedback,
+            and put together honest reviews and buying guides — so you can
+            make smarter decisions before you click "Buy Now."
+        </p>
+
+        <p>
+            No hype. No paid promotions. Just useful information that
+            actually helps you save money.
+        </p>
+
+    </div>
+
+
     <div class="card">
 
         <h2>Our Mission</h2>
@@ -287,6 +381,7 @@
             <li>Calculate potential savings.</li>
             <li>Provide links to retailer offers.</li>
             <li>Make deal information easier to understand.</li>
+            <li>Publish honest product reviews and buying guides.</li>
         </ul>
 
     </div>
@@ -328,6 +423,30 @@
 
     </div>
 
+
+    <div class="card amazon-card">
+
+        <h2>Amazon Associates Program</h2>
+
+        <p>
+            CheckerDiscount is a participant in the Amazon Services LLC
+            Associates Program, an affiliate advertising program designed
+            to provide a means for sites to earn advertising fees by
+            advertising and linking to Amazon.com, Amazon.ae, and other
+            Amazon properties.
+        </p>
+
+        <p>
+            <strong>As an Amazon Associate I earn from qualifying purchases.</strong>
+        </p>
+
+        <p>
+            Amazon and the Amazon logo are trademarks of Amazon.com, Inc.
+            or its affiliates.
+        </p>
+
+    </div>
+
 </main>
 
 
@@ -343,6 +462,11 @@
     <a href="privacy.html">Privacy</a>
     <a href="terms.html">Terms</a>
     <a href="affiliate-disclosure.html">Affiliate Disclosure</a>
+
+    <div class="footer-disclosure">
+        <p><strong>As an Amazon Associate I earn from qualifying purchases.</strong></p>
+        <p>Amazon and the Amazon logo are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    </div>
 
 </footer>
 
