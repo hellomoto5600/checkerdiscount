@@ -10,6 +10,7 @@
   --primary:#155eef;--primary-dark:#0047c1;--green:#12b76a;--red:#d92d20;
   --bg:#f5f7fb;--card:#fff;--text:#101828;--muted:#667085;
   --border:#e4e7ec;--shadow:0 4px 18px rgba(16,24,40,.07);
+  --navy:#0B1220;--navy-surface:#0F172A;
 }
 *{box-sizing:border-box;}
 body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text);}
@@ -47,6 +48,10 @@ button:disabled{opacity:.6;cursor:not-allowed;}
 .watch-item .price{font-weight:800;color:var(--primary);}
 .empty{padding:24px;text-align:center;color:var(--muted);font-size:14px;}
 .hidden{display:none!important;}
+.cd-disclosure-footer{background:var(--navy);color:#c0c6da;padding:20px;margin-top:40px;font-size:11px;line-height:1.6;}
+.cd-disclosure-footer .inner{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:8px;}
+.cd-disclosure-footer strong{color:#ffffff;}
+.cd-disclosure-footer .bottom{display:flex;justify-content:space-between;border-top:1px solid var(--navy-surface);padding-top:10px;margin-top:6px;font-size:10px;}
 @media(max-width:640px){.watch-item{flex-wrap:wrap;}}
 </style>
 </head>
@@ -116,6 +121,19 @@ button:disabled{opacity:.6;cursor:not-allowed;}
   </div>
 </div>
 
+<!-- ========== DISCLOSURE FOOTER ========== -->
+<div class="cd-disclosure-footer">
+  <div class="inner">
+    <p><strong>As an Amazon Associate I earn from qualifying purchases.</strong></p>
+    <p>Amazon and the Amazon logo are trademarks of Amazon.com, Inc. or its affiliates.</p>
+    <p>CheckerDiscount is an independent price validation service. We may earn a commission when you click merchant links.</p>
+    <div class="bottom">
+      <span>© 2026 CheckerDiscount.com</span>
+      <span>SSL Encrypted</span>
+    </div>
+  </div>
+</div>
+
 <script>
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
 
@@ -127,7 +145,6 @@ function showMessage(text, type="success"){
   box.className = "message show " + type;
   clearTimeout(window.__mt);
   window.__mt = setTimeout(()=>{ box.className = "message"; }, 6000);
-  // Scroll to top so user sees the message
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -160,7 +177,6 @@ function switchAuth(mode){
     $("registerTab").classList.add("active");
     $("authTitle").textContent = "Create Account";
   }
-  // Clear any previous message
   $("message").className = "message";
 }
 
@@ -193,13 +209,11 @@ async function handleLogin(e){
 async function handleRegister(e){
   e.preventDefault();
   
-  // Button disable (double submission rokne ke liye)
   const btn = e.target.querySelector('button[type="submit"]');
   const originalText = btn.textContent;
   btn.disabled = true;
   btn.textContent = "Creating...";
   
-  // Clear any previous message
   $("message").className = "message";
   
   try {
@@ -212,18 +226,15 @@ async function handleRegister(e){
       })
     });
     
-    // Success!
     setToken(data.token);
     
     const userName = data.customer?.name || "friend";
     showMessage("✅ Account created successfully! Welcome, " + userName + "! Redirecting to your dashboard...", "success");
     
-    // Form clear
     $("regName").value = "";
     $("regEmail").value = "";
     $("regPassword").value = "";
     
-    // Dashboard pe le jayein
     setTimeout(async () => {
       await loadDashboard();
     }, 800);
@@ -295,7 +306,7 @@ async function loadWatchlist(){
         <div class="info">
           <div class="title">${item.title || "Deal"}</div>
           <div class="meta">${item.store || ""} · ${item.country_code || ""}</div>
-          <div class="price">${item.currency || "USD"} ${Number(item.new_price || 0).toFixed(2)}
+          <div class="price">Check Latest Price on Store
             ${item.alert_price ? ` · Alert below ${Number(item.alert_price).toFixed(2)}` : ""}
           </div>
         </div>
