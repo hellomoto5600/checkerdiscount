@@ -1,5 +1,6 @@
-// CheckerDiscount - Complete App.js v10.0
-// Country Selector + Trust Badge + Admin Views + Rating + 5 Tools + Watchlist + Blog + Fixed Comparison
+// CheckerDiscount - Complete App.js v11.0
+// Amazon-Safe: No manual prices, no ratings. Only "Check Price" links.
+// Country Selector + Trust Badge + Admin Views + Rating + 5 Tools + Watchlist + Blog
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
 
@@ -209,7 +210,7 @@ function renderFavorites() {
             <div class="flex-1 min-w-0 flex flex-col justify-center">
                 <div class="text-[13px] font-semibold text-on-surface line-clamp-2">${escapeHtml(item.title)}</div>
                 <div class="text-[11px] text-on-surface-variant mt-0.5">${escapeHtml(item.store)}</div>
-                <div class="text-[14px] font-bold text-primary-container mt-1">${formatPrice(item.price, item.currency)}</div>
+                <div class="text-[13px] font-bold text-primary-container mt-1">Check Latest Price</div>
             </div>
             <div class="flex flex-col gap-1.5 self-center flex-shrink-0">
                 <a href="${escapeAttribute(item.url)}" target="_blank" rel="noopener noreferrer" 
@@ -610,10 +611,6 @@ function loadSpotlight() {
 
     const imgSrc = featuredDeal.image_url || featuredDeal.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
     const discountText = featuredDeal.discount_percent ? `${Math.round(featuredDeal.discount_percent)}% OFF` : "Special Offer";
-    const oldPrice = Number(featuredDeal.old_price || 0);
-    const newPrice = Number(featuredDeal.new_price || featuredDeal.price || 0);
-    const savingsAmount = oldPrice > newPrice ? oldPrice - newPrice : 0;
-    const currency = getDealCurrency(featuredDeal);
     const rating = Number(featuredDeal.rating || 0);
     const hasRating = rating > 0;
 
@@ -644,22 +641,22 @@ function loadSpotlight() {
             <span class="font-bold text-on-surface">${hasRating ? rating.toFixed(1) : "—"}</span>
           </div>
           <h3 class="font-headline-sm text-[14px] text-on-surface font-semibold leading-snug line-clamp-2 mt-0.5">${escapeHtml(featuredDeal.title || "Special Deal")}</h3>
-          <div class="flex items-baseline gap-2 mt-1.5">
-            <span class="font-headline-sm text-[20px] font-extrabold text-primary-container">${formatPrice(newPrice, currency)}</span>
-            ${oldPrice ? `<span class="font-price-strikethrough text-[13px] text-outline line-through">${formatPrice(oldPrice, currency)}</span>` : ""}
+          <div class="flex items-center gap-1.5 mt-1.5">
+            <span class="material-symbols-outlined text-primary text-[16px]" style="font-variation-settings:'FILL' 1;">local_offer</span>
+            <span class="text-[13px] font-semibold text-primary">Featured Deal</span>
           </div>
         </div>
       </div>
       <div class="mt-3 pt-2.5 border-t border-surface-container flex items-center justify-between">
         <div class="px-2.5 py-1 rounded-lg bg-savings-green-subtle text-savings-green font-bold text-[12px] flex items-center gap-1">
-          <span class="material-symbols-outlined text-[14px]">savings</span> You Save ${formatPrice(savingsAmount, currency)}
+          <span class="material-symbols-outlined text-[14px]">savings</span> Real Savings Available
         </div>
         <div class="flex items-center gap-2">
           <button onclick="shareDeal('${encodeURIComponent(featuredDeal.title || "")}', '${escapeAttribute(featuredDeal.url || window.location.href)}')" class="w-9 h-9 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface flex items-center justify-center transition-colors shadow-sm" title="Share Deal">
             <span class="material-symbols-outlined text-[18px]">share</span>
           </button>
           <a href="${escapeAttribute(featuredDeal.url || "#")}" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-lg bg-primary-container hover:bg-primary text-on-primary font-label-md text-[13px] font-semibold flex items-center gap-1 shadow-sm transition-colors">
-            <span>Check Deal</span>
+            <span>Check Price</span>
             <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
           </a>
         </div>
@@ -690,16 +687,10 @@ function loadDeals(filter = "all") {
     deals.forEach(deal => {
         const imgSrc = deal.image_url || deal.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
         const discountText = deal.discount_percent ? `${Math.round(deal.discount_percent)}% OFF` : "Special Deal";
-        const currency = getDealCurrency(deal);
-        const newPrice = Number(deal.new_price || deal.price || 0);
-        const oldPrice = deal.old_price ? Number(deal.old_price) : null;
         const card = document.createElement("div");
         card.className = "cd-card";
         const dealId = deal.id || "";
         const storeName = String(deal.store || deal.store_name || deal.storeName || deal.retailer || deal.retailer_name || "Store").trim();
-        const rating = Number(deal.rating || 0);
-        const hasRating = rating > 0;
-        const savings = (oldPrice && newPrice && oldPrice > newPrice) ? (oldPrice - newPrice) : 0;
         const saved = isInWatchlist(dealId);
         const trust = getTrustBadge(deal);
         const views = getDealViews(dealId, deal);
@@ -710,9 +701,9 @@ function loadDeals(filter = "all") {
             id: dealId,
             title: deal.title || 'Deal',
             store: storeName,
-            new_price: newPrice,
-            old_price: oldPrice,
-            currency: currency,
+            new_price: deal.new_price || deal.price || 0,
+            old_price: deal.old_price || null,
+            currency: getDealCurrency(deal),
             image_url: imgSrc,
             url: deal.url || '#',
             country: getDealCountry(deal)
@@ -742,23 +733,18 @@ function loadDeals(filter = "all") {
             </div>
             <div class="flex flex-col min-w-0 justify-center flex-1">
               <h3 class="text-[14px] text-on-surface font-semibold leading-snug line-clamp-2">${escapeHtml(deal.title || "Deal")}</h3>
-              <div class="flex items-baseline gap-2 mt-1.5 flex-wrap">
-                <span class="text-[18px] font-extrabold text-primary-container">${formatPrice(newPrice, currency)}</span>
-                ${oldPrice ? `<span class="text-[12px] text-outline line-through">${formatPrice(oldPrice, currency)}</span>` : ""}
+              <div class="flex items-center gap-1.5 mt-2">
+                <span class="material-symbols-outlined text-primary text-[16px]" style="font-variation-settings:'FILL' 1;">local_offer</span>
+                <span class="text-[13px] font-semibold text-primary">Verified Deal Available</span>
               </div>
-              <div class="flex items-center gap-1 mt-1">
-                <span class="material-symbols-outlined text-warning-amber text-[14px]" style="font-variation-settings:'FILL' 1;">star</span>
-                <span class="text-[12px] font-bold text-on-surface">${hasRating ? rating.toFixed(1) : "—"}</span>
-                <span class="text-[11px] text-on-surface-variant">/ 5</span>
-              </div>
+              <div class="text-[11px] text-on-surface-variant mt-1">Click to check current price</div>
             </div>
           </div>
 
-          ${savings > 0 ? `
           <div class="px-3 py-2 rounded-xl bg-gradient-to-r from-savings-green-subtle to-savings-green-subtle/30 text-savings-green font-bold text-[12px] flex items-center gap-1.5 border border-savings-green-border/50">
             <span class="material-symbols-outlined text-[15px]" style="font-variation-settings:'FILL' 1;">savings</span>
-            You Save ${formatPrice(savings, currency)}
-          </div>` : ""}
+            Real Savings Available
+          </div>
 
           <div class="flex items-center gap-2 flex-wrap">
             <button onclick="voteDeal('${escapeAttribute(String(dealId))}', 'up')" 
@@ -780,7 +766,7 @@ function loadDeals(filter = "all") {
           </div>
 
           <div class="flex items-center gap-2">
-            ${dealId ? `<button onclick="openDealComparison('${escapeAttribute(String(dealId))}')" class="cd-btn cd-btn-compare" title="Compare prices">
+            ${dealId ? `<button onclick="openDealComparison('${escapeAttribute(String(dealId))}')" class="cd-btn cd-btn-compare" title="Compare stores">
                 <span class="material-symbols-outlined text-[16px]">compare_arrows</span>
                 <span>Compare</span>
               </button>` : ""}
@@ -788,7 +774,7 @@ function loadDeals(filter = "all") {
               <span class="material-symbols-outlined text-[16px]">share</span>
             </button>
             <a href="${escapeAttribute(deal.url || "#")}" target="_blank" rel="noopener noreferrer" class="cd-btn cd-btn-primary">
-              <span>Get Deal</span>
+              <span>Check Price</span>
               <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
             </a>
           </div>
@@ -799,7 +785,7 @@ function loadDeals(filter = "all") {
 
 function setupFilters() {}
 
-// ========== COMPARISON MODAL (v10 — Fixed: no AED conversion, shows You Save) ==========
+// ========== COMPARISON MODAL (v11 — No prices shown, only store links) ==========
 async function openDealComparison(dealId) {
     let modal = document.getElementById("cdComparisonModal");
     if (!modal) {
@@ -835,143 +821,45 @@ async function openDealComparison(dealId) {
         const comparisons = Array.isArray(data) ? data : (Array.isArray(data.deals) ? data.deals : (Array.isArray(data.offers) ? data.offers : (Array.isArray(data.comparisons) ? data.comparisons : [])));
 
         if (!comparisons.length) {
-            content.innerHTML = `<div class="text-center py-8"><div class="text-3xl mb-2">🔎</div><div class="font-semibold text-on-surface">No other store prices found</div><div class="text-[12px] text-on-surface-variant mt-1">We will show more comparisons as they become available.</div></div>`;
+            content.innerHTML = `<div class="text-center py-8"><div class="text-3xl mb-2">🔎</div><div class="font-semibold text-on-surface">No other store prices found</div><div class="text-[12px] text-on-surface-variant mt-1">Check back later for more options.</div></div>`;
             return;
         }
 
-        // Convert all to AED for internal comparison only
-        let cheapestAed = Infinity;
-        let cheapestOffers = [];
-
-        comparisons.forEach(item => {
-            const normalized = normalizeDeal(item);
-            const currency = getDealCurrency(normalized);
-            const price = Number(normalized.new_price || normalized.price || 0);
-            const priceAed = convertToAED(price, currency);
-            if (priceAed > 0) {
-                if (priceAed < cheapestAed - 0.01) { cheapestAed = priceAed; cheapestOffers = [{ normalized, currency, price, priceAed }]; }
-                else if (Math.abs(priceAed - cheapestAed) < 0.01) { cheapestOffers.push({ normalized, currency, price, priceAed }); }
-            }
-        });
-
-        // Helper: Calculate savings for a deal (in its own currency)
-        function calcSavings(deal, price) {
-            const oldPrice = Number(deal.old_price || 0);
-            const newPrice = Number(price || 0);
-            if (oldPrice > newPrice && newPrice > 0) {
-                return {
-                    amount: oldPrice - newPrice,
-                    pct: Math.round(((oldPrice - newPrice) / oldPrice) * 100),
-                    oldPrice: oldPrice
-                };
-            }
-            return null;
-        }
-
-        let bestDealHtml = "";
-        if (cheapestOffers.length > 0 && comparisons.length > 1) {
-            if (cheapestOffers.length === 1) {
-                const cheapest = cheapestOffers[0];
-                const cheapestCountry = COUNTRIES[getDealCountry(cheapest.normalized)];
-                const cheapestImg = cheapest.normalized.image_url || cheapest.normalized.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200";
-                const cheapestTrust = getTrustBadge(cheapest.normalized);
-                const savings = calcSavings(cheapest.normalized, cheapest.price);
-
-                bestDealHtml = `<div class="cd-best-deal">
-                    <div class="cd-best-deal-badge">🏆 Best Deal</div>
-                    <div class="flex items-center gap-3 mb-2">
-                        <div class="cd-comparison-img" style="border-color:#12b76a;">
-                            <img src="${escapeAttribute(cheapestImg)}" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200'">
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-center gap-2 mb-1 flex-wrap">
-                                <span class="text-[16px]">${cheapestCountry?.flag || "🌐"}</span>
-                                <span class="font-bold text-on-surface text-[15px]">${escapeHtml(cheapest.normalized.store || "Store")}</span>
-                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full ${cheapestTrust.bgClass} ${cheapestTrust.textClass} text-[10px] font-bold">
-                                    <span class="material-symbols-outlined text-[11px]">${cheapestTrust.icon}</span>${cheapestTrust.label}
-                                </span>
-                            </div>
-                            <div class="flex items-baseline gap-2 flex-wrap">
-                                <span class="font-headline-sm text-[20px] font-extrabold text-primary-container">${formatPrice(cheapest.price, cheapest.currency)}</span>
-                                ${savings ? `<span class="text-[13px] text-outline line-through">${formatPrice(savings.oldPrice, cheapest.currency)}</span>` : ""}
-                            </div>
-                            ${savings ? `
-                            <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-savings-green text-white text-[12px] font-bold shadow-sm">
-                                <span class="material-symbols-outlined text-[14px]" style="font-variation-settings:'FILL' 1;">savings</span>
-                                You Save ${formatPrice(savings.amount, cheapest.currency)} (${savings.pct}%)
-                            </div>` : ""}
-                        </div>
+        content.innerHTML = `
+            <div class="bg-primary-container/10 border border-primary-container/30 rounded-2xl p-3 mb-4">
+                <div class="flex items-start gap-2">
+                    <span class="material-symbols-outlined text-primary text-[20px] flex-shrink-0 mt-0.5">info</span>
+                    <div class="text-[12px] text-on-surface leading-relaxed">
+                        <strong>How to get the best deal:</strong> Click each store below to check its current price. Prices change frequently, so always compare before buying.
                     </div>
-                </div>`;
-            } else {
-                const tieImg = cheapestOffers[0].normalized.image_url || cheapestOffers[0].normalized.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200";
-                const storesList = cheapestOffers.map(o => {
-                    const c = COUNTRIES[getDealCountry(o.normalized)];
-                    return `<span class="inline-flex items-center gap-1 mr-2"><span>${c?.flag || "🌐"}</span> <strong>${escapeHtml(o.normalized.store || "Store")}</strong></span>`;
-                }).join("");
-                const tieSavings = calcSavings(cheapestOffers[0].normalized, cheapestOffers[0].price);
-
-                bestDealHtml = `<div class="cd-best-deal" style="border-color:#f79009;background:linear-gradient(135deg,#fffaeb 0%,#fef0c7 100%);">
-                    <div class="cd-best-deal-badge" style="background:#f79009;">⚡ Best Price (Tie)</div>
-                    <div class="flex items-center gap-3 mb-2">
-                        <div class="cd-comparison-img" style="border-color:#f79009;">
-                            <img src="${escapeAttribute(tieImg)}">
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="text-[11px] font-bold text-orange-700 uppercase mb-1">Same price at ${cheapestOffers.length} stores</div>
-                            <div class="flex flex-wrap items-center gap-1 mb-2">${storesList}</div>
-                            <div class="flex items-baseline gap-2 flex-wrap">
-                                <span class="font-headline-sm text-[20px] font-extrabold text-orange-600">${formatPrice(cheapestOffers[0].price, cheapestOffers[0].currency)}</span>
-                                ${tieSavings ? `<span class="text-[13px] text-outline line-through">${formatPrice(tieSavings.oldPrice, cheapestOffers[0].currency)}</span>` : ""}
-                            </div>
-                            ${tieSavings ? `
-                            <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-savings-green text-white text-[12px] font-bold shadow-sm">
-                                <span class="material-symbols-outlined text-[14px]" style="font-variation-settings:'FILL' 1;">savings</span>
-                                You Save ${formatPrice(tieSavings.amount, cheapestOffers[0].currency)} (${tieSavings.pct}%)
-                            </div>` : ""}
-                        </div>
-                    </div>
-                </div>`;
-            }
-        }
-
-        content.innerHTML = bestDealHtml + comparisons.map(item => {
+                </div>
+            </div>
+        ` + comparisons.map(item => {
             const normalized = normalizeDeal(item);
             const countryCode = getDealCountry(normalized);
-            const currency = getDealCurrency(normalized);
-            const price = Number(normalized.new_price || normalized.price || 0);
-            const rating = Number(normalized.rating || 0);
-            const isCheapest = cheapestOffers.some(o => o.normalized.id === normalized.id);
+            const isCheapest = false;
             const imgSrc = normalized.image_url || normalized.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200";
             const trust = getTrustBadge(normalized);
-            const savings = calcSavings(normalized, price);
 
-            return `<div class="border ${isCheapest ? 'border-2 border-savings-green bg-savings-green-subtle/30' : 'border-surface-container'} rounded-2xl p-3 mb-3">
+            return `<div class="border border-surface-container rounded-2xl p-3 mb-3 hover:border-primary-container/50 transition-colors">
                 <div class="flex items-center gap-3">
                     <div class="cd-comparison-img"><img src="${escapeAttribute(imgSrc)}" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200'"></div>
                     <div class="min-w-0 flex-1">
                         <div class="flex items-center gap-1.5 flex-wrap">
                             <span>${COUNTRIES[countryCode]?.flag || "🌐"}</span>
                             <span class="font-semibold text-on-surface">${escapeHtml(normalized.store || "Store")}</span>
-                            <span class="text-[11px] text-on-surface-variant">⭐ ${rating > 0 ? rating.toFixed(1) : "—"}</span>
-                            ${isCheapest ? `<span class="text-[10px] font-bold text-secondary bg-savings-green-subtle px-2 py-0.5 rounded-full">BEST PRICE</span>` : ""}
                             <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full ${trust.bgClass} ${trust.textClass} text-[9px] font-bold">
                                 <span class="material-symbols-outlined text-[10px]">${trust.icon}</span>${trust.label}
                             </span>
                         </div>
                         <div class="text-[12px] text-on-surface-variant mt-1 line-clamp-2">${escapeHtml(normalized.title || "Product")}</div>
-                        <div class="flex items-baseline gap-2 mt-1 flex-wrap">
-                            <span class="font-bold text-primary text-[16px]">${formatPrice(price, currency)}</span>
-                            ${savings ? `<span class="text-[11px] text-outline line-through">${formatPrice(savings.oldPrice, currency)}</span>` : ""}
+                        <div class="flex items-center gap-1.5 mt-2">
+                            <span class="material-symbols-outlined text-primary text-[14px]">local_offer</span>
+                            <span class="text-[12px] font-semibold text-primary">Click to check current price</span>
                         </div>
-                        ${savings ? `
-                        <div class="mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-savings-green-subtle text-savings-green text-[11px] font-bold">
-                            <span class="material-symbols-outlined text-[12px]" style="font-variation-settings:'FILL' 1;">savings</span>
-                            Save ${formatPrice(savings.amount, currency)} (${savings.pct}%)
-                        </div>` : ""}
                     </div>
                 </div>
-                ${normalized.url ? `<a href="${escapeAttribute(normalized.url)}" target="_blank" rel="noopener noreferrer" class="cd-btn cd-btn-primary mt-3 w-full">View Deal <span class="material-symbols-outlined text-[15px]">arrow_forward</span></a>` : ""}
+                ${normalized.url ? `<a href="${escapeAttribute(normalized.url)}" target="_blank" rel="noopener noreferrer" class="cd-btn cd-btn-primary mt-3 w-full">Check Price at ${escapeHtml(normalized.store || "Store")} <span class="material-symbols-outlined text-[15px]">arrow_forward</span></a>` : ""}
             </div>`;
         }).join("");
 
