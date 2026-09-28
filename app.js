@@ -1,6 +1,6 @@
-// CheckerDiscount - Complete App.js v11.0
-// Amazon-Safe: No manual prices, no ratings. Only "Check Price" links.
-// Country Selector + Trust Badge + Admin Views + Rating + 5 Tools + Watchlist + Blog
+// CheckerDiscount - Complete App.js v12.0
+// Amazon-Safe: No promotional tags, no views, no ratings, no manual prices.
+// Country Selector + Trust Badge + 5 Tools + Watchlist + Blog
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
 
@@ -40,6 +40,36 @@ function formatAED(value) {
     return `AED ${num.toFixed(2)}`;
 }
 
+// ========== TITLE CLEANER (Amazon Policy Safe) ==========
+function cleanTitle(title) {
+    if (!title) return "";
+    let cleaned = String(title);
+
+    // 1. پروموشنل فیصد ہٹائیں (جیسے "50% Off", "-50%", "50% OFF", "50% discount")
+    cleaned = cleaned.replace(/\s*[-–—]?\s*\d+(\.\d+)?\s*%\s*(off|OFF|Off|discount|DISCOUNT|Discount)?\s*/g, ' ');
+
+    // 2. ایموجیز اور خاص نشانات ہٹائیں
+    cleaned = cleaned.replace(/[⭐🔥✅❌💥🎉🎁💯🛒💰🏷️✨🌟💫]/g, '');
+
+    // 3. اضافی پروموشنل الفاظ ہٹائیں
+    const promoWords = [
+        'best seller', 'bestseller', 'free shipping', 'limited time',
+        'hot deal', 'hot sale', 'clearance', 'special offer',
+        'deal of the day', 'flash sale', 'big sale'
+    ];
+    promoWords.forEach(word => {
+        const regex = new RegExp(`\\b${word}\\b`, 'gi');
+        cleaned = cleaned.replace(regex, '');
+    });
+
+    // 4. اضافی خالی جگہیں اور نشانات صاف کریں
+    cleaned = cleaned.replace(/\s*[-–—]\s*$/, '');
+    cleaned = cleaned.replace(/\s*[-–—]\s*(?=[,])/g, '');
+    cleaned = cleaned.replace(/\s+/g, ' ').trim();
+
+    return cleaned;
+}
+
 // ========== TRUST BADGE ==========
 function getTrustBadge(deal) {
     const storeType = String(deal.store_type || 'third-party').toLowerCase();
@@ -57,7 +87,7 @@ function getTrustBadge(deal) {
     };
 }
 
-// ========== VIEWS ==========
+// ========== VIEWS (internal only, not displayed) ==========
 function getDealViews(dealId, deal) {
     if (deal && deal.views) return Number(deal.views);
     if (!dealId) return 0;
@@ -150,7 +180,7 @@ function toggleWatchlist(dealId, dealData) {
     } else {
         list.push({
             id: dealId,
-            title: dealData.title || 'Deal',
+            title: cleanTitle(dealData.title) || 'Deal',
             store: dealData.store || 'Store',
             price: dealData.new_price || dealData.price || 0,
             old_price: dealData.old_price || null,
@@ -208,7 +238,7 @@ function renderFavorites() {
                  class="w-16 h-16 rounded-lg object-cover flex-shrink-0 border border-surface-container"
                  onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=100'">
             <div class="flex-1 min-w-0 flex flex-col justify-center">
-                <div class="text-[13px] font-semibold text-on-surface line-clamp-2">${escapeHtml(item.title)}</div>
+                <div class="text-[13px] font-semibold text-on-surface line-clamp-2">${escapeHtml(cleanTitle(item.title))}</div>
                 <div class="text-[11px] text-on-surface-variant mt-0.5">${escapeHtml(item.store)}</div>
                 <div class="text-[13px] font-bold text-primary-container mt-1">Check Latest Price</div>
             </div>
@@ -515,6 +545,12 @@ function normalizeDeal(deal) {
     copy.store = copy.store || copy.store_name || copy.storeName || copy.retailer || copy.retailer_name || "";
     copy.store_type = copy.store_type || "third-party";
     copy.views = copy.views || 0;
+
+    // ✅ ٹائٹل صاف کریں (50% Off وغیرہ ہٹائیں)
+    if (copy.title) {
+        copy.title = cleanTitle(copy.title);
+    }
+
     return copy;
 }
 
@@ -610,7 +646,6 @@ function loadSpotlight() {
     if (!spotlightContainer || !featuredDeal) return;
 
     const imgSrc = featuredDeal.image_url || featuredDeal.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
-    const discountText = featuredDeal.discount_percent ? `${Math.round(featuredDeal.discount_percent)}% OFF` : "Special Offer";
     const rating = Number(featuredDeal.rating || 0);
     const hasRating = rating > 0;
 
@@ -622,9 +657,6 @@ function loadSpotlight() {
         <div class="flex items-center gap-1 text-primary font-badge-caps text-[11px] font-bold uppercase tracking-wider">
           <span class="material-symbols-outlined text-[15px]">bolt</span> Deal Spotlight
         </div>
-        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-savings-green-subtle text-secondary font-badge-caps text-[10px] font-bold">
-          <span class="material-symbols-outlined text-[12px]">verified</span> ${escapeHtml(discountText)}
-        </span>
       </div>
       <div class="flex gap-3 pt-3">
         <div class="w-20 h-20 rounded-xl bg-surface-subtle overflow-hidden flex-shrink-0 relative border border-surface-container flex items-center justify-center">
@@ -647,10 +679,7 @@ function loadSpotlight() {
           </div>
         </div>
       </div>
-      <div class="mt-3 pt-2.5 border-t border-surface-container flex items-center justify-between">
-        <div class="px-2.5 py-1 rounded-lg bg-savings-green-subtle text-savings-green font-bold text-[12px] flex items-center gap-1">
-          <span class="material-symbols-outlined text-[14px]">savings</span> Real Savings Available
-        </div>
+      <div class="mt-3 pt-2.5 border-t border-surface-container flex items-center justify-end">
         <div class="flex items-center gap-2">
           <button onclick="shareDeal('${encodeURIComponent(featuredDeal.title || "")}', '${escapeAttribute(featuredDeal.url || window.location.href)}')" class="w-9 h-9 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface flex items-center justify-center transition-colors shadow-sm" title="Share Deal">
             <span class="material-symbols-outlined text-[18px]">share</span>
@@ -686,14 +715,12 @@ function loadDeals(filter = "all") {
 
     deals.forEach(deal => {
         const imgSrc = deal.image_url || deal.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
-        const discountText = deal.discount_percent ? `${Math.round(deal.discount_percent)}% OFF` : "Special Deal";
         const card = document.createElement("div");
         card.className = "cd-card";
         const dealId = deal.id || "";
         const storeName = String(deal.store || deal.store_name || deal.storeName || deal.retailer || deal.retailer_name || "Store").trim();
         const saved = isInWatchlist(dealId);
         const trust = getTrustBadge(deal);
-        const views = getDealViews(dealId, deal);
         const dealRating = getDealRating(dealId);
         const upPercent = calculateRatingPercent(dealRating);
 
@@ -709,6 +736,7 @@ function loadDeals(filter = "all") {
             country: getDealCountry(deal)
         }));
 
+        // ✅ صرف Trust Badge (Official/Third-Party)، کوئی پروموشنل ٹیگ نہیں
         card.innerHTML = `
           <button class="cd-heart-btn ${saved ? 'saved' : ''}" 
                   onclick='toggleWatchlist("${escapeAttribute(String(dealId))}", ${dealDataJson})'
@@ -721,10 +749,6 @@ function loadDeals(filter = "all") {
               <span class="material-symbols-outlined text-[12px]" style="font-variation-settings:'FILL' 1;">${trust.icon}</span>
               ${trust.label}
             </span>
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant text-[10px] font-semibold">
-              <span class="material-symbols-outlined text-[12px]">visibility</span>
-              ${formatViews(views)} views
-            </span>
           </div>
 
           <div class="flex gap-3">
@@ -733,17 +757,8 @@ function loadDeals(filter = "all") {
             </div>
             <div class="flex flex-col min-w-0 justify-center flex-1">
               <h3 class="text-[14px] text-on-surface font-semibold leading-snug line-clamp-2">${escapeHtml(deal.title || "Deal")}</h3>
-              <div class="flex items-center gap-1.5 mt-2">
-                <span class="material-symbols-outlined text-primary text-[16px]" style="font-variation-settings:'FILL' 1;">local_offer</span>
-                <span class="text-[13px] font-semibold text-primary">Verified Deal Available</span>
-              </div>
-              <div class="text-[11px] text-on-surface-variant mt-1">Click to check current price</div>
+              <div class="text-[11px] text-on-surface-variant mt-2">Click to check current price</div>
             </div>
-          </div>
-
-          <div class="px-3 py-2 rounded-xl bg-gradient-to-r from-savings-green-subtle to-savings-green-subtle/30 text-savings-green font-bold text-[12px] flex items-center gap-1.5 border border-savings-green-border/50">
-            <span class="material-symbols-outlined text-[15px]" style="font-variation-settings:'FILL' 1;">savings</span>
-            Real Savings Available
           </div>
 
           <div class="flex items-center gap-2 flex-wrap">
@@ -785,7 +800,7 @@ function loadDeals(filter = "all") {
 
 function setupFilters() {}
 
-// ========== COMPARISON MODAL (v11 — No prices shown, only store links) ==========
+// ========== COMPARISON MODAL ==========
 async function openDealComparison(dealId) {
     let modal = document.getElementById("cdComparisonModal");
     if (!modal) {
@@ -837,7 +852,6 @@ async function openDealComparison(dealId) {
         ` + comparisons.map(item => {
             const normalized = normalizeDeal(item);
             const countryCode = getDealCountry(normalized);
-            const isCheapest = false;
             const imgSrc = normalized.image_url || normalized.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200";
             const trust = getTrustBadge(normalized);
 
@@ -1366,3 +1380,4 @@ window.voteDeal = voteDeal;
 window.openDealComparison = openDealComparison;
 window.closeComparisonModal = closeComparisonModal;
 window.showToast = showToast;
+window.cleanTitle = cleanTitle;
