@@ -235,7 +235,7 @@
         border-radius: 0;
         margin: 0 0 16px 0;
         box-shadow: none;
-        aspect-ratio: 1 / 1;
+        aspect-ratio: 16 / 9; /* <--- یہ تبدیل کر دیا گیا ہے */
         max-height: none;
         width: 100vw;
         margin-left: calc(-50vw + 50%);
