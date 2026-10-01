@@ -1,21 +1,19 @@
 /* =========================================
-   CheckerDiscount - Amazon Style Hero Slider
-   Slide Effect + Full Width on Mobile
-   5 Slides with World-Wide Hero
-   NO OVERLAY — Clean Bright Images
+   CheckerDiscount - Modern 3D Hero Slider
+   Clean, Minimalist & Mobile Optimized
    ========================================= */
 
 .cd-hero-slider {
     position: relative;
     width: 100%;
     height: auto;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 16 / 9; /* تصویر کا سائز 16:9 */
     max-height: 500px;
     border-radius: 20px;
     overflow: hidden;
     margin: 16px 0 24px 0;
     box-shadow: 0 8px 32px rgba(16, 24, 40, 0.12);
-    background: #0B1220;
+    background: #0B1220; /* گہرا بیک گراؤنڈ */
 }
 
 .cd-hero-track {
@@ -34,104 +32,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px;
-    background-size: cover;
+    padding: 0; /* پیڈنگ ہٹا دی تاکہ تصویر پوری نظر آئے */
+    background-size: contain; /* cover کی جگہ contain */
     background-position: center;
     background-repeat: no-repeat;
-}
-
-/* NO overlay — images are fully bright */
-
-.cd-hero-content {
-    position: relative;
-    z-index: 3;
-    text-align: center;
-    max-width: 600px;
-    color: #FFFFFF;
-    padding: 0 16px;
-}
-
-.cd-hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #FFFFFF;
-    margin-bottom: 16px;
-}
-
-.cd-hero-title {
-    font-size: 30px;
-    font-weight: 800;
-    line-height: 1.35;
-    margin: 0 0 14px 0;
-    letter-spacing: -0.02em;
-    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
-}
-
-.cd-hero-title span {
-    display: block;
-    margin-top: 6px;
-    background: linear-gradient(135deg, #70FDA7 0%, #12B76A 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.4));
-}
-
-.cd-hero-subtitle {
-    font-size: 14px;
-    line-height: 1.5;
-    color: rgba(255, 255, 255, 0.95);
-    margin: 0 0 20px 0;
-    font-weight: 500;
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
-}
-
-.cd-hero-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #155EEF 0%, #0047C1 100%);
-    color: #FFFFFF;
-    font-weight: 700;
-    font-size: 14px;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 6px 20px rgba(21, 94, 239, 0.5);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    font-family: inherit;
-}
-
-.cd-hero-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 28px rgba(21, 94, 239, 0.6);
-}
-
-.cd-hero-btn:active {
-    transform: translateY(0) scale(0.98);
-}
-
-.cd-hero-btn-white {
-    background: #FFFFFF;
-    color: #155EEF;
-    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
-}
-
-.cd-hero-btn-white:hover {
-    background: #F0F5FF;
-    box-shadow: 0 10px 28px rgba(255, 255, 255, 0.5);
+    background-color: #0B1220;
 }
 
 /* ========== DOTS ========== */
@@ -208,64 +113,31 @@
 }
 
 /* ========== SLIDE BACKGROUNDS ========== */
+.cd-slide-1 { background-image: url('slide-hero.jpg'); }
+.cd-slide-2 { background-image: url('slide-family.jpg'); }
+.cd-slide-3 { background-image: url('slide-shield.jpg'); }
+.cd-slide-4 { background-image: url('slide-apple.jpg'); }
+.cd-slide-5 { background-image: url('slide-discounts.jpg'); }
 
-.cd-slide-1 {
-    background-image: url('slide-hero.jpg');
-}
-
-.cd-slide-2 {
-    background-image: url('slide-family.jpg');
-}
-
-.cd-slide-3 {
-    background-image: url('slide-shield.jpg');
-}
-
-.cd-slide-4 {
-    background-image: url('slide-apple.jpg');
-}
-
-.cd-slide-5 {
-    background-image: url('slide-discounts.jpg');
-}
-
-/* ========== MOBILE: FULL WIDTH ========== */
+/* ========== MOBILE OPTIMIZATION ========== */
 @media (max-width: 640px) {
     .cd-hero-slider {
         border-radius: 0;
         margin: 0 0 16px 0;
         box-shadow: none;
-        aspect-ratio: 16 / 9; /* <--- یہ تبدیل کر دیا گیا ہے */
-        max-height: none;
+        aspect-ratio: 16 / 9;
+        max-height: 300px; /* اونچائی کم کر دی تاکہ اسکرول نہ کرنا پڑے */
         width: 100vw;
         margin-left: calc(-50vw + 50%);
     }
     
     .cd-hero-slide {
-        padding: 16px;
-    }
-    
-    .cd-hero-title {
-        font-size: 22px;
-        line-height: 1.4;
-    }
-    
-    .cd-hero-subtitle {
-        font-size: 13px;
-    }
-    
-    .cd-hero-btn {
-        padding: 10px 20px;
-        font-size: 13px;
-    }
-    
-    .cd-hero-badge {
-        font-size: 10px;
-        padding: 5px 12px;
+        padding: 0;
+        background-size: contain; /* موبائل پر بھی تصویر کٹے نہ */
     }
     
     .cd-hero-arrow {
-        display: none;
+        display: none; /* موبائل پر تیر چھپا دیں */
     }
     
     .cd-hero-dot {
