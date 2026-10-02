@@ -102,17 +102,17 @@ button,a{-webkit-tap-highlight-color:transparent;}
     color: white;
     padding: 3px 8px;
     border-radius: 6px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 800;
-    min-width: 26px;
+    min-width: 28px;
     text-align: center;
     box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3);
 }
 
 .cd-top-pick-card {
-    flex: 0 0 140px;
+    flex: 0 0 130px;
     background: white;
-    border-radius: 14px;
+    border-radius: 12px;
     overflow: hidden;
     border: 1px solid #F0F2F5;
     box-shadow: 0 2px 8px rgba(16, 24, 40, 0.06);
@@ -126,7 +126,7 @@ button,a{-webkit-tap-highlight-color:transparent;}
 }
 .cd-top-pick-img {
     width: 100%;
-    height: 140px;
+    height: 120px;
     background: #F6F8FC;
     overflow: hidden;
     display: flex;
@@ -139,10 +139,10 @@ button,a{-webkit-tap-highlight-color:transparent;}
     object-fit: cover;
 }
 .cd-top-pick-info {
-    padding: 8px;
+    padding: 6px 8px;
 }
 .cd-top-pick-title {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
     color: #0B1C30;
     line-height: 1.3;
@@ -150,31 +150,13 @@ button,a{-webkit-tap-highlight-color:transparent;}
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    margin-bottom: 4px;
-    height: 30px;
+    margin-bottom: 3px;
+    height: 26px;
 }
-.cd-top-pick-price {
-    font-size: 15px;
-    font-weight: 800;
-    color: #EF4444;
-}
-.cd-top-pick-old-price {
-    font-size: 10px;
+.cd-top-pick-store {
+    font-size: 9px;
     color: #98A2B3;
-    text-decoration: line-through;
-    margin-left: 4px;
-}
-.cd-top-pick-discount {
-    position: absolute;
-    top: 8px;
-    left: 8px;
-    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
-    color: white;
-    font-size: 10px;
-    font-weight: 800;
-    padding: 3px 8px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+    font-weight: 500;
 }
 
 /* ====== STYLISH CATEGORIES ====== */
@@ -208,94 +190,107 @@ button,a{-webkit-tap-highlight-color:transparent;}
     font-size: 16px;
 }
 
-/* ====== NEW STYLISH BUTTONS (Same Style as Discount Badge) ====== */
-.cd-btn {
-    display: inline-flex;
+/* ====== EXACT 3D FROSTED BUTTONS ====== */
+.cd-actions-row { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr 1.3fr; 
+    gap: 10px; 
+    align-items: center; 
+    margin-top: 4px; 
+}
+.cd-btn-compare {
+    background: linear-gradient(135deg, rgba(239, 246, 255, 0.9) 0%, rgba(219, 234, 254, 0.9) 100%);
+    border: 1px solid #bfdbfe;
+    color: #1e40af;
+    padding: 12px 14px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
-    padding: 8px 14px;
-    border-radius: 10px;
-    font-size: 12px;
-    font-weight: 800;
-    border: none;
+    gap: 8px;
     cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 2px 5px rgba(59, 130, 246, 0.15);
     transition: all 0.2s ease;
-    text-decoration: none;
-    white-space: nowrap;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-}
-.cd-btn:active {
-    transform: scale(0.97);
-}
-
-/* Compare Button - Soft Blue */
-.cd-btn-compare {
-    background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
-    color: #1E40AF;
-    flex: 1;
 }
 .cd-btn-compare:hover {
-    background: linear-gradient(135deg, #BFDBFE 0%, #93C5FD 100%);
+    background: linear-gradient(135deg, rgba(219, 234, 254, 1) 0%, rgba(191, 219, 254, 1) 100%);
     transform: translateY(-1px);
 }
-
-/* Share Button - Soft Green */
 .cd-btn-share {
-    background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
-    color: #065F46;
-    flex: 1;
+    background: linear-gradient(135deg, rgba(240, 253, 244, 0.9) 0%, rgba(220, 252, 231, 0.9) 100%);
+    border: 1px solid #bbf7d0;
+    color: #166534;
+    padding: 12px 14px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 2px 5px rgba(34, 197, 94, 0.15);
+    transition: all 0.2s ease;
 }
 .cd-btn-share:hover {
-    background: linear-gradient(135deg, #A7F3D0 0%, #6EE7B7 100%);
+    background: linear-gradient(135deg, rgba(220, 252, 231, 1) 0%, rgba(187, 247, 208, 1) 100%);
     transform: translateY(-1px);
 }
-
-/* Check Price Button - Gold/Yellow (Same as 26% OFF badge) */
 .cd-btn-check {
-    background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
-    color: #78350F;
-    flex: 1.2;
+    background: linear-gradient(135deg, #fef08a 0%, #facc15 50%, #eab308 100%);
+    border: 1px solid #ca8a04;
+    color: #713f12;
+    padding: 12px 16px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    position: relative;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 4px 12px rgba(234, 179, 8, 0.4);
+    transition: transform 0.2s ease;
 }
 .cd-btn-check:hover {
-    background: linear-gradient(135deg, #FBBF24 0%, #D97706 100%);
     transform: translateY(-1px);
-    box-shadow: 0 5px 14px rgba(245, 158, 11, 0.45);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 6px 16px rgba(234, 179, 8, 0.5);
 }
-
-/* Discount Badge on Cards */
-.cd-discount-badge {
+.cd-best-deal-ribbon {
     position: absolute;
-    bottom: 12px;
-    right: 12px;
-    background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
-    color: #78350F;
-    font-size: 11px;
-    font-weight: 800;
-    padding: 4px 10px;
+    top: -12px;
+    right: 14px;
+    background: linear-gradient(135deg, #fde047 0%, #ca8a04 100%);
+    color: #ffffff;
+    font-size: 8px;
+    font-weight: 900;
+    padding: 2px 8px;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
-    z-index: 6;
+    letter-spacing: 0.8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    border: 1px solid #fef08a;
+    text-transform: uppercase;
 }
-
-/* cd-card styles */
-.cd-card { background: #FFFFFF; border-radius: 18px; padding: 16px; box-shadow: 0 2px 12px rgba(16, 24, 40, 0.06); border: 1px solid #F0F2F5; display: flex; flex-direction: column; gap: 12px; position: relative; transition: box-shadow 0.2s ease; }
-.cd-card:hover { box-shadow: 0 6px 24px rgba(16, 24, 40, 0.1); }
-.cd-heart-btn { position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border-radius: 50%; background: #FFFFFF; border: 1.5px solid #E4E7EC; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; z-index: 5; padding: 0; }
-.cd-heart-btn:hover { border-color: #D92D20; transform: scale(1.1); }
-.cd-heart-btn.saved { background: #FEE4E2; border-color: #D92D20; }
-.cd-heart-btn .material-symbols-outlined { font-size: 20px; color: #98A2B3; font-variation-settings: 'FILL' 0, 'wght' 500; }
-.cd-heart-btn.saved .material-symbols-outlined { color: #D92D20; font-variation-settings: 'FILL' 1, 'wght' 600; }
-.cd-store-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; background: #F9FAFB; border: 1px solid #E4E7EC; border-radius: 10px; font-size: 11px; color: #475467; width: fit-content; max-width: 100%; }
-
 @media (max-width: 640px) {
     .cd-card { padding: 14px; border-radius: 16px; }
-    .cd-btn { font-size: 11px; padding: 7px 10px; border-radius: 8px; }
-    .cd-heart-btn { width: 32px; height: 32px; top: 10px; right: 10px; }
-    .cd-heart-btn .material-symbols-outlined { font-size: 18px; }
-    .cd-top-pick-card { flex: 0 0 130px; }
-    .cd-top-pick-img { height: 130px; }
+    .cd-btn-compare, .cd-btn-share, .cd-btn-check { font-size: 11px; padding: 9px 10px; border-radius: 24px; }
+    .cd-heart-btn { width: 30px; height: 30px; top: 12px; right: 12px; }
+    .cd-heart-btn .material-symbols-outlined { font-size: 16px; }
+    .cd-best-deal-ribbon { font-size: 7px; padding: 1px 6px; top: -10px; right: 12px; }
 }
+
+/* ====== CARDS ====== */
+.cd-card { background: #FFFFFF; border-radius: 20px; padding: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05); border: 1px solid #f1f5f9; display: flex; flex-direction: column; gap: 12px; position: relative; transition: box-shadow 0.2s ease; }
+.cd-card:hover { box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.08); }
+.cd-heart-btn { position: absolute; top: 14px; right: 14px; width: 34px; height: 34px; border-radius: 50%; background: #FFFFFF; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; z-index: 5; padding: 0; }
+.cd-heart-btn:hover { border-color: #D92D20; transform: scale(1.1); }
+.cd-heart-btn.saved { background: #FEE4E2; border-color: #D92D20; }
+.cd-heart-btn .material-symbols-outlined { font-size: 18px; color: #98A2B3; font-variation-settings: 'FILL' 0, 'wght' 500; }
+.cd-heart-btn.saved .material-symbols-outlined { color: #D92D20; font-variation-settings: 'FILL' 1, 'wght' 600; }
+.cd-store-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 20px; font-size: 12px; font-weight: 500; color: #334155; width: fit-content; max-width: 100%; }
 
 </style>
 
@@ -331,33 +326,17 @@ button,a{-webkit-tap-highlight-color:transparent;}
     </a>
 
     <nav class="cd-desktop-nav" aria-label="Main Navigation">
-      <a href="index.html" class="cd-nav-link active">
-        <span class="material-symbols-outlined">home</span><span>Home</span>
-      </a>
-      <a href="blog.html" class="cd-nav-link">
-        <span class="material-symbols-outlined">article</span><span>Blog</span>
-      </a>
-      <a href="#market-deals" class="cd-nav-link">
-        <span class="material-symbols-outlined">local_offer</span><span>Deals</span>
-      </a>
-      <a href="#smart-tools" class="cd-nav-link">
-        <span class="material-symbols-outlined">construction</span><span>Tools</span>
-      </a>
-      <a href="#favorites-section" class="cd-nav-link">
-        <span class="material-symbols-outlined">favorite</span><span>Favorites</span>
-      </a>
+      <a href="index.html" class="cd-nav-link active"><span class="material-symbols-outlined">home</span><span>Home</span></a>
+      <a href="blog.html" class="cd-nav-link"><span class="material-symbols-outlined">article</span><span>Blog</span></a>
+      <a href="#market-deals" class="cd-nav-link"><span class="material-symbols-outlined">local_offer</span><span>Deals</span></a>
+      <a href="#smart-tools" class="cd-nav-link"><span class="material-symbols-outlined">construction</span><span>Tools</span></a>
+      <a href="#favorites-section" class="cd-nav-link"><span class="material-symbols-outlined">favorite</span><span>Favorites</span></a>
     </nav>
 
     <div class="cd-header-actions">
-      <a href="index.html" class="cd-mobile-home" aria-label="Home">
-        <span class="material-symbols-outlined">home</span>
-      </a>
-      <a href="customer.html" class="cd-nav-link cd-account-desktop" aria-label="Account">
-        <span class="material-symbols-outlined">person</span><span>Account</span>
-      </a>
-      <button id="burgerMenuBtn" type="button" class="cd-menu-button" aria-label="Open Navigation Menu">
-        <span class="material-symbols-outlined">menu</span>
-      </button>
+      <a href="index.html" class="cd-mobile-home" aria-label="Home"><span class="material-symbols-outlined">home</span></a>
+      <a href="customer.html" class="cd-nav-link cd-account-desktop" aria-label="Account"><span class="material-symbols-outlined">person</span><span>Account</span></a>
+      <button id="burgerMenuBtn" type="button" class="cd-menu-button" aria-label="Open Navigation Menu"><span class="material-symbols-outlined">menu</span></button>
     </div>
 
   </div>
@@ -366,8 +345,8 @@ button,a{-webkit-tap-highlight-color:transparent;}
 <main class="w-full pt-16 pb-24 bg-background">
 <div class="flex flex-col w-full">
 
-<!-- HERO SECTION -->
-<section class="relative w-full bg-gradient-to-b from-surface via-surface-container-low/40 to-background overflow-hidden pb-6 pt-4 px-4">
+<!-- HERO SECTION: صرف سلائیڈر، کوئی بٹن نہیں -->
+<section class="relative w-full bg-gradient-to-b from-surface via-surface-container-low/40 to-background overflow-hidden pb-4 pt-4 px-4">
   <div id="cd-hero-slider" class="cd-hero-slider">
     <div class="cd-hero-track">
       <div class="cd-hero-slide cd-slide-1" data-index="0"></div>
@@ -386,36 +365,10 @@ button,a{-webkit-tap-highlight-color:transparent;}
       <button class="cd-hero-dot" data-slide="4" aria-label="Slide 5" type="button"></button>
     </div>
   </div>
-
-  <div class="flex flex-col w-full gap-2.5 pt-4">
-    <a class="w-full py-3 px-4 rounded-xl bg-primary-container text-on-primary text-[14px] shadow-md shadow-primary-container/25 flex items-center justify-center gap-2 font-semibold active:scale-[0.99] transition-transform" href="#market-deals">
-      <span>Explore Verified Deals</span>
-      <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-    </a>
-    <a class="w-full py-3 px-4 rounded-xl bg-surface-container-lowest text-on-surface text-[14px] border border-surface-container-high flex items-center justify-center gap-2 font-semibold shadow-sm active:bg-surface-container-low transition-colors" href="#smart-tools">
-      <span class="material-symbols-outlined text-[18px] text-primary">construction</span>
-      <span>Try Smart Tools</span>
-    </a>
-  </div>
-
-  <div class="flex items-center justify-between w-full pt-3 text-on-surface-variant border-t border-surface-container-high/60 mt-4">
-    <div class="inline-flex items-center gap-1">
-      <span class="material-symbols-outlined text-[16px] text-savings-green font-bold">check_circle</span>
-      <span class="text-[12px] font-medium text-on-surface">Verified</span>
-    </div>
-    <div class="inline-flex items-center gap-1">
-      <span class="material-symbols-outlined text-[16px] text-savings-green font-bold">check_circle</span>
-      <span class="text-[12px] font-medium text-on-surface">Real Savings</span>
-    </div>
-    <div class="inline-flex items-center gap-1">
-      <span class="material-symbols-outlined text-[16px] text-savings-green font-bold">check_circle</span>
-      <span class="text-[12px] font-medium text-on-surface">Trusted Stores</span>
-    </div>
-  </div>
 </section>
 
 <!-- MARKET DEALS SECTION -->
-<section id="market-deals" class="w-full px-4 py-5 space-y-4">
+<section id="market-deals" class="w-full px-4 py-4 space-y-4">
   
   <div class="flex flex-col gap-1">
     <div class="inline-flex items-center gap-1 text-primary text-[11px] font-bold tracking-wider uppercase">
@@ -429,21 +382,21 @@ button,a{-webkit-tap-highlight-color:transparent;}
     </div>
   </div>
 
-  <!-- TOP PICKS SECTION -->
+  <!-- TOP PICKS SECTION (Horizontal Scrolling, NO price/discount) -->
   <div class="flex flex-col gap-2">
     <div class="flex items-center justify-between">
       <h3 class="text-[16px] font-bold text-on-surface flex items-center gap-1">
         <span class="text-[18px]">🔥</span> Top Picks
       </h3>
-      <div class="flex items-center gap-1 text-[11px] font-bold text-primary">
-        <span class="cd-countdown-box">11</span>
+      <div class="flex items-center gap-1 text-[12px] font-bold text-white" id="cd-countdown">
+        <span class="cd-countdown-box">00</span>
         <span>:</span>
-        <span class="cd-countdown-box">46</span>
+        <span class="cd-countdown-box">00</span>
         <span>:</span>
-        <span class="cd-countdown-box">28</span>
+        <span class="cd-countdown-box">00</span>
       </div>
     </div>
-    <div id="topPicksContainer" class="flex gap-3 overflow-x-auto pb-2 scrollbar-none -mx-4 px-4"></div>
+    <div id="topPicksContainer" class="flex gap-2 overflow-x-auto pb-2 scrollbar-none -mx-4 px-4"></div>
   </div>
 
   <!-- STYLISH CATEGORIES -->
@@ -492,6 +445,11 @@ button,a{-webkit-tap-highlight-color:transparent;}
     <h2 class="text-[20px] font-bold text-on-surface tracking-tight">Check Before You Buy</h2>
     <p class="text-[13px] text-on-surface-variant">Free calculators to help you shop smarter and save more.</p>
   </div>
+  <!-- "Try Smart Tools" button shifted here -->
+  <a class="w-full py-3 px-4 rounded-xl bg-surface-container-lowest text-on-surface text-[14px] border border-surface-container-high flex items-center justify-center gap-2 font-semibold shadow-sm active:bg-surface-container-low transition-colors" href="#tool-dealscore">
+    <span class="material-symbols-outlined text-[18px] text-primary">construction</span>
+    <span>Try Smart Tools</span>
+  </a>
   <div id="tool-dealscore"></div>
   <div id="tool-finalprice"></div>
   <div id="tool-currency"></div>
@@ -508,12 +466,8 @@ button,a{-webkit-tap-highlight-color:transparent;}
       <a class="flex items-center gap-2.5 group py-1 w-fit" href="index.html">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" class="h-12 sm:h-14 w-auto">
           <defs>
-            <linearGradient id="cdPrimaryGradFooter" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#155EEF"/><stop offset="100%" stop-color="#0047C1"/>
-            </linearGradient>
-            <linearGradient id="cdGreenGradFooter" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#70FDA7"/><stop offset="100%" stop-color="#12B76A"/>
-            </linearGradient>
+            <linearGradient id="cdPrimaryGradFooter" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#155EEF"/><stop offset="100%" stop-color="#0047C1"/></linearGradient>
+            <linearGradient id="cdGreenGradFooter" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#70FDA7"/><stop offset="100%" stop-color="#12B76A"/></linearGradient>
           </defs>
           <path d="M26 4C14 4 6 8 6 8C6 24 10 42 26 56C42 42 46 24 46 8C46 8 38 4 26 4Z" fill="url(#cdPrimaryGradFooter)"/>
           <path d="M18 28L23 33L34 20" stroke="url(#cdGreenGradFooter)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -583,7 +537,7 @@ button,a{-webkit-tap-highlight-color:transparent;}
 </nav>
 
 <script src="hero-slider.js"></script>
-<script src="app.js?v=16"></script>
+<script src="app.js?v=20"></script>
 
 </body>
 </html>
