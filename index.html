@@ -96,22 +96,18 @@ body.cd-menu-open{overflow-y:hidden !important;}
 img,svg{max-width:100%;}
 button,a{-webkit-tap-highlight-color:transparent;}
 
-/* ====== TOP PICKS PREMIUM CARD CONTAINER ====== */
+/* ====== TOP PICKS PREMIUM (Full-width, No Gap) ====== */
 .cd-top-picks-section {
-    background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
-    border-radius: 24px;
-    padding: 18px 16px;
-    border: 1px solid #EEF2F7;
-    box-shadow: 0 6px 24px rgba(16, 24, 40, 0.05);
-    margin: 0 4px;
+    background: #ffffff;
+    padding: 16px 0 18px 0;
+    margin: 0;
 }
 .cd-top-picks-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-bottom: 14px;
-    margin-bottom: 14px;
-    border-bottom: 1px dashed #E2E8F0;
+    padding: 0 16px 12px 16px;
+    margin-bottom: 12px;
 }
 .cd-countdown-box {
     background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
@@ -143,14 +139,19 @@ button,a{-webkit-tap-highlight-color:transparent;}
 .cd-top-pick-title { font-size: 11px; font-weight: 600; color: #0B1C30; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 4px; height: 30px; }
 .cd-top-pick-store { font-size: 10px; color: #98A2B3; font-weight: 500; }
 
-/* ====== STYLISH CATEGORIES ====== */
+/* ====== STYLISH CATEGORIES (No Lines/Borders) ====== */
 .cd-cat-btn {
     display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 999px;
-    font-size: 13px; font-weight: 600; color: #434655; background: #ffffff; border: 1px solid #E2E8F0;
+    font-size: 13px; font-weight: 600; color: #434655; background: #ffffff; border: none;
     cursor: pointer; transition: all 0.2s ease; flex-shrink: 0; white-space: nowrap;
+    box-shadow: 0 1px 3px rgba(16, 24, 40, 0.04);
 }
-.cd-cat-btn:hover { background: #eff4ff; border-color: #c3c6d8; }
-.cd-cat-btn.active { background: linear-gradient(135deg, #155EEF 0%, #0047C1 100%); color: #ffffff; border-color: #155eef; box-shadow: 0 4px 12px rgba(21, 94, 239, 0.3); }
+.cd-cat-btn:hover { background: #eff4ff; color: #155eef; }
+.cd-cat-btn.active {
+    background: linear-gradient(135deg, #155EEF 0%, #0047C1 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(21, 94, 239, 0.3);
+}
 .cd-cat-btn .material-symbols-outlined { font-size: 16px; }
 
 /* ====== EXACT 3D FROSTED BUTTONS ====== */
@@ -211,10 +212,12 @@ button,a{-webkit-tap-highlight-color:transparent;}
 .cd-flag-chip:hover { background: #E8EEF7; }
 .cd-flag-chip.active { background: linear-gradient(135deg, #155EEF 0%, #0047C1 100%); border-color:#0047c1; color:#fff; box-shadow: 0 4px 12px rgba(21, 94, 239, 0.35); }
 
-/* Hide any default scrollbar lines/borders in country scroller */
+/* Hide any default scrollbar lines/borders */
 #cdPopularCountries::-webkit-scrollbar,
-#cdMoreCountryList::-webkit-scrollbar { display: none; }
-#cdPopularCountries, #cdMoreCountryList { -ms-overflow-style: none; scrollbar-width: none; }
+#cdMoreCountryList::-webkit-scrollbar,
+#topPicksContainer::-webkit-scrollbar,
+#cdCategorySelector::-webkit-scrollbar { display: none; }
+#cdPopularCountries, #cdMoreCountryList, #topPicksContainer, #cdCategorySelector { -ms-overflow-style: none; scrollbar-width: none; }
 
 </style>
 
@@ -257,8 +260,8 @@ button,a{-webkit-tap-highlight-color:transparent;}
 <main class="w-full pt-16 pb-24 bg-background">
 <div class="flex flex-col w-full">
 
-<!-- 1. HERO SECTION -->
-<section class="relative w-full bg-gradient-to-b from-surface via-surface-container-low/40 to-background overflow-hidden pb-5 pt-5 px-4">
+<!-- 1. HERO SECTION (No Bottom Gap) -->
+<section class="relative w-full bg-gradient-to-b from-surface via-surface-container-low/40 to-background overflow-hidden pb-0 pt-3 px-4">
   <div id="cd-hero-slider" class="cd-hero-slider">
     <div class="cd-hero-track">
       <div class="cd-hero-slide cd-slide-1" data-index="0"></div>
@@ -279,12 +282,12 @@ button,a{-webkit-tap-highlight-color:transparent;}
   </div>
 </section>
 
-<!-- 2. 🔥 TOP PICKS — Premium Card Container -->
-<section class="w-full px-4 pb-2">
+<!-- 2. TOP PICKS — Full Width, No Gap -->
+<section class="w-full">
   <div class="cd-top-picks-section">
     <div class="cd-top-picks-header">
-      <h3 class="text-[17px] font-bold text-on-surface flex items-center gap-1.5">
-        <span class="text-[20px]">🔥</span> Top Picks
+      <h3 class="text-[18px] font-bold text-on-surface flex items-center gap-1.5">
+        <span class="text-[22px]">🔥</span> Top Picks
       </h3>
       <div class="flex items-center gap-1 text-[12px] font-bold text-white" id="cd-countdown">
         <span class="cd-countdown-box">00</span>
@@ -294,7 +297,7 @@ button,a{-webkit-tap-highlight-color:transparent;}
         <span class="cd-countdown-box">00</span>
       </div>
     </div>
-    <div id="topPicksContainer" class="flex gap-2.5 overflow-x-auto pb-1 scrollbar-none"></div>
+    <div id="topPicksContainer" class="flex gap-3 overflow-x-auto pb-1" style="padding-left:16px; padding-right:16px;"></div>
   </div>
 </section>
 
@@ -313,10 +316,10 @@ button,a{-webkit-tap-highlight-color:transparent;}
   </div>
 
   <!-- Country Selector (app.js injects here, no border lines) -->
-  <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none" style="display:none !important;"></div>
+  <div class="flex items-center gap-2 overflow-x-auto pb-1" style="display:none !important;"></div>
 
-  <!-- Categories -->
-  <div id="cdCategorySelector" class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none -mx-4 px-4"></div>
+  <!-- Categories (No Lines) -->
+  <div id="cdCategorySelector" class="flex items-center gap-2 overflow-x-auto pb-1 -mx-4 px-4"></div>
 
   <!-- Deals Container -->
   <div id="discountsContainer" class="flex flex-col gap-3"></div>
@@ -425,7 +428,7 @@ button,a{-webkit-tap-highlight-color:transparent;}
 </nav>
 
 <script src="hero-slider.js"></script>
-<script src="app.js?v=23"></script>
+<script src="app.js?v=24"></script>
 
 </body>
 </html>
