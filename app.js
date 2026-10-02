@@ -1,4 +1,4 @@
-// CheckerDiscount - Complete App.js v23.0 (Final - Clean UI, No Lines, Premium Top Picks)
+// CheckerDiscount - Complete App.js v24.0 (Final - Full Width Top Picks, No Lines)
 // Amazon-Safe: No promotional tags, no views, no helpful votes.
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
@@ -136,6 +136,8 @@ function showToast(message) {
         #market-deals, #favorites-section, #smart-tools { max-width: 1240px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
         #discountsContainer { display: grid !important; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 18px; }
         #discountsContainer > div { height: 100%; }
+        .cd-top-picks-section { max-width: 1240px; margin: 0 auto; }
+        #topPicksContainer { padding-left: 24px !important; padding-right: 24px !important; }
       }
       @media (min-width: 1200px) { #discountsContainer { grid-template-columns: repeat(3, 1fr); } }
       .cd-comparison-img { width: 72px; height: 72px; border-radius: 12px; background: #f6f8fc; border: 1px solid #e4e7ec; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
