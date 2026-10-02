@@ -1,4 +1,4 @@
-// CheckerDiscount - Complete App.js v14.0 (New Stylish UI)
+// CheckerDiscount - Complete App.js v15.0 (Final - New Stylish UI)
 // Amazon-Safe: No promotional tags, no views, no helpful votes.
 // Country Selector + Trust Badge + 5 Tools + Watchlist + Blog
 
@@ -21,12 +21,6 @@ async function loadLiveRates() {
     } catch (e) { console.warn('Live rates unavailable'); }
 }
 
-function convertToAED(amount, currency) {
-    const rates = LIVE_RATES || FALLBACK_RATES;
-    const rate = rates[currency] || FALLBACK_RATES[currency] || 1;
-    return Number(amount) * rate;
-}
-
 function getRate(from, to) {
     const rates = LIVE_RATES || FALLBACK_RATES;
     const fromRate = rates[from] || FALLBACK_RATES[from] || 1;
@@ -34,20 +28,12 @@ function getRate(from, to) {
     return toRate / fromRate;
 }
 
-function formatAED(value) {
-    const num = Number(value);
-    if (!Number.isFinite(num)) return "—";
-    return `AED ${num.toFixed(2)}`;
-}
-
 // ========== TITLE CLEANER (Amazon Policy Safe) ==========
 function cleanTitle(title) {
     if (!title) return "";
     let cleaned = String(title);
-
     cleaned = cleaned.replace(/\s*[-–—]?\s*\d+(\.\d+)?\s*%\s*(off|OFF|Off|discount|DISCOUNT|Discount)?\s*/g, ' ');
     cleaned = cleaned.replace(/[⭐🔥✅❌💥🎉🎁💯🛒💰🏷️✨🌟💫]/g, '');
-
     const promoWords = [
         'best seller', 'bestseller', 'free shipping', 'limited time',
         'hot deal', 'hot sale', 'clearance', 'special offer',
@@ -57,11 +43,9 @@ function cleanTitle(title) {
         const regex = new RegExp(`\\b${word}\\b`, 'gi');
         cleaned = cleaned.replace(regex, '');
     });
-
     cleaned = cleaned.replace(/\s*[-–—]\s*$/, '');
     cleaned = cleaned.replace(/\s*[-–—]\s*(?=[,])/g, '');
     cleaned = cleaned.replace(/\s+/g, ' ').trim();
-
     return cleaned;
 }
 
@@ -80,50 +64,6 @@ function getTrustBadge(deal) {
         bgClass: 'bg-warning-amber-subtle', textClass: 'text-warning-amber',
         borderClass: 'border-warning-amber/40'
     };
-}
-
-// ========== VIEWS (internal only, not displayed) ==========
-function getDealViews(dealId, deal) {
-    if (deal && deal.views) return Number(deal.views);
-    if (!dealId) return 0;
-    try {
-        const views = localStorage.getItem(`cd_views_${dealId}`);
-        return views ? parseInt(views) : 0;
-    } catch (e) { return 0; }
-}
-
-function incrementDealViews(dealId) {
-    if (!dealId) return;
-    try {
-        const current = getDealViews(dealId);
-        localStorage.setItem(`cd_views_${dealId}`, current + 1);
-    } catch (e) {}
-}
-
-function formatViews(n) {
-    if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
-    if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
-    return n.toString();
-}
-
-// ========== RATING (internal only, not displayed on cards) ==========
-function getDealRating(dealId) {
-    if (!dealId) return { up: 0, down: 0, userVote: null };
-    try {
-        const data = localStorage.getItem(`cd_rating_${dealId}`);
-        return data ? JSON.parse(data) : { up: 0, down: 0, userVote: null };
-    } catch (e) { return { up: 0, down: 0, userVote: null }; }
-}
-
-function saveDealRating(dealId, rating) {
-    if (!dealId) return;
-    try { localStorage.setItem(`cd_rating_${dealId}`, JSON.stringify(rating)); } catch (e) {}
-}
-
-function calculateRatingPercent(rating) {
-    const total = rating.up + rating.down;
-    if (total === 0) return 0;
-    return Math.round((rating.up / total) * 100);
 }
 
 // ========== WATCHLIST ==========
@@ -147,7 +87,6 @@ function toggleWatchlist(dealId, dealData) {
     if (!dealId) return;
     let list = getWatchlist();
     const exists = list.some(item => String(item.id) === String(dealId));
-
     if (exists) {
         list = list.filter(item => String(item.id) !== String(dealId));
         saveWatchlist(list);
@@ -168,7 +107,6 @@ function toggleWatchlist(dealId, dealData) {
         saveWatchlist(list);
         showToast('❤️ Saved to Favorites!');
     }
-
     updateFavCount();
     renderFavorites();
     loadDeals(currentCategory);
@@ -195,9 +133,7 @@ function updateFavCount() {
 function renderFavorites() {
     const container = document.getElementById('favoritesList');
     if (!container) return;
-
     const list = getWatchlist();
-
     if (list.length === 0) {
         container.innerHTML = `
             <div class="text-center py-6 text-on-surface-variant text-[13px]">
@@ -206,7 +142,6 @@ function renderFavorites() {
             </div>`;
         return;
     }
-
     container.innerHTML = list.map(item => `
         <div class="flex gap-3 p-3 rounded-xl border border-surface-container bg-surface-subtle/50">
             <img src="${escapeAttribute(item.image_url || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=100')}" 
@@ -234,19 +169,17 @@ function renderFavorites() {
 function showToast(message) {
     const existing = document.getElementById('cd-toast');
     if (existing) existing.remove();
-
     const toast = document.createElement('div');
     toast.id = 'cd-toast';
     toast.className = 'fixed bottom-28 left-1/2 -translate-x-1/2 z-[200] bg-navy-deep text-white px-5 py-3 rounded-xl shadow-2xl text-[13px] font-semibold transition-all duration-300 opacity-0 pointer-events-none';
     toast.textContent = message;
     document.body.appendChild(toast);
-
     setTimeout(() => { toast.style.opacity = '1'; toast.style.transform = 'translateX(-50%) translateY(-10px)'; }, 10);
     setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(-50%) translateY(0)'; }, 2200);
     setTimeout(() => { toast.remove(); }, 2600);
 }
 
-// ========== DESKTOP CSS ==========
+// ========== DESKTOP CSS & NEW STYLISH CSS ==========
 (function injectDesktopCSS(){
     if (window.__cdDesktopCSS) return;
     window.__cdDesktopCSS = true;
@@ -261,8 +194,6 @@ function showToast(message) {
       @media (min-width: 1200px) { #discountsContainer { grid-template-columns: repeat(3, 1fr); } }
       .cd-flag-chip { display:inline-flex; align-items:center; justify-content:center; width:44px; height:40px; border-radius:12px; background:#eef2f6; border:2px solid transparent; font-size:22px; cursor:pointer; }
       .cd-flag-chip.active { background:#155eef; border-color:#0047c1; color:#fff; }
-      .cd-best-deal { background: linear-gradient(135deg, #ecfdf3 0%, #d1fadf 100%); border: 2px solid #12b76a; border-radius: 16px; padding: 14px; margin-bottom: 14px; position: relative; }
-      .cd-best-deal-badge { position: absolute; top: -10px; left: 12px; background: #12b76a; color: #fff; font-size: 10px; font-weight: 800; padding: 3px 9px; border-radius: 999px; letter-spacing: 0.05em; text-transform: uppercase; }
       .cd-comparison-img { width: 72px; height: 72px; border-radius: 12px; background: #f6f8fc; border: 1px solid #e4e7ec; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
       .cd-comparison-img img { width: 100%; height: 100%; object-fit: cover; }
       .cd-card { background: #FFFFFF; border-radius: 18px; padding: 16px; box-shadow: 0 2px 12px rgba(16, 24, 40, 0.06); border: 1px solid #F0F2F5; display: flex; flex-direction: column; gap: 12px; position: relative; transition: box-shadow 0.2s ease; }
@@ -287,6 +218,12 @@ function showToast(message) {
       .cd-btn-check:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(21, 94, 239, 0.4); }
       
       .cd-store-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; background: #F9FAFB; border: 1px solid #E4E7EC; border-radius: 10px; font-size: 11px; color: #475467; width: fit-content; max-width: 100%; }
+      
+      /* ====== NEW STYLISH CATEGORIES (Temu Style) ====== */
+      .cd-cat-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 999px; font-size: 13px; font-weight: 600; color: #434655; background: #ffffff; border: 1px solid #E2E8F0; cursor: pointer; transition: all 0.2s ease; }
+      .cd-cat-btn:hover { background: #eff4ff; border-color: #c3c6d8; }
+      .cd-cat-btn.active { background: #155eef; color: #ffffff; border-color: #155eef; box-shadow: 0 4px 12px rgba(21, 94, 239, 0.3); }
+      .cd-cat-btn .material-symbols-outlined { font-size: 16px; }
       
       @media (max-width: 640px) {
         .cd-card { padding: 14px; border-radius: 16px; }
@@ -368,14 +305,11 @@ function setupCountrySystem() {
     const marketSection = document.getElementById("market-deals");
     if (!marketSection) return;
     if (document.getElementById("cdCountrySelector")) return;
-
     const filterRow = marketSection.querySelector(".overflow-x-auto");
     if (!filterRow) return;
-
     const wrapper = document.createElement("div");
     wrapper.id = "cdCountrySelector";
     wrapper.className = "mb-2";
-
     wrapper.innerHTML = `
         <div class="bg-surface-container-lowest rounded-2xl border border-surface-container p-4 shadow-sm">
             <div class="flex items-center justify-between gap-3 mb-3">
@@ -394,14 +328,11 @@ function setupCountrySystem() {
         </div>
         <div id="cdCategorySelector" class="mt-3"></div>
     `;
-
     filterRow.parentNode.insertBefore(wrapper, filterRow);
     filterRow.style.display = "none";
-
     renderCountryButtons();
     renderCountryName();
     renderCountryCategories();
-
     const moreBtn = document.getElementById("cdMoreCountriesBtn");
     if (moreBtn) {
         moreBtn.addEventListener("click", () => {
@@ -419,7 +350,6 @@ function renderCountryButtons() {
     if (!popular || !more) return;
     popular.innerHTML = "";
     more.innerHTML = "";
-
     const allChip = document.createElement("button");
     allChip.type = "button";
     allChip.className = "cd-flag-chip" + (currentCountry === "ALL" ? " active" : "");
@@ -427,13 +357,11 @@ function renderCountryButtons() {
     allChip.title = "All Countries";
     allChip.addEventListener("click", () => selectCountry("ALL"));
     popular.appendChild(allChip);
-
     POPULAR_COUNTRIES.forEach(code => {
         const country = COUNTRIES[code];
         if (!country) return;
         popular.appendChild(createCountryButton(country));
     });
-
     Object.keys(COUNTRIES).filter(code => !POPULAR_COUNTRIES.includes(code)).forEach(code => {
         const country = COUNTRIES[code];
         if (!country) return;
@@ -486,7 +414,6 @@ async function fetchDealsAndInit() {
 
 async function fetchCountryDeals() {
     if (!Array.isArray(globalDeals)) globalDeals = [];
-
     if (currentCountry === "ALL") {
         try {
             const response = await fetch(`${API_BASE}/api/deals`);
@@ -508,7 +435,6 @@ async function fetchCountryDeals() {
             }
         } catch (e) { console.warn("Country API failed:", e); }
     }
-
     globalDeals = globalDeals.map(normalizeDeal);
     renderCountryCategories();
     loadSpotlight();
@@ -524,11 +450,9 @@ function normalizeDeal(deal) {
     copy.store = copy.store || copy.store_name || copy.storeName || copy.retailer || copy.retailer_name || "";
     copy.store_type = copy.store_type || "third-party";
     copy.views = copy.views || 0;
-
     if (copy.title) {
         copy.title = cleanTitle(copy.title);
     }
-
     return copy;
 }
 
@@ -554,16 +478,14 @@ function getDealCountry(deal) {
 function renderCountryCategories() {
     const container = document.getElementById("cdCategorySelector");
     if (!container) return;
-
     const scoped = currentCountry === "ALL" ? globalDeals : globalDeals.filter(d => getDealCountry(d) === currentCountry);
     const categories = [...new Set(scoped.map(d => String(d.category || "").trim()).filter(Boolean))];
-
+    
     // ✅ NEW STYLISH CATEGORIES (Temu Style)
     let html = `<div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none -mx-4 px-4">
         <button type="button" data-category="all" class="cd-cat-btn active flex-shrink-0">
             <span class="material-symbols-outlined text-[16px]">grid_view</span> All (${scoped.length})
         </button>`;
-
     categories.forEach(category => {
         const count = scoped.filter(d => String(d.category || "").toLowerCase() === category.toLowerCase()).length;
         html += `<button type="button" data-category="${escapeAttribute(category)}" class="cd-cat-btn flex-shrink-0">
@@ -571,10 +493,8 @@ function renderCountryCategories() {
         </button>`;
     });
     html += `</div>`;
-
     if (categories.length === 0) html = `<div class="text-[12px] text-on-surface-variant">No categories available yet.</div>`;
     container.innerHTML = html;
-
     const buttons = container.querySelectorAll(".cd-cat-btn");
     buttons.forEach(button => {
         button.addEventListener("click", () => {
@@ -593,18 +513,6 @@ function getDealCurrency(deal) {
     return "USD";
 }
 
-function formatPrice(value, currency) {
-    const number = Number(value);
-    if (!Number.isFinite(number)) return "—";
-    const curr = currency || "USD";
-    try {
-        return new Intl.NumberFormat(undefined, { style: "currency", currency: curr, minimumFractionDigits: curr === "JPY" || curr === "KRW" ? 0 : 2, maximumFractionDigits: curr === "JPY" || curr === "KRW" ? 0 : 2 }).format(number);
-    } catch (e) {
-        const country = Object.values(COUNTRIES).find(c => c.currency === curr);
-        return `${country ? country.symbol : curr} ${number.toFixed(2)}`;
-    }
-}
-
 function getDealFlag(deal) {
     const code = getDealCountry(deal);
     return COUNTRIES[code]?.flag || "🌐";
@@ -618,20 +526,15 @@ function getDealCountryName(deal) {
 function loadSpotlight() {
     const deals = globalDeals;
     if (!deals.length) return;
-
     let featuredDeal = deals.find(d => Number(d.is_featured) === 1);
     if (!featuredDeal) featuredDeal = [...deals].sort((a, b) => (Number(b.discount_percent) || 0) - (Number(a.discount_percent) || 0))[0];
-
     const spotlightContainer = document.querySelector(".relative.w-full.bg-gradient-to-b");
     if (!spotlightContainer || !featuredDeal) return;
-
     const imgSrc = featuredDeal.image_url || featuredDeal.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
     const rating = Number(featuredDeal.rating || 0);
     const hasRating = rating > 0;
-
     const showcaseBox = spotlightContainer.querySelector(".w-full.mt-2.bg-surface-container-lowest");
     if (!showcaseBox) return;
-
     showcaseBox.innerHTML = `
       <div class="flex items-center justify-between gap-2 pb-3 border-b border-surface-container-low">
         <div class="flex items-center gap-1 text-primary font-badge-caps text-[11px] font-bold uppercase tracking-wider">
@@ -676,13 +579,10 @@ function loadSpotlight() {
 function loadDeals(filter = "all") {
     const container = document.getElementById("discountsContainer");
     if (!container) return;
-
     let deals = [...globalDeals];
     if (currentCountry !== "ALL") deals = deals.filter(d => getDealCountry(d) === currentCountry);
     if (filter !== "all") deals = deals.filter(d => String(d.category || "").toLowerCase() === String(filter).toLowerCase());
-
     container.innerHTML = "";
-
     if (deals.length === 0) {
         const country = COUNTRIES[currentCountry];
         container.innerHTML = `<div class="p-6 text-center text-on-surface-variant bg-surface-container-lowest rounded-2xl border border-surface-container">
@@ -692,7 +592,6 @@ function loadDeals(filter = "all") {
         </div>`;
         return;
     }
-
     deals.forEach(deal => {
         const imgSrc = deal.image_url || deal.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
         const card = document.createElement("div");
@@ -701,7 +600,6 @@ function loadDeals(filter = "all") {
         const storeName = String(deal.store || deal.store_name || deal.storeName || deal.retailer || deal.retailer_name || "Store").trim();
         const saved = isInWatchlist(dealId);
         const trust = getTrustBadge(deal);
-
         const dealDataJson = escapeAttribute(JSON.stringify({
             id: dealId,
             title: deal.title || 'Deal',
@@ -713,7 +611,7 @@ function loadDeals(filter = "all") {
             url: deal.url || '#',
             country: getDealCountry(deal)
         }));
-
+        
         // ✅ NEW STYLISH BUTTONS (Temu Style)
         card.innerHTML = `
           <button class="cd-heart-btn ${saved ? 'saved' : ''}" 
@@ -721,14 +619,12 @@ function loadDeals(filter = "all") {
                   title="${saved ? 'Remove from Favorites' : 'Save to Favorites'}">
             <span class="material-symbols-outlined">favorite</span>
           </button>
-
           <div class="flex items-center gap-2 flex-wrap pr-12">
             <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full ${trust.bgClass} ${trust.textClass} text-[10px] font-bold border ${trust.borderClass}">
               <span class="material-symbols-outlined text-[12px]" style="font-variation-settings:'FILL' 1;">${trust.icon}</span>
               ${trust.label}
             </span>
           </div>
-
           <div class="flex gap-3">
             <div class="w-[76px] h-[76px] rounded-2xl bg-surface-subtle overflow-hidden flex-shrink-0 border border-surface-container flex items-center justify-center">
               <img src="${escapeAttribute(imgSrc)}" class="w-full h-full object-cover" alt="Deal" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400'">
@@ -738,14 +634,12 @@ function loadDeals(filter = "all") {
               <div class="text-[11px] text-on-surface-variant mt-2">Click to check current price</div>
             </div>
           </div>
-
           <div class="cd-store-badge">
             <span class="text-[16px] flex-shrink-0">${getDealFlag(deal)}</span>
             <span class="font-semibold text-on-surface">${escapeHtml(storeName)}</span>
             <span class="text-outline">·</span>
             <span class="truncate">${escapeHtml(getDealCountryName(deal))}</span>
           </div>
-
           <div class="flex items-center gap-2">
             ${dealId ? `<button onclick="openDealComparison('${escapeAttribute(String(dealId))}')" class="cd-btn cd-btn-compare" title="Compare stores">
                 <span class="material-symbols-outlined text-[16px]">compare_arrows</span>
@@ -763,8 +657,6 @@ function loadDeals(filter = "all") {
         container.appendChild(card);
     });
 }
-
-function setupFilters() {}
 
 // ========== COMPARISON MODAL ==========
 async function openDealComparison(dealId) {
@@ -790,22 +682,18 @@ async function openDealComparison(dealId) {
     }
     modal.classList.remove("hidden");
     modal.classList.add("flex");
-
     const content = document.getElementById("cdComparisonContent");
     if (!content) return;
     content.innerHTML = `<div class="text-center py-8 text-on-surface-variant"><span class="material-symbols-outlined animate-spin">progress_activity</span><div class="mt-2">Checking other stores...</div></div>`;
-
     try {
         const response = await fetch(`${API_BASE}/api/deals/${encodeURIComponent(dealId)}/compare`);
         if (!response.ok) throw new Error("Comparison API failed");
         const data = await response.json();
         const comparisons = Array.isArray(data) ? data : (Array.isArray(data.deals) ? data.deals : (Array.isArray(data.offers) ? data.offers : (Array.isArray(data.comparisons) ? data.comparisons : [])));
-
         if (!comparisons.length) {
             content.innerHTML = `<div class="text-center py-8"><div class="text-3xl mb-2">🔎</div><div class="font-semibold text-on-surface">No other store prices found</div><div class="text-[12px] text-on-surface-variant mt-1">Check back later for more options.</div></div>`;
             return;
         }
-
         content.innerHTML = `
             <div class="bg-primary-container/10 border border-primary-container/30 rounded-2xl p-3 mb-4">
                 <div class="flex items-start gap-2">
@@ -820,7 +708,6 @@ async function openDealComparison(dealId) {
             const countryCode = getDealCountry(normalized);
             const imgSrc = normalized.image_url || normalized.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200";
             const trust = getTrustBadge(normalized);
-
             return `<div class="border border-surface-container rounded-2xl p-3 mb-3 hover:border-primary-container/50 transition-colors">
                 <div class="flex items-center gap-3">
                     <div class="cd-comparison-img"><img src="${escapeAttribute(imgSrc)}" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200'"></div>
@@ -842,7 +729,6 @@ async function openDealComparison(dealId) {
                 ${normalized.url ? `<a href="${escapeAttribute(normalized.url)}" target="_blank" rel="noopener noreferrer" class="cd-btn cd-btn-check mt-3 w-full">Check Price at ${escapeHtml(normalized.store || "Store")} <span class="material-symbols-outlined text-[15px]">arrow_forward</span></a>` : ""}
             </div>`;
         }).join("");
-
     } catch (error) {
         console.error("Comparison error:", error);
         content.innerHTML = `<div class="text-center py-8 text-on-surface-variant"><div class="text-2xl mb-2">⚠️</div><div class="font-semibold text-on-surface">Comparison not available</div></div>`;
@@ -902,28 +788,23 @@ function calculateDealScore() {
     const category = document.getElementById('ds-category')?.value || 'general';
     const resultEl = document.getElementById('ds-result');
     if (!resultEl) return;
-
     if (!price || !oldPrice || oldPrice <= price) {
         resultEl.className = 'p-3 rounded-xl bg-error-container text-on-error-container text-[13px]';
         resultEl.textContent = '⚠️ Please enter valid prices (old must be higher)';
         resultEl.classList.remove('hidden');
         return;
     }
-
     const discountPct = ((oldPrice - price) / oldPrice) * 100;
     const avgDiscounts = { general: 25, electronics: 20, home: 30, fashion: 35, beauty: 25 };
     const avg = avgDiscounts[category] || 25;
     let score = Math.min(10, (discountPct / avg) * 7);
     score = Math.round(score * 10) / 10;
-
     let verdict, emoji, colorClass;
     if (score >= 8) { verdict = 'Excellent Deal! Buy Now'; emoji = '🌟'; colorClass = 'bg-savings-green-subtle text-savings-green'; }
     else if (score >= 6) { verdict = 'Good Deal — Worth Buying'; emoji = '✅'; colorClass = 'bg-savings-green-subtle text-savings-green'; }
     else if (score >= 4) { verdict = 'Average — Consider Waiting'; emoji = '⚠️'; colorClass = 'bg-warning-amber-subtle text-warning-amber'; }
     else { verdict = 'Weak Deal — Better Options Likely'; emoji = '❌'; colorClass = 'bg-error-container text-on-error-container'; }
-
     const stars = '⭐'.repeat(Math.round(score / 2)) + '☆'.repeat(5 - Math.round(score / 2));
-
     resultEl.className = `p-3 rounded-xl ${colorClass} text-[13px] space-y-1`;
     resultEl.innerHTML = `
         <div class="font-bold text-[15px]">${emoji} ${score.toFixed(1)} / 10</div>
@@ -968,18 +849,15 @@ function calculateFinalPrice() {
     const vatPct = parseFloat(document.getElementById('fp-vat')?.value) || 0;
     const resultEl = document.getElementById('fp-result');
     if (!resultEl) return;
-
     if (!price) {
         resultEl.className = 'p-3 rounded-xl bg-error-container text-on-error-container text-[13px]';
         resultEl.textContent = '⚠️ Please enter product price';
         resultEl.classList.remove('hidden');
         return;
     }
-
     const subtotal = Math.max(0, price - coupon);
     const vat = subtotal * (vatPct / 100);
     const total = subtotal + vat + shipping;
-
     resultEl.className = 'p-3 rounded-xl bg-savings-green-subtle text-savings-green text-[13px] space-y-1';
     resultEl.innerHTML = `
         <div class="flex justify-between"><span>Product:</span><strong>AED ${price.toFixed(2)}</strong></div>
@@ -997,7 +875,6 @@ function setupCurrencyTool() {
     if (!container) return;
     const uniqueCurrencies = [...new Set(Object.values(COUNTRIES).map(c => c.currency))];
     const opts = uniqueCurrencies.map(c => `<option value="${c}">${c}</option>`).join('');
-
     container.innerHTML = `
         <div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container/60 space-y-3">
             <div class="flex items-center gap-2">
@@ -1032,10 +909,8 @@ function convertCurrency() {
     const to = document.getElementById('cc-to')?.value || 'AED';
     const resultEl = document.getElementById('cc-result');
     if (!resultEl) return;
-
     const rate = getRate(from, to);
     const result = amount * rate;
-
     resultEl.className = 'p-3 rounded-xl bg-primary-container/10 text-primary text-[13px] space-y-1';
     resultEl.innerHTML = `
         <div class="text-[16px] font-bold">${amount.toFixed(2)} ${from} = ${result.toFixed(2)} ${to}</div>
@@ -1079,19 +954,16 @@ function compareUnitPrice() {
     const w2 = parseFloat(document.getElementById('up-w2')?.value) || 0;
     const resultEl = document.getElementById('up-result');
     if (!resultEl) return;
-
     if (!p1 || !w1 || !p2 || !w2) {
         resultEl.className = 'p-3 rounded-xl bg-error-container text-on-error-container text-[13px]';
         resultEl.textContent = '⚠️ Please fill all fields';
         resultEl.classList.remove('hidden');
         return;
     }
-
     const u1 = p1 / w1;
     const u2 = p2 / w2;
     const winner = u1 < u2 ? 'Product 1' : 'Product 2';
     const saving = Math.abs(u1 - u2).toFixed(4);
-
     resultEl.className = 'p-3 rounded-xl bg-savings-green-subtle text-savings-green text-[13px] space-y-1';
     resultEl.innerHTML = `
         <div class="flex justify-between"><span>Product 1:</span><strong>${u1.toFixed(4)} per unit</strong></div>
@@ -1137,7 +1009,6 @@ function checkBestTime() {
     const currentDiscount = parseFloat(document.getElementById('bt-discount')?.value) || 0;
     const resultEl = document.getElementById('bt-result');
     if (!resultEl) return;
-
     const monthData = {
         electronics: { best: 'November (Black Friday)', bestVal: 45, currentMonth: 20 },
         home: { best: 'November (Black Friday)', bestVal: 45, currentMonth: 25 },
@@ -1145,9 +1016,7 @@ function checkBestTime() {
         beauty: { best: 'November (Black Friday)', bestVal: 42, currentMonth: 25 },
         general: { best: 'November (Black Friday)', bestVal: 45, currentMonth: 25 }
     };
-
     const data = monthData[category] || monthData.general;
-
     let verdict, emoji, colorClass;
     if (currentDiscount >= data.bestVal * 0.85) {
         verdict = 'Buy Now — Price is near lowest'; emoji = '🌟';
@@ -1159,7 +1028,6 @@ function checkBestTime() {
         verdict = 'Wait — Better deals come in ' + data.best; emoji = '⏳';
         colorClass = 'bg-warning-amber-subtle text-warning-amber';
     }
-
     resultEl.className = `p-3 rounded-xl ${colorClass} text-[13px] space-y-1`;
     resultEl.innerHTML = `
         <div class="font-bold text-[14px]">${emoji} ${verdict}</div>
@@ -1179,11 +1047,9 @@ function initBurgerMenu() {
     const btn = document.getElementById("burgerMenuBtn");
     if (!btn) return;
     if (document.getElementById("customBurgerMenu")) return;
-
     const menuOverlay = document.createElement("div");
     menuOverlay.id = "customBurgerMenu";
     menuOverlay.className = "fixed inset-0 z-50 bg-navy-deep/60 backdrop-blur-sm hidden transition-opacity duration-300";
-
     menuOverlay.innerHTML = `
         <div class="absolute right-0 top-0 h-full w-[320px] bg-surface-container-lowest shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300">
             <div class="bg-gradient-to-br from-primary-container via-primary to-primary-dark p-5 pb-6 relative overflow-hidden">
@@ -1298,16 +1164,13 @@ function initBurgerMenu() {
             </div>
         </div>
     `;
-
     document.body.appendChild(menuOverlay);
     const drawer = menuOverlay.querySelector("div > div");
-
     btn.addEventListener("click", () => {
         updateFavCount();
         menuOverlay.classList.remove("hidden");
         setTimeout(() => drawer.classList.remove("translate-x-full"), 10);
     });
-
     const closeBtn = document.getElementById("closeBurgerMenu");
     if (closeBtn) closeBtn.addEventListener("click", closeMenu);
     menuOverlay.addEventListener("click", e => { if (e.target === menuOverlay) closeMenu(); });
