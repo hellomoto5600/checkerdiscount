@@ -96,11 +96,92 @@ body.cd-menu-open{overflow-y:hidden !important;}
 img,svg{max-width:100%;}
 button,a{-webkit-tap-highlight-color:transparent;}
 
-/* ====== NEW STYLISH CATEGORIES (Like Temu) ====== */
+/* ====== TOP PICKS SECTION ====== */
+.cd-countdown-box {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    min-width: 26px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3);
+}
+
+.cd-top-pick-card {
+    flex: 0 0 140px;
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #F0F2F5;
+    box-shadow: 0 2px 8px rgba(16, 24, 40, 0.06);
+    transition: all 0.2s ease;
+    position: relative;
+    cursor: pointer;
+}
+.cd-top-pick-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 24, 40, 0.12);
+}
+.cd-top-pick-img {
+    width: 100%;
+    height: 140px;
+    background: #F6F8FC;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.cd-top-pick-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.cd-top-pick-info {
+    padding: 8px;
+}
+.cd-top-pick-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #0B1C30;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 4px;
+    height: 30px;
+}
+.cd-top-pick-price {
+    font-size: 15px;
+    font-weight: 800;
+    color: #EF4444;
+}
+.cd-top-pick-old-price {
+    font-size: 10px;
+    color: #98A2B3;
+    text-decoration: line-through;
+    margin-left: 4px;
+}
+.cd-top-pick-discount {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    color: white;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+}
+
+/* ====== STYLISH CATEGORIES ====== */
 .cd-cat-btn {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     padding: 8px 16px;
     border-radius: 999px;
     font-size: 13px;
@@ -110,6 +191,8 @@ button,a{-webkit-tap-highlight-color:transparent;}
     border: 1px solid #E2E8F0;
     cursor: pointer;
     transition: all 0.2s ease;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 .cd-cat-btn:hover {
     background: #eff4ff;
@@ -123,6 +206,95 @@ button,a{-webkit-tap-highlight-color:transparent;}
 }
 .cd-cat-btn .material-symbols-outlined {
     font-size: 16px;
+}
+
+/* ====== NEW STYLISH BUTTONS (Same Style as Discount Badge) ====== */
+.cd-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 800;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+.cd-btn:active {
+    transform: scale(0.97);
+}
+
+/* Compare Button - Soft Blue */
+.cd-btn-compare {
+    background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
+    color: #1E40AF;
+    flex: 1;
+}
+.cd-btn-compare:hover {
+    background: linear-gradient(135deg, #BFDBFE 0%, #93C5FD 100%);
+    transform: translateY(-1px);
+}
+
+/* Share Button - Soft Green */
+.cd-btn-share {
+    background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+    color: #065F46;
+    flex: 1;
+}
+.cd-btn-share:hover {
+    background: linear-gradient(135deg, #A7F3D0 0%, #6EE7B7 100%);
+    transform: translateY(-1px);
+}
+
+/* Check Price Button - Gold/Yellow (Same as 26% OFF badge) */
+.cd-btn-check {
+    background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
+    color: #78350F;
+    flex: 1.2;
+}
+.cd-btn-check:hover {
+    background: linear-gradient(135deg, #FBBF24 0%, #D97706 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 14px rgba(245, 158, 11, 0.45);
+}
+
+/* Discount Badge on Cards */
+.cd-discount-badge {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%);
+    color: #78350F;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+    z-index: 6;
+}
+
+/* cd-card styles */
+.cd-card { background: #FFFFFF; border-radius: 18px; padding: 16px; box-shadow: 0 2px 12px rgba(16, 24, 40, 0.06); border: 1px solid #F0F2F5; display: flex; flex-direction: column; gap: 12px; position: relative; transition: box-shadow 0.2s ease; }
+.cd-card:hover { box-shadow: 0 6px 24px rgba(16, 24, 40, 0.1); }
+.cd-heart-btn { position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border-radius: 50%; background: #FFFFFF; border: 1.5px solid #E4E7EC; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; z-index: 5; padding: 0; }
+.cd-heart-btn:hover { border-color: #D92D20; transform: scale(1.1); }
+.cd-heart-btn.saved { background: #FEE4E2; border-color: #D92D20; }
+.cd-heart-btn .material-symbols-outlined { font-size: 20px; color: #98A2B3; font-variation-settings: 'FILL' 0, 'wght' 500; }
+.cd-heart-btn.saved .material-symbols-outlined { color: #D92D20; font-variation-settings: 'FILL' 1, 'wght' 600; }
+.cd-store-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; background: #F9FAFB; border: 1px solid #E4E7EC; border-radius: 10px; font-size: 11px; color: #475467; width: fit-content; max-width: 100%; }
+
+@media (max-width: 640px) {
+    .cd-card { padding: 14px; border-radius: 16px; }
+    .cd-btn { font-size: 11px; padding: 7px 10px; border-radius: 8px; }
+    .cd-heart-btn { width: 32px; height: 32px; top: 10px; right: 10px; }
+    .cd-heart-btn .material-symbols-outlined { font-size: 18px; }
+    .cd-top-pick-card { flex: 0 0 130px; }
+    .cd-top-pick-img { height: 130px; }
 }
 
 </style>
@@ -194,7 +366,7 @@ button,a{-webkit-tap-highlight-color:transparent;}
 <main class="w-full pt-16 pb-24 bg-background">
 <div class="flex flex-col w-full">
 
-<!-- HERO SECTION: صرف سلائیڈر، کوئی ٹیکسٹ نہیں -->
+<!-- HERO SECTION -->
 <section class="relative w-full bg-gradient-to-b from-surface via-surface-container-low/40 to-background overflow-hidden pb-6 pt-4 px-4">
   <div id="cd-hero-slider" class="cd-hero-slider">
     <div class="cd-hero-track">
@@ -245,7 +417,6 @@ button,a{-webkit-tap-highlight-color:transparent;}
 <!-- MARKET DEALS SECTION -->
 <section id="market-deals" class="w-full px-4 py-5 space-y-4">
   
-  <!-- Header -->
   <div class="flex flex-col gap-1">
     <div class="inline-flex items-center gap-1 text-primary text-[11px] font-bold tracking-wider uppercase">
       <span class="material-symbols-outlined text-[15px]">radar</span>Deal Discovery
@@ -258,7 +429,27 @@ button,a{-webkit-tap-highlight-color:transparent;}
     </div>
   </div>
 
-  <!-- Deals Container (app.js isko bhar dega) -->
+  <!-- TOP PICKS SECTION -->
+  <div class="flex flex-col gap-2">
+    <div class="flex items-center justify-between">
+      <h3 class="text-[16px] font-bold text-on-surface flex items-center gap-1">
+        <span class="text-[18px]">🔥</span> Top Picks
+      </h3>
+      <div class="flex items-center gap-1 text-[11px] font-bold text-primary">
+        <span class="cd-countdown-box">11</span>
+        <span>:</span>
+        <span class="cd-countdown-box">46</span>
+        <span>:</span>
+        <span class="cd-countdown-box">28</span>
+      </div>
+    </div>
+    <div id="topPicksContainer" class="flex gap-3 overflow-x-auto pb-2 scrollbar-none -mx-4 px-4"></div>
+  </div>
+
+  <!-- STYLISH CATEGORIES -->
+  <div id="cdCategorySelector" class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none -mx-4 px-4"></div>
+
+  <!-- Deals Container -->
   <div id="discountsContainer" class="flex flex-col gap-3"></div>
 
   <div class="p-3 bg-surface-container-low/60 rounded-xl flex items-center justify-between text-[12px] text-on-surface-variant">
@@ -392,7 +583,7 @@ button,a{-webkit-tap-highlight-color:transparent;}
 </nav>
 
 <script src="hero-slider.js"></script>
-<script src="app.js?v=15"></script>
+<script src="app.js?v=16"></script>
 
 </body>
 </html>
