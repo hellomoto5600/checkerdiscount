@@ -108,7 +108,6 @@ button,a{-webkit-tap-highlight-color:transparent;}
     text-align: center;
     box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3);
 }
-
 .cd-top-pick-card {
     flex: 0 0 130px;
     background: white;
@@ -120,159 +119,55 @@ button,a{-webkit-tap-highlight-color:transparent;}
     position: relative;
     cursor: pointer;
 }
-.cd-top-pick-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(16, 24, 40, 0.12);
-}
-.cd-top-pick-img {
-    width: 100%;
-    height: 120px;
-    background: #F6F8FC;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.cd-top-pick-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-.cd-top-pick-info {
-    padding: 6px 8px;
-}
-.cd-top-pick-title {
-    font-size: 10px;
-    font-weight: 600;
-    color: #0B1C30;
-    line-height: 1.3;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    margin-bottom: 3px;
-    height: 26px;
-}
-.cd-top-pick-store {
-    font-size: 9px;
-    color: #98A2B3;
-    font-weight: 500;
-}
+.cd-top-pick-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16, 24, 40, 0.12); }
+.cd-top-pick-img { width: 100%; height: 120px; background: #F6F8FC; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.cd-top-pick-img img { width: 100%; height: 100%; object-fit: cover; }
+.cd-top-pick-info { padding: 6px 8px; }
+.cd-top-pick-title { font-size: 10px; font-weight: 600; color: #0B1C30; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 3px; height: 26px; }
+.cd-top-pick-store { font-size: 9px; color: #98A2B3; font-weight: 500; }
 
 /* ====== STYLISH CATEGORIES ====== */
 .cd-cat-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 8px 16px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #434655;
-    background: #ffffff;
-    border: 1px solid #E2E8F0;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-    white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 5px; padding: 8px 16px; border-radius: 999px;
+    font-size: 13px; font-weight: 600; color: #434655; background: #ffffff; border: 1px solid #E2E8F0;
+    cursor: pointer; transition: all 0.2s ease; flex-shrink: 0; white-space: nowrap;
 }
-.cd-cat-btn:hover {
-    background: #eff4ff;
-    border-color: #c3c6d8;
-}
-.cd-cat-btn.active {
-    background: #155eef;
-    color: #ffffff;
-    border-color: #155eef;
-    box-shadow: 0 4px 12px rgba(21, 94, 239, 0.3);
-}
-.cd-cat-btn .material-symbols-outlined {
-    font-size: 16px;
-}
+.cd-cat-btn:hover { background: #eff4ff; border-color: #c3c6d8; }
+.cd-cat-btn.active { background: #155eef; color: #ffffff; border-color: #155eef; box-shadow: 0 4px 12px rgba(21, 94, 239, 0.3); }
+.cd-cat-btn .material-symbols-outlined { font-size: 16px; }
 
 /* ====== EXACT 3D FROSTED BUTTONS ====== */
-.cd-actions-row { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr 1.3fr; 
-    gap: 10px; 
-    align-items: center; 
-    margin-top: 4px; 
-}
+.cd-actions-row { display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 10px; align-items: center; margin-top: 4px; }
 .cd-btn-compare {
     background: linear-gradient(135deg, rgba(239, 246, 255, 0.9) 0%, rgba(219, 234, 254, 0.9) 100%);
-    border: 1px solid #bfdbfe;
-    color: #1e40af;
-    padding: 12px 14px;
-    border-radius: 30px;
-    font-size: 13px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 2px 5px rgba(59, 130, 246, 0.15);
+    border: 1px solid #bfdbfe; color: #1e40af; padding: 12px 14px; border-radius: 30px;
+    font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;
+    cursor: pointer; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 2px 5px rgba(59, 130, 246, 0.15);
     transition: all 0.2s ease;
 }
-.cd-btn-compare:hover {
-    background: linear-gradient(135deg, rgba(219, 234, 254, 1) 0%, rgba(191, 219, 254, 1) 100%);
-    transform: translateY(-1px);
-}
+.cd-btn-compare:hover { background: linear-gradient(135deg, rgba(219, 234, 254, 1) 0%, rgba(191, 219, 254, 1) 100%); transform: translateY(-1px); }
 .cd-btn-share {
     background: linear-gradient(135deg, rgba(240, 253, 244, 0.9) 0%, rgba(220, 252, 231, 0.9) 100%);
-    border: 1px solid #bbf7d0;
-    color: #166534;
-    padding: 12px 14px;
-    border-radius: 30px;
-    font-size: 13px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 2px 5px rgba(34, 197, 94, 0.15);
+    border: 1px solid #bbf7d0; color: #166534; padding: 12px 14px; border-radius: 30px;
+    font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;
+    cursor: pointer; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 2px 5px rgba(34, 197, 94, 0.15);
     transition: all 0.2s ease;
 }
-.cd-btn-share:hover {
-    background: linear-gradient(135deg, rgba(220, 252, 231, 1) 0%, rgba(187, 247, 208, 1) 100%);
-    transform: translateY(-1px);
-}
+.cd-btn-share:hover { background: linear-gradient(135deg, rgba(220, 252, 231, 1) 0%, rgba(187, 247, 208, 1) 100%); transform: translateY(-1px); }
 .cd-btn-check {
     background: linear-gradient(135deg, #fef08a 0%, #facc15 50%, #eab308 100%);
-    border: 1px solid #ca8a04;
-    color: #713f12;
-    padding: 12px 16px;
-    border-radius: 30px;
-    font-size: 13px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    cursor: pointer;
-    position: relative;
+    border: 1px solid #ca8a04; color: #713f12; padding: 12px 16px; border-radius: 30px;
+    font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px;
+    cursor: pointer; position: relative;
     box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 4px 12px rgba(234, 179, 8, 0.4);
     transition: transform 0.2s ease;
 }
-.cd-btn-check:hover {
-    transform: translateY(-1px);
-    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 6px 16px rgba(234, 179, 8, 0.5);
-}
+.cd-btn-check:hover { transform: translateY(-1px); box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 6px 16px rgba(234, 179, 8, 0.5); }
 .cd-best-deal-ribbon {
-    position: absolute;
-    top: -12px;
-    right: 14px;
+    position: absolute; top: -12px; right: 14px;
     background: linear-gradient(135deg, #fde047 0%, #ca8a04 100%);
-    color: #ffffff;
-    font-size: 8px;
-    font-weight: 900;
-    padding: 2px 8px;
-    border-radius: 8px;
-    letter-spacing: 0.8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    border: 1px solid #fef08a;
-    text-transform: uppercase;
+    color: #ffffff; font-size: 8px; font-weight: 900; padding: 2px 8px; border-radius: 8px;
+    letter-spacing: 0.8px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); border: 1px solid #fef08a; text-transform: uppercase;
 }
 @media (max-width: 640px) {
     .cd-card { padding: 14px; border-radius: 16px; }
@@ -292,6 +187,10 @@ button,a{-webkit-tap-highlight-color:transparent;}
 .cd-heart-btn.saved .material-symbols-outlined { color: #D92D20; font-variation-settings: 'FILL' 1, 'wght' 600; }
 .cd-store-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 20px; font-size: 12px; font-weight: 500; color: #334155; width: fit-content; max-width: 100%; }
 
+/* Country selector chips */
+.cd-flag-chip { display:inline-flex; align-items:center; justify-content:center; width:44px; height:40px; border-radius:12px; background:#eef2f6; border:2px solid transparent; font-size:22px; cursor:pointer; }
+.cd-flag-chip.active { background:#155eef; border-color:#0047c1; color:#fff; }
+
 </style>
 
 </head>
@@ -300,21 +199,12 @@ button,a{-webkit-tap-highlight-color:transparent;}
 
 <header class="cd-header">
   <div class="cd-header-inner">
-
     <a href="index.html" class="cd-logo" aria-label="CheckerDiscount Home">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" aria-hidden="true">
         <defs>
-          <linearGradient id="cdPrimaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#155EEF"/>
-            <stop offset="100%" stop-color="#0047C1"/>
-          </linearGradient>
-          <linearGradient id="cdGreenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#70FDA7"/>
-            <stop offset="100%" stop-color="#12B76A"/>
-          </linearGradient>
-          <filter id="cdShadow" x="-10%" y="-10%" width="120%" height="120%">
-            <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#0047C1" flood-opacity="0.22"/>
-          </filter>
+          <linearGradient id="cdPrimaryGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#155EEF"/><stop offset="100%" stop-color="#0047C1"/></linearGradient>
+          <linearGradient id="cdGreenGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#70FDA7"/><stop offset="100%" stop-color="#12B76A"/></linearGradient>
+          <filter id="cdShadow" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#0047C1" flood-opacity="0.22"/></filter>
         </defs>
         <g filter="url(#cdShadow)">
           <path d="M26 4C14 4 6 8 6 8C6 24 10 42 26 56C42 42 46 24 46 8C46 8 38 4 26 4Z" fill="url(#cdPrimaryGrad)"/>
@@ -324,7 +214,6 @@ button,a{-webkit-tap-highlight-color:transparent;}
         <text x="60" y="39" font-family="Inter, system-ui, sans-serif" font-size="24" font-weight="800" fill="#0B1C30" letter-spacing="-0.03em">Checker<tspan font-weight="500" fill="#155EEF">Discount</tspan></text>
       </svg>
     </a>
-
     <nav class="cd-desktop-nav" aria-label="Main Navigation">
       <a href="index.html" class="cd-nav-link active"><span class="material-symbols-outlined">home</span><span>Home</span></a>
       <a href="blog.html" class="cd-nav-link"><span class="material-symbols-outlined">article</span><span>Blog</span></a>
@@ -332,20 +221,18 @@ button,a{-webkit-tap-highlight-color:transparent;}
       <a href="#smart-tools" class="cd-nav-link"><span class="material-symbols-outlined">construction</span><span>Tools</span></a>
       <a href="#favorites-section" class="cd-nav-link"><span class="material-symbols-outlined">favorite</span><span>Favorites</span></a>
     </nav>
-
     <div class="cd-header-actions">
       <a href="index.html" class="cd-mobile-home" aria-label="Home"><span class="material-symbols-outlined">home</span></a>
       <a href="customer.html" class="cd-nav-link cd-account-desktop" aria-label="Account"><span class="material-symbols-outlined">person</span><span>Account</span></a>
       <button id="burgerMenuBtn" type="button" class="cd-menu-button" aria-label="Open Navigation Menu"><span class="material-symbols-outlined">menu</span></button>
     </div>
-
   </div>
 </header>
 
 <main class="w-full pt-16 pb-24 bg-background">
 <div class="flex flex-col w-full">
 
-<!-- HERO SECTION: صرف سلائیڈر، کوئی بٹن نہیں -->
+<!-- 1. HERO SECTION -->
 <section class="relative w-full bg-gradient-to-b from-surface via-surface-container-low/40 to-background overflow-hidden pb-4 pt-4 px-4">
   <div id="cd-hero-slider" class="cd-hero-slider">
     <div class="cd-hero-track">
@@ -367,9 +254,25 @@ button,a{-webkit-tap-highlight-color:transparent;}
   </div>
 </section>
 
-<!-- MARKET DEALS SECTION -->
+<!-- 2. 🔥 TOP PICKS (Hero ke foran baad) -->
+<section class="w-full px-4 py-4">
+  <div class="flex items-center justify-between mb-3">
+    <h3 class="text-[16px] font-bold text-on-surface flex items-center gap-1">
+      <span class="text-[18px]">🔥</span> Top Picks
+    </h3>
+    <div class="flex items-center gap-1 text-[12px] font-bold text-white" id="cd-countdown">
+      <span class="cd-countdown-box">00</span>
+      <span>:</span>
+      <span class="cd-countdown-box">00</span>
+      <span>:</span>
+      <span class="cd-countdown-box">00</span>
+    </div>
+  </div>
+  <div id="topPicksContainer" class="flex gap-2 overflow-x-auto pb-2 scrollbar-none -mx-4 px-4"></div>
+</section>
+
+<!-- 3. MARKET DEALS SECTION (Deals by Country wapas apni jagah) -->
 <section id="market-deals" class="w-full px-4 py-4 space-y-4">
-  
   <div class="flex flex-col gap-1">
     <div class="inline-flex items-center gap-1 text-primary text-[11px] font-bold tracking-wider uppercase">
       <span class="material-symbols-outlined text-[15px]">radar</span>Deal Discovery
@@ -382,24 +285,10 @@ button,a{-webkit-tap-highlight-color:transparent;}
     </div>
   </div>
 
-  <!-- TOP PICKS SECTION (Horizontal Scrolling, NO price/discount) -->
-  <div class="flex flex-col gap-2">
-    <div class="flex items-center justify-between">
-      <h3 class="text-[16px] font-bold text-on-surface flex items-center gap-1">
-        <span class="text-[18px]">🔥</span> Top Picks
-      </h3>
-      <div class="flex items-center gap-1 text-[12px] font-bold text-white" id="cd-countdown">
-        <span class="cd-countdown-box">00</span>
-        <span>:</span>
-        <span class="cd-countdown-box">00</span>
-        <span>:</span>
-        <span class="cd-countdown-box">00</span>
-      </div>
-    </div>
-    <div id="topPicksContainer" class="flex gap-2 overflow-x-auto pb-2 scrollbar-none -mx-4 px-4"></div>
-  </div>
+  <!-- Country Selector (app.js injects here) -->
+  <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none"></div>
 
-  <!-- STYLISH CATEGORIES -->
+  <!-- Categories -->
   <div id="cdCategorySelector" class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none -mx-4 px-4"></div>
 
   <!-- Deals Container -->
@@ -418,34 +307,23 @@ button,a{-webkit-tap-highlight-color:transparent;}
   <div class="bg-surface-container-lowest rounded-2xl p-4 shadow-md border border-surface-container/60">
     <div class="flex items-center justify-between mb-3">
       <div class="flex items-center gap-2.5">
-        <div class="w-9 h-9 rounded-xl bg-error-container text-error flex items-center justify-center flex-shrink-0">
-          <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1;">favorite</span>
-        </div>
-        <div>
-          <h3 class="text-[17px] font-bold text-on-surface leading-tight">My Favorites</h3>
-          <p class="text-[12px] text-on-surface-variant">Deals you saved to check later</p>
-        </div>
+        <div class="w-9 h-9 rounded-xl bg-error-container text-error flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1;">favorite</span></div>
+        <div><h3 class="text-[17px] font-bold text-on-surface leading-tight">My Favorites</h3><p class="text-[12px] text-on-surface-variant">Deals you saved to check later</p></div>
       </div>
       <span id="fav-count-badge" class="px-3 py-1 rounded-full bg-error-container text-error text-[11px] font-bold">0</span>
     </div>
     <div id="favoritesList" class="space-y-2">
-      <div class="text-center py-6 text-on-surface-variant text-[13px]">
-        <span class="material-symbols-outlined text-[32px] text-outline mb-1 block">favorite_border</span>
-        No favorites yet. Tap ❤️ on any deal to save it.
-      </div>
+      <div class="text-center py-6 text-on-surface-variant text-[13px]"><span class="material-symbols-outlined text-[32px] text-outline mb-1 block">favorite_border</span>No favorites yet. Tap ❤️ on any deal to save it.</div>
     </div>
   </div>
 </section>
 
 <section id="smart-tools" class="w-full px-4 py-5 space-y-4">
   <div class="flex flex-col gap-1">
-    <div class="inline-flex items-center gap-1 text-primary text-[11px] font-bold uppercase tracking-wider">
-      <span class="material-symbols-outlined text-[15px]">construction</span>Smart Tools
-    </div>
+    <div class="inline-flex items-center gap-1 text-primary text-[11px] font-bold uppercase tracking-wider"><span class="material-symbols-outlined text-[15px]">construction</span>Smart Tools</div>
     <h2 class="text-[20px] font-bold text-on-surface tracking-tight">Check Before You Buy</h2>
     <p class="text-[13px] text-on-surface-variant">Free calculators to help you shop smarter and save more.</p>
   </div>
-  <!-- "Try Smart Tools" button shifted here -->
   <a class="w-full py-3 px-4 rounded-xl bg-surface-container-lowest text-on-surface text-[14px] border border-surface-container-high flex items-center justify-center gap-2 font-semibold shadow-sm active:bg-surface-container-low transition-colors" href="#tool-dealscore">
     <span class="material-symbols-outlined text-[18px] text-primary">construction</span>
     <span>Try Smart Tools</span>
@@ -477,12 +355,8 @@ button,a{-webkit-tap-highlight-color:transparent;}
       </a>
       <p class="text-[12px] text-tertiary-fixed-dim leading-relaxed">Algorithmic deal verification and real-time price monitoring across major retailers worldwide.</p>
       <div class="flex flex-wrap gap-2 pt-1">
-        <div class="inline-flex items-center gap-1 px-2.5 py-1 bg-navy-surface rounded-lg text-[11px] text-tertiary-fixed">
-          <span class="material-symbols-outlined text-savings-green text-[14px]">verified_user</span>Verified Deals
-        </div>
-        <div class="inline-flex items-center gap-1 px-2.5 py-1 bg-navy-surface rounded-lg text-[11px] text-tertiary-fixed">
-          <span class="material-symbols-outlined text-primary-fixed-dim text-[14px]">public</span>40+ Countries
-        </div>
+        <div class="inline-flex items-center gap-1 px-2.5 py-1 bg-navy-surface rounded-lg text-[11px] text-tertiary-fixed"><span class="material-symbols-outlined text-savings-green text-[14px]">verified_user</span>Verified Deals</div>
+        <div class="inline-flex items-center gap-1 px-2.5 py-1 bg-navy-surface rounded-lg text-[11px] text-tertiary-fixed"><span class="material-symbols-outlined text-primary-fixed-dim text-[14px]">public</span>40+ Countries</div>
       </div>
     </div>
     <div class="grid grid-cols-2 gap-4 border-t border-navy-surface pt-4">
@@ -510,34 +384,21 @@ button,a{-webkit-tap-highlight-color:transparent;}
       <p><strong class="text-on-tertiary">As an Amazon Associate I earn from qualifying purchases.</strong></p>
       <p>Amazon and the Amazon logo are trademarks of Amazon.com, Inc. or its affiliates.</p>
       <p>CheckerDiscount is an independent price validation service. We may earn a commission when you click merchant links.</p>
-      <div class="flex items-center justify-between text-[10px] text-tertiary-fixed-dim pt-1">
-        <span>© 2026 CheckerDiscount.com</span>
-        <span>SSL Encrypted</span>
-      </div>
+      <div class="flex items-center justify-between text-[10px] text-tertiary-fixed-dim pt-1"><span>© 2026 CheckerDiscount.com</span><span>SSL Encrypted</span></div>
     </div>
   </div>
 </footer>
 
 <nav aria-label="Mobile Navigation" class="cd-bottom-nav fixed bottom-0 inset-x-0 z-50 bg-surface-container-lowest/95 backdrop-blur-xl border-t border-surface-container px-3 py-2 flex items-center justify-around shadow-lg">
-  <a class="flex flex-col items-center gap-0.5 text-primary-container text-[11px] font-semibold py-1 px-2.5 rounded-xl" href="#market-deals">
-    <span class="material-symbols-outlined text-[20px]">local_offer</span><span>Deals</span>
-  </a>
-  <a class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface text-[11px] py-1 px-2.5 rounded-xl" href="blog.html">
-    <span class="material-symbols-outlined text-[20px]">article</span><span>Blog</span>
-  </a>
-  <a class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface text-[11px] py-1 px-2.5 rounded-xl" href="#favorites-section">
-    <span class="material-symbols-outlined text-[20px]">favorite</span><span>Favorites</span>
-  </a>
-  <a class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface text-[11px] py-1 px-2.5 rounded-xl" href="#smart-tools">
-    <span class="material-symbols-outlined text-[20px]">construction</span><span>Tools</span>
-  </a>
-  <a class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface text-[11px] py-1 px-2.5 rounded-xl" href="customer.html">
-    <span class="material-symbols-outlined text-[20px]">person</span><span>Account</span>
-  </a>
+  <a class="flex flex-col items-center gap-0.5 text-primary-container text-[11px] font-semibold py-1 px-2.5 rounded-xl" href="#market-deals"><span class="material-symbols-outlined text-[20px]">local_offer</span><span>Deals</span></a>
+  <a class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface text-[11px] py-1 px-2.5 rounded-xl" href="blog.html"><span class="material-symbols-outlined text-[20px]">article</span><span>Blog</span></a>
+  <a class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface text-[11px] py-1 px-2.5 rounded-xl" href="#favorites-section"><span class="material-symbols-outlined text-[20px]">favorite</span><span>Favorites</span></a>
+  <a class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface text-[11px] py-1 px-2.5 rounded-xl" href="#smart-tools"><span class="material-symbols-outlined text-[20px]">construction</span><span>Tools</span></a>
+  <a class="flex flex-col items-center gap-0.5 text-on-surface-variant hover:text-on-surface text-[11px] py-1 px-2.5 rounded-xl" href="customer.html"><span class="material-symbols-outlined text-[20px]">person</span><span>Account</span></a>
 </nav>
 
 <script src="hero-slider.js"></script>
-<script src="app.js?v=20"></script>
+<script src="app.js?v=22"></script>
 
 </body>
 </html>
