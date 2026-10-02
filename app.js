@@ -125,7 +125,7 @@ function showToast(message) {
     setTimeout(() => { toast.remove(); }, 2600);
 }
 
-// ========== DESKTOP CSS ==========
+// ========== DESKTOP & TEMU-STYLE BUTTONS CSS ==========
 (function injectDesktopCSS(){
     if (window.__cdDesktopCSS) return;
     window.__cdDesktopCSS = true;
@@ -142,6 +142,47 @@ function showToast(message) {
       .cd-flag-chip.active { background:#155eef; border-color:#0047c1; color:#fff; }
       .cd-comparison-img { width: 72px; height: 72px; border-radius: 12px; background: #f6f8fc; border: 1px solid #e4e7ec; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
       .cd-comparison-img img { width: 100%; height: 100%; object-fit: cover; }
+      
+      /* Temu-Style Button Enhancements */
+      .cd-btn-check {
+        background: linear-gradient(135deg, #ff6b00 0%, #ff3b00 100%);
+        color: #ffffff;
+        font-weight: 700;
+        border-radius: 9999px;
+        box-shadow: 0 4px 14px rgba(255, 59, 0, 0.35);
+        transition: all 0.2s ease-in-out;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 8px 16px;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        font-size: 12px;
+      }
+      .cd-btn-check:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(255, 59, 0, 0.45);
+        background: linear-gradient(135deg, #ff7b1a 0%, #ff4b1a 100%);
+      }
+      .cd-btn-compare, .cd-btn-share {
+        border-radius: 9999px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        padding: 8px 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        font-size: 12px;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+        color: #334155;
+      }
+      .cd-btn-compare:hover, .cd-btn-share:hover {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+      }
     `;
     document.head.appendChild(style);
 })();
@@ -434,7 +475,6 @@ function startCountdown() {
     const boxes = document.querySelectorAll('.cd-countdown-box');
     if (boxes.length < 3) return;
     
-    // Set end time to 11 hours 46 minutes from now (or use a fixed daily reset)
     const now = new Date();
     const endTime = new Date();
     endTime.setHours(now.getHours() + 11);
@@ -453,8 +493,8 @@ function startCountdown() {
         boxes[2].textContent = String(s).padStart(2, '0');
     }
     
-    updateTimer(); // Call immediately
-    setInterval(updateTimer, 1000); // Update every second
+    updateTimer();
+    setInterval(updateTimer, 1000);
 }
 
 function loadDeals(filter = "all") {
@@ -479,7 +519,7 @@ function loadDeals(filter = "all") {
         const trust = getTrustBadge(deal);
         const dealDataJson = escapeAttribute(JSON.stringify({ id: dealId, title: deal.title || 'Deal', store: storeName, new_price: deal.new_price || deal.price || 0, old_price: deal.old_price || null, currency: getDealCurrency(deal), image_url: imgSrc, url: deal.url || '#', country: getDealCountry(deal) }));
         
-        // ⚠️ NO discount badge at all (removed completely)
+        // ⚠️ NO discount badge at all (removed completely) + Temu-Style Buttons applied
         card.innerHTML = `
           <button class="cd-heart-btn ${saved ? 'saved' : ''}" onclick='toggleWatchlist("${escapeAttribute(String(dealId))}", ${dealDataJson})' title="${saved ? 'Remove from Favorites' : 'Save to Favorites'}">
             <span class="material-symbols-outlined">favorite</span>
@@ -506,15 +546,15 @@ function loadDeals(filter = "all") {
             <span class="truncate">${escapeHtml(getDealCountryName(deal))}</span>
           </div>
           <div class="flex items-center gap-2">
-            ${dealId ? `<button onclick="openDealComparison('${escapeAttribute(String(dealId))}')" class="cd-btn cd-btn-compare" title="Compare stores">
+            ${dealId ? `<button onclick="openDealComparison('${escapeAttribute(String(dealId))}')" class="cd-btn-compare" title="Compare stores">
                 <span class="material-symbols-outlined text-[14px]">compare_arrows</span>
                 <span>Compare</span>
               </button>` : ""}
-            <button onclick="shareDeal('${encodeURIComponent(deal.title || "")}', '${escapeAttribute(deal.url || window.location.href)}')" class="cd-btn cd-btn-share" title="Share Deal">
+            <button onclick="shareDeal('${encodeURIComponent(deal.title || "")}', '${escapeAttribute(deal.url || window.location.href)}')" class="cd-btn-share" title="Share Deal">
               <span class="material-symbols-outlined text-[14px]">share</span>
               <span>Share</span>
             </button>
-            <a href="${escapeAttribute(deal.url || "#")}" target="_blank" rel="noopener noreferrer" class="cd-btn cd-btn-check">
+            <a href="${escapeAttribute(deal.url || "#")}" target="_blank" rel="noopener noreferrer" class="cd-btn-check flex-1">
               <span>Check Price</span>
               <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
             </a>
@@ -578,7 +618,7 @@ async function openDealComparison(dealId) {
                         <div class="flex items-center gap-1.5 mt-2"><span class="material-symbols-outlined text-primary text-[14px]">local_offer</span><span class="text-[12px] font-semibold text-primary">Click to check current price</span></div>
                     </div>
                 </div>
-                ${normalized.url ? `<a href="${escapeAttribute(normalized.url)}" target="_blank" rel="noopener noreferrer" class="cd-btn cd-btn-check mt-3 w-full">Check Price at ${escapeHtml(normalized.store || "Store")} <span class="material-symbols-outlined text-[15px]">arrow_forward</span></a>` : ""}
+                ${normalized.url ? `<a href="${escapeAttribute(normalized.url)}" target="_blank" rel="noopener noreferrer" class="cd-btn-check mt-3 w-full">Check Price at ${escapeHtml(normalized.store || "Store")} <span class="material-symbols-outlined text-[15px]">arrow_forward</span></a>` : ""}
             </div>`;
         }).join("");
     } catch (error) {
@@ -680,7 +720,7 @@ function calculateFinalPrice() {
     const vat = subtotal * (vatPct / 100);
     const total = subtotal + vat + shipping;
     resultEl.className = 'p-3 rounded-xl bg-savings-green-subtle text-savings-green text-[13px] space-y-1';
-    resultEl.innerHTML = `<div class="flex justify-between"><span>Product:</span><strong>AED ${price.toFixed(2)}</strong></div>${coupon > 0 ? `<div class="flex justify-between"><span>Coupon:</span><strong>- AED ${coupon.toFixed(2)}</strong></div>` : ''}${vat > 0 ? `<div class="flex justify-between"><span>VAT (${vatPct}%):</span><strong>+ AED ${vat.toFixed(2)}</strong></div>` : ''}${shipping > 0 ? `<div class="flex justify-between"><span>Shipping:</span><strong>+ AED ${shipping.toFixed(2)}</strong></div>` : ''}<div class="flex justify-between pt-2 border-t border-savings-green/30 text-[15px]"><span class="font-bold">💰 Total:</span><strong>AED ${total.toFixed(2)}</strong></div>`;
+    resultEl.innerHTML = `<div class="flex justify-between"><span>Product:</span><strong>AED ${price.toFixed(2)}</strong></div>${coupon > 0 ? `<div class="flex justify-between"><span>Coupon:</span><strong>- AED ${coupon.toFixed(2)}</strong></div>` : ''}${vat > 0 ? `<div class="flex justify-between"><span>VAT (${vatPct}\%):</span><strong>+ AED${vat.toFixed(2)}</strong></div>` : ''}${shipping > 0 ? `<div class="flex justify-between"><span>Shipping:</span><strong>+ AED ${shipping.toFixed(2)}</strong></div>` : ''}<div class="flex justify-between pt-2 border-t border-savings-green/30 text-[15px]"><span class="font-bold">💰 Total:</span><strong>AED ${total.toFixed(2)}</strong></div>`;
     resultEl.classList.remove('hidden');
 }
 window.calculateFinalPrice = calculateFinalPrice;
