@@ -1,4 +1,4 @@
-// CheckerDiscount - Complete App.js v13.0
+// CheckerDiscount - Complete App.js v14.0 (New Stylish UI)
 // Amazon-Safe: No promotional tags, no views, no helpful votes.
 // Country Selector + Trust Badge + 5 Tools + Watchlist + Blog
 
@@ -45,13 +45,9 @@ function cleanTitle(title) {
     if (!title) return "";
     let cleaned = String(title);
 
-    // 1. پروموشنل فیصد ہٹائیں (جیسے "50% Off", "-50%", "50% OFF", "50% discount")
     cleaned = cleaned.replace(/\s*[-–—]?\s*\d+(\.\d+)?\s*%\s*(off|OFF|Off|discount|DISCOUNT|Discount)?\s*/g, ' ');
-
-    // 2. ایموجیز اور خاص نشانات ہٹائیں
     cleaned = cleaned.replace(/[⭐🔥✅❌💥🎉🎁💯🛒💰🏷️✨🌟💫]/g, '');
 
-    // 3. اضافی پروموشنل الفاظ ہٹائیں
     const promoWords = [
         'best seller', 'bestseller', 'free shipping', 'limited time',
         'hot deal', 'hot sale', 'clearance', 'special offer',
@@ -62,7 +58,6 @@ function cleanTitle(title) {
         cleaned = cleaned.replace(regex, '');
     });
 
-    // 4. اضافی خالی جگہیں اور نشانات صاف کریں
     cleaned = cleaned.replace(/\s*[-–—]\s*$/, '');
     cleaned = cleaned.replace(/\s*[-–—]\s*(?=[,])/g, '');
     cleaned = cleaned.replace(/\s+/g, ' ').trim();
@@ -277,12 +272,22 @@ function showToast(message) {
       .cd-heart-btn.saved { background: #FEE4E2; border-color: #D92D20; }
       .cd-heart-btn .material-symbols-outlined { font-size: 20px; color: #98A2B3; font-variation-settings: 'FILL' 0, 'wght' 500; }
       .cd-heart-btn.saved .material-symbols-outlined { color: #D92D20; font-variation-settings: 'FILL' 1, 'wght' 600; }
+      
+      /* ====== NEW STYLISH BUTTONS ====== */
       .cd-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600; font-size: 13px; padding: 10px 14px; border-radius: 12px; border: none; cursor: pointer; transition: all 0.2s; text-decoration: none; white-space: nowrap; }
       .cd-btn:active { transform: scale(0.96); }
-      .cd-btn-compare { background: linear-gradient(135deg, #EFF4FF 0%, #DBE7FF 100%); color: #155EEF; border: 1.5px solid #B2CCFF; flex: 1; }
-      .cd-btn-share { background: #F9FAFB; color: #475467; border: 1.5px solid #E4E7EC; padding: 10px; width: 42px; flex-shrink: 0; }
-      .cd-btn-primary { background: linear-gradient(135deg, #155EEF 0%, #0047C1 100%); color: #FFFFFF; flex: 1; }
+      
+      .cd-btn-compare { background: #eff4ff; color: #155eef; border: 1px solid #dce9ff; flex: 1; }
+      .cd-btn-compare:hover { background: #dce9ff; transform: translateY(-1px); }
+      
+      .cd-btn-share { background: #f8f9ff; color: #434655; border: 1px solid #E2E8F0; padding: 10px; width: 42px; flex-shrink: 0; }
+      .cd-btn-share:hover { background: #eff4ff; color: #155eef; border-color: #dce9ff; }
+      
+      .cd-btn-check { background: linear-gradient(135deg, #155EEF 0%, #0047C1 100%); color: #FFFFFF; flex: 1; border: none; }
+      .cd-btn-check:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(21, 94, 239, 0.4); }
+      
       .cd-store-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; background: #F9FAFB; border: 1px solid #E4E7EC; border-radius: 10px; font-size: 11px; color: #475467; width: fit-content; max-width: 100%; }
+      
       @media (max-width: 640px) {
         .cd-card { padding: 14px; border-radius: 16px; }
         .cd-btn { font-size: 12px; padding: 9px 12px; }
@@ -520,7 +525,6 @@ function normalizeDeal(deal) {
     copy.store_type = copy.store_type || "third-party";
     copy.views = copy.views || 0;
 
-    // ✅ ٹائٹل صاف کریں (50% Off وغیرہ ہٹائیں)
     if (copy.title) {
         copy.title = cleanTitle(copy.title);
     }
@@ -554,30 +558,32 @@ function renderCountryCategories() {
     const scoped = currentCountry === "ALL" ? globalDeals : globalDeals.filter(d => getDealCountry(d) === currentCountry);
     const categories = [...new Set(scoped.map(d => String(d.category || "").trim()).filter(Boolean))];
 
-    let html = `<div class="flex items-center gap-2 overflow-x-auto pb-1">
-        <button type="button" data-category="all" class="cd-category-btn flex-shrink-0 px-3.5 py-1.5 rounded-xl font-label-md text-[13px]">All (${scoped.length})</button>`;
+    // ✅ NEW STYLISH CATEGORIES (Temu Style)
+    let html = `<div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none -mx-4 px-4">
+        <button type="button" data-category="all" class="cd-cat-btn active flex-shrink-0">
+            <span class="material-symbols-outlined text-[16px]">grid_view</span> All (${scoped.length})
+        </button>`;
 
     categories.forEach(category => {
         const count = scoped.filter(d => String(d.category || "").toLowerCase() === category.toLowerCase()).length;
-        html += `<button type="button" data-category="${escapeAttribute(category)}" class="cd-category-btn flex-shrink-0 px-3.5 py-1.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-md text-[13px]">${escapeHtml(category)} (${count})</button>`;
+        html += `<button type="button" data-category="${escapeAttribute(category)}" class="cd-cat-btn flex-shrink-0">
+            <span class="material-symbols-outlined text-[16px]">category</span> ${escapeHtml(category)} (${count})
+        </button>`;
     });
     html += `</div>`;
 
     if (categories.length === 0) html = `<div class="text-[12px] text-on-surface-variant">No categories available yet.</div>`;
     container.innerHTML = html;
 
-    const buttons = container.querySelectorAll(".cd-category-btn");
+    const buttons = container.querySelectorAll(".cd-cat-btn");
     buttons.forEach(button => {
         button.addEventListener("click", () => {
             currentCategory = button.dataset.category || "all";
-            buttons.forEach(btn => btn.className = "cd-category-btn flex-shrink-0 px-3.5 py-1.5 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface-variant font-label-md text-[13px]");
-            button.className = "cd-category-btn flex-shrink-0 px-3.5 py-1.5 rounded-xl bg-primary-container text-on-primary font-label-md text-[13px] font-semibold shadow-sm";
+            buttons.forEach(btn => btn.classList.remove("active"));
+            button.classList.add("active");
             loadDeals(currentCategory);
         });
     });
-
-    const allButton = container.querySelector('[data-category="all"]');
-    if (allButton) allButton.className = "cd-category-btn flex-shrink-0 px-3.5 py-1.5 rounded-xl bg-primary-container text-on-primary font-label-md text-[13px] font-semibold shadow-sm";
 }
 
 function getDealCurrency(deal) {
@@ -708,7 +714,7 @@ function loadDeals(filter = "all") {
             country: getDealCountry(deal)
         }));
 
-        // ✅ صرف Trust Badge (Official/Third-Party)۔ کوئی Views، Helpful، Verified Deal، Real Savings نہیں۔
+        // ✅ NEW STYLISH BUTTONS (Temu Style)
         card.innerHTML = `
           <button class="cd-heart-btn ${saved ? 'saved' : ''}" 
                   onclick='toggleWatchlist("${escapeAttribute(String(dealId))}", ${dealDataJson})'
@@ -748,7 +754,7 @@ function loadDeals(filter = "all") {
             <button onclick="shareDeal('${encodeURIComponent(deal.title || "")}', '${escapeAttribute(deal.url || window.location.href)}')" class="cd-btn cd-btn-share" title="Share Deal">
               <span class="material-symbols-outlined text-[16px]">share</span>
             </button>
-            <a href="${escapeAttribute(deal.url || "#")}" target="_blank" rel="noopener noreferrer" class="cd-btn cd-btn-primary">
+            <a href="${escapeAttribute(deal.url || "#")}" target="_blank" rel="noopener noreferrer" class="cd-btn cd-btn-check">
               <span>Check Price</span>
               <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
             </a>
@@ -833,7 +839,7 @@ async function openDealComparison(dealId) {
                         </div>
                     </div>
                 </div>
-                ${normalized.url ? `<a href="${escapeAttribute(normalized.url)}" target="_blank" rel="noopener noreferrer" class="cd-btn cd-btn-primary mt-3 w-full">Check Price at ${escapeHtml(normalized.store || "Store")} <span class="material-symbols-outlined text-[15px]">arrow_forward</span></a>` : ""}
+                ${normalized.url ? `<a href="${escapeAttribute(normalized.url)}" target="_blank" rel="noopener noreferrer" class="cd-btn cd-btn-check mt-3 w-full">Check Price at ${escapeHtml(normalized.store || "Store")} <span class="material-symbols-outlined text-[15px]">arrow_forward</span></a>` : ""}
             </div>`;
         }).join("");
 
