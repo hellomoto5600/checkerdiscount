@@ -1,4 +1,4 @@
-// CheckerDiscount - Complete App.js v16.0 (Final - Top Picks + Stylish Buttons)
+// CheckerDiscount - Complete App.js v17.0 (Final - No Discount Badge + Temu Style Buttons)
 // Amazon-Safe: No promotional tags, no views, no helpful votes.
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
@@ -429,21 +429,32 @@ function loadTopPicks() {
     }).join("");
 }
 
-// ========== COUNTDOWN TIMER ==========
+// ========== COUNTDOWN TIMER (Real-time) ==========
 function startCountdown() {
     const boxes = document.querySelectorAll('.cd-countdown-box');
     if (boxes.length < 3) return;
-    let totalSeconds = 11 * 3600 + 46 * 60 + 28;
-    setInterval(() => {
-        if (totalSeconds <= 0) return;
-        totalSeconds--;
-        const h = Math.floor(totalSeconds / 3600);
-        const m = Math.floor((totalSeconds % 3600) / 60);
-        const s = totalSeconds % 60;
+    
+    // Set end time to 11 hours 46 minutes from now (or use a fixed daily reset)
+    const now = new Date();
+    const endTime = new Date();
+    endTime.setHours(now.getHours() + 11);
+    endTime.setMinutes(now.getMinutes() + 46);
+    endTime.setSeconds(now.getSeconds() + 28);
+    
+    function updateTimer() {
+        const now = new Date();
+        let diff = Math.floor((endTime - now) / 1000);
+        if (diff < 0) diff = 0;
+        const h = Math.floor(diff / 3600);
+        const m = Math.floor((diff % 3600) / 60);
+        const s = diff % 60;
         boxes[0].textContent = String(h).padStart(2, '0');
         boxes[1].textContent = String(m).padStart(2, '0');
         boxes[2].textContent = String(s).padStart(2, '0');
-    }, 1000);
+    }
+    
+    updateTimer(); // Call immediately
+    setInterval(updateTimer, 1000); // Update every second
 }
 
 function loadDeals(filter = "all") {
@@ -466,10 +477,10 @@ function loadDeals(filter = "all") {
         const storeName = String(deal.store || deal.store_name || deal.storeName || deal.retailer || deal.retailer_name || "Store").trim();
         const saved = isInWatchlist(dealId);
         const trust = getTrustBadge(deal);
-        const discount = Number(deal.discount_percent) || 0;
         const dealDataJson = escapeAttribute(JSON.stringify({ id: dealId, title: deal.title || 'Deal', store: storeName, new_price: deal.new_price || deal.price || 0, old_price: deal.old_price || null, currency: getDealCurrency(deal), image_url: imgSrc, url: deal.url || '#', country: getDealCountry(deal) }));
+        
+        // ⚠️ NO discount badge at all (removed completely)
         card.innerHTML = `
-          ${discount > 0 ? `<div class="cd-discount-badge">${discount.toFixed(0)}% OFF</div>` : ''}
           <button class="cd-heart-btn ${saved ? 'saved' : ''}" onclick='toggleWatchlist("${escapeAttribute(String(dealId))}", ${dealDataJson})' title="${saved ? 'Remove from Favorites' : 'Save to Favorites'}">
             <span class="material-symbols-outlined">favorite</span>
           </button>
