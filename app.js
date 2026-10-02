@@ -1,4 +1,4 @@
-// CheckerDiscount - Complete App.js v17.0 (Final - No Discount Badge + Temu Style Buttons)
+// CheckerDiscount - Complete App.js v20.0 (Final - No Price in Top Picks, BEST DEAL Ribbon)
 // Amazon-Safe: No promotional tags, no views, no helpful votes.
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
@@ -125,7 +125,7 @@ function showToast(message) {
     setTimeout(() => { toast.remove(); }, 2600);
 }
 
-// ========== DESKTOP & TEMU-STYLE BUTTONS CSS ==========
+// ========== DESKTOP CSS & EXACT BUTTONS CSS ==========
 (function injectDesktopCSS(){
     if (window.__cdDesktopCSS) return;
     window.__cdDesktopCSS = true;
@@ -142,47 +142,6 @@ function showToast(message) {
       .cd-flag-chip.active { background:#155eef; border-color:#0047c1; color:#fff; }
       .cd-comparison-img { width: 72px; height: 72px; border-radius: 12px; background: #f6f8fc; border: 1px solid #e4e7ec; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
       .cd-comparison-img img { width: 100%; height: 100%; object-fit: cover; }
-      
-      /* Temu-Style Button Enhancements */
-      .cd-btn-check {
-        background: linear-gradient(135deg, #ff6b00 0%, #ff3b00 100%);
-        color: #ffffff;
-        font-weight: 700;
-        border-radius: 9999px;
-        box-shadow: 0 4px 14px rgba(255, 59, 0, 0.35);
-        transition: all 0.2s ease-in-out;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        padding: 8px 16px;
-        text-transform: uppercase;
-        letter-spacing: 0.02em;
-        font-size: 12px;
-      }
-      .cd-btn-check:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 6px 20px rgba(255, 59, 0, 0.45);
-        background: linear-gradient(135deg, #ff7b1a 0%, #ff4b1a 100%);
-      }
-      .cd-btn-compare, .cd-btn-share {
-        border-radius: 9999px;
-        font-weight: 600;
-        transition: all 0.2s ease;
-        padding: 8px 12px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
-        font-size: 12px;
-        border: 1px solid #e2e8f0;
-        background: #f8fafc;
-        color: #334155;
-      }
-      .cd-btn-compare:hover, .cd-btn-share:hover {
-        background: #f1f5f9;
-        border-color: #cbd5e1;
-      }
     `;
     document.head.appendChild(style);
 })();
@@ -435,35 +394,27 @@ function getDealCurrency(deal) {
 function getDealFlag(deal) { const code = getDealCountry(deal); return COUNTRIES[code]?.flag || "🌐"; }
 function getDealCountryName(deal) { const code = getDealCountry(deal); return COUNTRIES[code]?.name || "International"; }
 
-// ========== TOP PICKS SECTION ==========
+// ========== TOP PICKS SECTION (NO PRICE, NO DISCOUNT) ==========
 function loadTopPicks() {
     const container = document.getElementById("topPicksContainer");
     if (!container) return;
     let topPicks = globalDeals.filter(d => (Number(d.discount_percent) || 0) > 0);
-    topPicks = topPicks.sort((a, b) => (Number(b.discount_percent) || 0) - (Number(a.discount_percent) || 0)).slice(0, 6);
+    topPicks = topPicks.sort((a, b) => (Number(b.discount_percent) || 0) - (Number(a.discount_percent) || 0)).slice(0, 8);
     if (topPicks.length === 0) {
         container.innerHTML = `<div class="text-[12px] text-on-surface-variant px-4">No top picks available yet.</div>`;
         return;
     }
     container.innerHTML = topPicks.map(deal => {
         const imgSrc = deal.image_url || deal.image || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400";
-        const discount = Number(deal.discount_percent) || 0;
-        const newPrice = deal.new_price || deal.price || 0;
-        const oldPrice = deal.old_price || null;
-        const currency = getDealCurrency(deal);
-        const currencySymbol = Object.values(COUNTRIES).find(c => c.currency === currency)?.symbol || "$";
+        const storeName = String(deal.store || deal.store_name || deal.storeName || "Store").trim();
         return `
             <div class="cd-top-pick-card" onclick="window.open('${escapeAttribute(deal.url || "#")}', '_blank')">
-                ${discount > 0 ? `<div class="cd-top-pick-discount">-${discount.toFixed(0)}%</div>` : ''}
                 <div class="cd-top-pick-img">
                     <img src="${escapeAttribute(imgSrc)}" alt="Top Pick" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400'">
                 </div>
                 <div class="cd-top-pick-info">
                     <div class="cd-top-pick-title">${escapeHtml(deal.title || "Deal")}</div>
-                    <div>
-                        <span class="cd-top-pick-price">${currencySymbol}${Number(newPrice).toFixed(2)}</span>
-                        ${oldPrice ? `<span class="cd-top-pick-old-price">${currencySymbol}${Number(oldPrice).toFixed(2)}</span>` : ''}
-                    </div>
+                    <div class="cd-top-pick-store">${escapeHtml(storeName)}</div>
                 </div>
             </div>
         `;
@@ -474,13 +425,11 @@ function loadTopPicks() {
 function startCountdown() {
     const boxes = document.querySelectorAll('.cd-countdown-box');
     if (boxes.length < 3) return;
-    
     const now = new Date();
     const endTime = new Date();
     endTime.setHours(now.getHours() + 11);
     endTime.setMinutes(now.getMinutes() + 46);
     endTime.setSeconds(now.getSeconds() + 28);
-    
     function updateTimer() {
         const now = new Date();
         let diff = Math.floor((endTime - now) / 1000);
@@ -492,7 +441,6 @@ function startCountdown() {
         boxes[1].textContent = String(m).padStart(2, '0');
         boxes[2].textContent = String(s).padStart(2, '0');
     }
-    
     updateTimer();
     setInterval(updateTimer, 1000);
 }
@@ -518,8 +466,6 @@ function loadDeals(filter = "all") {
         const saved = isInWatchlist(dealId);
         const trust = getTrustBadge(deal);
         const dealDataJson = escapeAttribute(JSON.stringify({ id: dealId, title: deal.title || 'Deal', store: storeName, new_price: deal.new_price || deal.price || 0, old_price: deal.old_price || null, currency: getDealCurrency(deal), image_url: imgSrc, url: deal.url || '#', country: getDealCountry(deal) }));
-        
-        // ⚠️ NO discount badge at all (removed completely) + Temu-Style Buttons applied
         card.innerHTML = `
           <button class="cd-heart-btn ${saved ? 'saved' : ''}" onclick='toggleWatchlist("${escapeAttribute(String(dealId))}", ${dealDataJson})' title="${saved ? 'Remove from Favorites' : 'Save to Favorites'}">
             <span class="material-symbols-outlined">favorite</span>
@@ -545,16 +491,17 @@ function loadDeals(filter = "all") {
             <span class="text-outline">·</span>
             <span class="truncate">${escapeHtml(getDealCountryName(deal))}</span>
           </div>
-          <div class="flex items-center gap-2">
-            ${dealId ? `<button onclick="openDealComparison('${escapeAttribute(String(dealId))}')" class="cd-btn-compare" title="Compare stores">
+          <div class="cd-actions-row">
+            ${dealId ? `<button onclick="openDealComparison('${escapeAttribute(String(dealId))}')" class="cd-btn-compare">
                 <span class="material-symbols-outlined text-[14px]">compare_arrows</span>
                 <span>Compare</span>
               </button>` : ""}
-            <button onclick="shareDeal('${encodeURIComponent(deal.title || "")}', '${escapeAttribute(deal.url || window.location.href)}')" class="cd-btn-share" title="Share Deal">
+            <button onclick="shareDeal('${encodeURIComponent(deal.title || "")}', '${escapeAttribute(deal.url || window.location.href)}')" class="cd-btn-share">
               <span class="material-symbols-outlined text-[14px]">share</span>
               <span>Share</span>
             </button>
-            <a href="${escapeAttribute(deal.url || "#")}" target="_blank" rel="noopener noreferrer" class="cd-btn-check flex-1">
+            <a href="${escapeAttribute(deal.url || "#")}" target="_blank" rel="noopener noreferrer" class="cd-btn-check">
+              <div class="cd-best-deal-ribbon">BEST DEAL</div>
               <span>Check Price</span>
               <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
             </a>
@@ -618,7 +565,7 @@ async function openDealComparison(dealId) {
                         <div class="flex items-center gap-1.5 mt-2"><span class="material-symbols-outlined text-primary text-[14px]">local_offer</span><span class="text-[12px] font-semibold text-primary">Click to check current price</span></div>
                     </div>
                 </div>
-                ${normalized.url ? `<a href="${escapeAttribute(normalized.url)}" target="_blank" rel="noopener noreferrer" class="cd-btn-check mt-3 w-full">Check Price at ${escapeHtml(normalized.store || "Store")} <span class="material-symbols-outlined text-[15px]">arrow_forward</span></a>` : ""}
+                ${normalized.url ? `<a href="${escapeAttribute(normalized.url)}" target="_blank" rel="noopener noreferrer" class="cd-btn-check mt-3 w-full" style="display:flex;justify-content:center;gap:6px;padding:12px;border-radius:30px;background:linear-gradient(135deg, #fef08a 0%, #facc15 50%, #eab308 100%);border:1px solid #ca8a04;color:#713f12;font-weight:700;font-size:13px;">Check Price at ${escapeHtml(normalized.store || "Store")} <span class="material-symbols-outlined text-[15px]">arrow_forward</span></a>` : ""}
             </div>`;
         }).join("");
     } catch (error) {
@@ -720,7 +667,7 @@ function calculateFinalPrice() {
     const vat = subtotal * (vatPct / 100);
     const total = subtotal + vat + shipping;
     resultEl.className = 'p-3 rounded-xl bg-savings-green-subtle text-savings-green text-[13px] space-y-1';
-    resultEl.innerHTML = `<div class="flex justify-between"><span>Product:</span><strong>AED ${price.toFixed(2)}</strong></div>${coupon > 0 ? `<div class="flex justify-between"><span>Coupon:</span><strong>- AED ${coupon.toFixed(2)}</strong></div>` : ''}${vat > 0 ? `<div class="flex justify-between"><span>VAT (${vatPct}\%):</span><strong>+ AED${vat.toFixed(2)}</strong></div>` : ''}${shipping > 0 ? `<div class="flex justify-between"><span>Shipping:</span><strong>+ AED ${shipping.toFixed(2)}</strong></div>` : ''}<div class="flex justify-between pt-2 border-t border-savings-green/30 text-[15px]"><span class="font-bold">💰 Total:</span><strong>AED ${total.toFixed(2)}</strong></div>`;
+    resultEl.innerHTML = `<div class="flex justify-between"><span>Product:</span><strong>AED ${price.toFixed(2)}</strong></div>${coupon > 0 ? `<div class="flex justify-between"><span>Coupon:</span><strong>- AED ${coupon.toFixed(2)}</strong></div>` : ''}${vat > 0 ? `<div class="flex justify-between"><span>VAT (${vatPct}%):</span><strong>+ AED ${vat.toFixed(2)}</strong></div>` : ''}${shipping > 0 ? `<div class="flex justify-between"><span>Shipping:</span><strong>+ AED ${shipping.toFixed(2)}</strong></div>` : ''}<div class="flex justify-between pt-2 border-t border-savings-green/30 text-[15px]"><span class="font-bold">💰 Total:</span><strong>AED ${total.toFixed(2)}</strong></div>`;
     resultEl.classList.remove('hidden');
 }
 window.calculateFinalPrice = calculateFinalPrice;
