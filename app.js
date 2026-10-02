@@ -1,4 +1,4 @@
-// CheckerDiscount - Complete App.js v22.0 (Final - Country Box Restored + Top Picks)
+// CheckerDiscount - Complete App.js v23.0 (Final - Clean UI, No Lines, Premium Top Picks)
 // Amazon-Safe: No promotional tags, no views, no helpful votes.
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
@@ -194,7 +194,7 @@ let currentCategory = "all";
 document.addEventListener("DOMContentLoaded", async () => {
     await loadLiveRates();
     currentCountry = detectCountry();
-    setupCountrySystem();   // ✅ Country box restored
+    setupCountrySystem();
     await fetchDealsAndInit();
     initBurgerMenu();
     setupAllTools();
@@ -209,7 +209,7 @@ function detectCountry() {
     return ALL;
 }
 
-// ========== ✅ COUNTRY SYSTEM (RESTORED) ==========
+// ========== ✅ COUNTRY SYSTEM (CLEAN, NO LINES) ==========
 function setupCountrySystem() {
     const marketSection = document.getElementById("market-deals");
     if (!marketSection) return;
@@ -220,7 +220,7 @@ function setupCountrySystem() {
     wrapper.id = "cdCountrySelector";
     wrapper.className = "mb-2";
     wrapper.innerHTML = `
-        <div class="bg-surface-container-lowest rounded-2xl border border-surface-container p-4 shadow-sm">
+        <div class="bg-white rounded-2xl border border-slate-100 p-4 shadow-sm">
             <div class="flex items-center justify-between gap-3 mb-3">
                 <div>
                     <div class="text-[11px] font-bold uppercase tracking-wider text-primary">Deals by Country</div>
@@ -228,7 +228,7 @@ function setupCountrySystem() {
                 </div>
                 <span class="material-symbols-outlined text-primary">public</span>
             </div>
-            <div id="cdPopularCountries" class="flex gap-2 overflow-x-auto pb-1"></div>
+            <div id="cdPopularCountries" class="flex gap-2 overflow-x-auto pb-1" style="scrollbar-width:none; -ms-overflow-style:none;"></div>
             <div id="cdMoreCountries" class="hidden mt-3">
                 <div class="text-[11px] font-semibold text-on-surface-variant mb-2">More Countries</div>
                 <div id="cdMoreCountryList" class="flex flex-wrap gap-2"></div>
