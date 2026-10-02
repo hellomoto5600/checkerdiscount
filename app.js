@@ -1,4 +1,4 @@
-// CheckerDiscount - Complete App.js v20.0 (Final - No Price in Top Picks, BEST DEAL Ribbon)
+// CheckerDiscount - Complete App.js v22.0 (Final - Country Box Restored + Top Picks)
 // Amazon-Safe: No promotional tags, no views, no helpful votes.
 
 const API_BASE = "https://deal-api.hamraahirn32.workers.dev";
@@ -125,7 +125,7 @@ function showToast(message) {
     setTimeout(() => { toast.remove(); }, 2600);
 }
 
-// ========== DESKTOP CSS & EXACT BUTTONS CSS ==========
+// ========== DESKTOP CSS ==========
 (function injectDesktopCSS(){
     if (window.__cdDesktopCSS) return;
     window.__cdDesktopCSS = true;
@@ -138,8 +138,6 @@ function showToast(message) {
         #discountsContainer > div { height: 100%; }
       }
       @media (min-width: 1200px) { #discountsContainer { grid-template-columns: repeat(3, 1fr); } }
-      .cd-flag-chip { display:inline-flex; align-items:center; justify-content:center; width:44px; height:40px; border-radius:12px; background:#eef2f6; border:2px solid transparent; font-size:22px; cursor:pointer; }
-      .cd-flag-chip.active { background:#155eef; border-color:#0047c1; color:#fff; }
       .cd-comparison-img { width: 72px; height: 72px; border-radius: 12px; background: #f6f8fc; border: 1px solid #e4e7ec; overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
       .cd-comparison-img img { width: 100%; height: 100%; object-fit: cover; }
     `;
@@ -196,7 +194,7 @@ let currentCategory = "all";
 document.addEventListener("DOMContentLoaded", async () => {
     await loadLiveRates();
     currentCountry = detectCountry();
-    setupCountrySystem();
+    setupCountrySystem();   // ✅ Country box restored
     await fetchDealsAndInit();
     initBurgerMenu();
     setupAllTools();
@@ -211,6 +209,7 @@ function detectCountry() {
     return ALL;
 }
 
+// ========== ✅ COUNTRY SYSTEM (RESTORED) ==========
 function setupCountrySystem() {
     const marketSection = document.getElementById("market-deals");
     if (!marketSection) return;
@@ -241,7 +240,6 @@ function setupCountrySystem() {
     filterRow.style.display = "none";
     renderCountryButtons();
     renderCountryName();
-    renderCountryCategories();
     const moreBtn = document.getElementById("cdMoreCountriesBtn");
     if (moreBtn) {
         moreBtn.addEventListener("click", () => {
@@ -394,12 +392,11 @@ function getDealCurrency(deal) {
 function getDealFlag(deal) { const code = getDealCountry(deal); return COUNTRIES[code]?.flag || "🌐"; }
 function getDealCountryName(deal) { const code = getDealCountry(deal); return COUNTRIES[code]?.name || "International"; }
 
-// ========== TOP PICKS SECTION (NO PRICE, NO DISCOUNT) ==========
+// ========== TOP PICKS SECTION ==========
 function loadTopPicks() {
     const container = document.getElementById("topPicksContainer");
     if (!container) return;
-    let topPicks = globalDeals.filter(d => (Number(d.discount_percent) || 0) > 0);
-    topPicks = topPicks.sort((a, b) => (Number(b.discount_percent) || 0) - (Number(a.discount_percent) || 0)).slice(0, 8);
+    let topPicks = [...globalDeals].sort(() => 0.5 - Math.random()).slice(0, 8);
     if (topPicks.length === 0) {
         container.innerHTML = `<div class="text-[12px] text-on-surface-variant px-4">No top picks available yet.</div>`;
         return;
@@ -425,13 +422,15 @@ function loadTopPicks() {
 function startCountdown() {
     const boxes = document.querySelectorAll('.cd-countdown-box');
     if (boxes.length < 3) return;
-    const now = new Date();
-    const endTime = new Date();
-    endTime.setHours(now.getHours() + 11);
-    endTime.setMinutes(now.getMinutes() + 46);
-    endTime.setSeconds(now.getSeconds() + 28);
+    function getEndTime() {
+        const end = new Date();
+        end.setHours(23, 59, 59, 0);
+        return end;
+    }
     function updateTimer() {
         const now = new Date();
+        let endTime = getEndTime();
+        if (endTime <= now) endTime = new Date(now.getTime() + 24 * 60 * 60 * 1000);
         let diff = Math.floor((endTime - now) / 1000);
         if (diff < 0) diff = 0;
         const h = Math.floor(diff / 3600);
@@ -509,8 +508,6 @@ function loadDeals(filter = "all") {
         `;
         container.appendChild(card);
     });
-    loadTopPicks();
-    startCountdown();
 }
 
 // ========== COMPARISON MODAL ==========
