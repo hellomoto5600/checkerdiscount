@@ -96,6 +96,76 @@ body.cd-menu-open{overflow-y:hidden !important;}
 img,svg{max-width:100%;}
 button,a{-webkit-tap-highlight-color:transparent;}
 
+/* ====== NEW STYLISH CATEGORIES (Like Temu) ====== */
+.cd-cat-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #434655; /* on-surface-variant */
+    background: #ffffff;
+    border: 1px solid #E2E8F0; /* surface-border */
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.cd-cat-btn:hover {
+    background: #eff4ff; /* surface-container-low */
+    border-color: #c3c6d8;
+}
+.cd-cat-btn.active {
+    background: #155eef; /* primary-container */
+    color: #ffffff;
+    border-color: #155eef;
+    box-shadow: 0 4px 12px rgba(21, 94, 239, 0.3);
+}
+.cd-cat-btn .material-symbols-outlined {
+    font-size: 16px;
+}
+
+/* ====== NEW STYLISH BUTTONS (Like Temu/Modern Apps) ====== */
+
+/* 1. Compare Button (Soft Blue) */
+.cd-btn-compare {
+    background: #eff4ff; /* surface-container-low */
+    color: #155eef; /* primary-container */
+    border: 1px solid #dce9ff;
+    transition: all 0.2s ease;
+}
+.cd-btn-compare:hover {
+    background: #dce9ff;
+    transform: translateY(-1px);
+}
+
+/* 2. Share Button (Icon Only) */
+.cd-btn-share {
+    background: #f8f9ff; /* background */
+    color: #434655; /* on-surface-variant */
+    border: 1px solid #E2E8F0;
+    transition: all 0.2s ease;
+}
+.cd-btn-share:hover {
+    background: #eff4ff;
+    color: #155eef;
+    border-color: #dce9ff;
+}
+
+/* 3. Check Price Button (Solid Blue Gradient) */
+.cd-btn-check {
+    background: linear-gradient(135deg, #155EEF 0%, #0047C1 100%);
+    border: none;
+    transition: all 0.2s ease;
+}
+.cd-btn-check:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(21, 94, 239, 0.4);
+}
+.cd-btn-check:active {
+    transform: translateY(0) scale(0.98);
+}
+
 </style>
 
 </head>
@@ -213,7 +283,10 @@ button,a{-webkit-tap-highlight-color:transparent;}
   </div>
 </section>
 
+<!-- MARKET DEALS SECTION (New Design) -->
 <section id="market-deals" class="w-full px-4 py-5 space-y-4">
+  
+  <!-- Header -->
   <div class="flex flex-col gap-1">
     <div class="inline-flex items-center gap-1 text-primary text-[11px] font-bold tracking-wider uppercase">
       <span class="material-symbols-outlined text-[15px]">radar</span>Deal Discovery
@@ -225,8 +298,116 @@ button,a{-webkit-tap-highlight-color:transparent;}
       </span>
     </div>
   </div>
-  <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none"></div>
-  <div id="discountsContainer" class="flex flex-col gap-3"></div>
+
+  <!-- Categories (New Stylish Scrollable Tabs) -->
+  <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none -mx-4 px-4">
+    <button class="cd-cat-btn active flex-shrink-0">
+      <span class="material-symbols-outlined text-[16px]">grid_view</span> All
+    </button>
+    <button class="cd-cat-btn flex-shrink-0">
+      <span class="material-symbols-outlined text-[16px]">devices</span> Electronics
+    </button>
+    <button class="cd-cat-btn flex-shrink-0">
+      <span class="material-symbols-outlined text-[16px]">headphones</span> Headphones
+    </button>
+    <button class="cd-cat-btn flex-shrink-0">
+      <span class="material-symbols-outlined text-[16px]">home</span> Home
+    </button>
+    <button class="cd-cat-btn flex-shrink-0">
+      <span class="material-symbols-outlined text-[16px]">watch</span> Watches
+    </button>
+    <button class="cd-cat-btn flex-shrink-0">
+      <span class="material-symbols-outlined text-[16px]">checkroom</span> Fashion
+    </button>
+  </div>
+
+  <!-- Deals Container -->
+  <div id="discountsContainer" class="flex flex-col gap-3">
+    
+    <!-- EXAMPLE CARD 1 (Yeh design dekhne ke liye hai, app.js isko generate karega) -->
+    <div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container/60 flex flex-col gap-3">
+      <!-- Top Row -->
+      <div class="flex items-center justify-between">
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-savings-green-subtle text-savings-green text-[10px] font-bold uppercase tracking-wider">
+          <span class="material-symbols-outlined text-[12px]">verified</span> Official Store
+        </span>
+        <button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-error hover:bg-error-container/50 transition-colors">
+          <span class="material-symbols-outlined text-[18px]">favorite_border</span>
+        </button>
+      </div>
+      <!-- Product Info -->
+      <div class="flex gap-3">
+        <div class="w-20 h-20 rounded-xl bg-surface-container-low flex-shrink-0 flex items-center justify-center overflow-hidden">
+          <img src="https://via.placeholder.com/80" alt="Product" class="w-full h-full object-cover">
+        </div>
+        <div class="flex flex-col justify-center">
+          <h3 class="text-[14px] font-semibold text-on-surface leading-tight line-clamp-2">Wireless Earbuds, AI Translation Earbuds Real Time Touch Screen</h3>
+          <p class="text-[11px] text-on-surface-variant mt-1">Click to check current price</p>
+        </div>
+      </div>
+      <!-- Store Info -->
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low border border-surface-container/50 w-fit">
+        <span class="text-[12px]">🇺🇸</span>
+        <span class="text-[11px] font-medium text-on-surface">Amazon.com</span>
+        <span class="text-[10px] text-on-surface-variant">• United States</span>
+      </div>
+      <!-- New Stylish Buttons -->
+      <div class="flex items-center gap-2 pt-1">
+        <button class="cd-btn-compare flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[12px] font-semibold">
+          <span class="material-symbols-outlined text-[16px]">compare_arrows</span>
+          Compare
+        </button>
+        <button class="w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center cd-btn-share">
+          <span class="material-symbols-outlined text-[18px]">share</span>
+        </button>
+        <button class="cd-btn-check flex-[1.5] flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[12px] font-bold text-white shadow-md">
+          Check Price
+          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- EXAMPLE CARD 2 (Yeh sirf design dikhane ke liye hai) -->
+    <div class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm border border-surface-container/60 flex flex-col gap-3">
+      <div class="flex items-center justify-between">
+        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-savings-green-subtle text-savings-green text-[10px] font-bold uppercase tracking-wider">
+          <span class="material-symbols-outlined text-[12px]">verified</span> Official Store
+        </span>
+        <button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-error hover:bg-error-container/50 transition-colors">
+          <span class="material-symbols-outlined text-[18px]">favorite_border</span>
+        </button>
+      </div>
+      <div class="flex gap-3">
+        <div class="w-20 h-20 rounded-xl bg-surface-container-low flex-shrink-0 flex items-center justify-center overflow-hidden">
+          <img src="https://via.placeholder.com/80" alt="Product" class="w-full h-full object-cover">
+        </div>
+        <div class="flex flex-col justify-center">
+          <h3 class="text-[14px] font-semibold text-on-surface leading-tight line-clamp-2">2026 Upgraded Open Ear Earbuds with Hooks, Ear Buds Wireless Bluetooth 6.1</h3>
+          <p class="text-[11px] text-on-surface-variant mt-1">Click to check current price</p>
+        </div>
+      </div>
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low border border-surface-container/50 w-fit">
+        <span class="text-[12px]">🇺🇸</span>
+        <span class="text-[11px] font-medium text-on-surface">Amazon.com</span>
+        <span class="text-[10px] text-on-surface-variant">• United States</span>
+      </div>
+      <div class="flex items-center gap-2 pt-1">
+        <button class="cd-btn-compare flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[12px] font-semibold">
+          <span class="material-symbols-outlined text-[16px]">compare_arrows</span>
+          Compare
+        </button>
+        <button class="w-10 h-10 flex-shrink-0 rounded-xl flex items-center justify-center cd-btn-share">
+          <span class="material-symbols-outlined text-[18px]">share</span>
+        </button>
+        <button class="cd-btn-check flex-[1.5] flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[12px] font-bold text-white shadow-md">
+          Check Price
+          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
   <div class="p-3 bg-surface-container-low/60 rounded-xl flex items-center justify-between text-[12px] text-on-surface-variant">
     <div class="flex items-center gap-1.5">
       <span class="material-symbols-outlined text-primary text-[18px]">sync</span>
