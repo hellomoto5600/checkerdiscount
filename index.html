@@ -96,44 +96,61 @@ body.cd-menu-open{overflow-y:hidden !important;}
 img,svg{max-width:100%;}
 button,a{-webkit-tap-highlight-color:transparent;}
 
-/* ====== TOP PICKS SECTION ====== */
+/* ====== TOP PICKS PREMIUM CARD CONTAINER ====== */
+.cd-top-picks-section {
+    background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+    border-radius: 24px;
+    padding: 18px 16px;
+    border: 1px solid #EEF2F7;
+    box-shadow: 0 6px 24px rgba(16, 24, 40, 0.05);
+    margin: 0 4px;
+}
+.cd-top-picks-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+    border-bottom: 1px dashed #E2E8F0;
+}
 .cd-countdown-box {
     background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
     color: white;
-    padding: 3px 8px;
-    border-radius: 6px;
-    font-size: 12px;
+    padding: 4px 9px;
+    border-radius: 8px;
+    font-size: 13px;
     font-weight: 800;
-    min-width: 28px;
+    min-width: 30px;
     text-align: center;
-    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.3);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+    letter-spacing: 0.5px;
 }
 .cd-top-pick-card {
-    flex: 0 0 130px;
-    background: white;
-    border-radius: 12px;
+    flex: 0 0 140px;
+    background: #ffffff;
+    border-radius: 14px;
     overflow: hidden;
-    border: 1px solid #F0F2F5;
-    box-shadow: 0 2px 8px rgba(16, 24, 40, 0.06);
-    transition: all 0.2s ease;
+    border: 1px solid #EEF2F7;
+    box-shadow: 0 2px 8px rgba(16, 24, 40, 0.05);
+    transition: all 0.25s ease;
     position: relative;
     cursor: pointer;
 }
-.cd-top-pick-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16, 24, 40, 0.12); }
-.cd-top-pick-img { width: 100%; height: 120px; background: #F6F8FC; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.cd-top-pick-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(16, 24, 40, 0.12); border-color: #DBEAFE; }
+.cd-top-pick-img { width: 100%; height: 130px; background: #F6F8FC; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 .cd-top-pick-img img { width: 100%; height: 100%; object-fit: cover; }
-.cd-top-pick-info { padding: 6px 8px; }
-.cd-top-pick-title { font-size: 10px; font-weight: 600; color: #0B1C30; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 3px; height: 26px; }
-.cd-top-pick-store { font-size: 9px; color: #98A2B3; font-weight: 500; }
+.cd-top-pick-info { padding: 10px 10px 12px; }
+.cd-top-pick-title { font-size: 11px; font-weight: 600; color: #0B1C30; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 4px; height: 30px; }
+.cd-top-pick-store { font-size: 10px; color: #98A2B3; font-weight: 500; }
 
 /* ====== STYLISH CATEGORIES ====== */
 .cd-cat-btn {
-    display: inline-flex; align-items: center; gap: 5px; padding: 8px 16px; border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 999px;
     font-size: 13px; font-weight: 600; color: #434655; background: #ffffff; border: 1px solid #E2E8F0;
     cursor: pointer; transition: all 0.2s ease; flex-shrink: 0; white-space: nowrap;
 }
 .cd-cat-btn:hover { background: #eff4ff; border-color: #c3c6d8; }
-.cd-cat-btn.active { background: #155eef; color: #ffffff; border-color: #155eef; box-shadow: 0 4px 12px rgba(21, 94, 239, 0.3); }
+.cd-cat-btn.active { background: linear-gradient(135deg, #155EEF 0%, #0047C1 100%); color: #ffffff; border-color: #155eef; box-shadow: 0 4px 12px rgba(21, 94, 239, 0.3); }
 .cd-cat-btn .material-symbols-outlined { font-size: 16px; }
 
 /* ====== EXACT 3D FROSTED BUTTONS ====== */
@@ -175,6 +192,8 @@ button,a{-webkit-tap-highlight-color:transparent;}
     .cd-heart-btn { width: 30px; height: 30px; top: 12px; right: 12px; }
     .cd-heart-btn .material-symbols-outlined { font-size: 16px; }
     .cd-best-deal-ribbon { font-size: 7px; padding: 1px 6px; top: -10px; right: 12px; }
+    .cd-top-pick-card { flex: 0 0 130px; }
+    .cd-top-pick-img { height: 120px; }
 }
 
 /* ====== CARDS ====== */
@@ -188,8 +207,14 @@ button,a{-webkit-tap-highlight-color:transparent;}
 .cd-store-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 20px; font-size: 12px; font-weight: 500; color: #334155; width: fit-content; max-width: 100%; }
 
 /* Country selector chips */
-.cd-flag-chip { display:inline-flex; align-items:center; justify-content:center; width:44px; height:40px; border-radius:12px; background:#eef2f6; border:2px solid transparent; font-size:22px; cursor:pointer; }
-.cd-flag-chip.active { background:#155eef; border-color:#0047c1; color:#fff; }
+.cd-flag-chip { display:inline-flex; align-items:center; justify-content:center; width:44px; height:40px; border-radius:12px; background:#F4F6FA; border:2px solid transparent; font-size:22px; cursor:pointer; transition: all 0.2s ease; }
+.cd-flag-chip:hover { background: #E8EEF7; }
+.cd-flag-chip.active { background: linear-gradient(135deg, #155EEF 0%, #0047C1 100%); border-color:#0047c1; color:#fff; box-shadow: 0 4px 12px rgba(21, 94, 239, 0.35); }
+
+/* Hide any default scrollbar lines/borders in country scroller */
+#cdPopularCountries::-webkit-scrollbar,
+#cdMoreCountryList::-webkit-scrollbar { display: none; }
+#cdPopularCountries, #cdMoreCountryList { -ms-overflow-style: none; scrollbar-width: none; }
 
 </style>
 
@@ -233,7 +258,7 @@ button,a{-webkit-tap-highlight-color:transparent;}
 <div class="flex flex-col w-full">
 
 <!-- 1. HERO SECTION -->
-<section class="relative w-full bg-gradient-to-b from-surface via-surface-container-low/40 to-background overflow-hidden pb-4 pt-4 px-4">
+<section class="relative w-full bg-gradient-to-b from-surface via-surface-container-low/40 to-background overflow-hidden pb-5 pt-5 px-4">
   <div id="cd-hero-slider" class="cd-hero-slider">
     <div class="cd-hero-track">
       <div class="cd-hero-slide cd-slide-1" data-index="0"></div>
@@ -254,25 +279,27 @@ button,a{-webkit-tap-highlight-color:transparent;}
   </div>
 </section>
 
-<!-- 2. 🔥 TOP PICKS (Hero ke foran baad) -->
-<section class="w-full px-4 py-4">
-  <div class="flex items-center justify-between mb-3">
-    <h3 class="text-[16px] font-bold text-on-surface flex items-center gap-1">
-      <span class="text-[18px]">🔥</span> Top Picks
-    </h3>
-    <div class="flex items-center gap-1 text-[12px] font-bold text-white" id="cd-countdown">
-      <span class="cd-countdown-box">00</span>
-      <span>:</span>
-      <span class="cd-countdown-box">00</span>
-      <span>:</span>
-      <span class="cd-countdown-box">00</span>
+<!-- 2. 🔥 TOP PICKS — Premium Card Container -->
+<section class="w-full px-4 pb-2">
+  <div class="cd-top-picks-section">
+    <div class="cd-top-picks-header">
+      <h3 class="text-[17px] font-bold text-on-surface flex items-center gap-1.5">
+        <span class="text-[20px]">🔥</span> Top Picks
+      </h3>
+      <div class="flex items-center gap-1 text-[12px] font-bold text-white" id="cd-countdown">
+        <span class="cd-countdown-box">00</span>
+        <span>:</span>
+        <span class="cd-countdown-box">00</span>
+        <span>:</span>
+        <span class="cd-countdown-box">00</span>
+      </div>
     </div>
+    <div id="topPicksContainer" class="flex gap-2.5 overflow-x-auto pb-1 scrollbar-none"></div>
   </div>
-  <div id="topPicksContainer" class="flex gap-2 overflow-x-auto pb-2 scrollbar-none -mx-4 px-4"></div>
 </section>
 
-<!-- 3. MARKET DEALS SECTION (Deals by Country wapas apni jagah) -->
-<section id="market-deals" class="w-full px-4 py-4 space-y-4">
+<!-- 3. MARKET DEALS SECTION -->
+<section id="market-deals" class="w-full px-4 py-5 space-y-4">
   <div class="flex flex-col gap-1">
     <div class="inline-flex items-center gap-1 text-primary text-[11px] font-bold tracking-wider uppercase">
       <span class="material-symbols-outlined text-[15px]">radar</span>Deal Discovery
@@ -285,8 +312,8 @@ button,a{-webkit-tap-highlight-color:transparent;}
     </div>
   </div>
 
-  <!-- Country Selector (app.js injects here) -->
-  <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none"></div>
+  <!-- Country Selector (app.js injects here, no border lines) -->
+  <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none" style="display:none !important;"></div>
 
   <!-- Categories -->
   <div id="cdCategorySelector" class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none -mx-4 px-4"></div>
@@ -398,7 +425,7 @@ button,a{-webkit-tap-highlight-color:transparent;}
 </nav>
 
 <script src="hero-slider.js"></script>
-<script src="app.js?v=22"></script>
+<script src="app.js?v=23"></script>
 
 </body>
 </html>
