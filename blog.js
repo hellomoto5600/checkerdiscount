@@ -107,7 +107,7 @@ function renderBlogPosts() {
         const cat = post.category || "General";
         const rt = readingTime(post.excerpt || post.content || "");
         return `
-        <a href="blog-post.html?slug=${encodeURIComponent(post.slug)}" class="cd-card block no-underline group">
+        <a href="/blog-post?slug=${encodeURIComponent(post.slug)}" class="cd-card block no-underline group">
             <div class="w-full h-44 rounded-2xl overflow-hidden bg-surface-subtle border border-surface-container -mb-1">
                 <img src="${escapeAttribute(img)}" 
                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -224,6 +224,12 @@ async function loadBlogPost() {
         const post = data.post;
         document.title = `${post.title} | CheckerDiscount Blog`;
 
+        // Canonical unique to each post
+        const canonicalUrl = "https://checkerdiscount.com/blog-post?slug=" + encodeURIComponent(slug);
+        let canon = document.querySelector('link[rel="canonical"]');
+        if (!canon) { canon = document.createElement("link"); canon.rel = "canonical"; document.head.appendChild(canon); }
+        canon.href = canonicalUrl;
+
         const metaDesc = document.querySelector('meta[name="description"]');
         if (metaDesc) metaDesc.setAttribute("content", post.excerpt || post.title);
 
@@ -284,7 +290,7 @@ async function loadBlogPost() {
                 </div>` : ""}
 
                 <div class="flex items-center gap-2 mt-6 pt-4 border-t border-surface-container flex-wrap">
-                    <a href="blog.html" class="cd-btn bg-surface-container-lowest border border-surface-container text-on-surface">
+                    <a href="/blog" class="cd-btn bg-surface-container-lowest border border-surface-container text-on-surface">
                         <span class="material-symbols-outlined text-[16px]">arrow_back</span>
                         <span>All Posts</span>
                     </a>
@@ -417,24 +423,24 @@ function initBlogBurgerMenu() {
             </div>
             <div class="flex-1 overflow-y-auto p-4">
                 <div class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest px-3 mb-3 mt-2">Main Menu</div>
-                <a href="index.html" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px]">
+                <a href="/" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px]">
                     <span class="w-9 h-9 rounded-lg bg-primary-container/10 text-primary flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-[20px]">home</span></span>
                     <span class="flex-1">Home</span>
                 </a>
-                <a href="blog.html" class="flex items-center gap-3 px-3 py-3 rounded-xl bg-primary-container/10 text-primary font-semibold text-[14px]">
+                <a href="/blog" class="flex items-center gap-3 px-3 py-3 rounded-xl bg-primary-container/10 text-primary font-semibold text-[14px]">
                     <span class="w-9 h-9 rounded-lg bg-primary-container text-white flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-[20px]">article</span></span>
                     <span class="flex-1">Blog</span>
                     <span class="px-2 py-0.5 rounded-full bg-primary text-white text-[10px] font-bold">NEW</span>
                 </a>
-                <a href="customer.html" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px]">
+                <a href="/customer" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px]">
                     <span class="w-9 h-9 rounded-lg bg-primary-container/10 text-primary flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-[20px]">person</span></span>
                     <span class="flex-1">My Account</span>
                 </a>
-                <a href="index.html#market-deals" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px]">
+                <a href="/#market-deals" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px]">
                     <span class="w-9 h-9 rounded-lg bg-savings-green-subtle text-savings-green flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-[20px]">local_offer</span></span>
                     <span class="flex-1">Top Deals</span>
                 </a>
-                <a href="index.html#smart-tools" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px]">
+                <a href="/#smart-tools" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-primary-container/10 text-on-surface font-semibold text-[14px]">
                     <span class="w-9 h-9 rounded-lg bg-warning-amber/10 text-warning-amber flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-[20px]">construction</span></span>
                     <span class="flex-1">Smart Tools</span>
                 </a>
@@ -444,7 +450,7 @@ function initBlogBurgerMenu() {
                     <span class="material-symbols-outlined text-savings-green text-[14px]">verified</span>
                     <span class="font-semibold">Verified Deals Worldwide</span>
                 </div>
-                <div class="text-center text-[10px] text-outline mt-1">© 2025 CheckerDiscount</div>
+                <div class="text-center text-[10px] text-outline mt-1">© 2026 CheckerDiscount</div>
             </div>
         </div>
     `;
