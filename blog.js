@@ -201,7 +201,12 @@ async function loadBlogPost() {
     const slug = params.get("slug");
 
     if (!slug) {
-        container.innerHTML = `<div class="p-8 text-center text-on-surface-variant"><div class="text-3xl mb-2">📄</div><div>No post specified.</div></div>`;
+        // No post selected: keep this empty page out of Google and send visitor to the blog list
+        const robotsMeta = document.createElement("meta");
+        robotsMeta.name = "robots";
+        robotsMeta.content = "noindex, follow";
+        document.head.appendChild(robotsMeta);
+        window.location.replace("/blog");
         return;
     }
 
